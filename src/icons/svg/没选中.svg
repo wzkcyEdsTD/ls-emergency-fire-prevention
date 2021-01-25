@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #fff;
+      }
+
+      .cls-2 {
+        fill: #28b4e7;
+      }
+    </style>
+  </defs>
+  <g id="没选中" transform="translate(-13 -2.715)">
+    <rect id="矩形备份_21" data-name="矩形备份 21" class="cls-1" width="16" height="16" rx="1" transform="translate(13 2.715)"/>
+    <rect id="矩形备份_21-2" data-name="矩形备份 21" class="cls-2" width="12" height="2" transform="translate(15 10.352)"/>
+    <rect id="矩形备份_21-3" data-name="矩形备份 21" class="cls-2" width="12" height="2" transform="translate(22 5.215) rotate(90)"/>
+  </g>
+</svg>

@@ -1,0 +1,217 @@
+<template>
+  <sider-bar class="sider-bar">
+    <div class="lqfb-wrapper">
+      <el-collapse v-model="activeNames">
+        <el-collapse-item
+          v-for="v in treeData"
+          :key="v.id"
+          :name="v.id"
+          :class="v.children == null ? 'no-arrow' : ''"
+          @click.native="handleMenuClick(v.label)"
+        >
+          <template slot="title">
+            <span>{{ v.label }}</span>
+          </template>
+          <div>
+            <el-tree
+              v-show="v.children != null"
+              :ref="`tree_${v.id}`"
+              :data="v.children"
+              :show-checkbox="v.showCheck"
+              node-key="id"
+              :default-expanded-keys="[]"
+              :props="defaultProps"
+              @check="(data, checked) => handleCheckChange(data, checked, v.id)"
+              @node-click="nodeClick"
+            >
+              <span slot-scope="{ node, data }" class="custom-tree-node">
+                <span>
+                  <i :class="data.icon" />
+                  {{ node.label }}
+                </span>
+              </span>
+            </el-tree>
+          </div>
+        </el-collapse-item>
+      </el-collapse>
+    </div>
+  </sider-bar>
+</template>
+
+<script>
+import treeData from './treeData'
+import SiderBar from '@/components/SiderBar'
+import jkList from './监控数据.json'
+import { getMonitorList } from '@/api/lqfb'
+
+export default {
+  components: {
+    SiderBar
+  },
+  data() {
+    return {
+      jkList,
+      activeNames: [1, 4],
+      treeData,
+      defaultProps: {
+        children: 'children',
+        label: 'label'
+      }
+    }
+  },
+  computed: {
+    yadqPannel() {
+      return this.$store.getters.yadqPannel
+    },
+    clearFlag() {
+      return this.$store.getters.clearFlag
+    },
+    yadqOffsetRight() {
+      return this.$store.getters.yadqOffsetRight
+    },
+    checkedLeafNodes() {
+      return this.$store.getters.checkedLeafNodes
+    },
+    videoListOffsetRight() {
+      return this.$store.getters.videoListOffsetRight
+    },
+    jkLayer() {
+      return this.$store.getters.jkLayer
+    },
+    isAddFeatures() {
+      return this.$store.getters.isAddFeatures
+    }
+  },
+  watch: {
+    clearFlag() {
+      this.clearTreeChecked()
+    },
+    jkLayer(val) {
+      if (val == null) {
+        this.$refs[`tree_7`][0].setCheckedKeys([])
+      }
+    },
+    checkedLeafNodes(val) {
+      this.clearTreeChecked()
+      for (let i = 1; i <= 6; i++) {
+        if (this.$refs[`tree_${i}`]) {
+          const ids = []
+          val.forEach(item => {
+            if ((item.id + '').substring(0, 1) == i) {
+              ids.push(item.id)
+            }
+          })
+          this.$refs[`tree_${i}`][0].setCheckedKeys(ids)
+        }
+      }
+    }
+  },
+  beforeDestroy() {},
+  mounted() {
+    // 默认选中林区节点
+    this.$refs[`tree_1`][0].setCheckedKeys([11, 146])
+    // this.$refs[`tree_4`][0].setCheckedKeys([41])
+    // 显示选中图层
+    this.showCheckLayer()
+  },
+  methods: {
+    handleCheckChange(data, checked, id) {
+      // 勾选目录树控制总览显示资源
+      if ((data.id + '').substring(0, 2) === '11') {
+        this.$store.dispatch('lqfb/changeActiveMenu', '基础要素')
+      } else if ((data.id + '')[0] === '2') {
+        this.$store.dispatch('lqfb/changeActiveMenu', '应急资源')
+      } else if ((data.id + '')[0] === '3') {
+        this.$store.dispatch('lqfb/changeActiveMenu', '安全风险源')
+      }
+      if ((data.id + '')[0] === '4' || (data.id + '')[0] === '6' || (data.id + '')[0] === '7') {
+        this.$store.dispatch('lqfb/changezlOffsetRight', -25)
+      }
+      if (data.label === '监控') {
+        if (!this.jkLayer) {
+          // 显示监控数据
+          const loading = this.$loading({
+            lock: true,
+            text: '视频点加载中……',
+            spinner: 'el-icon-loading',
+            background: 'rgba(0, 0, 0, 0.7)'
+          })
+          getMonitorList().then(res => {
+            const features = []
+            res.data.forEach(item => {
+              const items = item.data.map(v => {
+                const feature = this.$map.createFeature([v.longitude, v.latitude], '监控点', v)
+                feature.setStyle(this.$map.getMonitorStyle())
+                return feature
+              })
+              features.push(...items)
+            })
+            this.$store.dispatch('map/changeJkLayer', {
+              layer: this.$map.createVectorLayer(features),
+              ope: 'ADDLAYER'
+            })
+            // this.$map.addLayer(this.jkLayer)
+            loading.close()
+            this.$store.dispatch('lqfb/changeVideoListOffsetRight', 0)
+          })
+        } else {
+          this.$store.dispatch('map/changeJkLayer', {
+            layer: this.jkLayer,
+            ope: 'REMOVELAYER'
+          })
+          this.$store.dispatch('lqfb/changeVideoListOffsetRight', -30)
+          this.$map.goHome()
+        }
+        return
+      }
+      // 显示选中图层
+      this.showCheckLayer()
+    },
+    handleMenuClick(menu) {
+      this.$store.dispatch('lqfb/changeActiveMenu', menu)
+
+      if (menu === '预案调取') {
+        this.$store.dispatch('lqfb/changeyadqPannel', false)
+        this.$store.dispatch('lqfb/changeyadqOffsetRight', -30)
+      }
+      if (menu === '巡逻范围' || menu === '预案调取' || menu === '监控设备') {
+        this.$store.dispatch('lqfb/changezlOffsetRight', -25)
+      }
+      // if (menu === '监控设备') {
+      //   this.$store.dispatch('lqfb/changeVideoListOffsetRight', this.videoListOffsetRight === 0 ? -30 : 0)
+      // }
+    },
+    showCheckLayer() {
+      const nodes = [] // 所有大类下的tree选中的叶子节点
+      this.treeData.map(v => {
+        v.children &&
+            nodes.push(
+              ...this.$refs[`tree_${v.id}`][0].getCheckedNodes(true, false)
+            )
+      })
+      this.$store.dispatch('siderbar/changeCheckedLeafNodes', nodes)
+    },
+    nodeClick(data, node, obj) {
+      if (data.label === '事故分级调取') {
+        this.$store.dispatch('lqfb/changeyadqOffsetRight', this.yadqOffsetRight === 0 ? -30 : 0)
+      }
+      if (data.label === this.yadqPannel) {
+        this.$store.dispatch('lqfb/changeyadqPannel', '')
+      } else if (data.label !== this.yadqPannel) {
+        this.$store.dispatch('lqfb/changeyadqPannel', data.label)
+      }
+      if (data.label === '林区') this.$store.dispatch('lqfb/changeActiveMenu', '林区')
+      if ((data.id + '')[0] === '4' || (data.id + '')[0] === '6' || (data.id + '')[0] === '7') {
+        this.$store.dispatch('lqfb/changezlOffsetRight', -25)
+      }
+    },
+    clearTreeChecked() {
+      this.treeData.map(v => {
+        this.$refs[`tree_${v.id}`][0].setCheckedKeys([])
+      })
+    }
+  }
+}
+</script>
+<style lang="scss">
+</style>

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #f9a528;
+      }
+    </style>
+  </defs>
+  <path id="道路icon" class="cls-1" d="M17.125,22H22L16.5,0H14.375l.688,5.5H6.938L7.625,0H5.5L0,22H4.875l.688-5.5H16.438ZM5.906,13.75l.688-5.5h8.812l.688,5.5Z"/>
+</svg>

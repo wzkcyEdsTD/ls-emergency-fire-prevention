@@ -1,0 +1,359 @@
+// cover some element-ui styles
+
+.el-breadcrumb__inner,
+.el-breadcrumb__inner a {
+  font-weight: 400 !important;
+}
+
+.el-upload {
+  input[type="file"] {
+    display: none !important;
+  }
+}
+
+.el-upload__input {
+  display: none;
+}
+
+
+// to fixed https://github.com/ElemeFE/element/issues/2461
+.el-dialog {
+  transform: none;
+  left: 0;
+  position: relative;
+  margin: 0 auto;
+}
+
+// refine element ui upload
+.upload-container {
+  .el-upload {
+    width: 100%;
+
+    .el-upload-dragger {
+      width: 100%;
+      height: 200px;
+    }
+  }
+}
+
+// dropdown
+.el-dropdown-menu {
+  a {
+    display: block
+  }
+}
+
+// to fix el-date-picker css style
+.el-range-separator {
+  box-sizing: content-box;
+}
+
+// refine element ui el-tree
+.el-tree::-webkit-scrollbar {
+  width: 0 !important;
+}
+.el-tree {
+  overflow: auto;
+  overflow: -moz-scrollbars-none;
+  -ms-overflow-style: none;
+  background-color: rgb(16, 21, 24);
+  width: 260px;
+  color: #ffffff;
+  .el-tree-node__content {
+    height: 32px;
+    .el-tree-node__label {
+      font-size: 16px;
+      color: #fafafa;
+      line-height: 22px;
+    }
+    label.el-checkbox {
+      margin-bottom: 1px;
+    }
+    .el-checkbox__inner {
+      transform:scale(0.9,0.9)
+    }
+  }
+  .el-tree-node__content:hover,
+  .el-tree-node__content:active {
+    background-color: rgb(6, 56, 86);
+  }
+  .el-tree-node:focus > .el-tree-node__content {
+    background: url(../assets/images/矩形1.png);
+  }
+  .el-tree-node__children .el-tree-node__label {
+    font-size: 14px;
+    color: #fafafa;
+    line-height: 20px;
+  }
+}
+
+//el-collapse ui
+.el-collapse::-webkit-scrollbar {
+  display: none; //Safari and Chrome
+}
+.el-collapse {
+  height: 100%;
+  overflow: scroll;
+  -ms-overflow-style: none; //IE 10+
+  overflow: -moz-scrollbars-none; //Firefox
+  width: 260px;
+  border: none;
+  background-color: rgb(16, 21, 24);
+  background-repeat: no-repeat;
+  .el-collapse-item {
+    margin-bottom: 10px;
+    .el-collapse-item__wrap {
+      border: none;
+      .el-collapse-item__content {
+        padding-bottom: 0;
+      }
+    }
+  }
+  .el-collapse-item__content {
+    background-color: rgb(16, 21, 24);
+    padding-left: 7px;
+  }
+  .el-collapse-item__header {
+    background-color: rgb(16, 21, 24);
+    color: #FAFAFA;
+    border: none;
+    height: 32.75px;
+    font-size: 16px;
+    line-height: 40px;
+    span {
+      padding-left: 10px;
+    }
+    .svg-icon {
+      margin-left: 16px;
+      margin-right: 8px;
+      width: 20px;
+      height: 18px;
+    }
+  }
+}
+
+.sider-bar {
+  .el-collapse-item__header:focus {
+    background: url(../assets/images/矩形1.png) no-repeat;
+    background-size: 100%;
+    color: #fafafa;
+  }
+}
+
+.no-arrow i:before {
+  content: '';
+}
+
+.ljxq-container,.video-list-pannel {
+  .el-collapse{
+    width: 100%;
+    height: 350px;
+    margin-top: 10px;
+    background-color: rgb(16, 21, 24);
+  }
+  .el-collapse-item__content {
+    color: #fff;
+    background-color: rgb(16, 21, 24);
+    padding-left: 0;
+  }
+  .el-collapse-item__header {
+    background: url('../assets/images/图标底框 (1).png') no-repeat;
+    background-size: 100%;
+    height: 30px;
+    line-height: 30px;
+    font-size: 16px;
+    padding-left: 10px;
+  }
+  .el-collapse-item__header:focus {
+    background: url('../assets/images/图标底框.png') no-repeat;
+    color: hsla(184, 94%, 50%, 1);
+  }
+  .is-actvie{
+    background-size: 100%;
+  }
+}
+
+.video-list-pannel  {
+  .el-collapse {
+    height: 95%;
+    background-color: rgb(16, 21, 25);
+  }
+  .el-collapse-item__wrap {
+    background-color: rgb(16, 21, 25);
+  }
+}
+
+// table
+.el-table::before{
+  background-color: transparent;
+}
+
+.el-date-editor--datetimerange.el-input, .el-date-editor--datetimerange.el-input__inner {
+  width: 100%;
+}
+
+
+
+//日期和时间选择器样式
+.start-date,.end-date {
+  display: flex;
+  font-size: 16px;
+  height: 28px;
+  margin-left: 20px;
+  line-height: 28px;
+  margin-bottom: 20px;
+  .el-date-editor.el-input, .el-date-editor.el-input__inner {
+    width: 120px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    margin-left: 10px;
+    background-color: hsla(208, 80%, 17%, 1);
+  }
+  .el-input__inner {
+    width: 120px;
+    height: 28px;
+    background-color: hsla(208, 80%, 17%, 1);
+    color: hsla(208, 81%, 37%, 1);
+    border: 0;
+    font-size: 14px;
+  }
+  .el-input__inner::-webkit-input-placeholder {color:hsla(208, 81%, 37%, 1)}
+  .el-input__prefix{
+    top: -6px;
+  }
+  .el-icon-date:before {color:hsla(208, 81%, 37%, 1)}
+  .el-input__suffix {
+    // display: none;
+    top: -6px;
+  }
+  .el-input__icon:before {color:hsla(208, 81%, 37%, 1)}
+}
+
+.el-picker-panel,.el-time-panel{
+  background: linear-gradient(to bottom, rgba(11, 72, 141, 1), rgba(7, 36, 61, 1));
+  border: 0;
+  border-radius: 0;
+  .el-date-picker__header{
+    .el-picker-panel__icon-btn::before {
+      color: #fff;
+    }
+    .el-date-picker__header-label {
+      color: hsla(195, 88%, 67%, 1);
+    }
+  }
+  .el-picker-panel__content {
+    table tbody {
+      tr {
+        border:  0;
+        th {color: rgb(79, 162, 235)}
+        .available div span {
+          color: rgb(35, 126, 207);
+          &:hover {
+            background-color: rgb(25, 144, 255);
+            color:#fff;
+            border-radius: 0;
+          }
+        }
+        .current div span {background-color: rgb(25, 144, 255);color:#fff;border-radius: 0;}
+      }
+    }
+  }
+  .el-time-panel__content::before,.el-time-panel__content::after {
+    border: 0;
+  }
+ 
+  .el-time-spinner__item{color: rgb(35, 126, 207)}
+  .el-time-spinner__item:hover:not(.disabled):not(.active) {
+    background-color: rgb(25, 144, 255);
+    color:#fff;
+    border-radius: 0;
+  }
+  .el-time-spinner__item.active:not(.disabled) {
+    background-color: rgb(25, 144, 255);
+    color:#fff;
+    border-radius: 0;
+  }
+  .el-time-panel__footer {
+    border:0;
+    .cancel {
+      color: #fff;
+    }
+  }
+  
+}
+.el-popper[x-placement^=top] .popper__arrow::after,
+.el-popper[x-placement^=top] .popper__arrow,
+.el-popper[x-placement^=bottom] .popper__arrow,
+.el-popper[x-placement^=bottom] .popper__arrow::after {
+  border-top-color:rgb(7, 50, 81);
+  border-bottom-color:rgb(7, 50, 81)
+}
+
+.zztx-container {
+  .el-checkbox__label {
+    color: #8fc8fc;
+    font-size: 18px;
+  }
+  .el-checkbox__inner,.is-checked .el-checkbox__inner {
+    border: 1px #29AEEA solid;
+    background-color: rgb(15, 47, 84);
+    border-radius: 0;
+  }
+  .is-checked .el-checkbox__inner::after { border-color: rgb(11, 201, 234);}
+  
+}
+
+.toolbar-wrapper {
+  .el-select {
+    width: 96px;
+    height: 32px;  
+    .el-input__inner {
+      background-color: rgba(16, 21, 24, 1);
+      border-color: rgba(16, 21, 24, 1);
+      height: 32px;
+      background: url(../assets/images/实时降水底.png) no-repeat;
+      background-size: 100%;
+      border: 0;
+      padding-left: 10px;
+      color:hsla(198, 60%, 46%, 1);
+    }
+    .el-input__icon {
+      line-height: 32px;
+    }
+    .el-input .el-select__caret {
+      color:hsla(198, 60%, 46%, 1)
+    }
+    .el-input__inner::-webkit-input-placeholder {
+      color:hsla(198, 60%, 46%, 1);
+    }
+  }
+}
+.el-select-dropdown {
+  background-color: rgb(7, 50, 81);
+  border-color: rgb(7, 50, 81);
+
+  .el-select-dropdown__list{
+    .el-select-title {
+      text-align: center;
+      font-size: 16px;
+      color: rgb(0, 192, 218);
+      cursor: pointer;
+      margin: 8px;
+    }
+    .split-line {
+      width: 70%;
+      margin: 5px 15px 15px;
+      height: 1px;
+      background-color: #fff;
+    }
+  }
+    
+  .el-select-dropdown__item {
+    color: hsla(198, 60%, 46%, 1)
+  }
+  .hover {
+    background-color: rgb(14, 124, 199);
+    color: #fff
+  }
+}
