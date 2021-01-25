@@ -78,7 +78,7 @@ import ruianGeoJson from './ruian.json'
 import jsonp from 'jsonp'
 import moment from 'moment'
 import windPr1h from './预测1小时风向.json'
-// import axios from 'axios'
+import axios from 'axios'
 import { getForRain_3H } from '@/api/lqfb'
 import { log } from 'video.js'
 export default {
@@ -250,8 +250,16 @@ export default {
     },
 
     addWindCur() {
-      this.$map.removeWindLayer()
-      this.$map.getWindLayer(require('@/components/Map/实时风向.json'))
+      const url = `https://datacenter.istrongcloud.com`
+      axios.get(`${url}/data/gfs/fcdata/202101/25/08/132.json?v=1611565356612`).then(res => {
+         const temp = res.data["2021013020"]
+         console.log(temp)
+        //  debugger
+         this.$map.wind(temp);
+      })
+
+      // this.$map.removeWindLayer()
+      // this.$map.getWindLayer(require('@/components/Map/实时风向.json'))
     },
     removeWindCur() {
       this.$map.removeWindLayer()

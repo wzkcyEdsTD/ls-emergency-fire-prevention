@@ -216,20 +216,20 @@ export default {
         this.lssgLayer.setVisible(false)
         // remove layer
         if (this.lssgTempLayer) {
-          vue.$map.removeLayer(this.lssgTempLayer)
+          window.$map.removeLayer(this.lssgTempLayer)
           this.$store.dispatch('lssg/changeLssgTempLayer', layer)
         }
 
-        const feature = vue.$map.createFeatureByGeoJson(item.geo_info)
-        const layer = vue.$map.createVectorLayer([feature])
-        const mask = vue.$map.createMaskByGeoJson(
+        const feature = window.$map.createFeatureByGeoJson(item.geo_info)
+        const layer = window.$map.createVectorLayer([feature])
+        const mask = window.$map.createMaskByGeoJson(
           require('@/components/Map/ruian.json')
         )
         layer.addFilter(mask)
-        vue.$map.addLayer(layer)
+        window.$map.addLayer(layer)
 
         // zoom to the geometry
-        vue.$map
+        window.$map
           .getMap()
           .getView()
           .fit(feature.getGeometry(), { padding: [100, 50, 50, 50] })
@@ -273,10 +273,10 @@ export default {
     handleGoBack() {
       if (this.lssgLayer) {
         this.lssgLayer.setVisible(true)
-        vue.$map.goHome()
+        window.$map.goHome()
         // remove lssg temp layer
         if (this.lssgTempLayer) {
-          vue.$map.removeLayer(this.lssgTempLayer)
+          window.$map.removeLayer(this.lssgTempLayer)
         }
       }
       this.isDetail = !this.isDetail
@@ -317,16 +317,16 @@ export default {
             }
           }
         }).map((v) =>
-          vue.$map.createFeatureByGeoJson(JSON.parse(v.geo_info), v)
+          window.$map.createFeatureByGeoJson(JSON.parse(v.geo_info), v)
         )
         if (this.lssgLayer && lssgFeatures) {
-          vue.$map.removeLayer(this.lssgLayer)
-          const layer = vue.$map.createVectorLayer(lssgFeatures)
-          const mask = vue.$map.createMaskByGeoJson(
+          window.$map.removeLayer(this.lssgLayer)
+          const layer = window.$map.createVectorLayer(lssgFeatures)
+          const mask = window.$map.createMaskByGeoJson(
             require('@/components/Map/ruian.json')
           )
           layer.addFilter(mask)
-          vue.$map.addLayer(layer)
+          window.$map.addLayer(layer)
           // commit('SET_LSSG_LAYER', layer)
           this.$store.dispatch('lssg/changeLssgLayer', layer)
         }

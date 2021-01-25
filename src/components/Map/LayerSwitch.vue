@@ -50,7 +50,7 @@
       <li
         :title="'工具'"
         class="tool"
-        :style="activeType === '工具' ? 'height:160px' : ''"
+        :style="activeType === '工具' ? 'height:24vh' : ''"
         @click="handleActiveType('工具')"
       >
         <img
@@ -67,7 +67,7 @@
         <svg-icon v-show="activeType === '工具'" icon-class="工具icon-选中" />
         <div
           class="dropdown-lists"
-          :style="activeType === '工具' ? 'height:90px' : 'height:0px'"
+          :style="activeType === '工具' ? 'height:19vh' : 'height:0px'"
         >
           <div
             v-for="(item, index) in toolList"
@@ -85,13 +85,14 @@
 
 <script>
 import MAP_URL from '@/utils/map/map-url'
-
+import Measure from "@/utils/map/measure_new.js";
 export default {
   data() {
     return {
       activeType: '',
       radio: '标准地图',
       measureLayers: [],
+      list:[],
       vectorList: [
         {
           label: '标准地图',
@@ -132,7 +133,7 @@ export default {
         //   url: MAP_URL.SLZY
         // }
       ],
-      toolList: ['清空', '定位', '测距'],
+      toolList: ['清空', '定位', '测距',"测面","打印"],
       dgxLayer: null // 示高线图层
     }
   },
@@ -175,8 +176,15 @@ export default {
     },
 
     handleToolChange(val) {
+      
       if (val === '清空') {
         this.$store.dispatch('map/changeClearFlag', null)
+        if(this.list){
+          this.list.forEach(element => {
+            window.map.removeLayer(element)
+          });
+          this.list = [];
+        }
         this.measureLayers.map(v => {
           this.$map.removeLayer(v.layer)
           this.$map.getMap().removeOverlay(v.overlay)
@@ -186,12 +194,32 @@ export default {
         this.$map.goHome()
       }
       if (val === '测距') {
-        this.$map.doLineMeasure((layer, overlay) => {
-          this.measureLayers.push({
-            layer,
-            overlay
-          })
-        })
+       const tempLayer = Measure.returnLayer(window.map,"lineString");
+       this.list.push(tempLayer);
+      }
+      if (val === '测面') {
+        const tempLayer = Measure.returnLayer(window.map,"area");
+        this.list.push(tempLayer);
+        console.log(this.list)
+        // var layers = window.map.getLayers();
+        // console.log(layers)
+        // window.map.removeLayer(window.temp)
+      }
+      if (val === '打印') { 
+      let map = window.map;
+      console.log("map",map);
+      map.once("postcompose", function(event) {
+        // debugger
+        var canvas = event.context.canvas;
+        if (navigator.msSaveBlob) {
+          navigator.msSaveBlob(canvas.msToBlob(), "map.png");
+        } else {
+          canvas.toBlob(function(blob) {
+            FileSaverJS.saveAs(blob, "map.png");
+          });
+        }
+        });
+        map.renderSync();
       }
     },
 
@@ -215,6 +243,8 @@ export default {
       this.$store.dispatch('map/changeLayerListByUrl', { appendLayerUrlList: [MAP_URL.SLZY], removeLayerUrlList: [] })
       this.$store.dispatch('map/changeLqzyLayer', true)
     }
+  },
+  mounted:{
   }
 }
 </script>

@@ -51,7 +51,7 @@ export default {
   data() {
     return {
       jkList,
-      activeNames: [1, 4],
+      activeNames: [1,4],
       treeData,
       defaultProps: {
         children: 'children',
@@ -117,6 +117,7 @@ export default {
   methods: {
     handleCheckChange(data, checked, id) {
       // 勾选目录树控制总览显示资源
+      // debugger
       if ((data.id + '').substring(0, 2) === '11') {
         this.$store.dispatch('lqfb/changeActiveMenu', '基础要素')
       } else if ((data.id + '')[0] === '2') {

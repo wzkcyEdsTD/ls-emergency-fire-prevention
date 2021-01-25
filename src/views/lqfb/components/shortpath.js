@@ -104,7 +104,7 @@ const onFeatureSelecter = feature => {
       false
     )
     feature.popup = popup
-    vue.$map.getMap().addPopup(popup)
+    window.$map.getMap().addPopup(popup)
   }
   if (feature.geometry.CLASS_NAME !== 'SuperMap.Geometry.Point') {
     feature.style = styleGuideLine
@@ -114,7 +114,7 @@ const onFeatureSelecter = feature => {
 
 // 清除要素时调用此函数
 const onFeatureUnselect = feature => {
-  vue.$map.getMap().removePopup(feature.popup)
+  window.$map.getMap().removePopup(feature.popup)
   feature.popup.destroy()
   feature.popup = null
   if (feature.geometry.CLASS_NAME !== 'SuperMap.Geometry.Point') {
@@ -126,13 +126,13 @@ const onFeatureUnselect = feature => {
 // //////////////////////////////////////////--------- 进行最短路径计算---------//////////////////////////////////////////////////////////////////////////////////////
 
 const selectStartPt = () => {
-  vue.$map.doInteractionDraw('Point', (geojson, feature) => {
+  window.$map.doInteractionDraw('Point', (geojson, feature) => {
     startPt = feature
   })
 }
 
 const selectEndPt = () => {
-  vue.$map.doInteractionDraw('Point', (geojson, feature) => {
+  window.$map.doInteractionDraw('Point', (geojson, feature) => {
     endPt = feature
   })
 }
@@ -381,8 +381,8 @@ const clearElements = () => {
   // }
   // lineLayers.removeAllFeatures();
   // markerLayers.clearMarkers();
-  vue.$map.removeLayer(markerLayers)
-  vue.$map.removeLayer(lineLayers)
+  window.$map.removeLayer(markerLayers)
+  window.$map.removeLayer(lineLayers)
 }
 
 export default {

@@ -538,8 +538,8 @@ export default {
     width: 400px;
     height: calc(100vh - 60px);
     // background-color: rgba(16, 21, 24, 1);
-    background-image: url("~@/common/images/左边框.png");
-    // background-size: 100% 100%;
+    background-image: url("~@/common/images/右侧框.png");
+    background-size: 100% 100%;
     transition: right 0.9s;
     .close {
       position: absolute;

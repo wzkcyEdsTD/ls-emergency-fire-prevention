@@ -27,7 +27,7 @@ const mapUrl = {
   ZWPT_SG_WZ_CGCS2000: {
     type: 'map',
     layerName: 'wenzhou_emap',
-    url: 'http://10.36.245.203:8090/iserver/services/map-agscachev2-YJSGBZB2019CGCS2000/rest/maps/YJ_SG_BZB_2019_CGCS2000'
+    url: 'http://t4.tianditu.com/DataServer?T=vec_c&x={x}&y={y}&l={z}&tk=2e6919cbe2122200fa172aaea99742e0'
   },
   // 影像注记
   YJ_YXZJ_2019_CGCS2000: {

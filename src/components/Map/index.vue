@@ -76,8 +76,8 @@ export default {
       return this.$store.getters.videoListOffsetRight
     }
   },
-  mounted() {
-    this.initMap()
+ async mounted() {
+   await this.initMap()
   },
   methods: {
     getOffsetRight() {
@@ -91,6 +91,7 @@ export default {
 
     initMap() {
       this.map = this.$map.createMap('map-container')
+
       
       const token = "2e6919cbe2122200fa172aaea99742e0";
 
@@ -114,7 +115,7 @@ export default {
 
       // zjLayer.addFilter(mask)
       this.$store.dispatch('map/changeZjLayer', zjLayer)
-
+      window.map = this.map;
     },
     collapse() {
       this.$store.dispatch('lqfb/changeInfoPanelOffsetRight', this.infoPanelOffsetRight === 0 ? -25 : 0)

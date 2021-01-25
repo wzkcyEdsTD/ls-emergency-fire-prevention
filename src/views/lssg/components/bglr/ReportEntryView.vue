@@ -347,13 +347,13 @@ export default {
       } else if (this.reportType === '报告录入') {
         if (this.lssgLayer) {
           this.lssgLayer.setVisible(true)
-          vue.$map.goHome()
+          window.$map.goHome()
           // remove lssg temp layer
           if (this.lssgTempLayer) {
-            vue.$map.removeLayer(this.lssgTempLayer)
+            window.$map.removeLayer(this.lssgTempLayer)
           }
         }
-        vue.$map.goHome()
+        window.$map.goHome()
         this.$emit('close')
         this.reset()
         this.$parent.$refs.lssgcx.isDetail = false

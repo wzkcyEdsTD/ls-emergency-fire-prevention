@@ -79,7 +79,7 @@ const actions = {
     getFhryCurPositionByPhone().then(res => {
       const list = res.data.result
       const features = list.map(v => {
-        const feature = vue.$map.createFeature(
+        const feature = window.$map.createFeature(
           [v.longitude, v.latitude],
           v.smid,
           { ...v, NAME: v.smid }
@@ -103,7 +103,7 @@ const actions = {
         })
       }
       const features = list.map(v => {
-        const feature = vue.$map.createFeature(
+        const feature = window.$map.createFeature(
           [v.longitude, v.latitude],
           '监控点',
           v

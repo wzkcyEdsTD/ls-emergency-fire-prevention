@@ -52,7 +52,7 @@ const actions = {
   getLssgLayer({ commit, state }, payload) {
     getLssgList().then(res => {
       commit('SET_LSSG_LIST', res)
-      state.lssgLayer && vue.$map.removeLayer(state.lssgLayer)
+      state.lssgLayer && window.$map.removeLayer(state.lssgLayer)
       const features = res.data.result
         .filter(v => {
           if (!v.geo_info) return false
@@ -70,20 +70,20 @@ const actions = {
             }
           }
         })
-        .map(v => vue.$map.createFeatureByGeoJson(JSON.parse(v.geo_info), v))
+        .map(v => window.$map.createFeatureByGeoJson(JSON.parse(v.geo_info), v))
 
-      const layer = vue.$map.createVectorLayer(features)
-      const mask = vue.$map.createMaskByGeoJson(
+      const layer = window.$map.createVectorLayer(features)
+      const mask = window.$map.createMaskByGeoJson(
         require('@/components/Map/ruian.json')
       )
       layer.addFilter(mask)
-      vue.$map.addLayer(layer)
+      window.$map.addLayer(layer)
       commit('SET_LSSG_LAYER', layer)
     })
   },
 
   removeLssgLayer({ commit, state }, payload) {
-    state.lssgLayer && vue.$map.removeLayer(state.lssgLayer)
+    state.lssgLayer && window.$map.removeLayer(state.lssgLayer)
     commit('SET_LSSG_LAYER', null)
   },
 

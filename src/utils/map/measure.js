@@ -114,11 +114,13 @@ var formatArea = function(polygon) {
   return output
 }
 
-export const addInteraction = (map, type, callback) => {
+export const addInteraction = (map, types, callback) => {
+  var type = (types == 'area' ? 'Polygon' : 'LineString');
   // var type = 'LineString' //(typeSelect.value == 'area' ? 'Polygon' : 'LineString');
   var source = new VectorSource()
   var vector = new VectorLayer({
     source: source,
+    type:type,
     style: new Style({
       fill: new Fill({
         color: 'rgba(255, 255, 255, 0.2)'
