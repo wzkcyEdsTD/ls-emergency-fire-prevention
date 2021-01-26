@@ -31,8 +31,11 @@ const mutations = {
   SET_BASE_LAYER(state, layer) {
     state.baseLayer = layer
   },
-  UPDATE_BASE_LAYER_SOURCE_URL(state, url) {
+  UPDATE_BASE_LAYER_SOURCE_URL_old(state, url) {
     state.baseLayer.setSource(vue.$map.createTileSuperMapRestSource(url))
+  },
+  UPDATE_BASE_LAYER_SOURCE_URL(state, type) {
+    state.baseLayer = vue.$map.createTianDiTuLayer(type)
   },
   SET_ZJ_LAYER(state, layer) {
     state.zjLayer = layer
@@ -93,8 +96,8 @@ const actions = {
     commit('SET_BASE_LAYER', layer)
     vue.$map.addLayer(layer)
   },
-  updateBaseLayerSourceUrl({ commit }, url) {
-    commit('UPDATE_BASE_LAYER_SOURCE_URL', url)
+  updateBaseLayerSourceUrl({ commit }, type) {
+    commit('UPDATE_BASE_LAYER_SOURCE_URL', type)
   },
   changeZjLayer({ commit }, layer) {
     state.zjLayer && vue.$map.removeLayer(state.zjLayer)

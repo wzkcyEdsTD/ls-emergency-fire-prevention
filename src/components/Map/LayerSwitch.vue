@@ -19,7 +19,7 @@
         :title="'地图切换'"
         class="img-container"
         :style="activeType === '影像' ? 'height:17vh' : ''"
-        @click="handleToolChange('影像')"
+        @click="handleActiveType('影像')"
       >
         <img
           v-show="activeType !== '影像'"
@@ -96,42 +96,21 @@ export default {
       vectorList: [
         {
           label: '标准地图',
-          url: MAP_URL.ZWPT_SG_WZ_CGCS2000
+          url: MAP_URL.ZWPT_SG_WZ_CGCS2000,
+          type:"vec_w"
         }
       ],
       imgList: [
         {
-          label: '矢量底图',
-          url: MAP_URL.ZWPT_SG_WZ_CGCS2000
+          label: '矢量图',
+          url: MAP_URL.ZWPT_SG_WZ_CGCS2000,
+          type:"vec_w"
         },
         {
-          label: '影像底图',
-          url: MAP_URL.IMG_2019
+          label: '影像图',
+          url: MAP_URL.IMG_2019,
+          type:"img_w"
         },
-        // {
-        //   label: '18年影像',
-        //   url: MAP_URL.IMG_2018
-        // },
-        // {
-        //   label: '17年影像',
-        //   url: MAP_URL.IMG_2017
-        // },
-        // {
-        //   label: '14年影像',
-        //   url: MAP_URL.IMG_2014
-        // },
-        // {
-        //   label: '12年影像',
-        //   url: MAP_URL.IMG_2012
-        // },
-        // {
-        //   label: '示高线',
-        //   url: MAP_URL.DGX
-        // },
-        // {
-        //   label: '林区资源',
-        //   url: MAP_URL.SLZY
-        // }
       ],
       toolList: ['清空', '定位', '测距',"测面","打印"],
       dgxLayer: null // 示高线图层
@@ -160,6 +139,7 @@ export default {
     },
 
     handleDropdownChange(data) {
+      const map = window.map;
       if (data.label === '示高线') {
         this.showDGX()
         return
@@ -169,10 +149,35 @@ export default {
         this.showLQZY()
         return
       }
-      this.$store.dispatch('map/updateBaseLayerSourceUrl', data.url.url)
-      data.label.indexOf('影像') > -1
-        ? this.$store.dispatch('map/setZjLayerVisible', true)
-        : this.$store.dispatch('map/setZjLayerVisible', false)
+
+      let temp = null;
+      if(data.type == "vec_w"){
+        const layerList = map.getLayers().array_;
+        layerList.forEach((item)=>{
+          if(item.className_=="vec_w"){
+            temp = item
+          }
+        })
+        //若无矢量图
+        if(!temp){
+          const vec_layer = this.$map.createTianDiTuLayer("vec_w")
+          const cva_layer = this.$map.createTianDiTuLayer("cva_w")
+          temp = vec_layer;
+          map.getLayers().item(0).setVisible(false)//影像图
+          map.getLayers().item(1).setVisible(false)//影像图注记
+          map.addLayer(vec_layer);
+          map.addLayer(cva_layer);
+        }else{
+          map.getLayers().item(5).setVisible(true)//矢量图
+          map.getLayers().item(6).setVisible(true)//矢量图注记
+        }
+      }else if(data.type == "img_w"){
+        map.getLayers().item(0).setVisible(true)//影像图
+        map.getLayers().item(1).setVisible(true)//影像图注记
+        map.getLayers().item(5).setVisible(false)//矢量图
+        map.getLayers().item(6).setVisible(false)//矢量图注记
+      }
+
     },
 
     handleToolChange(val) {
@@ -205,22 +210,9 @@ export default {
         // console.log(layers)
         // window.map.removeLayer(window.temp)
       }
-      if (val === '打印') { 
-      let map = window.map;
-      console.log("map",map);
-      map.once("postcompose", function(event) {
-        // debugger
-        var canvas = event.context.canvas;
-        if (navigator.msSaveBlob) {
-          navigator.msSaveBlob(canvas.msToBlob(), "map.png");
-        } else {
-          canvas.toBlob(function(blob) {
-            FileSaverJS.saveAs(blob, "map.png");
-          });
-        }
-        });
-        map.renderSync();
-      }
+      if (val === '打印') { }
+
+      
     },
 
     showDGX() {

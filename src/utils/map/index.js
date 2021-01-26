@@ -135,14 +135,27 @@ const createTianDiTuLayer = (type, options = {}) => {
   const token = "2e6919cbe2122200fa172aaea99742e0";
   const layer = new ol.layer.Tile({
     source: new ol.source.XYZ({
-      crossOrigin: 'anonymous',
+      // crossOrigin: 'anonymous',
       url: `http://t4.tianditu.com/DataServer?T=${type}&x={x}&y={y}&l={z}&tk=${token}`
     }),
+    className:type
   })
 
   return layer
 }
 
+const createTestLayer = (url, options = {}) => {
+  const token = "2e6919cbe2122200fa172aaea99742e0";
+  const layer = new ol.layer.Tile({
+    source: new ol.source.XYZ({
+      // crossOrigin: 'anonymous',
+      url: url
+    }),
+    className:'base'
+  })
+
+  return layer
+}
 
 const createTileSuperMapRestSource = (url) => {
   return new TileSuperMapRest({
@@ -1209,5 +1222,6 @@ export default {
   getTerminalstylePointStyle,
   createTianDiTuLayer,
   doPolygonMeasure,
-  wind
+  wind,
+  createTestLayer,
 }
