@@ -93,6 +93,7 @@ export default {
       radio: '标准地图',
       measureLayers: [],
       list:[],
+      map:window.g.map,
       vectorList: [
         {
           label: '标准地图',
@@ -112,7 +113,7 @@ export default {
           type:"img_w"
         },
       ],
-      toolList: ['清空', '定位', '测距',"测面","打印"],
+      toolList: ['清空', '定位', '画线',"画面","打印"],
       dgxLayer: null // 示高线图层
     }
   },
@@ -139,7 +140,7 @@ export default {
     },
 
     handleDropdownChange(data) {
-      const map = window.map;
+      const map = window.g.map;
       if (data.label === '示高线') {
         this.showDGX()
         return
@@ -181,38 +182,61 @@ export default {
     },
 
     handleToolChange(val) {
-      
       if (val === '清空') {
-        this.$store.dispatch('map/changeClearFlag', null)
+        // this.$store.dispatch('map/changeClearFlag', null)
         if(this.list){
           this.list.forEach(element => {
-            window.map.removeLayer(element)
+            window.g.map.removeLayer(element)
+            const dom = $(".tooltip-static")
+            dom.remove()
+            // dom.array.forEach(element => {
+            //   element.remove()
+            // });
           });
           this.list = [];
         }
-        this.measureLayers.map(v => {
-          this.$map.removeLayer(v.layer)
-          this.$map.getMap().removeOverlay(v.overlay)
-        })
+        // this.measureLayers.map(v => {
+        //   this.$map.removeLayer(v.layer)
+        //   this.$map.getMap().removeOverlay(v.overlay)
+        // })
       }
       if (val === '定位') {
         this.$map.goHome()
       }
-      if (val === '测距') {
-       const tempLayer = Measure.returnLayer(window.map,"lineString");
+      if (val === '画线') {
+       const tempLayer = Measure.returnLayer(window.g.map,"lineString");
        this.list.push(tempLayer);
       }
-      if (val === '测面') {
-        const tempLayer = Measure.returnLayer(window.map,"area");
+      if (val === '画面') {
+        const tempLayer = Measure.returnLayer(window.g.map,"area");
         this.list.push(tempLayer);
         console.log(this.list)
-        // var layers = window.map.getLayers();
-        // console.log(layers)
-        // window.map.removeLayer(window.temp)
       }
-      if (val === '打印') { }
+      if (val === '打印') {
+        let map = this.$map.getMap();
+        map.once("postcompose", function(event) {
+          var canvas1 = $(".img_w").children('canvas')[0];//底图
+          var canvas2 = $(".cia_w").children('canvas')[0];//注记
+          var canvas3 = $(".ol-layer").children('canvas')[0];//各种矢量图
+          canvas1.getContext("2d").drawImage(canvas2,0,0);
+          if(canvas3){
+            const width = canvas3.width;
+            if(Number(width)>0){
+              canvas1.getContext("2d").drawImage(canvas3,0,0);
+            }
+          }
 
-      
+          if (navigator.msSaveBlob) {
+            navigator.msSaveBlob(canvas1.msToBlob(), 'map.png');
+          } else {
+            canvas1.toBlob(function(blob) {
+              saveAs(blob, 'map.png');
+            });
+          }
+        });
+        map.renderSync();
+
+      }
     },
 
     showDGX() {

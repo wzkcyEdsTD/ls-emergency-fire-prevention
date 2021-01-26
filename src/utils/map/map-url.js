@@ -1,7 +1,7 @@
 import { getForRain_3H } from '@/api/lqfb'
 
-const dataSourceName = 'pg_wzyjdb'
-const dataUrl = 'http://10.36.234.83:8090/iserver/services/data-wenzhouyingji/rest/data'
+const dataSourceName = 'lishui_forestfire'
+const dataUrl = 'http://10.53.137.59:8090/iserver/services/data-lishui_forestfire/rest/data'
 // const dataUrl = 'http://172.20.83.218:8090/iserver/services/data-wenzhouyingji/rest/data'
 // const bufferUrl = 'http://172.20.83.218:8090/iserver/services/data-buffer/rest/data'
 const bufferUrl = 'http://10.36.234.83:8090/iserver/services/data-buffer/rest/data'
@@ -27,7 +27,7 @@ const mapUrl = {
   ZWPT_SG_WZ_CGCS2000: {
     type: 'map',
     layerName: 'wenzhou_emap',
-    url: 'http://t4.tianditu.com/DataServer?T=vec_c&x={x}&y={y}&l={z}&tk=2e6919cbe2122200fa172aaea99742e0'
+    url: 'http://t4.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=2e6919cbe2122200fa172aaea99742e0'
   },
   // 影像注记
   YJ_YXZJ_2019_CGCS2000: {
@@ -228,7 +228,7 @@ const mapUrl = {
   // --森林公园
   SECRET_FORESTPARK_M: {
     type: 'data', // 数据服务
-    layerName: 'SECRET_FORESTPARK_M',
+    layerName: 'd_forest_park',
     label: '森林公园',
     dataSourceName,
     icon: '森林公园.png',

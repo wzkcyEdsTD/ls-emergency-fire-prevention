@@ -97,9 +97,6 @@ export default {
 
       const wenzhouLayer = this.$map.createTianDiTuLayer(
         "img_w",
-        {
-          className: 'base-layer'
-        }
       )
 
       const mask = this.$map.createMaskByGeoJson(ruianGeoJson)
@@ -108,14 +105,11 @@ export default {
 
       const zjLayer = this.$map.createTianDiTuLayer(
         "cia_w",
-        {
-          className: 'zj-layer'
-        }
       )
 
       // zjLayer.addFilter(mask)
       this.$store.dispatch('map/changeZjLayer', zjLayer)
-      window.map = this.map;
+      // window.map = this.map;
     },
     collapse() {
       this.$store.dispatch('lqfb/changeInfoPanelOffsetRight', this.infoPanelOffsetRight === 0 ? -25 : 0)

@@ -136,7 +136,9 @@ const createTianDiTuLayer = (type, options = {}) => {
   const layer = new ol.layer.Tile({
     source: new ol.source.XYZ({
       // crossOrigin: 'anonymous',
-      url: `http://t4.tianditu.com/DataServer?T=${type}&x={x}&y={y}&l={z}&tk=${token}`
+      url: `http://t4.tianditu.com/DataServer?T=${type}&x={x}&y={y}&l={z}&tk=${token}`,
+      wrapX: false,
+      crossOrigin: "Anonymous"
     }),
     className:type
   })
@@ -394,11 +396,12 @@ const getFeaturesBySQL = ({ url, dataSourceName, layerName, label, attributeFilt
       })
       const resultLayer = new VectorLayer({
         source: vectorSource,
-        style: styleFunction
+        style: styleFunction,
+        // className:label
       })
       // 暂时用遮罩，后面再用turfjs
-      const mask = createMaskByGeoJson(require('@/components/Map/ruian.json'))
-      resultLayer.addFilter(mask)
+      // const mask = createMaskByGeoJson(require('@/components/Map/ruian.json'))
+      // resultLayer.addFilter(mask)
       if (cropFeature) {
         const crop = createCropByFeature(cropFeature)
         resultLayer.addFilter(crop)

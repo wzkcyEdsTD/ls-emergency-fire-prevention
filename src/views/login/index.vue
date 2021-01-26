@@ -2,9 +2,9 @@
   <div class="login-container">
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
 
-      <div class="title-container">
+      <!-- <div class="title-container">
         <h3 class="title">森林防火子系统</h3>
-      </div>
+      </div> -->
 
       <el-form-item prop="username">
         <span class="svg-container">

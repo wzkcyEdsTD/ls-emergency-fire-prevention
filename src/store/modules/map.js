@@ -122,11 +122,13 @@ const actions = {
     let list = await Promise.all(
       appendLayerUrlList.map(async v => {
         let layer = null
+
         if (v.type === 'map') {
           layer = vue.$map.createTileSuperMapRestLayer(v.url)
         } else if (v.type === 'wms') {
           layer = vue.$map.createWMSLayer(v)
         } else {
+          // console.log("显示节点的图层",v);
           layer = await vue.$map.createVectorLayerByDataRest(v)
         }
         return {
@@ -138,7 +140,7 @@ const actions = {
     )
     list = list.filter(v => v.layer != null)
     commit('APPEND_LAYER_LIST', list)
-    list.map(v => v.layer && vue.$map.addLayer(v.layer))
+    list.map(v => v.layer && window.g.map.addLayer(v.layer))
   },
   appendLayerList({ commit, state }, list) {
     commit('SET_LAYER_LIST', [...state.layerList, ...list])

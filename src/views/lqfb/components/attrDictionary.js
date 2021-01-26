@@ -1,26 +1,14 @@
 export default {
 // 林区
 // --森林公园
-  SECRET_FORESTPARK_M: {
-    TYPE: '类型',
-    NAME: '名称',
-    DISTRICT: '区/县',
-    TOWN: '乡/镇/街道行政编码',
-    TOWN_CODE: '乡/镇/街道',
-    DATA_FROM: '数据来源',
-    PRODUCT_MAN: '生产人',
-    PRODUCT_DT: '生产日期',
-    CHECK_MAN: '校对人',
-    CHECK_DT: '校对时间',
-    COUNTRY_BEFOR: '原本区县',
-    PRODUCT_RECORD: '生产记录',
-    CHECK_RECORD: '校对记录',
-    ADDRESS: '地址',
-    AREA: '面积',
-    APPROVAL_NO: '批复文号',
-    BUILD_DT: '批准设立时间',
-    GRADE: '等级'
-  },
+d_forest_park: {
+  NAME: '名称',
+  AREA: '面积',
+  GRADE: '等级',
+  ADDRESS: '地址',
+  BUILD_DT: '批准设立时间',
+  TYPE:'类型'
+},
   // 国有林场
   SECRET_NATIONAL_FOREST: {
     TYPE: '类型',

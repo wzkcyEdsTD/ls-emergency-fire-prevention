@@ -1,37 +1,37 @@
 <template>
   <div class="navbar">
-    <div class="left-menu">
+    <!-- <div class="left-menu">
       <logo-wgt>
-        <!-- 系统标识 -->
+
       </logo-wgt>
     </div>
     <div class="right-menu">
       <div class="menu-operate-domain">
         <div class="domain-switch">
           <menu-wgt>
-            <!-- 切换菜单 -->
+
           </menu-wgt>
         </div>
         <div class="domain-broadcast">
           <broadcast-wgt>
-            <!-- 广播 -->
+ 
           </broadcast-wgt>
         </div>
       </div>
       <div class="menu-func-domain">
         <time-wgt>
-          <!-- 时间 -->
+
         </time-wgt>
         <span class="line" />
         <weather-wgt>
-          <!-- 天气 -->
+
         </weather-wgt>
         <span class="line" />
         <user-wgt>
-          <!-- 用户 -->
+
         </user-wgt>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 

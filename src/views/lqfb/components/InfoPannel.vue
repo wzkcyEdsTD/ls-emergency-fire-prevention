@@ -1,6 +1,6 @@
 <template>
   <div id="info-pannel-wrapper" class="info-pannel-wrapper" :style="{right:`${offsetRight}rem`}">
-    <div v-show="isXFDW === ''">
+    <div style="padding-top:3vh" v-show="isXFDW === ''">
       <div class="title">
         信息详情
         <i class="el-icon-close" @click="collapse" />
@@ -83,7 +83,7 @@ export default {
     padding: 10px;
     transition: right 0.9s;
     .title {
-      font-size: 16px;
+      font-size: 1.8vh;
       margin-top: 10px;
       margin-bottom: 10px;
       padding-right: 10px;
@@ -91,6 +91,7 @@ export default {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      font-family: 'YouSheBiaoTiHei';
       position: relative;
       .el-icon-close {
         font-size: 20px;
