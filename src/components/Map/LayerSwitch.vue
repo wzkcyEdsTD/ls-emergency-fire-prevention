@@ -152,11 +152,15 @@ export default {
       }
 
       let temp = null;
+      let temp1 = null;
       if(data.type == "vec_w"){
         const layerList = map.getLayers().array_;
         layerList.forEach((item)=>{
           if(item.className_=="vec_w"){
             temp = item
+            item.setVisible(true)
+          }else if(item.className_=="cva_w"){
+            item.setVisible(true)
           }
         })
         //若无矢量图
@@ -169,14 +173,22 @@ export default {
           map.addLayer(vec_layer);
           map.addLayer(cva_layer);
         }else{
-          map.getLayers().item(5).setVisible(true)//矢量图
-          map.getLayers().item(6).setVisible(true)//矢量图注记
+          // map.getLayers().item(5).setVisible(true)//矢量图
+          // map.getLayers().item(6).setVisible(true)//矢量图注记
         }
       }else if(data.type == "img_w"){
+        const layerList = map.getLayers().array_;
+        layerList.forEach(element => {
+          if(element.className_ == "vec_w"){
+            element.setVisible(false)
+          }else if(element.className_ == "cva_w"){
+            element.setVisible(false)
+          }
+        });
         map.getLayers().item(0).setVisible(true)//影像图
         map.getLayers().item(1).setVisible(true)//影像图注记
-        map.getLayers().item(5).setVisible(false)//矢量图
-        map.getLayers().item(6).setVisible(false)//矢量图注记
+        // map.getLayers().item(5).setVisible(false)//矢量图
+        // map.getLayers().item(6).setVisible(false)//矢量图注记
       }
 
     },
