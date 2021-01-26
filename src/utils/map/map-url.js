@@ -237,7 +237,7 @@ const mapUrl = {
   // --国有林场
   SECRET_NATIONAL_FOREST: {
     type: 'data', // 数据服务
-    layerName: 'SECRET_NATIONAL_FOREST',
+    layerName: 'd_national_forest',
     label: '国有林场',
     dataSourceName,
     icon: '国有林场.png',
@@ -246,7 +246,7 @@ const mapUrl = {
   // --湿地
   SECRET_WETLAND: {
     type: 'data', // 数据服务
-    layerName: 'SECRET_WETLAND',
+    layerName: 'd_wetland',
     label: '湿地',
     dataSourceName,
     icon: '湿地.png',
@@ -364,7 +364,7 @@ const mapUrl = {
   // 应急队伍
   JZJZNL_YJDW: {
     type: 'data',
-    layerName: 'JZJZNL_YJDW',
+    layerName: 'd_emergency_team',
     label: '应急队伍',
     dataSourceName,
     url: dataUrl,

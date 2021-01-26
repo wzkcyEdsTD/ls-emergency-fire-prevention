@@ -300,72 +300,76 @@ export default {
       if (this.input) {
         query.param = this.input
       }
-      getFhry(query).then((res) => {
-        this.tableXFYData = res.data.result.map((v) => ({
-          ...v,
-          status: '未上线',
-          type: '消防员'
-        }))
-        this.selectedItem = {
-          smid: '',
-          name: '',
-          phone: '',
-          team: '',
-          type: ''
-        }
-      })
-      getHly(query).then((res) => {
-        this.tableHLYData = res.data.result.map((v) => ({
-          ...v,
-          type: '护林员',
-          status: '未上线'
-        }))
-        this.selectedItem = {
-          smid: '',
-          name: '',
-          phone: '',
-          team: '',
-          type: ''
-        }
-      })
+      // getFhry(query).then((res) => {
+      //   this.tableXFYData = res.data.result.map((v) => ({
+      //     ...v,
+      //     status: '未上线',
+      //     type: '消防员'
+      //   }))
+      //   this.selectedItem = {
+      //     smid: '',
+      //     name: '',
+      //     phone: '',
+      //     team: '',
+      //     type: ''
+      //   }
+      // })
+      
+      // getHly(query).then((res) => {
+      //   this.tableHLYData = res.data.result.map((v) => ({
+      //     ...v,
+      //     type: '护林员',
+      //     status: '未上线'
+      //   }))
+      //   this.selectedItem = {
+      //     smid: '',
+      //     name: '',
+      //     phone: '',
+      //     team: '',
+      //     type: ''
+      //   }
+      // })
+    
     },
 
     getFhryCurPosition() {
-      getFhryCurPositionByPhone().then((res) => {
-        const list = res.data.result
-        this.updateTableList(list)
-        const features = list.map((v) => {
-          const feature = this.$map.createFeature(
-            [v.longitude, v.latitude],
-            v.smid,
-            { ...v, NAME: v.name }
-          )
-          feature.setStyle(this.$map.getFhryStyle(feature))
-          return feature
-        })
-        this.fhryLayer = this.$map.createVectorLayer(features)
-        this.fhryLayer.setZIndex(100)
-        this.fhryLayer.setVisible(false)
-        this.$map.addLayer(this.fhryLayer)
-      })
+      // getFhryCurPositionByPhone().then((res) => {
+      //   const list = res.data.result
+      //   this.updateTableList(list)
+      //   const features = list.map((v) => {
+      //     const feature = this.$map.createFeature(
+      //       [v.longitude, v.latitude],
+      //       v.smid,
+      //       { ...v, NAME: v.name }
+      //     )
+      //     feature.setStyle(this.$map.getFhryStyle(feature))
+      //     return feature
+      //   })
+      //   this.fhryLayer = this.$map.createVectorLayer(features)
+      //   this.fhryLayer.setZIndex(100)
+      //   this.fhryLayer.setVisible(false)
+      //   this.$map.addLayer(this.fhryLayer)
+      // })
+    
     },
 
     updateCurPosition() {
       this.fhryLayer.getSource().clear()
-      getFhryCurPositionByPhone().then((res) => {
-        const list = res.data.result
-        this.updateTableList(list)
-        const features = list.map((v) => {
-          const feature = this.$map.createFeature(
-            [v.longitude, v.latitude],
-            v.smid,
-            { ...v, NAME: v.smid }
-          )
-          feature.setStyle(this.$map.getFhryStyle(feature))
-          return feature
-        })
-        this.fhryLayer.getSource().addFeatures(features)
-      })
+      // getFhryCurPositionByPhone().then((res) => {
+      //   const list = res.data.result
+      //   this.updateTableList(list)
+      //   const features = list.map((v) => {
+      //     const feature = this.$map.createFeature(
+      //       [v.longitude, v.latitude],
+      //       v.smid,
+      //       { ...v, NAME: v.smid }
+      //     )
+      //     feature.setStyle(this.$map.getFhryStyle(feature))
+      //     return feature
+      //   })
+      //   this.fhryLayer.getSource().addFeatures(features)
+      // })
+    
     },
 
     updateTableList(list) {

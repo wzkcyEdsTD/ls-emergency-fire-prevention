@@ -201,26 +201,21 @@ export default {
             window.g.map.removeLayer(element)
             const dom = $(".tooltip-static")
             dom.remove()
-            // dom.array.forEach(element => {
-            //   element.remove()
-            // });
           });
           this.list = [];
         }
-        // this.measureLayers.map(v => {
-        //   this.$map.removeLayer(v.layer)
-        //   this.$map.getMap().removeOverlay(v.overlay)
-        // })
+
       }
       if (val === '定位') {
-        this.$map.goHome()
+       const tempLayer = Measure.returnLayer(window.g.map,"Point");
+        this.list.push(tempLayer);
       }
       if (val === '画线') {
-       const tempLayer = Measure.returnLayer(window.g.map,"lineString");
+       const tempLayer = Measure.returnLayer(window.g.map,"LineString");
        this.list.push(tempLayer);
       }
       if (val === '画面') {
-        const tempLayer = Measure.returnLayer(window.g.map,"area");
+        const tempLayer = Measure.returnLayer(window.g.map,"Polygon");
         this.list.push(tempLayer);
         console.log(this.list)
       }

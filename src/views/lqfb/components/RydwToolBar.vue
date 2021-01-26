@@ -39,12 +39,12 @@ export default {
       this.getOnlineNum()
     }, 1000 * 30)
 
-    getFhry({}).then((res) => {
-      this.fhryTotalNum = res.data.result.length
-    })
-    getHly({}).then((res) => {
-      this.hlyTotalNum = res.data.result.length
-    })
+    // getFhry({}).then((res) => {
+    //   this.fhryTotalNum = res.data.result.length
+    // })
+    // getHly({}).then((res) => {
+    //   this.hlyTotalNum = res.data.result.length
+    // })
   },
   methods: {
     handleRydwToolBar(val) {

@@ -10,7 +10,7 @@ d_forest_park: {
   TYPE:'类型'
 },
   // 国有林场
-  SECRET_NATIONAL_FOREST: {
+  d_national_forest: {
     TYPE: '类型',
     NAME: '名称',
     DISTRICT: '区/县',
@@ -28,7 +28,7 @@ d_forest_park: {
     CHECK_RECORD: '校对记录'
   },
   // --湿地
-  SECRET_WETLAND: {
+  d_wetland: {
     TYPE: '湿地类型',
     NAME: '名称',
     DISTRICT: '区/县',
@@ -65,7 +65,7 @@ d_forest_park: {
     SFYWLGJSB: '是否物联感知设备'
   },
   // --应急队伍
-  JZJZNL_YJDW: {
+  d_emergency_team: {
     CREDIT_CODE: '社会统一信用代码',
     NAME: '名称',
     ADDRESS: '地址',
@@ -132,7 +132,7 @@ d_forest_park: {
     SFYWLGJSB: '是否物联感知设备'
   },
   // --队伍成员信息
-  JZJZNL_YJDW_DWRY: {
+  d_emergency_team_member: {
     NAME: '姓名',
     SEX: '性别',
     BIRTHDAY: '生日',

@@ -137,25 +137,27 @@ export default {
             spinner: 'el-icon-loading',
             background: 'rgba(0, 0, 0, 0.7)'
           })
-          getMonitorList().then(res => {
-            const features = []
-            res.data.forEach(item => {
-              const items = item.data.map(v => {
-                const feature = this.$map.createFeature([v.longitude, v.latitude], '监控点', v)
-                feature.setStyle(this.$map.getMonitorStyle())
-                return feature
-              })
-              features.push(...items)
-            })
-            this.$store.dispatch('map/changeJkLayer', {
-              layer: this.$map.createVectorLayer(features),
-              ope: 'ADDLAYER'
-            })
-            // this.$map.addLayer(this.jkLayer)
-            loading.close()
-            this.$store.dispatch('lqfb/changeVideoListOffsetRight', 0)
-          })
-        } else {
+          // getMonitorList().then(res => {
+          //   const features = []
+          //   res.data.forEach(item => {
+          //     const items = item.data.map(v => {
+          //       const feature = this.$map.createFeature([v.longitude, v.latitude], '监控点', v)
+          //       feature.setStyle(this.$map.getMonitorStyle())
+          //       return feature
+          //     })
+          //     features.push(...items)
+          //   })
+          //   this.$store.dispatch('map/changeJkLayer', {
+          //     layer: this.$map.createVectorLayer(features),
+          //     ope: 'ADDLAYER'
+          //   })
+          //   // this.$map.addLayer(this.jkLayer)
+          //   loading.close()
+          //   this.$store.dispatch('lqfb/changeVideoListOffsetRight', 0)
+          // })
+       
+       
+       } else {
           this.$store.dispatch('map/changeJkLayer', {
             layer: this.jkLayer,
             ope: 'REMOVELAYER'

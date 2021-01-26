@@ -225,9 +225,9 @@ export default {
         this.handleLeafChange(this.checkedLeafNodes)
         return
       }
-      getResources({ resources: val, searchStr: this.zlzyInput }).then(res => {
-        this.allListData = res.data
-      })
+      // getResources({ resources: val, searchStr: this.zlzyInput }).then(res => {
+      //   this.allListData = res.data
+      // })
     }
   },
   mounted() {
@@ -241,29 +241,29 @@ export default {
     },
     getAllFeatures() {
       // 林区数据
-      getResources({ resources: `森林公园` }).then(res => {
-        if (res.code === 20000) this.listData['森林公园'] = res.data
-        return getResources({ resources: `国有林场` })
-      }).then(res => {
-        if (res.code === 20000) this.listData['国有林场'] = res.data
-        return getResources({ resources: `湿地` })
-      }).then(res => {
-        if (res.code === 20000) this.listData['湿地'] = res.data
+      // getResources({ resources: `森林公园` }).then(res => {
+      //   if (res.code === 20000) this.listData['森林公园'] = res.data
+      //   return getResources({ resources: `国有林场` })
+      // }).then(res => {
+      //   if (res.code === 20000) this.listData['国有林场'] = res.data
+      //   return getResources({ resources: `湿地` })
+      // }).then(res => {
+      //   if (res.code === 20000) this.listData['湿地'] = res.data
 
-        this.initLQCharts()
-        const resources = `危化类,机械类,矿山类,防汛类,综合类,减灾救灾类,地震地质类,综合救援队伍,骨干救援队伍,专业救援队伍,志愿者救援队伍,应急避难场所,市县物资储备库,部门物资储备点,供应网点,运输企业,冲锋舟,橡皮艇,挖掘机,推土机,发电机组,水泵,吊车,抛绳器,大型照明设备,无人机,切割机,运输车,救护场所,救护车辆,医疗救护设备,血站,疾控中心,急救指挥中心,卫生监督机构,消防站`
-        return getResources({ resources })
-      }).then(res => {
-        // 应急资源数据
-        if (res.code === 20000) this.listData['应急资源'] = res.data
-        this.initYJZYCharts()
-        const resources = `水库,山塘,海塘,堤防,泵站,水闸,农村饮用水,水电站,桥梁,隧道,涵洞,港口码头,水路运输单位,市域轨道站点,火车站,两客一危企业,道路隐患点,生产企业,使用企业,仓储经营,带仓储经营,加油站,旅游景点,农家乐,民宿,重点餐饮,烟花爆竹经营单位,消防安全单位,民爆物品企业,易制毒化学品企业`
-        return getResources({ resources })
-      }).then(res => {
-        // 安全风险源数据
-        if (res.code === 20000) this.listData['安全风险源'] = res.data
-        this.initAQFXYCharts()
-      })
+      //   this.initLQCharts()
+      //   const resources = `危化类,机械类,矿山类,防汛类,综合类,减灾救灾类,地震地质类,综合救援队伍,骨干救援队伍,专业救援队伍,志愿者救援队伍,应急避难场所,市县物资储备库,部门物资储备点,供应网点,运输企业,冲锋舟,橡皮艇,挖掘机,推土机,发电机组,水泵,吊车,抛绳器,大型照明设备,无人机,切割机,运输车,救护场所,救护车辆,医疗救护设备,血站,疾控中心,急救指挥中心,卫生监督机构,消防站`
+      //   return getResources({ resources })
+      // }).then(res => {
+      //   // 应急资源数据
+      //   if (res.code === 20000) this.listData['应急资源'] = res.data
+      //   this.initYJZYCharts()
+      //   const resources = `水库,山塘,海塘,堤防,泵站,水闸,农村饮用水,水电站,桥梁,隧道,涵洞,港口码头,水路运输单位,市域轨道站点,火车站,两客一危企业,道路隐患点,生产企业,使用企业,仓储经营,带仓储经营,加油站,旅游景点,农家乐,民宿,重点餐饮,烟花爆竹经营单位,消防安全单位,民爆物品企业,易制毒化学品企业`
+      //   return getResources({ resources })
+      // }).then(res => {
+      //   // 安全风险源数据
+      //   if (res.code === 20000) this.listData['安全风险源'] = res.data
+      //   this.initAQFXYCharts()
+      // })
     },
     initLQCharts() {
       this.townList.forEach(item => {
@@ -482,15 +482,15 @@ export default {
           parmars += `,${item.label}`
         }
       })
-      if (this.zlActiveTab === null) {
-        getResources({ resources: parmars.substring(1), searchStr: this.zlzyInput }).then(res => {
-          this.allListData = res.data
-        })
-      } else {
-        getResources({ resources: this.zlActiveTab, searchStr: this.zlzyInput }).then(res => {
-          this.allListData = res.data
-        })
-      }
+      // if (this.zlActiveTab === null) {
+      //   getResources({ resources: parmars.substring(1), searchStr: this.zlzyInput }).then(res => {
+      //     this.allListData = res.data
+      //   })
+      // } else {
+      //   getResources({ resources: this.zlActiveTab, searchStr: this.zlzyInput }).then(res => {
+      //     this.allListData = res.data
+      //   })
+      // }
     },
     handleListClick(item) {
       const smid = item.id.slice(0, item.id.indexOf('_'))
@@ -509,9 +509,9 @@ export default {
       })
     },
     initZLLB() {
-      getResources({ resources: `森林公园,湿地,国有林场` }).then(res => {
-        this.allListData = res.data
-      })
+      // getResources({ resources: `森林公园,湿地,国有林场` }).then(res => {
+      //   this.allListData = res.data
+      // })
     },
     handleLeafChange(val) {
       this.allListData = []
@@ -521,9 +521,9 @@ export default {
           parmars += `,${item.value.label}`
         }
       })
-      getResources({ resources: parmars.substring(1), searchStr: this.zlzyInput }).then(res => {
-        this.allListData = res.data
-      })
+      // getResources({ resources: parmars.substring(1), searchStr: this.zlzyInput }).then(res => {
+      //   this.allListData = res.data
+      // })
     }
   }
 }

@@ -132,7 +132,7 @@ function  measure(map, measureType) {
         }
       }
 
-      helpTooltipElement.innerHTML = helpMsg;
+      helpTooltipElement.innerHTML = "";
       helpTooltip.setPosition(evt.coordinate);
 
       helpTooltipElement.classList.remove('hidden');
@@ -191,7 +191,7 @@ function  measure(map, measureType) {
     }
 
     function addInteraction() {
-      var type = (measureType == 'area' ? 'Polygon' : 'LineString');
+      var type = measureType //== 'area' ? 'Polygon' : 'LineString');
       draw = new Draw({
         source: source,
         type: type,
@@ -256,7 +256,7 @@ function  measure(map, measureType) {
 
       draw.on('drawend',
         function () {
-          measureTooltipElement.className = 'tooltip tooltip-static';
+          measureTooltipElement.className = 'tooltip-static';
           measureTooltip.setOffset([0, -7]);
           // unset sketch
           sketch = null;
@@ -281,7 +281,7 @@ function  measure(map, measureType) {
         offset: [15, 0],
         positioning: 'center-left'
       });
-      map.addOverlay(helpTooltip);
+      // map.addOverlay(helpTooltip);
     }
 
     function createMeasureTooltip() {
@@ -295,7 +295,7 @@ function  measure(map, measureType) {
         offset: [0, -15],
         positioning: 'bottom-center'
       });
-      map.addOverlay(measureTooltip);
+      // map.addOverlay(measureTooltip);
     }
     // 量测调用
     addInteraction();

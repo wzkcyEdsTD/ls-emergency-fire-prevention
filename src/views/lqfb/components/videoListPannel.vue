@@ -40,11 +40,12 @@ export default {
     }
   },
   mounted() {
-    getMonitorList().then(res => {
-      if (res.code === 20000) {
-        this.videoList = res.data
-      }
-    })
+    // getMonitorList().then(res => {
+    //   if (res.code === 20000) {
+    //     this.videoList = res.data
+    //   }
+    // })
+  
   },
   methods: {
     close() {

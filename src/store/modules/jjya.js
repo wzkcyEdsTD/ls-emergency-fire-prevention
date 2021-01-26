@@ -95,27 +95,27 @@ const actions = {
   },
 
   getMonitorList({ commit }, list) {
-    getMonitorList().then(res => {
-      let list = []
-      if (res.code === 20000) {
-        res.data.forEach(item => {
-          list = [...list, ...item.data]
-        })
-      }
-      const features = list.map(v => {
-        const feature = window.$map.createFeature(
-          [v.longitude, v.latitude],
-          '监控点',
-          v
-        )
-        return feature
-      })
-      const format = new GeoJSON()
-      const jkPtsGeojson = format.writeFeaturesObject(features)
-      const bufferGeojson = format.writeFeatureObject(state.buffer)
-      const ptsWithin = turf.pointsWithinPolygon(jkPtsGeojson, bufferGeojson)
-      commit('SET_MONITOR_LIST', format.readFeatures(ptsWithin))
-    })
+    // getMonitorList().then(res => {
+    //   let list = []
+    //   if (res.code === 20000) {
+    //     res.data.forEach(item => {
+    //       list = [...list, ...item.data]
+    //     })
+    //   }
+    //   const features = list.map(v => {
+    //     const feature = window.$map.createFeature(
+    //       [v.longitude, v.latitude],
+    //       '监控点',
+    //       v
+    //     )
+    //     return feature
+    //   })
+    //   const format = new GeoJSON()
+    //   const jkPtsGeojson = format.writeFeaturesObject(features)
+    //   const bufferGeojson = format.writeFeatureObject(state.buffer)
+    //   const ptsWithin = turf.pointsWithinPolygon(jkPtsGeojson, bufferGeojson)
+    //   commit('SET_MONITOR_LIST', format.readFeatures(ptsWithin))
+    // })
   }
 }
 

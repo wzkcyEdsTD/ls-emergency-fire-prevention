@@ -1,0 +1,180 @@
+{
+    "type": "FeatureCollection",
+    "features": [
+        {
+            "geometry": {
+                "coordinates": [
+                    119.8869118709861,
+                    28.47009973431534
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "UserID": 0,
+                "address": "丽水乌岭头",
+                "infocode": "1",
+                "infocontent": "森林火灾",
+                "infotitle": "火灾事件",
+                "infotype": "",
+                "jubaoren": "张三",
+                "sourceguid": "",
+                "systemcode": "",
+                "time": "2020.01.20",
+                "x": "119.74880664959635",
+                "xzqh": "莲都区",
+                "y": "28.366781900549583"
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": {
+                "coordinates": [
+                    119.8943486473722,
+                    28.44661177341889
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "UserID": 0,
+                "address": "丽水乌岭头",
+                "infocode": "2",
+                "infocontent": "森林火灾",
+                "infotitle": "火灾事件",
+                "infotype": "",
+                "jubaoren": "李四",
+                "sourceguid": "",
+                "systemcode": "",
+                "time": "2020.01.20",
+                "x": "120.1011117887804",
+                "xzqh": "莲都区",
+                "y": "28.370258849882251"
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": {
+                "coordinates": [
+                    119.9989816737654,
+                    28.45411900988882
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "UserID": 0,
+                "address": "丽水乌岭头",
+                "infocode": "3",
+                "infocontent": "森林火灾",
+                "infotitle": "火灾事件",
+                "infotype": "",
+                "jubaoren": "张三",
+                "sourceguid": "",
+                "systemcode": "",
+                "time": "2020.01.20",
+                "x": "120.0058572318174",
+                "xzqh": "莲都区",
+                "y": "28.395959685364481"
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": {
+                "coordinates": [
+                    119.9517746174682,
+                    28.45258444302587
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "UserID": 0,
+                "address": "丽水乌岭头",
+                "infocode": "4",
+                "infocontent": "森林火灾",
+                "infotitle": "火灾事件",
+                "infotype": "",
+                "jubaoren": "李四",
+                "sourceguid": "",
+                "systemcode": "",
+                "time": "2020.01.20",
+                "x": "120.06092278878035",
+                "xzqh": "莲都区",
+                "y": "28.366000849882248"
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": {
+                "coordinates": [
+                    119.9517746174682,
+                    28.45258444302587
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "UserID": 0,
+                "address": "丽水乌岭头",
+                "infocode": "5",
+                "infocontent": "森林火灾",
+                "infotitle": "火灾事件",
+                "infotype": "",
+                "jubaoren": "张三",
+                "sourceguid": "",
+                "systemcode": "",
+                "time": "2020.01.20",
+                "x": "120.06092278878035",
+                "xzqh": "莲都区",
+                "y": "28.366000849882248"
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": {
+                "coordinates": [
+                    119.9498926174683,
+                    28.44901244302587
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "UserID": 0,
+                "address": "丽水乌岭头",
+                "infocode": "6",
+                "infocontent": "森林火灾",
+                "infotitle": "火灾事件",
+                "infotype": "",
+                "jubaoren": "李四",
+                "sourceguid": "",
+                "systemcode": "",
+                "time": "2020.01.20",
+                "x": "120.05904078878044",
+                "xzqh": "莲都区",
+                "y": "28.362428849882246"
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": {
+                "coordinates": [
+                    119.9668283619394,
+                    28.48218103782466
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "UserID": 0,
+                "address": "丽水乌岭头",
+                "infocode": "7",
+                "infocontent": "森林火灾",
+                "infotitle": "火灾事件",
+                "infotype": "",
+                "jubaoren": "张三",
+                "sourceguid": "",
+                "systemcode": "",
+                "time": "2020.01.20",
+                "x": "120.05250178878036",
+                "xzqh": "莲都区",
+                "y": "28.364917849882197"
+            },
+            "type": "Feature"
+        }
+    ]
+}

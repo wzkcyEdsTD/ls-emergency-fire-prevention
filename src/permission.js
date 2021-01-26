@@ -20,14 +20,14 @@ router.beforeEach(async(to, from, next) => {
 
   // determine whether the user has logged in
   const hasToken = getToken()
-  getAccount().then(res => {
-    // console.log('getAccount', res)
-    // console.log(window.location)
-    if (res.data === 'unauthenticated') {
-      window.location.href = 'http://10.36.234.84:9090/cas/login?service=http://localhost:8080/authenticate/getAccount?currentPath=http://localhost:9528'
-      // window.location.href = 'http://10.36.234.84:9090/cas/login?service=http://10.36.234.81:8080/authenticate/getAccount?currentPath=http://10.36.234.81:9091/forest-fire-system'
-    }
-  })
+  // getAccount().then(res => {
+  //   // console.log('getAccount', res)
+  //   // console.log(window.location)
+  //   if (res.data === 'unauthenticated') {
+  //     window.location.href = 'http://10.36.234.84:9090/cas/login?service=http://localhost:8080/authenticate/getAccount?currentPath=http://localhost:9528'
+  //     // window.location.href = 'http://10.36.234.84:9090/cas/login?service=http://10.36.234.81:8080/authenticate/getAccount?currentPath=http://10.36.234.81:9091/forest-fire-system'
+  //   }
+  // })
 
   if (hasToken) {
     if (to.path === '/login') {
