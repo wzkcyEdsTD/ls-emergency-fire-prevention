@@ -244,6 +244,9 @@ export default {
         map.renderSync();
 
       }
+      if (val === '定位'){
+        this.$map.goHome()
+      }
     },
 
     showDGX() {
