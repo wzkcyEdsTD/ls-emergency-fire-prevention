@@ -113,7 +113,7 @@ export default {
           type:"img_w"
         },
       ],
-      toolList: ['清空', '定位', '画线',"画面","打印"],
+      toolList: ['清空', '画点', '画线',"画面","打印"],
       dgxLayer: null // 示高线图层
     }
   },
@@ -206,7 +206,7 @@ export default {
         }
 
       }
-      if (val === '定位') {
+      if (val === '画点') {
        const tempLayer = Measure.returnLayer(window.g.map,"Point");
         this.list.push(tempLayer);
       }
