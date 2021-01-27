@@ -226,6 +226,7 @@ export default {
       //  自选点
       diyPtLayer: null,
       diyPathLayer: null,
+
     };
   },
   computed: {
@@ -515,6 +516,7 @@ export default {
       this.RouteDetails = true;
     },
   },
+
 };
 </script>
 <style lang="scss">
@@ -543,6 +545,7 @@ export default {
   .zgfx-container {
     height: 120px;
     width: 360px;
+    padding-top: 4vh;
     .zgfx-box {
       padding: 10px;
       margin-left: 0px;
@@ -588,6 +591,7 @@ export default {
     // height: 450px;
     height: calc(100% - 120px);
     width: 100%;
+    padding-top: 4vh;
     .ljxq-box {
       height: 260px;
       .route-box {

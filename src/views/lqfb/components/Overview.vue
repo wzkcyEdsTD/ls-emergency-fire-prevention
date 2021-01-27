@@ -2,7 +2,8 @@
   <div class="overview-wrapper" :style="`right: ${zlOffsetRight}rem`">
     <div class="close" @click="close" />
     <!-- 基础要素总览 start -->
-    <div v-show="lqfbActiveMenu === '基础要素' || lqfbActiveMenu === '林区'" class="yjzyzl-wrapper">
+    <!-- <div v-show="lqfbActiveMenu === '基础要素' || lqfbActiveMenu === '林区'" class="yjzyzl-wrapper"> -->
+    <div v-show="false" class="yjzyzl-wrapper">
       <div class="title">
         林区资源总览
       </div>
@@ -71,7 +72,8 @@
     </div>
     <!-- 基础要素总览 end -->
     <!-- 应急资源总览 start -->
-    <div v-show="lqfbActiveMenu === '应急资源'" class="yjzyzl-wrapper">
+    <!-- <div v-show="lqfbActiveMenu === '应急资源'" class="yjzyzl-wrapper"> -->
+    <div v-show="false" class="yjzyzl-wrapper">
       <div class="title">应急资源总览</div>
       <img src="../../../assets/images/边.png" alt="">
       <div class="swiper">
@@ -111,7 +113,8 @@
     </div>
     <!-- 应急资源总览 end -->
     <!-- 安全风险源总览 start -->
-    <div v-show="lqfbActiveMenu === '安全风险源'" class="yjzyzl-wrapper">
+    <!-- <div v-show="lqfbActiveMenu === '安全风险源'" class="yjzyzl-wrapper"> -->
+    <div v-show="false" class="yjzyzl-wrapper">
       <div class="title">
         安全风险源总览
       </div>
@@ -152,7 +155,7 @@
       </div>
     </div>
     <!-- 安全风险源总览 end -->
-    <div class="lb-wrapper">
+    <!-- <div class="lb-wrapper">
       <div class="title">
         总览资源列表
         <el-input
@@ -177,6 +180,64 @@
           <div class="item item-3">{{ item.name }}</div>
         </li>
       </ul>
+    </div> -->
+    
+    <div class="lb-wrapper" style="padding-top:4vh">
+      <div class="title">
+        应急关键设备(指挥车0/7台)
+      </div>
+      <img style="width: 100%;" src="@/common/images/边.png" alt="">
+      <div class="imgLine">
+        <img class="location" v-show="zhclocation==1" src="@/common/images/定位选中.png" alt="" @click="zhclocation = 0">
+        <img class="location" v-show="zhclocation==0" src="@/common/images/定位未选中.png" alt="" @click="zhclocation = 1">
+        <img class="detail" v-show="zhcdetail==0" src="@/common/images/详情未选中.png" alt=""@click="zhcdetail = 1">
+        <img class="detail" v-show="zhcdetail==1" src="@/common/images/详情选中.png" alt=""@click="zhcdetail = 0">
+      </div>
+      <div class="ul-head">
+        <div class="item item-1">名称</div>
+        <div class="item item-3">区域</div>
+        <div class="item item-1">是否在线</div>
+      </div>
+      <ul style="height:25vh">
+        <li v-for="(item, index) in zhcList.RECORDS" 
+        :key="index" 
+        class="list-item" 
+        :class="{active : zhc == index}"
+        @click="zhc =index">
+          <div class="item item-3">{{ item.name }}</div>
+          <div class="item item-1">{{ item.street }}</div>
+
+          <div class="item item-1">否</div>
+        </li>
+      </ul>
+    </div>
+    <div class="lb-wrapper">
+      <div class="title">
+        应急关键设备(单兵设备0/8台)
+      </div>
+      <img style="width: 100%;" src="@/common/images/边.png" alt="">
+      <div class="imgLine">
+        <img class="location" v-show="dbsblocation==1" src="@/common/images/定位选中.png" alt="" @click="dbsblocation = 0">
+        <img class="location" v-show="dbsblocation==0" src="@/common/images/定位未选中.png" alt="" @click="dbsblocation = 1">
+        <img class="detail" v-show="dbsbdetail==0" src="@/common/images/详情未选中.png" alt=""@click="dbsbdetail = 1">
+        <img class="detail" v-show="dbsbdetail==1" src="@/common/images/详情选中.png" alt=""@click="dbsbdetail = 0">
+      </div>
+      <div class="ul-head">
+        <div class="item item-1">名称</div>
+        <div class="item item-3">区域</div>
+        <div class="item item-1">是否在线</div>
+      </div>
+      <ul style="height:25vh">
+        <li v-for="(item, index) in dbsbList.RECORDS" 
+        :key="index" 
+        class="list-item" 
+        :class="{active : temp == index}"
+        @click="temp = index">
+          <div class="item item-3">{{ item.name }}</div>
+          <div class="item item-1">{{ item.street }}</div>
+          <div class="item item-1">否</div>
+        </li>
+      </ul>
     </div>
   </div>
 </template>
@@ -184,6 +245,8 @@
 import axios from 'axios'
 import MAP_URL from '@/utils/map/map-url'
 import { getResources } from '@/api/lqfb'
+import dbsbList from './d_dbsb_jbxx.json'
+import zhcList from './d_zhc_jbxx.json'
 
 export default {
   data() {
@@ -194,7 +257,15 @@ export default {
       listData: {},
       chartsData: { 林区: [], 应急资源: [], 安全风险源: [] },
       allListData: [],
-      zlzyInput: ''
+      dbsbList,
+      zhcList,
+      zlzyInput: '',
+      temp:null,
+      zhc:null,
+      dbsblocation:1,
+      dbsbdetail:1,
+      zhclocation:1,
+      zhcdetail:1,
     }
   },
   computed: {
@@ -234,8 +305,12 @@ export default {
     this.getAllFeatures()
     this.initZLLB() // 初始化总览列表
     this.activeTab = this.lqfbActiveMenu === '基础要素' ? '乡镇区域' : '区域统计'
+    console.log(this.dbsbList.RECORDS);
   },
   methods: {
+    select_li(index){
+      this.temp = index;
+    },
     close() {
       this.$store.dispatch('lqfb/changezlOffsetRight', this.zlOffsetRight === 0 ? -25 : 0)
     },
@@ -761,6 +836,21 @@ export default {
     .lb-wrapper {
       width: 100%;
       height: 49%;
+      // padding-bottom: 2vh;
+      .imgLine{
+        display: flex;
+        justify-content: flex-end;
+        padding-top:0.5vh;
+        padding-bottom: 0.5vh;
+        .detail{
+          padding-right: 1vh;
+          padding-left: 1.5vh;
+          
+        }
+        .location{
+
+        }
+      }
       .list-item{
         &:hover{
           cursor: pointer;
@@ -771,8 +861,8 @@ export default {
     height: 2rem;
     font-family: youshebiaotihei;
     font-size: 1.8vh;
-    padding-top: 4vh;
-    padding-bottom: 4vh;
+    // padding-top: 4vh;
+    // padding-bottom: 4vh;
         .search {
           width: 180px;
           height: 22px;
@@ -805,7 +895,7 @@ export default {
       .ul-head {
         height: 26px;
         width: 380px;
-        background-color: rgb(10, 40, 68);
+        // background-color: rgb(10, 40, 68);
         margin-top: 10px;
         display: flex;
       }
@@ -816,13 +906,13 @@ export default {
       }
       ul::-webkit-scrollbar-thumb {
           border-radius: 10px;
-          background: rgba(255,255,255,0.8);
-          width: 4px;
+          background:#118251;
+          width: 8px;
           height: 30px;
       }
       ul::-webkit-scrollbar-track {
           border-radius: 0;
-          background: rgba(255,255,255,0.2);
+          background:#103E29;
       }
       ul {
         list-style: none;
@@ -834,10 +924,17 @@ export default {
           align-items: center;
           position: relative;
           width: 380px;
-          height: 41px;
+          height: 30px;
           margin-bottom: 12px;
-          background: url(../../../assets/images/框.png) no-repeat;
+          font-family: PingFang SC;
+          font-size: 16px;
+          // background: url(../../../assets/images/框.png) no-repeat;
           background-size: 100% 100%;
+          &.active {
+            background: #103E29;
+            border: 1px solid #0F7247;
+            color: #52FEB3;
+          }
           .number {
             width: 30px;
             margin-left: 8px;
@@ -864,7 +961,7 @@ export default {
         flex: 1;
       }
       .item-3 {
-        flex: 3
+        flex: 1
       }
     }
   }

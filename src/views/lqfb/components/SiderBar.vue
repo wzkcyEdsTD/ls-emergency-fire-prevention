@@ -43,6 +43,7 @@ import treeData from './treeData'
 import SiderBar from '@/components/SiderBar'
 import jkList from './监控数据.json'
 import firePointList from './d_fire_alarm.json'
+import dbsbList from './d_dbsb_jbxx.json'
 import { getMonitorList } from '@/api/lqfb'
 import VectorLayer from 'ol/layer/Vector'
 import VectorSource from 'ol/source/Vector'
@@ -57,12 +58,15 @@ export default {
     return {
       jkList,
       firePointList,
+      dbsbList,
       activeNames: [1,4],
       treeData,
       defaultProps: {
         children: 'children',
         label: 'label'
-      }
+      },
+      temp:false,
+      firelayer:null,
     }
   },
   computed: {
@@ -185,6 +189,7 @@ export default {
         return
       }
       if(data.label === '火灾点'){
+        if(!this.temp){
           const features = new GeoJSON().readFeatures(this.firePointList)
           console.log("点击了火灾点",features)
           var vectorSource = new VectorSource({
@@ -193,21 +198,46 @@ export default {
           });
           var fireLayer = new VectorLayer({
             source: vectorSource,
-            // style: new Style({
-            //   stroke: new Stroke({
-            //     color: '#12FD94',
-            //     // 'rgba(0, 255, 0, 1)',
-            //     lineDash: [5, 3],
-            //     width: 2
-            //   }),
-            //   fill: new Fill({
-            //     color: 'rgba(254,27, 1, 0.3)'
-            //   })
-            // })
+
           })
+          fireLayer.setStyle(this.$map.getFirePointStyle())
+          this.firelayer = fireLayer;
+          this.temp = true;
           this.$map.addLayer(fireLayer)
+        }else if (this.temp) {
+          this.temp = false;
+          window.g.map.removeLayer(this.firelayer)
+          this.firelayer = null;
+        }
+        
+      }
+
+      if(data.label === '单兵设备'){
+        const list = this.dbsbList;
+          // const features = new GeoJSON().readFeatures(this.firePointList)
+          console.log("点击了单兵设备",list)
+          // var vectorSource = new VectorSource({
+          //   features,
+          //   wrapX: false
+          // });
+          // var fireLayer = new VectorLayer({
+          //   source: vectorSource,
+          //   // style: new Style({
+          //   //   stroke: new Stroke({
+          //   //     color: '#12FD94',
+          //   //     // 'rgba(0, 255, 0, 1)',
+          //   //     lineDash: [5, 3],
+          //   //     width: 2
+          //   //   }),
+          //   //   fill: new Fill({
+          //   //     color: 'rgba(254,27, 1, 0.3)'
+          //   //   })
+          //   // })
+          // })
+          // this.$map.addLayer(fireLayer)
 
       }
+
       // 显示选中图层
       this.showCheckLayer()
     },

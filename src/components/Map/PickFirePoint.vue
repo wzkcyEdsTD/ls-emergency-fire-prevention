@@ -154,11 +154,11 @@ export default {
       if (this.features.length === 81) {
         const attrDic = {
           ZBZY: { // 周边资源
-            JZJZNL_YJZJ: {
-              name: '应急专家'
-            },
             JZJZNL_YJDW: {
               name: '应急队伍'
+            },
+            JZJZNL_YJZJ: {
+              name: '应急专家'
             },
             JZJZNL_BZAZCS: {
               name: '应急避难场所'
@@ -210,6 +210,7 @@ export default {
           wayNum: 0,
           dbfgNum: 0
         }
+        // debugger
         // 去除空数组
         const fe = this.features.filter(v => v.length > 0)
         fe.forEach(item => {

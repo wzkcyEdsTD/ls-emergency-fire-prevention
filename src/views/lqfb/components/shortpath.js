@@ -246,20 +246,20 @@ const findPath = (startPt, endPt, serviceUrl) => {
 // buffer--半径 千米
 const findBuffer = (pt, url, buffer) => {
   // debugger
-  // //指定点查询处理
-  // const point = new ol.geom.Point(pt);
-  // // 查询参数
-  // const bufferParam = new SuperMap.GetFeaturesByBufferParameters({
-  //     datasetNames: ["MapManager:roadnoother"],
-  //     bufferDistance: buffer,
-  //     geometry: point
-  // });
-  // // 创建缓冲区查询实例
-  // new FeatureService(url).getFeaturesByBuffer(bufferParam, function (serviceResult) {
-  //     //获取features数据
-  //     const features = serviceResult.result.features;
-  //     console.log({features})
-  // });
+  //指定点查询处理
+  const point = new ol.geom.Point(pt);
+  // 查询参数
+  const bufferParam = new SuperMap.GetFeaturesByBufferParameters({
+      datasetNames: ["MapManager:roadnoother"],
+      bufferDistance: buffer,
+      geometry: point
+  });
+  // 创建缓冲区查询实例
+  new FeatureService(url).getFeaturesByBuffer(bufferParam, function (serviceResult) {
+      //获取features数据
+      const features = serviceResult.result.features;
+      console.log({features})
+  });
   return new Promise((resolve, reject) => {
     const buffered = turf.buffer(
       turf.point(pt),

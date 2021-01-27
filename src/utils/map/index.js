@@ -279,6 +279,9 @@ const getFeaturesBySQL = ({ url, dataSourceName, layerName, label, attributeFilt
       },
       datasetNames: [`${dataSourceName}:${layerName}`]
     })
+    if(label =="单兵设备"){
+      return
+    }
     new FeatureService(url).getFeaturesBySQL(sqlParam, serviceResult => {
       // debugger
       const features = new GeoJSON().readFeatures(serviceResult.result.features)
