@@ -13,36 +13,15 @@ d_forest_park: {
   d_national_forest: {
     TYPE: '类型',
     NAME: '名称',
-    DISTRICT: '区/县',
-    STREET: '乡/镇/街道行政编码',
-    LINK_MAN: '联系人1',
-    LINK_MAN_TEL: '联系人1联系方式',
-    LINK_MAN2: '联系人2',
-    LINK_MAN2_TEL: '联系人2联系方式',
-    DATA_FROM: '数据来源',
-    PRODUCT_MAN: '生产人',
-    PRODUCT_DT: '生产日期',
-    CHECK_MAN: '校对人',
-    CHECK_DT: '校对时间',
-    PRODUCT_RECORD: '生产记录',
-    CHECK_RECORD: '校对记录'
+    AREA: '面积',
+    LINK_MAN: '联系人',
+    LINK_MAN_TEL: '联系方式'
   },
   // --湿地
   d_wetland: {
-    TYPE: '湿地类型',
     NAME: '名称',
-    DISTRICT: '区/县',
-    STREET: '乡/镇/街道行政编码',
-    DATA_FROM: '数据来源',
-    PRODUCT_MAN: '生产人',
-    PRODUCT_DT: '生产日期',
-    CHECK_MAN: '校对人',
-    CHECK_DT: '校对时间',
-    PRODUCT_RECORD: '生产记录',
-    CHECK_RECORD: '校对记录',
-    AREA: '面积',
-    SZFW: '四至范围',
-    BZ: '备注'
+    TYPE: '类型',
+    AREA: '面积'
   },
   // 应急资源
   // --应急专家
@@ -66,7 +45,6 @@ d_forest_park: {
   },
   // --应急队伍
   d_emergency_team: {
-    CREDIT_CODE: '社会统一信用代码',
     NAME: '名称',
     ADDRESS: '地址',
     PHONE: '电话',
@@ -80,25 +58,13 @@ d_forest_park: {
     LEGAL_MAN: '法定代表人',
     LG_MAN_NUM: '法定代表人身份证号码',
     REGISTRY: '注册机构',
-    REGISTRATION_CODE: '注册代码',
     TOTAL_NUM: '总人数',
-    TARGETS_NUM: '目标人数',
-    LOGISTICS_NUM: '后勤人数',
     VEHICLES_NUM: '车辆数',
     HANDL_ACCIDENT_TYPE: '处理事故类型',
     MAJOR_EQUIPMENT: '主要装备',
     ACCIDENT_HANDL_EXPERIENCE: '事故处理经验',
-    INTERFACE_WITH: '对接部门',
     CAPTAIN: '队长',
-    CAPTION_TEL: '队长联系方式',
-    TEAM_MEMBER: '队员',
-    NOTE: '备注',
-    ROOTNAME: '安全风险源/减灾救灾',
-    CITY: '市',
-    DISTRICT: '区县',
-    STREET: '乡镇',
-    DEALER: '处理人',
-    SFYWLGJSB: '是否物联感知设备'
+    CAPTION_TEL: '队长联系方式'
   },
   // --应急队伍运营商
   JZJZNL_YJDW_YYS: {
@@ -135,25 +101,15 @@ d_forest_park: {
   d_emergency_team_member: {
     NAME: '姓名',
     SEX: '性别',
-    BIRTHDAY: '生日',
     AGE: '年龄',
-    ID_CARD_NUM: '身份证号码',
     PHONE: '电话',
     SHORT_TEL: '短号',
     MAJOR: '专业',
     POST: '科室',
-    NOTE: '备注',
-    ROOTNAME: '安全风险源/减灾救灾',
     ZZMM: '政治面貌',
     WHCD: '文化程度',
     DNZW: '队内职务',
-    ADDRESS: '工作或家庭住址',
-    MZ: '民族',
-    DTSJ: '党团时间',
-    RZSJ: '入职时间',
-    XFJYX: '消防救援衔',
-    DEALER: '处理人',
-    SFYWLGJSB: '是否物联感知设备'
+    ADDRESS: '工作或家庭住址'
   },
   // --物资储备库
   JZJZNL_WZCBK: {

@@ -42,7 +42,12 @@
 import treeData from './treeData'
 import SiderBar from '@/components/SiderBar'
 import jkList from './监控数据.json'
+import firePointList from './d_fire_alarm.json'
 import { getMonitorList } from '@/api/lqfb'
+import VectorLayer from 'ol/layer/Vector'
+import VectorSource from 'ol/source/Vector'
+import Feature from 'ol/Feature'
+import GeoJSON from 'ol/format/GeoJSON'
 
 export default {
   components: {
@@ -51,6 +56,7 @@ export default {
   data() {
     return {
       jkList,
+      firePointList,
       activeNames: [1,4],
       treeData,
       defaultProps: {
@@ -131,14 +137,23 @@ export default {
       if (data.label === '监控') {
         if (!this.jkLayer) {
           // 显示监控数据
-          const loading = this.$loading({
-            lock: true,
-            text: '视频点加载中……',
-            spinner: 'el-icon-loading',
-            background: 'rgba(0, 0, 0, 0.7)'
-          })
-          // getMonitorList().then(res => {
-          //   const features = []
+          // const loading = this.$loading({
+          //   lock: true,
+          //   text: '视频点加载中……',
+          //   spinner: 'el-icon-loading',
+          //   background: 'rgba(0, 0, 0, 0.7)'
+          // })
+          // const features = []
+          // const items = this.jkList.data.map(v => {
+          //       console.log(v)
+          //       const feature = this.$map.createFeature([v.longitude, v.latitude], '监控点', v)
+          //       feature.setStyle(this.$map.getMonitorStyle())
+          //       return feature
+          // })
+          // features.push(...items)
+          // console.log(features)
+      
+
           //   res.data.forEach(item => {
           //     const items = item.data.map(v => {
           //       const feature = this.$map.createFeature([v.longitude, v.latitude], '监控点', v)
@@ -147,13 +162,15 @@ export default {
           //     })
           //     features.push(...items)
           //   })
-          //   this.$store.dispatch('map/changeJkLayer', {
-          //     layer: this.$map.createVectorLayer(features),
-          //     ope: 'ADDLAYER'
-          //   })
+            // this.$store.dispatch('map/changeJkLayer', {
+            //   layer: this.$map.createVectorLayer(features),
+            //   ope: 'ADDLAYER'
+            // })
           //   // this.$map.addLayer(this.jkLayer)
           //   loading.close()
           //   this.$store.dispatch('lqfb/changeVideoListOffsetRight', 0)
+          // getMonitorList().then(res => {
+
           // })
        
        
@@ -166,6 +183,30 @@ export default {
           this.$map.goHome()
         }
         return
+      }
+      if(data.label === '火灾点'){
+          const features = new GeoJSON().readFeatures(this.firePointList)
+          console.log("点击了火灾点",features)
+          var vectorSource = new VectorSource({
+            features,
+            wrapX: false
+          });
+          var fireLayer = new VectorLayer({
+            source: vectorSource,
+            // style: new Style({
+            //   stroke: new Stroke({
+            //     color: '#12FD94',
+            //     // 'rgba(0, 255, 0, 1)',
+            //     lineDash: [5, 3],
+            //     width: 2
+            //   }),
+            //   fill: new Fill({
+            //     color: 'rgba(254,27, 1, 0.3)'
+            //   })
+            // })
+          })
+          this.$map.addLayer(fireLayer)
+
       }
       // 显示选中图层
       this.showCheckLayer()

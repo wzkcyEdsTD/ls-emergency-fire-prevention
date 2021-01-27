@@ -284,7 +284,7 @@ const mapUrl = {
   // 应急专家
   JZJZNL_YJZJ: {
     type: 'data', // 数据服务
-    layerName: 'JZJZNL_YJZJ',
+    layerName: 'd_emergency_team',
     label: '应急专家',
     dataSourceName,
     url: dataUrl,
@@ -293,7 +293,7 @@ const mapUrl = {
   // --危化类
   JZJZNL_YJZJ_WH: {
     type: 'data', // 数据服务
-    layerName: 'JZJZNL_YJZJ',
+    layerName: 'd_emergency_team',
     label: '危化类专家',
     dataSourceName,
     url: dataUrl,
@@ -303,7 +303,7 @@ const mapUrl = {
   // --机械电气类
   JZJZNL_YJZJ_JXDQ: {
     type: 'data', // 数据服务
-    layerName: 'JZJZNL_YJZJ',
+    layerName: 'd_emergency_team',
     label: '机械类专家',
     dataSourceName,
     url: dataUrl,
@@ -313,7 +313,7 @@ const mapUrl = {
   // --矿山类
   JZJZNL_YJZJ_KS: {
     type: 'data', // 数据服务
-    layerName: 'JZJZNL_YJZJ',
+    layerName: 'd_emergency_team',
     label: '矿山类专家',
     dataSourceName,
     url: dataUrl,
@@ -323,7 +323,7 @@ const mapUrl = {
   // --防汛类
   JZJZNL_YJZJ_FX: {
     type: 'data', // 数据服务
-    layerName: 'JZJZNL_YJZJ',
+    layerName: 'd_emergency_team',
     label: '防汛类专家',
     dataSourceName,
     url: dataUrl,
@@ -333,7 +333,7 @@ const mapUrl = {
   // --综合类
   JZJZNL_YJZJ_ZH: {
     type: 'data', // 数据服务
-    layerName: 'JZJZNL_YJZJ',
+    layerName: 'd_emergency_team',
     label: '综合类专家',
     dataSourceName,
     url: dataUrl,
@@ -343,7 +343,7 @@ const mapUrl = {
   // --减灾救灾类
   JZJZNL_YJZJ_ZJJZ: {
     type: 'data', // 数据服务
-    layerName: 'JZJZNL_YJZJ',
+    layerName: 'd_emergency_team',
     label: '减灾救灾类专家',
     dataSourceName,
     url: dataUrl,
@@ -353,7 +353,7 @@ const mapUrl = {
   // --地震地质类
   JZJZNL_YJZJ_DZDZ: {
     type: 'data', // 数据服务
-    layerName: 'JZJZNL_YJZJ',
+    layerName: 'd_emergency_team',
     label: '地震地质类专家',
     dataSourceName,
     url: dataUrl,
@@ -373,7 +373,7 @@ const mapUrl = {
   // --综合救援队伍
   JZJZNL_YJDW_ZH: {
     type: 'data',
-    layerName: 'JZJZNL_YJDW',
+    layerName: 'd_emergency_team',
     label: '综合救援队伍',
     dataSourceName,
     url: dataUrl,
@@ -383,7 +383,7 @@ const mapUrl = {
   // --骨干救援队伍
   JZJZNL_YJDW_GG: {
     type: 'data',
-    layerName: 'JZJZNL_YJDW',
+    layerName: 'd_emergency_team',
     label: '森林消防救援队伍',
     dataSourceName,
     url: dataUrl,
@@ -393,7 +393,7 @@ const mapUrl = {
   // --专业救援队伍
   JZJZNL_YJDW_ZY: {
     type: 'data',
-    layerName: 'JZJZNL_YJDW',
+    layerName: 'd_emergency_team',
     label: '专业救援队伍',
     dataSourceName,
     url: dataUrl,
@@ -403,7 +403,7 @@ const mapUrl = {
   // --森林消防救援队伍
   JZJZNL_YJDW_XFDW: {
     type: 'data',
-    layerName: 'JZJZNL_YJDW',
+    layerName: 'd_emergency_team',
     label: '森林消防救援队伍',
     dataSourceName,
     url: dataUrl,
@@ -413,7 +413,7 @@ const mapUrl = {
   // --志愿者救援队伍
   JZJZNL_YJDW_ZYZ: {
     type: 'data',
-    layerName: 'JZJZNL_YJDW',
+    layerName: 'd_emergency_team',
     label: '志愿者救援队伍',
     dataSourceName,
     url: dataUrl,

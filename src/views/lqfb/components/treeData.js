@@ -675,7 +675,18 @@ const treeData = [
         label: '监控'
       }
     ]
-  }
+  },
+  {
+    id: 8,
+    label: '火灾点',
+    showCheck: true,
+    children: [
+      {
+        id: 81,
+        label: '火灾点'
+      }
+    ]
+  },
 ]
 
 export default treeData
