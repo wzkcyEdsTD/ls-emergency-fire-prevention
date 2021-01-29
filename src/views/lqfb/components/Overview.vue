@@ -184,7 +184,7 @@
     
     <div class="lb-wrapper" style="padding-top:4vh">
       <div class="title">
-        应急关键设备(指挥车0/7台)
+        指挥车0/7台
       </div>
       <img style="width: 100%;" src="@/common/images/边.png" alt="">
       <div class="imgLine">
@@ -213,7 +213,7 @@
     </div>
     <div class="lb-wrapper">
       <div class="title">
-        应急关键设备(单兵设备0/8台)
+        单兵设备0/8台
       </div>
       <img style="width: 100%;" src="@/common/images/边.png" alt="">
       <div class="imgLine">

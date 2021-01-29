@@ -1,7 +1,7 @@
 <template>
   <div class="zhfxlb-wrapper" :style="{ right: `${zhfxOffsetRight}rem` }">
     <div class="close" @click="close" />
-    <div class="zgfx-container">
+    <!-- <div class="zgfx-container">
       <div class="title">阻隔分析</div>
       <img src="../../../assets/images/边.png" alt />
       <div class="zgfx-box">
@@ -18,9 +18,9 @@
           <span class="cover">地表覆盖</span>
         </div>
       </div>
-    </div>
+    </div> -->
     <div class="ljxq-container">
-      <div class="title">
+      <!-- <div class="title">
         路径详情
         <el-button type="primary" class="btn-yadq" @click="doPoint">选点</el-button>
         <el-button type="primary" class="btn-yadq" @click="clearPoint">清点</el-button>
@@ -28,8 +28,8 @@
           >预案调取</el-button
         >
       </div>
-      <img src="../../../assets/images/边.png" alt />
-      <div class="ljxq-box">
+      <img src="../../../assets/images/边.png" alt /> -->
+      <!-- <div class="ljxq-box">
         <div v-show="RouteDetails == true && pathList.length === 0" class="route-box">
           暂无救援路径
         </div>
@@ -89,7 +89,7 @@
             <div class="road"><span />车行道 <span />人行道</div>
           </div>
         </div>
-      </div>
+      </div> -->
 
       <el-collapse v-model="activeNames" accordion @change="handleChange(activeNames)">
         <el-collapse-item title="周边资源搜索成果" name="1">
@@ -370,7 +370,7 @@ export default {
         7
       );
       if (lines.length === 0) {
-        this.$message.error("最近公路点分析失败");
+        // this.$message.error("最近公路点分析失败");
         return;
       }
 
@@ -515,7 +515,15 @@ export default {
       this.RouteDetails = true;
     },
   },
-
+  mounted(){
+    const that = this;
+    this.$bus.$on('clearAll',()=>{
+      that.close()
+    })
+  },
+  beforeDestroy(){
+    this.$bus.$off('clearAll')
+  }
 };
 </script>
 <style lang="scss">
@@ -528,6 +536,7 @@ export default {
   z-index: 1000;
   top: 0;
   padding: 10px;
+  z-index: 1999;
   .close {
     position: absolute;
     left: -34px;

@@ -201,11 +201,13 @@ export default {
         return
       }
       // 是否为火灾点
-      debugger
+      // debugger
       if ((value['systemcode'])) {
-        // this.$bus.$emit("fireShow",value);
+
+
         this.$bus.$emit("fire",value);
         this.$bus.$emit("fireDetail",value);
+
       }else{
         this.$bus.$emit("noFireDetail",false);
       }
@@ -289,7 +291,7 @@ export default {
           }
         }
       }else if ((value['systemcode'])) {
-
+        this.infoPopup.setPosition([value.x,value.y])
         // debugger
         infoTmpl += `<div  class="item">
                 <span class="key">地点：</span>

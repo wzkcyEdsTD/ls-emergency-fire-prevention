@@ -125,7 +125,7 @@ export default {
     },
     initMap() {
       this.map = this.$map.createMap('map-container')
-      const url = `http://10.53.136.100/map/tile?z={TileMatrix}&x={TileCol}&y={TileRow}&layer= w331100:Base_20201101`
+      const url = `http://10.53.136.100/map/tile?z={z}&x={x}&y={y}&layer=w331100:Base_20201101`
       
 
       const request_time =  new Date().getTime();
@@ -155,6 +155,17 @@ export default {
       const wenzhouLayer = this.$map.createTianDiTuLayer(
         "img_w",
       )
+        // const wenzhouLayer = new createTileSuperMapRestLayer(url);
+        // const wenzhouLayer = new ol.layer.Tile({
+        //   source: new ol.source.XYZ({
+        //     // crossOrigin: 'anonymous',
+        //     url: url,
+        //     wrapX: false,
+        //     crossOrigin: "Anonymous"
+        //   }),
+        //   className:"img_w"
+        // })
+
 
       // const layer = this.$map.createTileSuperMapRestLayer('')
       // const layer = new ol.layer.Tile({

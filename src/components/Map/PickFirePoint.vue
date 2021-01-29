@@ -32,7 +32,7 @@
             placeholder="输入分析半径"
             @keyup="inputSearchRadius = inputSearchRadius.replace(/[^\d.]/g, '')"
           >
-          
+
         </div>
       </div>
       <div class="footer">
@@ -256,6 +256,11 @@ export default {
     closePicFirePoint() {
       this.$parent.isShowPickFirePoint = false
       this.$parent.$refs['tool-bar'].isHzhzd = false
+
+     this.$bus.$emit("clearAll")
+
+      this.handleClearClick();
+
     },
     handleComfirmClick() {
       // const that = this;
@@ -271,6 +276,8 @@ export default {
         return
       }
 
+      this.$map.getMap().getView().setCenter([this.inputLon,this.inputLat]);
+      this.$map.getMap().getView().setZoom(16);
       this.$store.dispatch('map/changeLqzyLayer', true)
       this.$store.dispatch('map/changeIsAddFeatures', true) // 只在选中火灾点的时候获取才重新数据
       this.$store.dispatch('map/clearFeatures', []) // 设置features为空
