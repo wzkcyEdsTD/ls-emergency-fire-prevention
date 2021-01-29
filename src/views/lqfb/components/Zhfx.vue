@@ -289,7 +289,6 @@ export default {
       this.terminalLayer && this.$map.removeLayer(this.terminalLayer);
     },
     lineLayerList(val) {
-      console.log(val);
       this.lastLineLayerList &&
         this.lastLineLayerList.forEach((item) => {
           this.$map.removeLayer(item.path.lineLayers);

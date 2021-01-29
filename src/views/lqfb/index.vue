@@ -201,7 +201,8 @@ export default {
         return
       }
       // 是否为火灾点
-      if ((value['infotitle'])) {
+      debugger
+      if ((value['systemcode'])) {
         // this.$bus.$emit("fireShow",value);
         this.$bus.$emit("fire",value);
         this.$bus.$emit("fireDetail",value);
@@ -209,7 +210,7 @@ export default {
         this.$bus.$emit("noFireDetail",false);
       }
       // debugger
-      if ((!value['NAME'] && !value['label'])&&(!value['infotitle'])) return
+      if ((!value['NAME'] && !value['label'])&&(!value['systemcode'])) return
       // console.log("没有执行")
       // 判断是不是防火人员
       if (value.smid && value.smid.match(/^1[3|4|5|6|7|8|9][0-9]\d{8}$/)) {
@@ -277,7 +278,7 @@ export default {
       }
       // debugger
       console.log(value)
-      if (!(value['infotitle'])) {
+      if (!(value['systemcode'])) {
 
         for (const key in attrData[value['TABLE_NAME']]) {
           if (value[key] != undefined) {
@@ -287,7 +288,7 @@ export default {
                         </div>`
           }
         }
-      }else if ((value['infotitle'])) {
+      }else if ((value['systemcode'])) {
 
         // debugger
         infoTmpl += `<div  class="item">
@@ -299,8 +300,12 @@ export default {
             <span class="value">${value["infocontent"]}</span>
         </div>`
         infoTmpl += `<div  class="item">
-            <span class="key">人员：</span>
+            <span class="key">举报人：</span>
             <span class="value">${value["jubaoren"]}</span>
+        </div>`
+        infoTmpl += `<div  class="item">
+            <span class="key">电话：</span>
+            <span class="value">${value["jubaorentel"]}</span>
         </div>`
         infoTmpl += `<div  class="item">
             <span class="key">时间：</span>
@@ -310,7 +315,7 @@ export default {
       }
 
       table.innerHTML = infoTmpl
-      if ((value['infotitle'])) {
+      if ((value['systemcode'])) {
         keyName.innerHTML = '地点：'
         keyValue.innerHTML = `${value['address']}`
       }else{

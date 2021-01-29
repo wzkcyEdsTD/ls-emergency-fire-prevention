@@ -1,0 +1,23 @@
+{
+    "msg": "成功",
+    "code": "00",
+    "datas": {
+        "custom": [
+            {
+                "infocontent": "测试",
+                "jubaorentel": "18852574807",
+                "address": "浙江省丽水市莲都区丽阳街38号",
+                "systemcode": "ilishui",
+                "x": "119.927685",
+                "infocode": "63683d5e547b4290bc6916abb0f8ee8f",
+                "y": "28.47098",
+                "time": "2021-01-29 10:06:04",
+                "jubaoren": "荣双辉"
+            }
+        ],
+        "status": {
+            "code": "1",
+            "text": ""
+        }
+    }
+}

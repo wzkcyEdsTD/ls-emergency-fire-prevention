@@ -42,13 +42,14 @@
 import treeData from './treeData'
 import SiderBar from '@/components/SiderBar'
 import jkList from './监控数据.json'
-import firePointList from './d_fire_alarm.json'
+import firePointList from './fire.json'
 import dbsbList from './d_dbsb_jbxx.json'
 import { getMonitorList } from '@/api/lqfb'
 import VectorLayer from 'ol/layer/Vector'
 import VectorSource from 'ol/source/Vector'
 import Feature from 'ol/Feature'
 import GeoJSON from 'ol/format/GeoJSON'
+import { Point } from 'ol/geom'
 
 export default {
   components: {
@@ -134,7 +135,21 @@ export default {
   methods: {
 
     createFireLayer(){
-      const features = new GeoJSON().readFeatures(this.firePointList)
+      const features = [];
+      const arrlist = this.firePointList.datas.custom; 
+      arrlist.forEach(element => {
+        const properties = element;
+        const feature =  new Feature({
+              geometry: new Point([element.x,element.y]),
+              ...properties
+          })
+
+        features.push(feature);
+      });
+
+
+
+      // const features = new GeoJSON().readFeatures(this.firePointList)
 
       var vectorSource = new VectorSource({
         features,

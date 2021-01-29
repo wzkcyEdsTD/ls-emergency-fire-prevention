@@ -89,8 +89,10 @@ export default {
    const that = this;
    await this.initMap()
    this.$bus.$on("fireDetail",(value)=>{
-          console.log(111)
-     this.detailShow = true;
+      console.log(111)
+     that.$nextTick(()=>{
+       that.detailShow = true;
+     })
       this.tempData = value;
    })
    this.$bus.$on("noFireDetail",()=>{
@@ -137,7 +139,7 @@ export default {
       const appkey = "ece37a6f2fad49fb839f997f984b04c0"
       const yyrz = "b529677eda5447dbb3bb7d32820115fb"
       
-      const refreshSecret = "cf07c54de370408194bcff7bd6d92697"
+      const refreshSecret = "452948a7f73a45028fff6c59b56ad6a7"
       // const key = request_time + appkey + yyrz
 
       const key = appkey + refreshSecret + request_time
@@ -198,7 +200,7 @@ export default {
       this.map.addLayer(streetLayer);
       this.map.addLayer(gridLayer);
  
-      getkey();
+      // getkey();
       // window.map = this.map;
     },
     collapse() {

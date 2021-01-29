@@ -196,7 +196,8 @@ const actions = {
     commit('SET_FEATURES_DATA', layer)
   },
   changeClearFlag({ commit, state, dispatch }, payload) {
-    commit('SET_CLEAR_FLAG', payload)
+    // commit('SET_CLEAR_FLAG', payload)
+
     state.layerList.map(item => {
       item.layer && vue.$map.removeLayer(item.layer)
     })
