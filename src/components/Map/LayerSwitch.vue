@@ -216,8 +216,10 @@ export default {
           temp = vec_layer;
           map.getLayers().item(0).setVisible(false)//影像图
           map.getLayers().item(1).setVisible(false)//影像图注记
-          map.addLayer(vec_layer);
-          map.addLayer(cva_layer);
+
+          // 矢量图层插入顺序
+          map.getLayers().insertAt(2, vec_layer)
+          map.getLayers().insertAt(3, cva_layer)
         }else{
           // map.getLayers().item(5).setVisible(true)//矢量图
           // map.getLayers().item(6).setVisible(true)//矢量图注记
