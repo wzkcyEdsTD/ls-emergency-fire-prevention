@@ -43,8 +43,8 @@ const createMap = (divId, options = {}) => {
       rotate: false
     }).extend([scaleControl(), mousePositionControl()]),
     view: new View({
-      center: [119.923238,28.467972],
-      zoom: 14,
+      center: [119.563179,28.193992],
+      zoom: 10,
       projection: 'EPSG:4326'
     }),
     ...options
@@ -90,8 +90,8 @@ const getMap = () => {
 }
 
 const goHome = () => {
-  getMap().getView().setCenter([119.923238,28.467972])
-  getMap().getView().setZoom(14)
+  getMap().getView().setCenter([119.563179,28.193992])
+  getMap().getView().setZoom(10)
 }
 
 const addLayer = layer => {
@@ -136,7 +136,7 @@ const createTianDiTuLayer = (type, options = {}) => {
   const layer = new ol.layer.Tile({
     source: new ol.source.XYZ({
       // crossOrigin: 'anonymous',
-      url: `http://t4.tianditu.com/DataServer?T=${type}&x={x}&y={y}&l={z}&tk=${token}`,
+      url: `http://t0.tianditu.com/DataServer?T=${type}&x={x}&y={y}&l={z}&tk=${token}`,
       wrapX: false,
       crossOrigin: "Anonymous"
     }),
@@ -434,7 +434,9 @@ const getAllFeaturesBySQL = ({ url, dataSourceName, layerName, attributeFilter }
 }
 
 const getFeaturesByGeometry = ({ url, dataSourceName, label, layerName, attributeFilter, geomFilter, styleFunction }) => {
+
   return new Promise((resolve, reject) => {
+    // debugger
     var geometryParam = new SuperMap.GetFeaturesByGeometryParameters({
       toIndex: 999999,
       attributeFilter: attributeFilter || '',
@@ -843,7 +845,7 @@ const getPolygonStyle = () => {
       width: 2
     }),
     fill: new Fill({
-      color: 'rgba(255,0,0,0.1)'
+      color: 'rgba(255,0,0,0.3)'
     })
   })
 }
@@ -858,7 +860,7 @@ const createStaticImageLayer = (url, extent) => {
   })
 }
 
-var oe = null
+// var oe = null
 const getWindLayer = (windData) => {
   windData = windData.result;
   (function () {
@@ -980,11 +982,14 @@ var buildGrid = function(data, callback) {
 };
 
 function wind(windData){
+  console.log('111')
+  let oe = null
   buildGrid(windData, function(header, grid) {
     var data = [];
     var p = 0;
     var maxMag = 0;
     var minMag = Infinity;
+    // var oe = null
     for (var j = 0; j < header.ny; j++) {
         for (var i = 0; i < header.nx; i++) {
             var vx = grid[j][i][0];
@@ -1148,14 +1153,16 @@ function wind(windData){
             }
         }]
     };
+    //只有在地图渲染的时候才渲染
     oe = new ADLayer(option, window.g.map, echarts)
     oe.render()
   });
+  return oe;
 }
 
-const removeWindLayer = () => {
+const removeWindLayer = function(ADLayer) {
+  let oe = ADLayer;
   oe && oe.clear()
-  oe = null
 }
 
 // 测距

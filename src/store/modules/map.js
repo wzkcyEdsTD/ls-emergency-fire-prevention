@@ -44,7 +44,39 @@ const mutations = {
     state.layerList = list
   },
   APPEND_LAYER_LIST(state, list) {
-    state.layerList = [...state.layerList, ...list]
+    const name = null;
+
+    if (state.layerList.length == 0) {
+      state.layerList = [...state.layerList, ...list]
+    } else {
+      const obj = {};
+      const arr = [...state.layerList, ...list];
+      arr.map(v => {
+        if (!obj[v.name]) { obj[v.name] = v }
+      })
+      const setNameArr = [...new Set(arr.map(v => v.name))];
+      state.layerList = setNameArr.map(v => obj[v])
+      // list.forEach(element => {
+      //   debugger
+      //   state.layerList.forEach(item=>{
+      //       if(item.name==element.name){
+      //         name = item.name
+      //       }
+      //     })
+      //     if(!name){
+      //       state.layerList = [...state.layerList,element]
+      //     }else{
+      //       name = null;
+      //     }
+
+      // })
+    }
+
+
+
+
+
+
   },
   REMOVE_FROM_LAYER_LIST(state, item) {
     state.layerList = state.layerList.filter(v => v.name !== item.name)

@@ -46,6 +46,7 @@ import { getVideoByCode, getFiremanByTeamName, getEquipment, getLqzyByCoordinate
 export default {
   name: 'Lqfb',
   components: {
+
     SiderBar,
     RydwPopup,
     LegendBox,
@@ -199,14 +200,23 @@ export default {
         })
         return
       }
-
-      if (!value['NAME'] && !value['label']) return
-
+      // 是否为火灾点
+      if ((value['infotitle'])) {
+        // this.$bus.$emit("fireShow",value);
+        this.$bus.$emit("fire",value);
+        this.$bus.$emit("fireDetail",value);
+      }else{
+        this.$bus.$emit("noFireDetail",false);
+      }
+      // debugger
+      if ((!value['NAME'] && !value['label'])&&(!value['infotitle'])) return
+      // console.log("没有执行")
       // 判断是不是防火人员
       if (value.smid && value.smid.match(/^1[3|4|5|6|7|8|9][0-9]\d{8}$/)) {
         // this.$refs.rydwPannel.handleItemClick(value)
         return
       }
+
 
       // 显示属性框
       switch (value.type) {
@@ -228,6 +238,7 @@ export default {
 
       this.$store.dispatch('map/changeIsShowDetail', true)
       let table; let infoTmpl = ``
+      // debugger
       if (feature.values_.DATATYPE === '骨干救援队伍' && feature.values_.TYPE2 === '森林消防救援队伍') {
         table = document.getElementById('table-box1')
         const infoPannelDwry = document.getElementById('info-pannel-dwry')
@@ -264,19 +275,52 @@ export default {
         this.$store.dispatch('lqfb/changeIsXFDW', '')
         table = document.getElementById('table-box')
       }
-      for (const key in attrData[value['TABLE_NAME']]) {
-        if (value[key] != undefined) {
-          infoTmpl += `<div  class="item">
-                          <span class="key">${attrData[value['TABLE_NAME']][key]}：</span>
-                          <span class="value">${value[key]}</span>
-                      </div>`
+      // debugger
+      console.log(value)
+      if (!(value['infotitle'])) {
+
+        for (const key in attrData[value['TABLE_NAME']]) {
+          if (value[key] != undefined) {
+            infoTmpl += `<div  class="item">
+                            <span class="key">${attrData[value['TABLE_NAME']][key]}：</span>
+                            <span class="value">${value[key]}</span>
+                        </div>`
+          }
         }
+      }else if ((value['infotitle'])) {
+
+        // debugger
+        infoTmpl += `<div  class="item">
+                <span class="key">地点：</span>
+                <span class="value">${value["address"]}</span>
+            </div>`
+        infoTmpl += `<div  class="item">
+            <span class="key">类型：</span>
+            <span class="value">${value["infocontent"]}</span>
+        </div>`
+        infoTmpl += `<div  class="item">
+            <span class="key">人员：</span>
+            <span class="value">${value["jubaoren"]}</span>
+        </div>`
+        infoTmpl += `<div  class="item">
+            <span class="key">时间：</span>
+            <span class="value">${value["time"]}</span>
+        </div>`
+        // console.log(infoTmpl)
       }
+
       table.innerHTML = infoTmpl
-      keyName.innerHTML = `${attrData[value['TABLE_NAME']]['NAME']}：`
-      keyValue.innerHTML = `${value['NAME']}`
+      if ((value['infotitle'])) {
+        keyName.innerHTML = '地点：'
+        keyValue.innerHTML = `${value['address']}`
+      }else{
+
+        keyName.innerHTML = `${attrData[value['TABLE_NAME']]['NAME']}：`
+        keyValue.innerHTML = `${value['NAME']}`
+      }
     },
     clearPopup() {
+      // this.firePopyp.setPosition(undefined)
       this.rydwPopyp.setPosition(undefined)
       this.infoPopup.setPosition(undefined)
     },

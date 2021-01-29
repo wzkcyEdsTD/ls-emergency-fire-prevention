@@ -131,7 +131,7 @@
             </div>
           </div>
         </el-collapse-item>
-        <el-collapse-item title="实时响应人员" name="2">
+        <!-- <el-collapse-item title="实时响应人员" name="2">
           <div v-if="ssxyPersonList.length > 0">
             <ul>
               <li v-for="(v, i) in ssxyPersonList" :key="i">{{ v.values_["smid"] }}</li>
@@ -191,7 +191,7 @@
             </div>
             <div v-else>周边无监控设施</div>
           </div>
-        </el-collapse-item>
+        </el-collapse-item> -->
       </el-collapse>
     </div>
   </div>
@@ -350,7 +350,7 @@ export default {
 
     showShortPath() {
       this.pathList = [];
-      this.posTo(this.featuresData.ZBZY.JZJZNL_YJDW);
+      this.posTo(this.featuresData.ZBZY.d_emergency_team);
     },
 
     async getNearestPtOnLine() {

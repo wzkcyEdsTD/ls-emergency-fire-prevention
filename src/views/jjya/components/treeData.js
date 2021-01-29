@@ -348,206 +348,206 @@ const treeData = [
           }
         ]
       },
-      {
-        id: 'aqfx',
-        label: '安全风险源分析',
-        showCheck: true,
-        children: [
-          {
-            id: 31,
-            label: '水利工程',
-            children: [
-              {
-                id: 311,
-                label: '水库',
-                value: MAP_URL.RESERVOIR
-              },
-              {
-                id: 312,
-                label: '山塘',
-                value: MAP_URL.POOL
-              },
-              {
-                id: 313,
-                label: '海塘',
-                value: MAP_URL.SEAWALL
-              },
-              {
-                id: 314,
-                label: '堤防',
-                value: MAP_URL.DYKE
-              },
-              {
-                id: 315,
-                label: '泵站',
-                value: MAP_URL.PUMP
-              },
-              {
-                id: 316,
-                label: '水闸',
-                value: MAP_URL.WATER_GATE
-              },
-              {
-                id: 317,
-                label: '旱闸'
-              },
-              {
-                id: 318,
-                label: '防浪墙开口'
-              },
-              {
-                id: 319,
-                label: '农村饮用水',
-                value: MAP_URL.RURAL_DRINKING_WATER
-              },
-              {
-                id: 3110,
-                label: '水电站',
-                value: MAP_URL.AQFXY_SL_SDZ
-              }
-            ]
-          },
-          {
-            id: 32,
-            label: '道路运输',
-            children: [
-              {
-                index: 321,
-                label: '桥梁',
-                value: MAP_URL.BRIDGE
-              },
-              {
-                index: 322,
-                label: '隧道',
-                value: MAP_URL.TUNNEL
-              },
-              {
-                index: 323,
-                label: '涵洞',
-                value: MAP_URL.AQFXY_JT_HD
-              },
-              {
-                index: 324,
-                label: '港口码头',
-                value: MAP_URL.PORT_WHARF
-              },
-              {
-                index: 325,
-                label: '水路运输单位',
-                value: MAP_URL.WATERWAY_TRANSPORT_UNIT
-              },
-              {
-                index: 326,
-                label: '市域轨道站点',
-                value: MAP_URL.D_HAZARDS_TRACKSHP_P
-              },
-              {
-                index: 327,
-                label: '火车站',
-                value: MAP_URL.D_HAZARDS_TRAIN_STATION
-              },
-              {
-                index: 328,
-                label: '两客一危企业',
-                value: MAP_URL.DANGEROUS_CAR_ENTERPRISE
-              },
-              {
-                index: 329,
-                label: '道路隐患点',
-                value: MAP_URL.ACCIDENT_BLACK_SPOT
-              }
-            ]
-          },
-          {
-            id: 33,
-            label: '化工及危险品企业',
-            children: [
-              {
-                id: 331,
-                label: '生产企业',
-                value: MAP_URL.D_HAZARDS_CHEMICALSHP_SCQY
-              },
-              {
-                id: 332,
-                label: '使用企业',
-                value: MAP_URL.D_HAZARDS_CHEMICALSHP_SYQY
-              },
-              {
-                id: 333,
-                label: '仓储经营',
-                value: MAP_URL.D_HAZARDS_CHEMICALSHP_SYQY_CCJY
-              },
-              {
-                id: 334,
-                label: '带仓储经营',
-                value: MAP_URL.D_HAZARDS_CHEMICALSHP_SYQY_DCCJY
-              },
-              // {
-              //   id: 335,
-              //   label: '不带仓储经营',
-              //   value: MAP_URL.D_HAZARDS_CHEMICALSHP_SYQY_BDCCJY
-              // },
-              {
-                id: 336,
-                label: '加油站',
-                value: MAP_URL.D_HAZARDS_CHEMICALSHP_SYQY_YJZ
-              }
-            ]
-          },
-          {
-            id: 34,
-            label: '人员密集场所',
-            children: [
-              {
-                id: 341,
-                label: '旅游景点',
-                value: MAP_URL.TOURIST_SPOT
-              },
-              {
-                id: 342,
-                label: '农家乐',
-                value: MAP_URL.AGRITAINMENT
-              },
-              {
-                id: 343,
-                label: '民宿',
-                value: MAP_URL.HOMESTAY
-              },
-              {
-                id: 344,
-                label: '重点餐饮',
-                value: MAP_URL.AQFXY_RM_ZDCY
-              }
-            ]
-          },
-          {
-            id: 35,
-            label: '烟花爆竹经营单位',
-            value: MAP_URL.D_HARAZDS_FIREWORKS
-          },
-          {
-            id: 36,
-            label: '消防安全单位',
-            value: MAP_URL.FIRE_SAFETY_PROTECT_UNIT
-          },
-          {
-            id: 37,
-            label: '其他',
-            children: [
-              {
-                id: 371,
-                label: '民爆物品企业',
-                value: MAP_URL.CIVIL_EXPLOSIVES_ENTERPRISES
-              },
-              {
-                id: 372,
-                label: '易制毒化学品企业',
-                value: MAP_URL.AQFXY_QT_YZDHX
-              }
-            ]
-          }
-        ]
-      }
+      // {
+      //   id: 'aqfx',
+      //   label: '安全风险源分析',
+      //   showCheck: true,
+      //   children: [
+      //     {
+      //       id: 31,
+      //       label: '水利工程',
+      //       children: [
+      //         {
+      //           id: 311,
+      //           label: '水库',
+      //           value: MAP_URL.RESERVOIR
+      //         },
+      //         {
+      //           id: 312,
+      //           label: '山塘',
+      //           value: MAP_URL.POOL
+      //         },
+      //         {
+      //           id: 313,
+      //           label: '海塘',
+      //           value: MAP_URL.SEAWALL
+      //         },
+      //         {
+      //           id: 314,
+      //           label: '堤防',
+      //           value: MAP_URL.DYKE
+      //         },
+      //         {
+      //           id: 315,
+      //           label: '泵站',
+      //           value: MAP_URL.PUMP
+      //         },
+      //         {
+      //           id: 316,
+      //           label: '水闸',
+      //           value: MAP_URL.WATER_GATE
+      //         },
+      //         {
+      //           id: 317,
+      //           label: '旱闸'
+      //         },
+      //         {
+      //           id: 318,
+      //           label: '防浪墙开口'
+      //         },
+      //         {
+      //           id: 319,
+      //           label: '农村饮用水',
+      //           value: MAP_URL.RURAL_DRINKING_WATER
+      //         },
+      //         {
+      //           id: 3110,
+      //           label: '水电站',
+      //           value: MAP_URL.AQFXY_SL_SDZ
+      //         }
+      //       ]
+      //     },
+      //     {
+      //       id: 32,
+      //       label: '道路运输',
+      //       children: [
+      //         {
+      //           index: 321,
+      //           label: '桥梁',
+      //           value: MAP_URL.BRIDGE
+      //         },
+      //         {
+      //           index: 322,
+      //           label: '隧道',
+      //           value: MAP_URL.TUNNEL
+      //         },
+      //         {
+      //           index: 323,
+      //           label: '涵洞',
+      //           value: MAP_URL.AQFXY_JT_HD
+      //         },
+      //         {
+      //           index: 324,
+      //           label: '港口码头',
+      //           value: MAP_URL.PORT_WHARF
+      //         },
+      //         {
+      //           index: 325,
+      //           label: '水路运输单位',
+      //           value: MAP_URL.WATERWAY_TRANSPORT_UNIT
+      //         },
+      //         {
+      //           index: 326,
+      //           label: '市域轨道站点',
+      //           value: MAP_URL.D_HAZARDS_TRACKSHP_P
+      //         },
+      //         {
+      //           index: 327,
+      //           label: '火车站',
+      //           value: MAP_URL.D_HAZARDS_TRAIN_STATION
+      //         },
+      //         {
+      //           index: 328,
+      //           label: '两客一危企业',
+      //           value: MAP_URL.DANGEROUS_CAR_ENTERPRISE
+      //         },
+      //         {
+      //           index: 329,
+      //           label: '道路隐患点',
+      //           value: MAP_URL.ACCIDENT_BLACK_SPOT
+      //         }
+      //       ]
+      //     },
+      //     {
+      //       id: 33,
+      //       label: '化工及危险品企业',
+      //       children: [
+      //         {
+      //           id: 331,
+      //           label: '生产企业',
+      //           value: MAP_URL.D_HAZARDS_CHEMICALSHP_SCQY
+      //         },
+      //         {
+      //           id: 332,
+      //           label: '使用企业',
+      //           value: MAP_URL.D_HAZARDS_CHEMICALSHP_SYQY
+      //         },
+      //         {
+      //           id: 333,
+      //           label: '仓储经营',
+      //           value: MAP_URL.D_HAZARDS_CHEMICALSHP_SYQY_CCJY
+      //         },
+      //         {
+      //           id: 334,
+      //           label: '带仓储经营',
+      //           value: MAP_URL.D_HAZARDS_CHEMICALSHP_SYQY_DCCJY
+      //         },
+      //         // {
+      //         //   id: 335,
+      //         //   label: '不带仓储经营',
+      //         //   value: MAP_URL.D_HAZARDS_CHEMICALSHP_SYQY_BDCCJY
+      //         // },
+      //         {
+      //           id: 336,
+      //           label: '加油站',
+      //           value: MAP_URL.D_HAZARDS_CHEMICALSHP_SYQY_YJZ
+      //         }
+      //       ]
+      //     },
+      //     {
+      //       id: 34,
+      //       label: '人员密集场所',
+      //       children: [
+      //         {
+      //           id: 341,
+      //           label: '旅游景点',
+      //           value: MAP_URL.TOURIST_SPOT
+      //         },
+      //         {
+      //           id: 342,
+      //           label: '农家乐',
+      //           value: MAP_URL.AGRITAINMENT
+      //         },
+      //         {
+      //           id: 343,
+      //           label: '民宿',
+      //           value: MAP_URL.HOMESTAY
+      //         },
+      //         {
+      //           id: 344,
+      //           label: '重点餐饮',
+      //           value: MAP_URL.AQFXY_RM_ZDCY
+      //         }
+      //       ]
+      //     },
+      //     {
+      //       id: 35,
+      //       label: '烟花爆竹经营单位',
+      //       value: MAP_URL.D_HARAZDS_FIREWORKS
+      //     },
+      //     {
+      //       id: 36,
+      //       label: '消防安全单位',
+      //       value: MAP_URL.FIRE_SAFETY_PROTECT_UNIT
+      //     },
+      //     {
+      //       id: 37,
+      //       label: '其他',
+      //       children: [
+      //         {
+      //           id: 371,
+      //           label: '民爆物品企业',
+      //           value: MAP_URL.CIVIL_EXPLOSIVES_ENTERPRISES
+      //         },
+      //         {
+      //           id: 372,
+      //           label: '易制毒化学品企业',
+      //           value: MAP_URL.AQFXY_QT_YZDHX
+      //         }
+      //       ]
+      //     }
+      //   ]
+      // }
     ]
   },
   {

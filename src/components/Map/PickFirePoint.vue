@@ -2,12 +2,12 @@
   <!-- 选择火灾点位置 -->
   <div class="pick-wrapper">
     <div class="title">
-      绘制火灾点
+      请输入分析半径
       <i class="el-icon-close" @click="closePicFirePoint" />
     </div>
     <div class="content">
       <div class="input-container">
-        <div class="draw-wrapper">
+        <!-- <div class="draw-wrapper">
           <div class="item">
             <span>经度：</span>
             <input
@@ -25,13 +25,14 @@
             >
           </div>
           <div class="input-btn" @click="handlePickClick" />
-        </div>
+        </div> -->
         <div class="input-radius">
           <input
             v-model="inputSearchRadius"
             placeholder="输入分析半径"
             @keyup="inputSearchRadius = inputSearchRadius.replace(/[^\d.]/g, '')"
           >
+
         </div>
       </div>
       <div class="footer">
@@ -39,7 +40,6 @@
         <div class="btn" @click="handleComfirmClick">确认</div>
       </div>
     </div>
-
   </div>
 </template>
 
@@ -52,7 +52,7 @@ import hzdfxNodes from './hzdfx'
 export default {
   data() {
     return {
-      inputSearchRadius: 2,
+      inputSearchRadius: 1000,
       inputLon: null,
       inputLat: null
     }
@@ -89,7 +89,7 @@ export default {
         this.$message.info('请清除已有火灾点！')
         return
       }
-
+      // debugger
       // 没有输入经纬度则用鼠标选择
       if (this.inputLat || this.inputLon) {
         if (!this.inputLon) {
@@ -110,7 +110,7 @@ export default {
     },
 
     showFireFeature(fireFeature) {
-      this.$map.zoomToFeature(fireFeature, 13)
+      // this.$map.zoomToFeature(fireFeature, 15)
       fireFeature.setStyle(this.$map.getFirePointStyle())
       this.$store.dispatch('jjya/changeFirePt', fireFeature)
       const layer = this.$map.createVectorLayer([fireFeature])
@@ -118,15 +118,20 @@ export default {
       const fireCoor = fireFeature.getGeometry().getCoordinates()
       this.inputLon = fireCoor[0]
       this.inputLat = fireCoor[1]
+      console.log(fireCoor)
+            // debugger
+      const r = this.inputSearchRadius / 1000;
+      // console.log(r)
       const buffered = turf.buffer(
         turf.point(fireCoor),
-        this.inputSearchRadius,
+        r,
         {
           units: 'kilometers'
         }
       )
       var format = new GeoJSON()
       var f = format.readFeature(buffered)
+      // console.log('1111111111',f)
       f.setStyle(this.$map.getPolygonStyle())
       layer.getSource().addFeature(f)
       this.$store.dispatch('jjya/changeBuffer', f)
@@ -135,15 +140,16 @@ export default {
 
     clearFire() {
       this.$store.dispatch('map/changeIsAddFeatures', false)
-      this.inputLon = null
-      this.inputLat = null
+      // this.inputLon = null
+      // this.inputLat = null
       this.firePtLayer && this.$map.removeLayer(this.firePtLayer)
       // this.$store.dispatch('map/changeLqzyLayer', false)
       this.$store.dispatch('jjya/changeFirePtLayer', null)
       this.$store.dispatch('jjya/changeBuffer', null)
       this.$store.dispatch('jjya/changeFirePt', null)
-      this.$store.dispatch('siderbar/changeCheckedLeafNodesWithBuffer', [])
+      // this.$store.dispatch('siderbar/changeCheckedLeafNodesWithBuffer', [])
     },
+
 
     handleClearClick() {
       this.clearFire()
@@ -154,7 +160,7 @@ export default {
       if (this.features.length === 81) {
         const attrDic = {
           ZBZY: { // 周边资源
-            JZJZNL_YJDW: {
+            d_emergency_team: {
               name: '应急队伍'
             },
             JZJZNL_YJZJ: {
@@ -238,6 +244,7 @@ export default {
                 }
               }
             })
+
           } else {
             // 地表覆盖数量
             attrDic.dbfgNum += item.length
@@ -251,6 +258,10 @@ export default {
       this.$parent.$refs['tool-bar'].isHzhzd = false
     },
     handleComfirmClick() {
+      // const that = this;
+      this.clearFire();
+      const fireFeat = this.$map.createFeature([this.inputLon, this.inputLat])
+      this.showFireFeature(fireFeat)
       if (this.inputSearchRadius === 0 || !this.inputSearchRadius) {
         this.$message.info('请设置分析范围！')
         return
@@ -259,6 +270,7 @@ export default {
         this.$message.info('请先设置火灾点！')
         return
       }
+
       this.$store.dispatch('map/changeLqzyLayer', true)
       this.$store.dispatch('map/changeIsAddFeatures', true) // 只在选中火灾点的时候获取才重新数据
       this.$store.dispatch('map/clearFeatures', []) // 设置features为空
@@ -266,6 +278,28 @@ export default {
       this.$store.dispatch('jjya/getSsxyPersonList', null)
       this.$store.dispatch('jjya/getMonitorList', null)
     }
+  },
+  mounted(){
+    const that = this;
+
+    this.$bus.$on('fire',(value)=>{
+      console.log("传过来了",value)
+      // that.handleClearClick();
+      if (that.firePtLayer) {
+        that.$store.dispatch('map/changeClearFlag', null)
+        that.$store.dispatch('map/changeIsAddFeatures', false)
+        that.firePtLayer && that.$map.removeLayer(that.firePtLayer)
+        that.$store.dispatch('jjya/changeFirePtLayer', null)
+        that.$store.dispatch('jjya/changeBuffer', null)
+        that.$store.dispatch('jjya/changeFirePt', null)
+      }
+        that.inputLon = value.x;
+        that.inputLat = value.y;
+        // that.handlePickClick();
+    })
+  },
+  beforeDestroy(){
+    this.$bus.$off('fire');
   }
 }
 </script>
@@ -282,7 +316,7 @@ export default {
   background: url('../../assets/images/弹框-火灾点.png') no-repeat;
   background-size: 100% 100%;
   width: 271px;
-  height: 177px;
+  height: 150px;
   .title {
     height: 30px;
     width: 100%;
@@ -320,7 +354,7 @@ export default {
       }
       .input-radius{
         &::after{
-          content: 'km';
+          content: '米';
           position: relative;
           left: -30px;
         }
@@ -376,6 +410,7 @@ export default {
       display: flex;
       justify-content: space-between;
       width: 205px;
+      padding-top: 1vh;
       margin-top: 5px;
       .btn {
         width: 66px;

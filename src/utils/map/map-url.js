@@ -27,19 +27,19 @@ const mapUrl = {
   ZWPT_SG_WZ_CGCS2000: {
     type: 'map',
     layerName: 'wenzhou_emap',
-    url: 'http://t4.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=2e6919cbe2122200fa172aaea99742e0'
+    url: 'http://t3.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=2e6919cbe2122200fa172aaea99742e0'
   },
   // 影像注记
   YJ_YXZJ_2019_CGCS2000: {
     type: 'map',
     layerName: 'img_zj',
-    url: 'http://t4.tianditu.com/DataServer?T=cia_w&x={x}&y={y}&l={z}&tk=2e6919cbe2122200fa172aaea99742e0'
+    url: 'http://t3.tianditu.com/DataServer?T=cia_w&x={x}&y={y}&l={z}&tk=2e6919cbe2122200fa172aaea99742e0'
   },
   // 2019年影像
   IMG_2019: {
     type: 'map',
     layerName: 'img_2019',
-    url: 'http://t4.tianditu.com/DataServer?T=img_w&x={x}&y={y}&l={z}&tk=2e6919cbe2122200fa172aaea99742e0'
+    url: 'http://t3.tianditu.com/DataServer?T=img_w&x={x}&y={y}&l={z}&tk=2e6919cbe2122200fa172aaea99742e0'
   },
   // 2018年影像
   IMG_2018: {

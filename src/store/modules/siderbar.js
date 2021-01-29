@@ -34,7 +34,7 @@ const actions = {
     const removeNodes = oldeNodes.filter(v => newNodesIds.indexOf(v.id) === -1)
     const appendLayerUrlList = appendNodes.filter(v => v.value).map(v => ({ ...v.value, cropFeature: rootGetters.buffer, geomFilter: rootGetters.buffer }))
     const removeLayerUrlList = removeNodes.filter(v => v.value).map(v => ({ ...v.value, cropFeature: rootGetters.buffer, geomFilter: rootGetters.buffer }))
-    commit('SET_CHECKED_LEAF_NODES', [])
+    // commit('SET_CHECKED_LEAF_NODES', [])
     dispatch('map/changeLayerListByUrl', { appendLayerUrlList, removeLayerUrlList }, { root: true })
   }
 }

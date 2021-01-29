@@ -1,8 +1,8 @@
 <template>
   <div id="header" class="header-wrapper">
     <div class="header-img">
-      <img class="bg-img" src="./images/head.png" alt="">
-      <img class="topLab" src="./images/标题.png" alt="">
+      <div class="bg-img"></div>
+      <div class="topLab"/>
     </div>
     <div class="info">
       <p class="time">{{date}}</p>
@@ -60,7 +60,8 @@ export default {
 
 <style scoped lang="less">
 .header-wrapper {
-  position: relative;
+  position: absolute;
+  top: 0vh;
   z-index: 1999;
   width: 100%;
   height: 8vh;
@@ -77,24 +78,21 @@ export default {
       width: 100%;
       height: 100%;
       z-index: -1;
+      background-image: url('./images/head.png');
+      background-size: 100% 100%;
     }
     .topLab{
       height: 100%;
       // z-index: 3000;
-    }
-    .shadow {
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      bottom: 10px;
-      width: 34vh;
-      height: 4vh;
+      background-image: url('./images/标题.png');
+      background-size: 100% 100%;
+      // src="./images/标题.png" 
     }
   }
 
   .info {
     position: absolute;
-    top: 4.3vh;
+    top: 5.7vh;
     left: 50%;
     transform: translateX(-50%);
     color: #fff;

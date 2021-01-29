@@ -59,14 +59,18 @@ export default {
       jkList,
       firePointList,
       dbsbList,
-      activeNames: [1,4],
+      activeNames: [1,5,6],
       treeData,
       defaultProps: {
         children: 'children',
         label: 'label'
       },
-      temp:false,
+      temp:true,
       firelayer:null,
+      district:true,
+      village:false,
+      grid:false,
+      street:false,
     }
   },
   computed: {
@@ -102,8 +106,9 @@ export default {
       }
     },
     checkedLeafNodes(val) {
+      // console.log(9999999999999, val)
       this.clearTreeChecked()
-      for (let i = 1; i <= 6; i++) {
+      for (let i = 1; i <= 7; i++) {
         if (this.$refs[`tree_${i}`]) {
           const ids = []
           val.forEach(item => {
@@ -120,14 +125,36 @@ export default {
   mounted() {
     // 默认选中林区节点
     this.$refs[`tree_1`][0].setCheckedKeys([11, 146])
-    // this.$refs[`tree_4`][0].setCheckedKeys([41])
+    this.$refs[`tree_6`][0].setCheckedKeys([61])
+    this.$refs[`tree_5`][0].setCheckedKeys([51])
+    this.createFireLayer()
     // 显示选中图层
     this.showCheckLayer()
   },
   methods: {
+
+    createFireLayer(){
+      const features = new GeoJSON().readFeatures(this.firePointList)
+
+      var vectorSource = new VectorSource({
+        features,
+        wrapX: false
+      });
+      var fireLayer = new VectorLayer({
+        source: vectorSource,
+      })
+      fireLayer.setStyle(this.$map.getFirePointStyle())
+      this.firelayer = fireLayer;
+      this.temp = true;
+      this.$map.addLayer(fireLayer)
+    },
+
     handleCheckChange(data, checked, id) {
+      //console.log('handleCheckChange', data, checked)
       // 勾选目录树控制总览显示资源
       // debugger
+      let list = window.g.map.getLayers().array_
+
       if ((data.id + '').substring(0, 2) === '11') {
         this.$store.dispatch('lqfb/changeActiveMenu', '基础要素')
       } else if ((data.id + '')[0] === '2') {
@@ -188,56 +215,51 @@ export default {
         }
         return
       }
-      if(data.label === '火灾点'){
-        if(!this.temp){
-          const features = new GeoJSON().readFeatures(this.firePointList)
-          console.log("点击了火灾点",features)
-          var vectorSource = new VectorSource({
-            features,
-            wrapX: false
-          });
-          var fireLayer = new VectorLayer({
-            source: vectorSource,
-
-          })
-          fireLayer.setStyle(this.$map.getFirePointStyle())
-          this.firelayer = fireLayer;
-          this.temp = true;
-          this.$map.addLayer(fireLayer)
-        }else if (this.temp) {
+      if(data.label === '火灾报警点'){
+        if(this.temp){
           this.temp = false;
-          window.g.map.removeLayer(this.firelayer)
-          this.firelayer = null;
+          this.firelayer.setVisible(false);
+        }else if (!this.temp) {
+          this.temp = true;
+          this.firelayer.setVisible(true);
+
         }
-        
+        this.$store.dispatch('lqfb/changezlOffsetRight', 0)
       }
 
-      if(data.label === '单兵设备'){
-        const list = this.dbsbList;
-          // const features = new GeoJSON().readFeatures(this.firePointList)
-          console.log("点击了单兵设备",list)
-          // var vectorSource = new VectorSource({
-          //   features,
-          //   wrapX: false
-          // });
-          // var fireLayer = new VectorLayer({
-          //   source: vectorSource,
-          //   // style: new Style({
-          //   //   stroke: new Stroke({
-          //   //     color: '#12FD94',
-          //   //     // 'rgba(0, 255, 0, 1)',
-          //   //     lineDash: [5, 3],
-          //   //     width: 2
-          //   //   }),
-          //   //   fill: new Fill({
-          //   //     color: 'rgba(254,27, 1, 0.3)'
-          //   //   })
-          //   // })
-          // })
-          // this.$map.addLayer(fireLayer)
+      if(data.label === '区县'){
+        this.district = !this.district
+        list.forEach(element => {
+          if (element.className_=="districtLayer") {
+            element.setVisible(this.district)
+          }
+        });
 
       }
-
+      if(data.label === '乡镇街道'){
+        this.street = !this.street
+        list.forEach(element => {
+          if (element.className_=="streetLayer") {
+            element.setVisible(this.street)
+          }
+        });
+      }
+      if(data.label === '行政村社区'){
+        this.village = !this.village
+        list.forEach(element => {
+          if (element.className_=="villageLayer") {
+            element.setVisible(this.village)
+          }
+        });
+      }
+      if(data.label === '网格'){
+        this.grid = !this.grid
+        list.forEach(element => {
+          if (element.className_=="gridLayer") {
+            element.setVisible(this.grid)
+          }
+        });
+      }
       // 显示选中图层
       this.showCheckLayer()
     },
@@ -266,6 +288,7 @@ export default {
       this.$store.dispatch('siderbar/changeCheckedLeafNodes', nodes)
     },
     nodeClick(data, node, obj) {
+      console.log('nodeClick', data, node)
       if (data.label === '事故分级调取') {
         this.$store.dispatch('lqfb/changeyadqOffsetRight', this.yadqOffsetRight === 0 ? -30 : 0)
       }

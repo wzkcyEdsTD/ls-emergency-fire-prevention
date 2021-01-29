@@ -24,10 +24,13 @@ import '@/icons' // icon
 import '@/permission' // permission control
 import '@/libs/rem.js'
 import 'video.js/dist/video-js.css'
+import VueBus from "vue-bus";
 
 import map from '@/utils/map'
 Vue.prototype.$map = map
 Vue.prototype.$echarts = echarts
+Vue.use(VueBus);
+
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api

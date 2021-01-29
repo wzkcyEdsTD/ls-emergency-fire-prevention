@@ -18,21 +18,21 @@
       <li
         :title="'地图切换'"
         class="img-container"
-        :style="activeType === '影像' ? 'height:17vh' : ''"
-        @click="handleActiveType('影像')"
+        :style="activeType === '影像' ? '' : ''"
+        @click="change()"
       >
         <img
-          v-show="activeType !== '影像'"
+          v-show="mapType === 'img_w'"
           src="../../assets/images/框1.png"
           alt=""
         >
         <img
-          v-show="activeType === '影像'"
+          v-show="mapType === 'vec_w'"
           src="../../assets/images/绿框.png"
           alt=""
         >
-        <svg-icon v-show="activeType !== '影像'" icon-class="影像icon" />
-        <svg-icon v-show="activeType === '影像'" icon-class="影像icon-选中" />
+        <svg-icon v-show="mapType === 'img_w'" icon-class="影像icon" />
+        <svg-icon v-show="mapType === 'vec_w'" icon-class="影像icon-选中" />
         <div
           class="dropdown-lists"
           :style="activeType === '影像' ? 'height:375px' : 'height:0px'"
@@ -113,8 +113,9 @@ export default {
           type:"img_w"
         },
       ],
-      toolList: ['清空', '画点', '画线',"画面","打印"],
-      dgxLayer: null // 示高线图层
+      toolList: ['绘点', '绘线',"绘面",'清空',"打印"],
+      dgxLayer: null ,// 示高线图层
+      mapType:"img_w",
     }
   },
   computed: {
@@ -192,7 +193,52 @@ export default {
       }
 
     },
-
+    change(){
+      //影像切矢量
+      const map = window.g.map;
+      //影像切矢量
+      //img_w
+      if(this.mapType == "img_w"){
+        let temp = null;
+        const layerList = map.getLayers().array_;
+        layerList.forEach((item)=>{
+          if(item.className_=="vec_w"){
+            temp = item
+            item.setVisible(true)
+          }else if(item.className_=="cva_w"){
+            item.setVisible(true)
+          }
+        })
+        //若无矢量图
+        if(!temp){
+          const vec_layer = this.$map.createTianDiTuLayer("vec_w")
+          const cva_layer = this.$map.createTianDiTuLayer("cva_w")
+          temp = vec_layer;
+          map.getLayers().item(0).setVisible(false)//影像图
+          map.getLayers().item(1).setVisible(false)//影像图注记
+          map.addLayer(vec_layer);
+          map.addLayer(cva_layer);
+        }else{
+          // map.getLayers().item(5).setVisible(true)//矢量图
+          // map.getLayers().item(6).setVisible(true)//矢量图注记
+        }
+        this.mapType = "vec_w"
+      }else if(this.mapType == "vec_w"){
+        const layerList = map.getLayers().array_;
+        layerList.forEach(element => {
+          if(element.className_ == "vec_w"){
+            element.setVisible(false)
+          }else if(element.className_ == "cva_w"){
+            element.setVisible(false)
+          }
+        });
+        map.getLayers().item(0).setVisible(true)//影像图
+        map.getLayers().item(1).setVisible(true)//影像图注记
+        // map.getLayers().item(5).setVisible(false)//矢量图
+        // map.getLayers().item(6).setVisible(false)//矢量图注记
+        this.mapType = "img_w"
+      }
+    },
     handleToolChange(val) {
       if (val === '清空') {
         // this.$store.dispatch('map/changeClearFlag', null)
@@ -206,15 +252,15 @@ export default {
         }
 
       }
-      if (val === '画点') {
+      if (val === '绘点') {
        const tempLayer = Measure.returnLayer(window.g.map,"Point");
         this.list.push(tempLayer);
       }
-      if (val === '画线') {
+      if (val === '绘线') {
        const tempLayer = Measure.returnLayer(window.g.map,"LineString");
        this.list.push(tempLayer);
       }
-      if (val === '画面') {
+      if (val === '绘面') {
         const tempLayer = Measure.returnLayer(window.g.map,"Polygon");
         this.list.push(tempLayer);
         console.log(this.list)

@@ -305,7 +305,7 @@ export default {
     this.getAllFeatures()
     this.initZLLB() // 初始化总览列表
     this.activeTab = this.lqfbActiveMenu === '基础要素' ? '乡镇区域' : '区域统计'
-    console.log(this.dbsbList.RECORDS);
+    // console.log(this.dbsbList.RECORDS);
   },
   methods: {
     select_li(index){

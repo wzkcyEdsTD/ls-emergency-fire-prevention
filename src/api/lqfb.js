@@ -1,6 +1,8 @@
 import request from '@/utils/request'
 import qs from 'qs'
 import axios from 'axios'
+import { MD5 } from 'crypto-js';
+import app from '@/store/modules/app';
 
 // 防火人员信息查询
 export function getFhry({ param }) {
@@ -11,6 +13,27 @@ export function getFhry({ param }) {
       param
     })
   })
+}
+
+
+export function getKey() {
+
+   const request_time = new Date(currentdate.replace(new RegExp("-","gm"),"/")).getTime();
+  /*
+  appkey：ece37a6f2fad49fb839f997f984b04c0 (应用kye)
+  
+  应用认证：b529677eda5447dbb3bb7d32820115fb
+  */
+ //MD5 (应用KEY+秘钥（应用认证秘钥/刷新秘钥/请求秘钥）+long类型请求时间)
+  
+  const appkey = "ece37a6f2fad49fb839f997f984b04c0"
+  const yyrz = "b529677eda5447dbb3bb7d32820115fb"
+
+  const key = request_time + appkey + yyrz
+
+  console.log("test",MD5(key))
+
+  // return axios.get(``)
 }
 
 // 护林员在线人数

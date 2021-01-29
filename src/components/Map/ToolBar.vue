@@ -30,7 +30,7 @@
           />
         </el-select>
       </li> -->
-      <li :class="checkedWind ? 'li-active' : ''" @click="checkedWind = !checkedWind">实时风向</li>
+      <li :class="checkedWind ? 'li-active' : ''" @click="showWind">实时风场</li>
       <!-- <li :class="activeType==='预测风向' ? 'li-active' : ''">
         <el-select v-model="windPrValue" clearable placeholder="预测风向">
           <el-option
@@ -45,11 +45,11 @@
       <!-- <li class="hxdj" :class="yzhxdjOffsetRight==0 ? 'hzhzd-active' : '' " @click="changeHxdj">
         一周森林火险等级
       </li> -->
-      <li class="hzhzd" :class="isHzhzd ? 'hzhzd-active' : '' " @click="changeHzhzd">
+      <!-- <li class="hzhzd" :class="isHzhzd ? 'hzhzd-active' : '' " @click="changeHzhzd">
         <svg-icon v-show="!isHzhzd" icon-class="模拟火灾icon" />
         <svg-icon v-show="isHzhzd" icon-class="模拟火灾icon (1)" />
         绘制火灾点
-      </li>
+      </li> -->
     </ul>
 
     <div v-show="checkedRadar" class="time-play">
@@ -159,7 +159,8 @@ export default {
         ]
       },
       rainPrValue: '',
-      windPrValue: ''
+      windPrValue: '',
+      oe:null,
     }
   },
   computed: {
@@ -218,6 +219,19 @@ export default {
       // this.rainPrLayer.addFilter(this.mask)
       this.$map.addLayer(this.rainPrLayer)
     },
+    
+    showWind(){
+      const that = this;
+      if (!that.checkedWind) {
+        that.$map.getMap().getView().setCenter([119.923238,28.467972])
+        that.$map.getMap().getView().setZoom(5)
+      }
+      that.$nextTick(()=>{
+        that.checkedWind = !that.checkedWind
+      })
+
+    },
+      
 
     handleWindPrChange(val) {
       this.$map.removeWindLayer()
@@ -251,18 +265,27 @@ export default {
 
     addWindCur() {
       const url = `https://datacenter.istrongcloud.com`
+      const that = this;
       axios.get(`${url}/data/gfs/fcdata/202101/25/08/132.json?v=1611565356612`).then(res => {
          const temp = res.data["2021013020"]
          console.log(temp)
         //  debugger
-         this.$map.wind(temp);
+
+         that.oe = that.$map.wind(temp);
+        console.log(that.oe);
+
       })
 
       // this.$map.removeWindLayer()
       // this.$map.getWindLayer(require('@/components/Map/实时风向.json'))
     },
     removeWindCur() {
-      this.$map.removeWindLayer()
+      const that = this;
+      if (that.oe) {
+        this.$map.removeWindLayer(that.oe);
+      }
+
+      that.oe = null;
     },
 
     addWindPr(json) {
@@ -326,6 +349,16 @@ export default {
         this.stop()
       }
     }
+  },
+  mounted(){
+    const that = this;
+    this.$bus.$on("fireShow",(value)=>{
+      that.isHzhzd = true
+      that.$parent.isShowPickFirePoint = true
+    })
+  },
+  beforeDestroy(){
+    this.$bus.$off("fire");
   }
 }
 </script>

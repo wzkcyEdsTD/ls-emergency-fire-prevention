@@ -29,10 +29,10 @@ export default {
 <style lang="scss" scoped>
 .sider-bar-wrapper{
   padding: 12px 10px;
-  width: 304px;
+  width: 300px;
   height: calc(100vh - 60px);
-  // background-color: rgb(16, 21, 24);
-  background-image: url("~@/common/images/左边框.png");
+  background-color: rgb(16, 21, 24);
+  // background-image: url("~@/common/images/左边框.png");
   background-size: 100% 100%;
   position: relative;
   z-index: 999;
