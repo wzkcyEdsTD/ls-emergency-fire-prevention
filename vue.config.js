@@ -39,9 +39,17 @@ module.exports = {
     },
     before: require('./mock/mock-server.js'),
     proxy: {
-      '/App': {
-        target: 'http://slzywx.hzgzsoft.com',
-        changeOrigin: true
+      // '/App': {
+      //   target: 'http://slzywx.hzgzsoft.com',
+      //   changeOrigin: true
+      // },
+      '/key':{
+        target: 'http://10.53.129.97/fire_forward/',
+        changeOrigin: true,
+        secure:false,
+        pathRewrite: {
+          "^/key": ""
+        }
       }
     }
   },

@@ -282,15 +282,15 @@ export default {
       this.$store.dispatch('map/changeIsAddFeatures', true) // 只在选中火灾点的时候获取才重新数据
       this.$store.dispatch('map/clearFeatures', []) // 设置features为空
       this.$store.dispatch('siderbar/changeCheckedLeafNodesWithBuffer', hzdfxNodes)
-      this.$store.dispatch('jjya/getSsxyPersonList', null)
-      this.$store.dispatch('jjya/getMonitorList', null)
+      // this.$store.dispatch('jjya/getSsxyPersonList', null)
+      // this.$store.dispatch('jjya/getMonitorList', null)
     }
   },
   mounted(){
     const that = this;
 
     this.$bus.$on('fire',(value)=>{
-      console.log("传过来了",value)
+      // console.log("传过来了",value)
       // that.handleClearClick();
       if (that.firePtLayer) {
         that.$store.dispatch('map/changeClearFlag', null)
@@ -320,7 +320,7 @@ export default {
   z-index: 999;
   padding: 10px;
   transition: right 0.9s;
-  background: url('../../assets/images/弹框-火灾点.png') no-repeat;
+  background: url('~@/common/images/弹框.png') no-repeat;
   background-size: 100% 100%;
   width: 271px;
   height: 150px;
@@ -347,7 +347,7 @@ export default {
     content: ' ';
     width: 2px;
     height: 16px;
-    background-color: #fff;
+    background-color: #52FEB3;
   }
  .content {
     width: 100%;
@@ -368,13 +368,13 @@ export default {
         input {
           width: 190px;
           height: 30px;
-          background-color: rgba(9, 46, 79, 1);
+          background-color: rgba(36, 78, 59, 1);
           outline: none;
           padding-left: 8px;
           margin-top: 10px;
           font-size: 16px;
-          color:rgba(23, 148, 194, 1);
-          border:1px #29AEEA solid;
+          color:rgba(41, 181, 121, 1);
+          border:1px #52FEB3 solid;
         }
       }
       input::-webkit-input-placeholder,textarea::-webkit-input-placeholder{
@@ -422,13 +422,13 @@ export default {
       .btn {
         width: 66px;
         height: 30px;
-        background: url(../../assets/images/按钮.png) no-repeat;
+        background: url("~@/common/images/按钮.png") no-repeat;
         background-size: 100% 100%;
         display: flex;
         justify-content: center;
         align-items: center;
         cursor: pointer;
-        color:#fff;
+        color:#000;
       }
     }
 

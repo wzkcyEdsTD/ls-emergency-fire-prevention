@@ -45,11 +45,6 @@ export default {
   methods: {
     goRoute(name) {
       if (this.currentPage != name) {
-        // if (name == 'compare') {
-        //   this.showLarge && this.$bus.$emit("change-screen", { value: false });
-        // } else {
-        //   this.showLarge && this.$bus.$emit("change-screen", { value: true });
-        // }
         this.currentPage = name
         this.$router.push({name})
       }

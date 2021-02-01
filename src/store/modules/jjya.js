@@ -76,22 +76,22 @@ const actions = {
 
   getSsxyPersonList({ commit, state }, list) {
     // 用缓冲区范围面查询实时人员
-    getFhryCurPositionByPhone().then(res => {
-      const list = res.data.result
-      const features = list.map(v => {
-        const feature = window.$map.createFeature(
-          [v.longitude, v.latitude],
-          v.smid,
-          { ...v, NAME: v.smid }
-        )
-        return feature
-      })
-      const format = new GeoJSON()
-      const ssxyPtsGeojson = format.writeFeaturesObject(features)
-      const bufferGeojson = format.writeFeatureObject(state.buffer)
-      const ptsWithin = turf.pointsWithinPolygon(ssxyPtsGeojson, bufferGeojson)
-      commit('SET_SSXY_PERSON_LIST', format.readFeatures(ptsWithin))
-    })
+    // getFhryCurPositionByPhone().then(res => {
+    //   const list = res.data.result
+    //   const features = list.map(v => {
+    //     const feature = window.$map.createFeature(
+    //       [v.longitude, v.latitude],
+    //       v.smid,
+    //       { ...v, NAME: v.smid }
+    //     )
+    //     return feature
+    //   })
+    //   const format = new GeoJSON()
+    //   const ssxyPtsGeojson = format.writeFeaturesObject(features)
+    //   const bufferGeojson = format.writeFeatureObject(state.buffer)
+    //   const ptsWithin = turf.pointsWithinPolygon(ssxyPtsGeojson, bufferGeojson)
+    //   commit('SET_SSXY_PERSON_LIST', format.readFeatures(ptsWithin))
+    // })
   },
 
   getMonitorList({ commit }, list) {

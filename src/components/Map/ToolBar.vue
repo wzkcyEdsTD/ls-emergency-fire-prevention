@@ -358,7 +358,7 @@ export default {
     })
   },
   beforeDestroy(){
-    this.$bus.$off("fire");
+    this.$bus.$off("fireShow");
   }
 }
 </script>
