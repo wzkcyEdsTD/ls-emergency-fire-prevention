@@ -131,39 +131,44 @@ export default {
     this.createFireLayer()
     // 显示选中图层
     this.showCheckLayer()
+    const that = this;
+    this.$bus.$on("fireList",value=>{
+      console.log(33333)
+      that.createFireLayer(value);
+    })
   },
   methods: {
 
-    createFireLayer(){
-      const features = [];
-      const arrlist = this.firePointList.datas.custom; 
-      arrlist.forEach(element => {
-        const properties = element;
-        const feature =  new Feature({
-              geometry: new Point([element.x,element.y]),
-              ...properties
-          })
+    createFireLayer(fireList){
+      // if (fireList.length>0) {
 
-        features.push(feature);
-      });
+      // }
+        const features = [];
+        const arrlist = this.firePointList.datas.custom; 
+        arrlist.forEach(element => {
+          const properties = element;
+          const feature =  new Feature({
+                geometry: new Point([element.x,element.y]),
+                ...properties
+            })
+          features.push(feature);
+        });
+
+        var vectorSource = new VectorSource({
+          features,
+          wrapX: false
+        });
+        var fireLayer = new VectorLayer({
+          source: vectorSource,
+        })
+        fireLayer.setStyle(this.$map.getFirePointStyle())
+        this.firelayer = fireLayer;
+        this.temp = true;
+        this.$map.addLayer(fireLayer)
 
 
 
-      // const features = new GeoJSON().readFeatures(this.firePointList)
-
-      var vectorSource = new VectorSource({
-        features,
-        wrapX: false
-      });
-      var fireLayer = new VectorLayer({
-        source: vectorSource,
-      })
-      fireLayer.setStyle(this.$map.getFirePointStyle())
-      this.firelayer = fireLayer;
-      this.temp = true;
-      this.$map.addLayer(fireLayer)
     },
-
     handleCheckChange(data, checked, id) {
       //console.log('handleCheckChange', data, checked)
       // 勾选目录树控制总览显示资源
@@ -234,10 +239,11 @@ export default {
         if(this.temp){
           this.temp = false;
           this.firelayer.setVisible(false);
+          // this.$bus.$emit('hzjbd',this.temp);
         }else if (!this.temp) {
           this.temp = true;
           this.firelayer.setVisible(true);
-
+          // this.$bus.$emit('hzjbd',this.temp);
         }
         this.$store.dispatch('lqfb/changezlOffsetRight', 0)
       }
@@ -322,6 +328,9 @@ export default {
         this.$refs[`tree_${v.id}`][0].setCheckedKeys([])
       })
     }
+  },
+  beforeDestroy(){
+    this.$bus.$off("fireList");
   }
 }
 </script>

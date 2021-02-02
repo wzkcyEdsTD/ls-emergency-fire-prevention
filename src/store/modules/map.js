@@ -151,23 +151,38 @@ const actions = {
         }
       })
     })
+    // appendLayerUrlList = appendLayerUrlList.filter(v=>{
+    //   if(v.label=="专业救援队伍"){
+    //     return v
+    //   }
+    //   else if(v.label=="综合救援队伍"){
+    //     return v
+    //   }
+    //   else if(v.label=="森林消防救援队伍"){
+    //     return v
+    //   }
+    //   else if(v.label=="志愿者救援队伍"){
+    //     return v
+    //   }}
+    //   )
+      // debugger
     let list = await Promise.all(
       appendLayerUrlList.map(async v => {
         let layer = null
-
-        if (v.type === 'map') {
-          layer = vue.$map.createTileSuperMapRestLayer(v.url)
-        } else if (v.type === 'wms') {
-          layer = vue.$map.createWMSLayer(v)
-        } else {
-          // console.log("显示节点的图层",v);
-          layer = await vue.$map.createVectorLayerByDataRest(v)
-        }
-        return {
-          name: v.label,
-          layer,
-          ...v
-        }
+        // debugger
+          if (v.type === 'map') {
+            layer = vue.$map.createTileSuperMapRestLayer(v.url)
+          } else if (v.type === 'wms') {
+            layer = vue.$map.createWMSLayer(v)
+          } else {
+            // console.log("显示节点的图层",v);
+            layer = await vue.$map.createVectorLayerByDataRest(v)
+          }
+          return {
+            name: v.label,
+            layer,
+            ...v
+          }
       })
     )
     list = list.filter(v => v.layer != null)

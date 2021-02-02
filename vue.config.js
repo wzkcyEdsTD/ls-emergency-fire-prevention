@@ -46,7 +46,7 @@ module.exports = {
       '/key':{
         target: 'http://10.53.129.97/fire_forward/',
         changeOrigin: true,
-        secure:false,
+        // secure:false,
         pathRewrite: {
           "^/key": ""
         }

@@ -3,6 +3,7 @@
     <sider-bar />
     <info-pannel ref="infoPannel" />
     <rydw-pannel ref="rydwPannel" />
+    <rightMenu/>
     <!-- <rydw-tool-bar /> -->
     <rydw-popup />
     <!-- <firePopup/> -->
@@ -29,6 +30,7 @@ import SiderBar from './components/SiderBar'
 import RydwPopup from './components/RydwPopup'
 // import firePopup from './components/firePopup'
 import RydwPannel from './components/RydwPannel'
+import rightMenu from './components/rightMenu'
 import Qdtj from './components/Qdtj'
 import Sgfj from './components/Sgfj'
 import Zztx from './components/Zztx'
@@ -48,7 +50,7 @@ import { getVideoByCode, getFiremanByTeamName, getEquipment, getLqzyByCoordinate
 export default {
   name: 'Lqfb',
   components: {
-
+    rightMenu,
     SiderBar,
     // firePopup,
     RydwPopup,

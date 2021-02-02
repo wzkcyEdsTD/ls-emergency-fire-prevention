@@ -1,6 +1,6 @@
 <template>
   <div class="zhfx-wrapper" :style="`right: 0rem`">
-    <i class="left-collapse" @click="collapse"> ||</i>
+    <!-- <i class="left-collapse" @click="collapse"> ||</i>
     智慧分析列表
     <div>
       <h3>阻隔分析</h3>
@@ -43,7 +43,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 <script>

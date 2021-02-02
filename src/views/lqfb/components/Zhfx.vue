@@ -260,8 +260,9 @@ export default {
   },
   watch: {
     featuresData(val) {
-      this.showShortPath();
-      this.getNearestPtOnLine();
+      // this.showShortPath();
+      // this.getNearestPtOnLine();
+      console.log(123456)
       this.$store.dispatch("lqfb/changezhfxOffsetRight", 0);
     },
     ssxyPersonList(val) {
@@ -333,18 +334,18 @@ export default {
       return require(`../../../assets/images/icon/${name}.png`);
     },
     posTo(item) {
-      if (item.name === "应急队伍") {
-        // this.$store.dispatch('jjya/changeJydwList', item.arr)
-        const lenged = {
-          name: "最近公路点",
-          icon: "公路点.png",
-          label: "最近公路点",
-        };
-        const list = this.layerList;
-        list.push(lenged);
-        this.$store.dispatch("map/changeLayerList", list);
-        this.getshortPath(item.arr);
-      }
+      // if (item.name === "应急队伍") {
+      //   // this.$store.dispatch('jjya/changeJydwList', item.arr)
+      //   const lenged = {
+      //     name: "最近公路点",
+      //     icon: "公路点.png",
+      //     label: "最近公路点",
+      //   };
+      //   const list = this.layerList;
+      //   list.push(lenged);
+      //   this.$store.dispatch("map/changeLayerList", list);
+      //   this.getshortPath(item.arr);
+      // }
     },
 
     showShortPath() {

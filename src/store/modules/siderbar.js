@@ -26,6 +26,7 @@ const actions = {
   },
   changeCheckedLeafNodesWithBuffer({ commit, dispatch, rootGetters }, nodes) {
     // 判断取消勾选的和新勾选的node
+    // debugger
     const newNodes = nodes
     const oldeNodes = state.checkedLeafNodes
     const oldNodesIds = oldeNodes.map(v => v.id)
@@ -35,6 +36,7 @@ const actions = {
     const appendLayerUrlList = appendNodes.filter(v => v.value).map(v => ({ ...v.value, cropFeature: rootGetters.buffer, geomFilter: rootGetters.buffer }))
     const removeLayerUrlList = removeNodes.filter(v => v.value).map(v => ({ ...v.value, cropFeature: rootGetters.buffer, geomFilter: rootGetters.buffer }))
     // commit('SET_CHECKED_LEAF_NODES', [])
+        // debugger
     dispatch('map/changeLayerListByUrl', { appendLayerUrlList, removeLayerUrlList }, { root: true })
   }
 }

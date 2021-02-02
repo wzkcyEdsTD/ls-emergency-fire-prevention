@@ -282,6 +282,7 @@ const getFeaturesBySQL = ({ url, dataSourceName, layerName, label, attributeFilt
     if(label =="单兵设备"){
       return
     }
+    
     new FeatureService(url).getFeaturesBySQL(sqlParam, serviceResult => {
       // debugger
       const features = new GeoJSON().readFeatures(serviceResult.result.features)
@@ -1020,7 +1021,8 @@ function wind(windData){
             dimension: 4,
             inRange: {
                 // color: ['green', 'yellow', 'red']
-                color: ['#313695', '#4575b4', '#74add1', '#abd9e9', '#e0f3f8', '#ffffbf', '#fee090', '#fdae61', '#f46d43', '#d73027', '#a50026']
+                //风场颜色修改
+                color: [ '#ffffbf', '#fee090', '#fdae61', '#f46d43', '#d73027', '#a50026']
             },
             realtime: false,
             calculable: true,

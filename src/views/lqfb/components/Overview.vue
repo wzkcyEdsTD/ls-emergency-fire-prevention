@@ -239,6 +239,8 @@
         </li>
       </ul>
     </div>
+
+
   </div>
 </template>
 <script>
@@ -247,6 +249,7 @@ import MAP_URL from '@/utils/map/map-url'
 import { getResources } from '@/api/lqfb'
 import dbsbList from './d_dbsb_jbxx.json'
 import zhcList from './d_zhc_jbxx.json'
+import fireList from './fire.json'
 
 export default {
   data() {
@@ -259,6 +262,7 @@ export default {
       allListData: [],
       dbsbList,
       zhcList,
+      fireList,
       zlzyInput: '',
       temp:null,
       zhc:null,
@@ -266,6 +270,8 @@ export default {
       dbsbdetail:1,
       zhclocation:1,
       zhcdetail:1,
+      fireShow:false,
+      fire:null
     }
   },
   computed: {
@@ -302,11 +308,18 @@ export default {
     }
   },
   mounted() {
+    const that = this;
     this.getAllFeatures()
     this.initZLLB() // 初始化总览列表
     this.activeTab = this.lqfbActiveMenu === '基础要素' ? '乡镇区域' : '区域统计'
     // console.log(this.dbsbList.RECORDS);
-  },
+
+    this.$bus.$on("fireList",value=>{
+      that.$nextTick(()=>{
+        that.fireList = value;
+      })
+    })
+ },
   methods: {
     select_li(index){
       this.temp = index;
@@ -600,6 +613,10 @@ export default {
       //   this.allListData = res.data
       // })
     }
+  },
+  beforeDestroy(){
+    // this.$bus.$off("hzjbd")
+    this.$bus.$off("fireList")
   }
 }
 </script>
@@ -616,6 +633,10 @@ export default {
     // background-image: url("~@/common/images/右侧框.png");
     background-size: 100% 100%;
     transition: right 0.9s;
+    overflow-y: scroll;
+
+
+
     .close {
       position: absolute;
       left: -34px;
@@ -837,6 +858,51 @@ export default {
       width: 100%;
       height: 49%;
       // padding-bottom: 2vh;
+      .titleLine{
+        display: flex;
+        padding-right: 1vh;
+          .title {
+          width: 100%;
+          height: 2rem;
+          font-family: youshebiaotihei;
+          font-size: 1.8vh;
+          // padding-top: 4vh;
+          // padding-bottom: 4vh;
+              .search {
+                width: 180px;
+                height: 22px;
+                position: relative;
+                .el-input__inner {
+                  height: 22px;
+                  border-radius: 20px;
+                  outline: none;
+                  padding-left: 15px;
+                  background: url(../../../assets/images/搜索底框.png) no-repeat;
+                  background-size: 100%;
+                  border: 0;
+                  color: hsla(196, 79%, 43%, 1);
+                }
+                .el-input__inner::-webkit-input-placeholder {color: hsla(196, 79%, 43%, 1);}
+                .el-input__icon::before {
+                  content: ' ';
+                  width: 25px;
+                  height: 22px;
+                  position: absolute;
+                  top: 0;
+                  right: -4px;
+                  margin-left: 2px;
+                  cursor: pointer;
+                  background: url(../../../assets/images/搜索.png) no-repeat;
+                  background-size: 100%;
+                }
+              }
+            }
+          .titleInput{
+            background-color: rgba(82, 254, 179, .5);
+            color: #fff;
+            border-radius: 5px;
+          }
+      }
       .imgLine{
         display: flex;
         justify-content: flex-end;
@@ -964,6 +1030,23 @@ export default {
         flex: 1
       }
     }
-  }
 
+
+
+  }
+/*滚动条样式*/
+.overview-wrapper::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+}
+.overview-wrapper::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background: #103E29;
+    width: 4px;
+    height: 30px;
+}
+.overview-wrapper::-webkit-scrollbar-track {
+    border-radius: 0;
+    background: #000;
+}
 </style>

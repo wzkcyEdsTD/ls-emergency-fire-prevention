@@ -31,6 +31,7 @@
         </el-select>
       </li> -->
       <li :class="checkedWind ? 'li-active' : ''" @click="showWind">实时风场</li>
+      <li :class="showFire ? 'li-active' : ''" @click="clickFire">火灾报警点</li>
       <!-- <li :class="activeType==='预测风向' ? 'li-active' : ''">
         <el-select v-model="windPrValue" clearable placeholder="预测风向">
           <el-option
@@ -97,6 +98,7 @@ export default {
       radarTimeList: [], // 雷达图时间轴
       mask: mask,
       windCurLayer: null,
+      showFire:false,
       windPrOptions: [
         {
           value: '未来1小时',
@@ -206,6 +208,11 @@ export default {
       this.rainLayer = this.$map.createTileSuperMapRestLayer(val, true)
       // this.rainLayer.addFilter(this.mask)
       this.$map.addLayer(this.rainLayer)
+    },
+
+    clickFire(){
+      this.showFire=!this.showFire;
+      this.$bus.$emit('hzjbd',this.showFire);
     },
 
     async handleRainPrChange(val) {

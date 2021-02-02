@@ -1,8 +1,8 @@
 import axios from "axios";
 // const BASEURL = ~window.location.host.indexOf('localhost') ? "http://localhost:3000" : "http://10.36.198.161:3000";
-const BASEURL = "https://172.28.77.10:8089";
+const BASEURL = "http://10.53.129.97";
 const serverInstanec = axios.create();
-// serverInstanec.defaults.baseURL = BASEURL;
+serverInstanec.defaults.baseURL = BASEURL;
 
 /**
  * axios default
@@ -14,35 +14,34 @@ function getAxios(url = "", params = {}, method){
     method == 'get' ? option.params = params : option.data = params;
     return serverInstanec.request(option).then(res => {
 
-        console.log(res)
+        // console.log(res)
         // debugger
-        return res
-        // return res.data ? Promise.resolve(res.data.data) : Promise.reject(res);
+        // return res
+        return res.data ? Promise.resolve(res.data) : Promise.reject(res);
     });
 };
 
-function getKey(sign,requestTime,appKey) {
+function getKey(sign,requestTime) {
     const method = "get"
- 
-    return getAxios(`/key/a/api/requestTokenKey`,{
-        "sign":sign,
-        "requestTime":requestTime,
-        "appKey": appKey,
-        // "systemcode": slfhyzt
+    return getAxios(`/fire_forward_py/requestTokenKey/${sign}/${requestTime}`,{
     },method)
 };
 
-function getData(sign,requestTime,appKey) {
-    const method = "post"
-    return getAxios(`/key/a/api/shared/1611732549274`,{
-        "sign":sign,
-        "requestTime":requestTime,
-        "appKey": appKey,
-        "params": {"systemcode":"slfhyzt"}
+function getData(sign,requestTime) {
+    const method = "get"
+    return getAxios(`/fire_forward_py/getData/${sign}/${requestTime}`,{
     },method)
+};
+
+
+function testAxios() {
+    const method = "get"
+    return getAxios(`http://localhost:9000/test`
+    ,{},method)
 };
 
 export default {
     getKey,
-    getData
+    getData,
+    testAxios
 }

@@ -34,24 +34,25 @@
             <img src="@/common/images/定位icon.png" class="icon" alt="">
             <div id="key-value-fire" class="pop-value" />
         </div>
+        <div class="pop-item">
+          <div class="pop-key" >举报人:</div>
+          <div id="key-value-fire-jbr" class="pop-value" />
+        </div>
+
+        <div class="pop-item">
+          <div class="pop-key" >举报人电话:</div>
+          <div id="key-value-fire-jbrtel" class="pop-value" />
+        </div>
+        <div class="pop-item">
+          <div class="pop-key" >时间:</div>
+          <div id="key-value-fire-time" class="pop-value" />
+        </div>
         <div class="flexLine">
-          <div class="pop-item">
-            <div class="pop-key" >举报人:</div>
-            <div id="key-value-fire-jbr" class="pop-value" />
-          </div>
           <div class="pop-item">
             <div class="pop-key" >内容:</div>
             <div id="key-value-fire-cont" class="pop-value" />
           </div>
         </div>
-          <div class="pop-item">
-            <div class="pop-key" >举报人电话:</div>
-            <div id="key-value-fire-jbrtel" class="pop-value" />
-          </div>
-          <div class="pop-item">
-            <div class="pop-key" >时间:</div>
-            <div id="key-value-fire-time" class="pop-value" />
-          </div>
 
         <div v-show="isShowDetail" id="pop-fire-deatil" class="pop-item">
           <div
@@ -176,35 +177,62 @@ export default {
     testPost() {},
 
     getData() {
-      let appkey = localStorage.getItem("appkey");
-      let yyrz = "b529677eda5447dbb3bb7d32820115fb";
-      let refreshSecret = "fd5f95aaded24616a72db39116568976" //刷新密钥
-      let refreshSecretEndTime = "1612320850017" //刷新密钥过期时间
-      let requestSecret = "c9978835f5c74d58968d02a170d0d388" //请求密钥
-      let requestSecretEndTime = "111" //请求密钥过期时间
-      let request_time = new Date().getTime();
-      if (request_time > requestSecretEndTime) {
+      // let appkey = "ece37a6f2fad49fb839f997f984b04c0";
+      // let yyrz = "b529677eda5447dbb3bb7d32820115fb";
+      // let refreshSecret = "81cb02ac3ec6408db0213bdf30d2531d" //刷新密钥
+      // let refreshSecretEndTime = "1612322247324" //刷新密钥过期时间
+      // let requestSecret = "c9978835f5c74d58968d02a170d0d388" //请求密钥
+      // let requestSecretEndTime = "111" //请求密钥过期时间
+      // let request_time = new Date().getTime();
+      // const that = this;
+      // if (request_time > requestSecretEndTime) {
+      //   if (request_time > refreshSecretEndTime) {
+      //     console.log("刷新密钥已过期");
+      //     this.key = appkey + yyrz + request_time;
+      //     const sign = md5(this.key);
+      //     const data = Util.getKey(sign, request_time)
+      //     data.then(res=>{
+      //       requestSecret = res.datas.requestSecret;
+      //       requestSecretEndTime = res.datas.requestSecretEndTime
+      //       refreshSecret = res.datas.refreshSecret;
+      //       refreshSecretEndTime = res.datas.refreshSecretEndTime
+      //       this.key = appkey + requestSecret + request_time;
+      //       Util.getData(sign,request_time).then(res=>{
+      //         // debugger
+      //         console.log(res)
+      //         that.$bus.$emit('fireList',res);
+      //       })
+      //     })  
+      //     return
+      //   } else {
+      //     this.key = appkey + refreshSecret + request_time;
+      //     const sign = md5(this.key);
+      //     console.log("sign",sign)
+      //     console.log("request_time",request_time)
+      //     const data = Util.getKey(sign, request_time)
+      //     data.then(res=>{
+      //       //重新获取请求密钥
+      //       requestSecret = res.datas.requestSecret;
+      //       requestSecretEndTime = res.datas.requestSecretEndTime
+      //       this.key = appkey + requestSecret + request_time;
+      //       const sign = md5(this.key);
 
-        if (request_time > refreshSecretEndTime) {
-          console.log("刷新密钥已过期");
-          this.key = appkey + yyrz + request_time;
-          let sign = md5(this.key);
-          console.log("sign",sign);
-          console.log("request_time",request_time)
-        } else {
-          //刷新密钥未过期
-          console.log("重新获取请求密钥中...")
-          this.key = appkey + refreshSecret + request_time;
-          let sign = md5(this.key);
-          // debugger
-          // Util.getKey(sign, request_time, appkey)
-        }
-      }else{
-          this.key = appkey + requestSecret + request_time;
-          let sign = md5(this.key);
-        //  console.log(Util.getData(sign, request_time, appkey)) 
-      }
-      //  console.log("appkey",appkey);
+      //       Util.getData(sign,request_time).then(res=>{
+      //         // debugger
+      //         console.log(res)
+      //         that.$bus.$emit('fireList',res);
+      //       })
+      //     })  
+      //     return
+      //   }
+      // }
+      // this.key = appkey + requestSecret + request_time;
+      // const sign = md5(this.key);
+      // Util.getData(sign,request_time).then(res=>{
+      //   console.log(res)
+      //   that.$bus.$emit('fireList',res);
+      // })
+
     },
 
     initMap() {
@@ -221,25 +249,13 @@ export default {
       const appkey = `ece37a6f2fad49fb839f997f984b04c0`
       const yyrz = `b529677eda5447dbb3bb7d32820115fb`
 
-      const refreshSecret = "ff83cc6935764ac6a0a17167c9a21e80"
-      const request_time =  new Date().getTime();
-      const key = appkey + refreshSecret + request_time
-      ////请求秘钥 requestSecret d14190de74de41988a7e9ea8b49669db
-      //刷新密钥 refreshSecret cf07c54de370408194bcff7bd6d92697
+      // const refreshSecret = "81cb02ac3ec6408db0213bdf30d2531d"
+      // const request_time =  new Date().getTime();
+      // const key = appkey + refreshSecret + request_time
       
-      const sign = md5(key)
-
-      console.log("sign",sign)
-      console.log("time",request_time)
-
-      // Util.getData(sign, request_time, appkey)
-      // const params = {"systemcode":"slfhyzt"}
-    //  let form = new FormData()
-    //   form.append("sign",sign);
-    //   form.append("requestTime",request_time);
-    //   form.append("appKey",appkey);
-    //   form.append("params",params);
-      Util.getKey(sign,request_time,appkey)
+      // const sign = md5(key)
+ 
+      // Util.getKey(sign,request_time,appkey)
 
       const wenzhouLayer = this.$map.createTianDiTuLayer("img_w");
 
@@ -387,7 +403,7 @@ export default {
 
 .fire-popup {
   width: 300px;
-  /* height: 150px; */
+  height: 250px; 
   // background-color: rgba(1, 51, 78, 0.8);
   background-image: url("~@/common/images/详情框.png");
   background-size: 100% 100%;
@@ -446,7 +462,7 @@ export default {
         margin-top: 9px;
         // margin-bottom: 9px;
         font-size: 16px;
-        width: 50%;
+        // width: 50%;
         display: flex;
         .pop-key{
           color: #00FFEB;
@@ -456,10 +472,15 @@ export default {
         }
         .pop-value {
           // display: inline-block;
-          flex: 1;
+          // height: 4vh;
+          // flex: 1;
           font-family: PingFang SC Regular;
           color: #F5F5F5;
           font-size: 14px;
+          // display: block;
+          width: 13vh;
+          height: 5vh;
+          word-wrap: break-word;
         }
       }
     }
