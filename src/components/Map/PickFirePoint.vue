@@ -89,7 +89,6 @@ export default {
         this.$message.info('请清除已有火灾点！')
         return
       }
-      // debugger
       // 没有输入经纬度则用鼠标选择
       if (this.inputLat || this.inputLon) {
         if (!this.inputLon) {
@@ -119,9 +118,7 @@ export default {
       this.inputLon = fireCoor[0]
       this.inputLat = fireCoor[1]
       console.log(fireCoor)
-            // debugger
       const r = this.inputSearchRadius / 1000;
-      // console.log(r)
       const buffered = turf.buffer(
         turf.point(fireCoor),
         r,
@@ -216,7 +213,6 @@ export default {
           wayNum: 0,
           dbfgNum: 0
         }
-        // debugger
         // 去除空数组
         const fe = this.features.filter(v => v.length > 0)
         fe.forEach(item => {

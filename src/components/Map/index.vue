@@ -133,27 +133,9 @@ export default {
     const that = this;
     await this.initMap();
     this.getData();
-    // this.$bus.$on("fireDetail", (value) => {
-    //   // console.log(111);
-    //   that.$nextTick(() => {
-    //     that.detailShow = true;
-    //     console.log("是火灾点", that.detailShow);
-    //     this.tempData = value;
-    //   });
-    // });
-    // this.$bus.$on("noFireDetail", () => {
-    //   //  console.log(1211)
-    //   that.$nextTick(() => {
-    //     that.detailShow = false;
-    //     console.log("不是火灾点", that.detailShow);
-    //   });
-    // });
-  
   },
   beforeDestroy() {
-    // this.$bus.$off("fireDetail");
-    // this.$bus.$off("noFireDetail");
-    // this.detailShow = false;
+
   },
   methods: {
     zbfx() {
@@ -177,61 +159,11 @@ export default {
     testPost() {},
 
     getData() {
-      // let appkey = "ece37a6f2fad49fb839f997f984b04c0";
-      // let yyrz = "b529677eda5447dbb3bb7d32820115fb";
-      // let refreshSecret = "81cb02ac3ec6408db0213bdf30d2531d" //刷新密钥
-      // let refreshSecretEndTime = "1612322247324" //刷新密钥过期时间
-      // let requestSecret = "c9978835f5c74d58968d02a170d0d388" //请求密钥
-      // let requestSecretEndTime = "111" //请求密钥过期时间
-      // let request_time = new Date().getTime();
-      // const that = this;
-      // if (request_time > requestSecretEndTime) {
-      //   if (request_time > refreshSecretEndTime) {
-      //     console.log("刷新密钥已过期");
-      //     this.key = appkey + yyrz + request_time;
-      //     const sign = md5(this.key);
-      //     const data = Util.getKey(sign, request_time)
-      //     data.then(res=>{
-      //       requestSecret = res.datas.requestSecret;
-      //       requestSecretEndTime = res.datas.requestSecretEndTime
-      //       refreshSecret = res.datas.refreshSecret;
-      //       refreshSecretEndTime = res.datas.refreshSecretEndTime
-      //       this.key = appkey + requestSecret + request_time;
-      //       Util.getData(sign,request_time).then(res=>{
-      //         // debugger
-      //         console.log(res)
-      //         that.$bus.$emit('fireList',res);
-      //       })
-      //     })  
-      //     return
-      //   } else {
-      //     this.key = appkey + refreshSecret + request_time;
-      //     const sign = md5(this.key);
-      //     console.log("sign",sign)
-      //     console.log("request_time",request_time)
-      //     const data = Util.getKey(sign, request_time)
-      //     data.then(res=>{
-      //       //重新获取请求密钥
-      //       requestSecret = res.datas.requestSecret;
-      //       requestSecretEndTime = res.datas.requestSecretEndTime
-      //       this.key = appkey + requestSecret + request_time;
-      //       const sign = md5(this.key);
-
-      //       Util.getData(sign,request_time).then(res=>{
-      //         // debugger
-      //         console.log(res)
-      //         that.$bus.$emit('fireList',res);
-      //       })
-      //     })  
-      //     return
-      //   }
-      // }
-      // this.key = appkey + requestSecret + request_time;
-      // const sign = md5(this.key);
-      // Util.getData(sign,request_time).then(res=>{
-      //   console.log(res)
-      //   that.$bus.$emit('fireList',res);
-      // })
+      const that = this;
+      Util.testAxios().then(res=>{
+        console.log(res)
+        that.$bus.$emit('fireList',res);
+      })
 
     },
 
@@ -246,14 +178,16 @@ export default {
       */
       //MD5 (应用KEY+秘钥（应用认证秘钥/刷新秘钥/请求秘钥）+long类型请求时间)
 
-      const appkey = `ece37a6f2fad49fb839f997f984b04c0`
-      const yyrz = `b529677eda5447dbb3bb7d32820115fb`
+      const appkey = 'ece37a6f2fad49fb839f997f984b04c0'
+      const yyrz = 'b529677eda5447dbb3bb7d32820115fb'
 
       // const refreshSecret = "81cb02ac3ec6408db0213bdf30d2531d"
-      // const request_time =  new Date().getTime();
-      // const key = appkey + refreshSecret + request_time
+      const request_time =  new Date().getTime();
+      const key = appkey + yyrz + request_time
       
-      // const sign = md5(key)
+      const sign = md5(key)
+      console.log("sign",sign);
+      console.log("time",request_time);
  
       // Util.getKey(sign,request_time,appkey)
 
@@ -402,7 +336,7 @@ export default {
 }
 
 .fire-popup {
-  width: 300px;
+  width: 310px;
   height: 250px; 
   // background-color: rgba(1, 51, 78, 0.8);
   background-image: url("~@/common/images/详情框.png");

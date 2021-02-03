@@ -30,7 +30,7 @@
             :key="index" 
             class="list-item" 
             :class="{active : fire == index}"
-            @click="fire = index">
+            @click="fire = index;clickFire(item)">
           <div class="item item-1">{{ item.address }}</div>
           <div class="item item-1">{{ item.jubaoren }}</div>
           <div class="item item-1">{{ item.time }}</div>
@@ -57,6 +57,11 @@ export default {
     }
   },
   methods:{
+    clickFire(item){
+      console.log(item);
+      this.$map.getMap().getView().setCenter([item.x,item.y]);
+      this.$map.getMap().getView().setZoom(16);
+    },
     closeMenu(){
       if (this.rydwPannelOffsetRight==-30) {
         that.$nextTick(() => {
@@ -71,15 +76,18 @@ export default {
     searchFilter(){
       const that = this
       if (that.searchText) {
-        this.list = fireList.datas.custom
+        this.list = that.fireList.result.records
       // debugger
         this.tempList = this.list.filter((item)=>{
           if (item.systemcode.indexOf(that.searchText) != -1) {
             return item;
           }
+          if (item.time.indexOf(that.searchText) != -1) {
+            return item;
+          }
         })
       }else{
-        this.tempList = fireList.datas.custom
+        this.tempList = that.fireList.result.records
       }
 
       console.log(this.tempList)
@@ -91,7 +99,13 @@ export default {
   },
   mounted() {
     const that = this;
-    that.tempList = fireList.datas.custom
+
+    this.$bus.$on("fireList",value=>{
+      that.$nextTick(()=>{
+        that.fireList = value;
+        that.tempList =that.fireList.result.records
+      })
+    })
     this.$bus.$on("hzjbd",(value)=>{
       that.$nextTick(() => {
         // debugger
@@ -105,6 +119,7 @@ export default {
   },
   beforeDestroy() {
       this.$bus.$off("hzjbd");
+      this.$bus.$off("fireList");
   },
 
 }

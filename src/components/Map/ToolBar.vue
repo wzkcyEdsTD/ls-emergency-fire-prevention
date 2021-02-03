@@ -276,7 +276,6 @@ export default {
       axios.get(`${url}/data/gfs/fcdata/202101/25/08/132.json?v=1611565356612`).then(res => {
          const temp = res.data["2021013020"]
          console.log(temp)
-        //  debugger
 
          that.oe = that.$map.wind(temp);
         console.log(that.oe);

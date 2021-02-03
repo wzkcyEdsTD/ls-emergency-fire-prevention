@@ -249,7 +249,6 @@ import MAP_URL from '@/utils/map/map-url'
 import { getResources } from '@/api/lqfb'
 import dbsbList from './d_dbsb_jbxx.json'
 import zhcList from './d_zhc_jbxx.json'
-import fireList from './fire.json'
 
 export default {
   data() {
@@ -262,7 +261,6 @@ export default {
       allListData: [],
       dbsbList,
       zhcList,
-      fireList,
       zlzyInput: '',
       temp:null,
       zhc:null,
@@ -314,11 +312,7 @@ export default {
     this.activeTab = this.lqfbActiveMenu === '基础要素' ? '乡镇区域' : '区域统计'
     // console.log(this.dbsbList.RECORDS);
 
-    this.$bus.$on("fireList",value=>{
-      that.$nextTick(()=>{
-        that.fireList = value;
-      })
-    })
+
  },
   methods: {
     select_li(index){
@@ -614,10 +608,6 @@ export default {
       // })
     }
   },
-  beforeDestroy(){
-    // this.$bus.$off("hzjbd")
-    this.$bus.$off("fireList")
-  }
 }
 </script>
 <style lang="scss">

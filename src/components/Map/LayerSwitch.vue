@@ -269,10 +269,19 @@ export default {
       }
       if (val === '打印') {
         let map = this.$map.getMap();
+        const that = this;
         map.once("postcompose", function(event) {
-          var canvas1 = $(".img_w").children('canvas')[0];//底图
-          var canvas2 = $(".cia_w").children('canvas')[0];//注记
+          var canvas1,canvas2;
+          if(that.mapType == "img_w"){
+            canvas1 = $(".img_w").children('canvas')[0];//底图
+            canvas2 = $(".cia_w").children('canvas')[0];//注记
+          }else if(that.mapType=="vec_w"){
+            canvas1 = $(".vec_w").children('canvas')[0];//底图
+            canvas2 = $(".cva_w").children('canvas')[0];//注记
+          }
+
           var canvas3 = $(".ol-layer").children('canvas')[0];//各种矢量图
+
           canvas1.getContext("2d").drawImage(canvas2,0,0);
           if(canvas3){
             const width = canvas3.width;

@@ -128,7 +128,7 @@ export default {
     this.$refs[`tree_1`][0].setCheckedKeys([11, 146])
     this.$refs[`tree_6`][0].setCheckedKeys([61])
     this.$refs[`tree_5`][0].setCheckedKeys([51])
-    this.createFireLayer()
+    // this.createFireLayer()
     // 显示选中图层
     this.showCheckLayer()
     const that = this;
@@ -140,11 +140,11 @@ export default {
   methods: {
 
     createFireLayer(fireList){
-      // if (fireList.length>0) {
-
-      // }
+      const list = fireList.result.records
+      if (list.length>0) {
+        // debugger
         const features = [];
-        const arrlist = this.firePointList.datas.custom; 
+        const arrlist = list; 
         arrlist.forEach(element => {
           const properties = element;
           const feature =  new Feature({
@@ -165,6 +165,8 @@ export default {
         this.firelayer = fireLayer;
         this.temp = true;
         this.$map.addLayer(fireLayer)
+      }
+
 
 
 
