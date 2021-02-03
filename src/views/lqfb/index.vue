@@ -330,8 +330,8 @@ export default {
             <span class="value">${value["infocontent"]}</span>
         </div>`
         infoTmpl += `<div  class="item">
-            <span class="key">举报人：</span>
-            <span class="value">${value["jubaoren"]}</span>
+            <span class="key">来源：</span>
+            <span class="value">${value["systemcode"]}</span>
         </div>`
         infoTmpl += `<div  class="item">
             <span class="key">电话：</span>
@@ -348,8 +348,8 @@ export default {
       if ((value['systemcode'])) {
         // keyNameFire.innerHTML = '地点：'
       keyValueFire.innerHTML = `${value['address']}`
-      jbr.innerHTML = `${value['jubaoren']}`
-      jbrtel.innerHTML = `${value['jubaorentel']}`
+      jbr.innerHTML = `${value['x']},${value['y']}`
+      jbrtel.innerHTML = `${value['systemcode']}`
       contents.innerHTML = `${value['infocontent']}`
       time.innerHTML = `${value['time']}`
 

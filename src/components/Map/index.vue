@@ -35,12 +35,12 @@
             <div id="key-value-fire" class="pop-value" />
         </div>
         <div class="pop-item">
-          <div class="pop-key" >举报人:</div>
+          <div class="pop-key" >坐标:</div>
           <div id="key-value-fire-jbr" class="pop-value" />
         </div>
 
         <div class="pop-item">
-          <div class="pop-key" >举报人电话:</div>
+          <div class="pop-key" >来源:</div>
           <div id="key-value-fire-jbrtel" class="pop-value" />
         </div>
         <div class="pop-item">
@@ -169,27 +169,19 @@ export default {
 
     initMap() {
       this.map = this.$map.createMap("map-container");
-      const url = `http://10.53.136.100/map/tile?z={z}&x={x}&y={y}&layer=w331100:Base_20201101`;
+      //const url = `http://10.53.136.100/map/tile?z={z}&x={x}&y={y}&layer=w331100:Base_20201101`;
 
-      /*
-      appkey：ece37a6f2fad49fb839f997f984b04c0 (应用kye)
+      // const appkey = "ece37a6f2fad49fb839f997f984b04c0"
+      // const yyrz = "b529677eda5447dbb3bb7d32820115fb"
+
+      // const request_time =  new Date().getTime();
+      // const key = appkey + yyrz + request_time
       
-      应用认证：b529677eda5447dbb3bb7d32820115fb
-      */
-      //MD5 (应用KEY+秘钥（应用认证秘钥/刷新秘钥/请求秘钥）+long类型请求时间)
-
-      const appkey = 'ece37a6f2fad49fb839f997f984b04c0'
-      const yyrz = 'b529677eda5447dbb3bb7d32820115fb'
-
-      // const refreshSecret = "81cb02ac3ec6408db0213bdf30d2531d"
-      const request_time =  new Date().getTime();
-      const key = appkey + yyrz + request_time
-      
-      const sign = md5(key)
-      console.log("sign",sign);
-      console.log("time",request_time);
+      // debugger
+      // const sign = md5(key)
+      // console.log("sign",sign);
+      // console.log("time",request_time);
  
-      // Util.getKey(sign,request_time,appkey)
 
       const wenzhouLayer = this.$map.createTianDiTuLayer("img_w");
 
@@ -337,7 +329,7 @@ export default {
 
 .fire-popup {
   width: 310px;
-  height: 250px; 
+  height: 260px; 
   // background-color: rgba(1, 51, 78, 0.8);
   background-image: url("~@/common/images/详情框.png");
   background-size: 100% 100%;

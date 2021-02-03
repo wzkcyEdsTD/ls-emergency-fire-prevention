@@ -184,9 +184,9 @@ export default {
       } else if ((data.id + '')[0] === '3') {
         this.$store.dispatch('lqfb/changeActiveMenu', '安全风险源')
       }
-      if ((data.id + '')[0] === '4' || (data.id + '')[0] === '6' || (data.id + '')[0] === '7') {
-        this.$store.dispatch('lqfb/changezlOffsetRight', -25)
-      }
+      // if ((data.id + '')[0] === '4' || (data.id + '')[0] === '6' || (data.id + '')[0] === '7') {
+      //   this.$store.dispatch('lqfb/changezlOffsetRight', -25)
+      // }
       if (data.label === '监控') {
         if (!this.jkLayer) {
           // 显示监控数据
@@ -293,9 +293,9 @@ export default {
         this.$store.dispatch('lqfb/changeyadqPannel', false)
         this.$store.dispatch('lqfb/changeyadqOffsetRight', -30)
       }
-      if (menu === '巡逻范围' || menu === '预案调取' || menu === '监控设备') {
-        this.$store.dispatch('lqfb/changezlOffsetRight', -25)
-      }
+      // if (menu === '巡逻范围' || menu === '预案调取' || menu === '监控设备') {
+      //   this.$store.dispatch('lqfb/changezlOffsetRight', -25)
+      // }
       // if (menu === '监控设备') {
       //   this.$store.dispatch('lqfb/changeVideoListOffsetRight', this.videoListOffsetRight === 0 ? -30 : 0)
       // }

@@ -21,18 +21,18 @@
       <img style="width: 100%;" src="@/common/images/边.png" alt="">
       <div class="ul-head">
         <div class="item item-1">地点</div>
-        <div class="item item-1">举报人</div>
+        <div class="item item-1">内容</div>
         <div class="item item-1">时间</div>
         <div class="item item-1">来源</div>
       </div>
-      <ul style="height:25vh">
+      <ul style="height:25vh" >
         <li v-for="(item, index) in tempList" 
             :key="index" 
             class="list-item" 
             :class="{active : fire == index}"
             @click="fire = index;clickFire(item)">
           <div class="item item-1">{{ item.address }}</div>
-          <div class="item item-1">{{ item.jubaoren }}</div>
+          <div class="item item-1">{{ item.infocontent }}</div>
           <div class="item item-1">{{ item.time }}</div>
           <div class="item item-1">{{ item.systemcode }}</div>
         </li>
@@ -58,7 +58,7 @@ export default {
   },
   methods:{
     clickFire(item){
-      console.log(item);
+      // console.log(item);
       this.$map.getMap().getView().setCenter([item.x,item.y]);
       this.$map.getMap().getView().setZoom(16);
     },
@@ -93,7 +93,8 @@ export default {
       console.log(this.tempList)
     },
     searchClear(){
-      this.tempList = fireList.datas.custom;
+      // debugger
+      this.tempList = this.fireList.result.records;
       this.searchText = "";
     }
   },

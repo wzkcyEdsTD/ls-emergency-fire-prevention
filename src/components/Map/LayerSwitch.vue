@@ -281,7 +281,10 @@ export default {
           }
 
           var canvas3 = $(".ol-layer").children('canvas')[0];//各种矢量图
-
+          var canvas4 = $(".districtLayer").children('canvas')[0];//区县
+          var canvas5 = $(".villageLayer").children('canvas')[0];//行政村社区
+          var canvas6 = $(".streetLayer").children('canvas')[0];//乡镇街道
+          var canvas7 = $(".gridLayer").children('canvas')[0];//网格
           canvas1.getContext("2d").drawImage(canvas2,0,0);
           if(canvas3){
             const width = canvas3.width;
@@ -289,7 +292,30 @@ export default {
               canvas1.getContext("2d").drawImage(canvas3,0,0);
             }
           }
-
+          if(canvas4){
+            const width = canvas4.width;
+            if(Number(width)>0){
+              canvas1.getContext("2d").drawImage(canvas4,0,0);
+            }
+          }
+          if(canvas5){
+            const width = canvas5.width;
+            if(Number(width)>0){
+              canvas1.getContext("2d").drawImage(canvas5,0,0);
+            }
+          }
+          if(canvas6){
+            const width = canvas6.width;
+            if(Number(width)>0){
+              canvas1.getContext("2d").drawImage(canvas6,0,0);
+            }
+          }
+          if(canvas7){
+            const width = canvas7.width;
+            if(Number(width)>0){
+              canvas1.getContext("2d").drawImage(canvas7,0,0);
+            }
+          }
           if (navigator.msSaveBlob) {
             navigator.msSaveBlob(canvas1.msToBlob(), 'map.png');
           } else {

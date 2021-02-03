@@ -220,9 +220,9 @@ export default {
     this.getList()
     this.getFhryCurPosition()
     // 执行实时刷新定位
-    this.interval = setInterval(() => {
-      this.updateCurPosition()
-    }, 1000 * 30)
+    // this.interval = setInterval(() => {
+    //   this.updateCurPosition()
+    // }, 1000 * 30)
   },
   beforeDestroy() {
     this.$map.removeLayer(this.fhryLayer)

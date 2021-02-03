@@ -116,7 +116,8 @@ const createTileSuperMapRestLayer = (url, options = {}) => {
   const layer = new TileLayer({
     source: new TileSuperMapRest({
       url: url,
-      wrapX: true
+      wrapX: true,
+      crossOrigin: "Anonymous"
     }),
     projection: 'EPSG:4326',
     ...options
