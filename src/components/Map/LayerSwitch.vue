@@ -279,7 +279,6 @@ export default {
             canvas1 = $(".vec_w").children('canvas')[0];//底图
             canvas2 = $(".cva_w").children('canvas')[0];//注记
           }
-
           var canvas3 = $(".ol-layer").children('canvas')[0];//各种矢量图
           var canvas4 = $(".districtLayer").children('canvas')[0];//区县
           var canvas5 = $(".villageLayer").children('canvas')[0];//行政村社区
