@@ -21,18 +21,18 @@
       <img style="width: 100%;" src="@/common/images/边.png" alt="">
       <div class="ul-head">
         <div class="item item-1">地点</div>
-        <div class="item item-1">内容</div>
+        <div class="item item-1">举报人</div>
         <div class="item item-1">时间</div>
         <div class="item item-1">来源</div>
       </div>
-      <ul style="height:25vh" >
+      <ul style="height:50vh" >
         <li v-for="(item, index) in tempList" 
             :key="index" 
             class="list-item" 
             :class="{active : fire == index}"
             @click="fire = index;clickFire(item)">
           <div class="item item-1">{{ item.address }}</div>
-          <div class="item item-1">{{ item.infocontent }}</div>
+          <div class="item item-1">{{ item.jubaoren }}</div>
           <div class="item item-1">{{ item.time }}</div>
           <div class="item item-1">{{ item.systemcode }}</div>
         </li>
@@ -48,7 +48,7 @@ import fireList from './fire.json'
 export default {
   data() {
     return {
-        rydwPannelOffsetRight:-30,
+        rydwPannelOffsetRight:0,
         fireList,
         fire:null,
         searchText:"",
@@ -108,6 +108,7 @@ export default {
       })
     })
     this.$bus.$on("hzjbd",(value)=>{
+      // debugger
       that.$nextTick(() => {
         // debugger
         if (value) {

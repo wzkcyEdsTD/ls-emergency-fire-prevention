@@ -241,11 +241,11 @@ export default {
         if(this.temp){
           this.temp = false;
           this.firelayer.setVisible(false);
-          // this.$bus.$emit('hzjbd',this.temp);
+          this.$bus.$emit('hzjbd',this.temp);
         }else if (!this.temp) {
           this.temp = true;
           this.firelayer.setVisible(true);
-          // this.$bus.$emit('hzjbd',this.temp);
+          this.$bus.$emit('hzjbd',this.temp);
         }
         this.$store.dispatch('lqfb/changezlOffsetRight', 0)
       }

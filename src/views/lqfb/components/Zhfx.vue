@@ -138,8 +138,8 @@
             </ul>
           </div>
           <div v-else>周边无实时响应人员</div>
-        </el-collapse-item>
-        <el-collapse-item title="安全风险源搜索成果" name="3">
+        </el-collapse-item> -->
+        <!-- <el-collapse-item title="安全风险源搜索成果" name="3">
           <div class="ljxq-content">
             <div
               v-for="(item, index) in featuresData.AQFXY"
@@ -179,7 +179,7 @@
               </ul>
             </div>
           </div>
-        </el-collapse-item>
+        </el-collapse-item> -->
         <el-collapse-item title="周边监控设置" name="4">
           <div class="zbjksz-container">
             <div v-if="monitorList.length > 0">
@@ -191,7 +191,7 @@
             </div>
             <div v-else>周边无监控设施</div>
           </div>
-        </el-collapse-item> -->
+        </el-collapse-item>
       </el-collapse>
     </div>
   </div>

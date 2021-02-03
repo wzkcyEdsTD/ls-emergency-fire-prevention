@@ -31,7 +31,7 @@
         </el-select>
       </li> -->
       <li :class="checkedWind ? 'li-active' : ''" @click="showWind">实时风场</li>
-      <li :class="showFire ? 'li-active' : ''" @click="clickFire">火灾报警点</li>
+      <!-- <li :class="showFire ? 'li-active' : ''" @click="clickFire">火灾报警点</li> -->
       <!-- <li :class="activeType==='预测风向' ? 'li-active' : ''">
         <el-select v-model="windPrValue" clearable placeholder="预测风向">
           <el-option

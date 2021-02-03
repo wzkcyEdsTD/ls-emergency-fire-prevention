@@ -348,8 +348,8 @@ export default {
       if ((value['systemcode'])) {
         // keyNameFire.innerHTML = '地点：'
       keyValueFire.innerHTML = `${value['address']}`
-      jbr.innerHTML = `${value['x']},${value['y']}`
-      jbrtel.innerHTML = `${value['systemcode']}`
+      jbr.innerHTML = `${value['jubaoren']}`
+      jbrtel.innerHTML = `${value['jubaorentel']}`
       contents.innerHTML = `${value['infocontent']}`
       time.innerHTML = `${value['time']}`
 

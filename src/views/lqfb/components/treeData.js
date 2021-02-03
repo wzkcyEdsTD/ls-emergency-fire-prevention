@@ -271,18 +271,18 @@ const treeData = [
         id: 25,
         label: '应急关键设备',
         children: [
-          {
-            id: 251,
-            label: '冲锋舟',
-            value: MAP_URL.JZJZNL_YJGJSB_CFZ,
-            isZLZY: true
-          },
-          {
-            id: 252,
-            label: '橡皮艇',
-            value: MAP_URL.JZJZNL_YJGJSB_XPT,
-            isZLZY: true
-          },
+          // {
+          //   id: 251,
+          //   label: '冲锋舟',
+          //   value: MAP_URL.JZJZNL_YJGJSB_CFZ,
+          //   isZLZY: true
+          // },
+          // {
+          //   id: 252,
+          //   label: '橡皮艇',
+          //   value: MAP_URL.JZJZNL_YJGJSB_XPT,
+          //   isZLZY: true
+          // },
           {
             id: 253,
             label: '挖掘机',
@@ -702,17 +702,17 @@ const treeData = [
   //     // }
   //   ]
   // },
-  // {
-  //   id: 7,
-  //   label: '监控设备',
-  //   showCheck: true,
-  //   children: [
-  //     {
-  //       id: 71,
-  //       label: '监控'
-  //     }
-  //   ]
-  // },
+  {
+    id: 7,
+    label: '监控设备',
+    showCheck: true,
+    children: [
+      {
+        id: 71,
+        label: '监控'
+      }
+    ]
+  },
 
 
 
