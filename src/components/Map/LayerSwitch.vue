@@ -22,17 +22,17 @@
         @click="change()"
       >
         <img
-          v-show="mapType === 'img_w'"
+          v-show="mapType === 'img_c'"
           src="../../assets/images/框1.png"
           alt=""
         >
         <img
-          v-show="mapType === 'vec_w'"
+          v-show="mapType === 'vec_c'"
           src="../../assets/images/绿框.png"
           alt=""
         >
-        <svg-icon v-show="mapType === 'img_w'" icon-class="影像icon" />
-        <svg-icon v-show="mapType === 'vec_w'" icon-class="影像icon-选中" />
+        <svg-icon v-show="mapType === 'img_c'" icon-class="影像icon" />
+        <svg-icon v-show="mapType === 'vec_c'" icon-class="影像icon-选中" />
         <div
           class="dropdown-lists"
           :style="activeType === '影像' ? 'height:375px' : 'height:0px'"
@@ -98,24 +98,24 @@ export default {
         {
           label: '标准地图',
           url: MAP_URL.ZWPT_SG_WZ_CGCS2000,
-          type:"vec_w"
+          type:"vec_c"
         }
       ],
       imgList: [
         {
           label: '矢量图',
           url: MAP_URL.ZWPT_SG_WZ_CGCS2000,
-          type:"vec_w"
+          type:"vec_c"
         },
         {
           label: '影像图',
           url: MAP_URL.IMG_2019,
-          type:"img_w"
+          type:"img_c"
         },
       ],
       toolList: ['绘点', '绘线',"绘面",'清空',"打印"],
       dgxLayer: null ,// 示高线图层
-      mapType:"img_w",
+      mapType:"img_c",
     }
   },
   computed: {
@@ -154,20 +154,21 @@ export default {
 
       let temp = null;
       let temp1 = null;
-      if(data.type == "vec_w"){
+      if(data.type == "vec_c"){
         const layerList = map.getLayers().array_;
         layerList.forEach((item)=>{
-          if(item.className_=="vec_w"){
+          if(item.className_=="vec_c"){
             temp = item
             item.setVisible(true)
-          }else if(item.className_=="cva_w"){
+          }else if(item.className_=="cva_c"){
             item.setVisible(true)
           }
         })
         //若无矢量图
         if(!temp){
-          const vec_layer = this.$map.createTianDiTuLayer("vec_w")
-          const cva_layer = this.$map.createTianDiTuLayer("cva_w")
+          const vec_layer = this.$map.crtLayerWMTS("vec_c")
+          const cva_layer = this.$map.crtLayerWMTS("cva_c")
+                    // const cva_layer = this.$map.crtLayerWMTS("cva_c")
           temp = vec_layer;
           map.getLayers().item(0).setVisible(false)//影像图
           map.getLayers().item(1).setVisible(false)//影像图注记
@@ -177,12 +178,12 @@ export default {
           // map.getLayers().item(5).setVisible(true)//矢量图
           // map.getLayers().item(6).setVisible(true)//矢量图注记
         }
-      }else if(data.type == "img_w"){
+      }else if(data.type == "img_c"){
         const layerList = map.getLayers().array_;
         layerList.forEach(element => {
-          if(element.className_ == "vec_w"){
+          if(element.className_ == "vec_c"){
             element.setVisible(false)
-          }else if(element.className_ == "cva_w"){
+          }else if(element.className_ == "cva_c"){
             element.setVisible(false)
           }
         });
@@ -198,21 +199,21 @@ export default {
       const map = window.g.map;
       //影像切矢量
       //img_w
-      if(this.mapType == "img_w"){
+      if(this.mapType == "img_c"){
         let temp = null;
         const layerList = map.getLayers().array_;
         layerList.forEach((item)=>{
-          if(item.className_=="vec_w"){
+          if(item.className_=="vec_c"){
             temp = item
             item.setVisible(true)
-          }else if(item.className_=="cva_w"){
+          }else if(item.className_=="cva_c"){
             item.setVisible(true)
           }
         })
         //若无矢量图
         if(!temp){
-          const vec_layer = this.$map.createTianDiTuLayer("vec_w")
-          const cva_layer = this.$map.createTianDiTuLayer("cva_w")
+          const vec_layer = this.$map.crtLayerWMTS("vec_c")
+          const cva_layer = this.$map.crtLayerWMTS("cva_c")
           temp = vec_layer;
           map.getLayers().item(0).setVisible(false)//影像图
           map.getLayers().item(1).setVisible(false)//影像图注记
@@ -224,13 +225,13 @@ export default {
           // map.getLayers().item(5).setVisible(true)//矢量图
           // map.getLayers().item(6).setVisible(true)//矢量图注记
         }
-        this.mapType = "vec_w"
-      }else if(this.mapType == "vec_w"){
+        this.mapType = "vec_c"
+      }else if(this.mapType == "vec_c"){
         const layerList = map.getLayers().array_;
         layerList.forEach(element => {
-          if(element.className_ == "vec_w"){
+          if(element.className_ == "vec_c"){
             element.setVisible(false)
-          }else if(element.className_ == "cva_w"){
+          }else if(element.className_ == "cva_c"){
             element.setVisible(false)
           }
         });
@@ -238,7 +239,7 @@ export default {
         map.getLayers().item(1).setVisible(true)//影像图注记
         // map.getLayers().item(5).setVisible(false)//矢量图
         // map.getLayers().item(6).setVisible(false)//矢量图注记
-        this.mapType = "img_w"
+        this.mapType = "img_c"
       }
     },
     handleToolChange(val) {
@@ -272,12 +273,12 @@ export default {
         const that = this;
         map.once("postcompose", function(event) {
           var canvas1,canvas2;
-          if(that.mapType == "img_w"){
-            canvas1 = $(".img_w").children('canvas')[0];//底图
-            canvas2 = $(".cia_w").children('canvas')[0];//注记
-          }else if(that.mapType=="vec_w"){
-            canvas1 = $(".vec_w").children('canvas')[0];//底图
-            canvas2 = $(".cva_w").children('canvas')[0];//注记
+          if(that.mapType == "img_c"){
+            canvas1 = $(".img_c").children('canvas')[0];//底图
+            canvas2 = $(".cia_c").children('canvas')[0];//注记
+          }else if(that.mapType=="vec_c"){
+            canvas1 = $(".vec_c").children('canvas')[0];//底图
+            canvas2 = $(".cva_c").children('canvas')[0];//注记
           }
           var canvas3 = $(".ol-layer").children('canvas')[0];//各种矢量图
           var canvas4 = $(".districtLayer").children('canvas')[0];//区县

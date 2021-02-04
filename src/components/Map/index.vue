@@ -196,11 +196,12 @@ export default {
       // console.log("time",request_time);
  
 
-      const wenzhouLayer = this.$map.createTianDiTuLayer("img_w");
-
+      // const wenzhouLayer = this.$map.createTianDiTuLayer("img_w");
+      const wenzhouLayer = this.$map.crtLayerWMTS('img_c')
       this.$store.dispatch("map/changeBaseLayer", wenzhouLayer);
 
-      const zjLayer = this.$map.createTianDiTuLayer("cia_w");
+      // const zjLayer = this.$map.createTianDiTuLayer("cia_w");
+      const zjLayer = this.$map.crtLayerWMTS("cia_c");
 
       // // zjLayer.addFilter(mask)
       this.$store.dispatch("map/changeZjLayer", zjLayer);
