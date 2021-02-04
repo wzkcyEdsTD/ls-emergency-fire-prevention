@@ -2,9 +2,8 @@ import { getForRain_3H } from '@/api/lqfb'
 
 const dataSourceName = 'lishui_forestfire'
 const dataUrl = 'http://10.53.137.59:8090/iserver/services/data-lishui_forestfire/rest/data'
-// const dataUrl = 'http://172.20.83.218:8090/iserver/services/data-wenzhouyingji/rest/data'
-// const bufferUrl = 'http://172.20.83.218:8090/iserver/services/data-buffer/rest/data'
-const bufferUrl = 'http://10.36.234.83:8090/iserver/services/data-buffer/rest/data'
+// const bufferUrl = 'http://10.36.234.83:8090/iserver/services/data-buffer/rest/data'
+const bufferUrl = ''
 const mapUrl = {
   dataUrl,
   dataSourceName,
@@ -70,19 +69,19 @@ const mapUrl = {
   RIAN_1_H: {
     type: 'map',
     layerName: 'RIAN_1_HOUR',
-    url: 'http://10.36.234.83:8090/iserver/services/map-kljcz_1/rest/maps/klj01%4010.36.234.85_klj_RainFall'
+    // url: 'http://10.36.234.83:8090/iserver/services/map-kljcz_1/rest/maps/klj01%4010.36.234.85_klj_RainFall'
   },
   // ----三小时累计降雨
   RIAN_3_H: {
     type: 'map',
     layerName: 'RIAN_3_HOUR',
-    url: 'http://10.36.234.83:8090/iserver/services/map-kljcz_3/rest/maps/klj03'
+    // url: 'http://10.36.234.83:8090/iserver/services/map-kljcz_3/rest/maps/klj03'
   },
   // ----六小时累计降雨
   RIAN_6_H: {
     type: 'map',
     layerName: 'RIAN_6_HOUR',
-    url: 'http://10.36.234.83:8090/iserver/services/map-kljcz_6/rest/maps/klj06'
+    // url: 'http://10.36.234.83:8090/iserver/services/map-kljcz_6/rest/maps/klj06'
   },
   // ----短时预报 未来3小时
   RIAN_SHORT_3_H_PR: {
@@ -94,19 +93,19 @@ const mapUrl = {
   RIAN_1_H_PR: {
     type: 'map',
     layerName: 'RIAN_1_H_PR',
-    url: 'http://10.36.234.83:8090/iserver/services/map-Weather_Pr/rest/maps/Pr01@10.36.234.85_Weather_RainFall'
+    // url: 'http://10.36.234.83:8090/iserver/services/map-Weather_Pr/rest/maps/Pr01@10.36.234.85_Weather_RainFall'
   },
   // ----三小时预测降雨
   RIAN_3_H_PR: {
     type: 'map',
     layerName: 'RIAN_3_H_PR',
-    url: 'http://10.36.234.83:8090/iserver/services/map-Weather_Pr/rest/maps/Pr03@10.36.234.85_Weather_RainFall'
+    // url: 'http://10.36.234.83:8090/iserver/services/map-Weather_Pr/rest/maps/Pr03@10.36.234.85_Weather_RainFall'
   },
   // ----六小时预测降雨
   RIAN_6_H_PR: {
     type: 'map',
     layerName: 'RIAN_6_H_PR',
-    url: 'http://10.36.234.83:8090/iserver/services/map-Weather_Pr/rest/maps/Pr06@10.36.234.85_Weather_RainFall'
+    // url: 'http://10.36.234.83:8090/iserver/services/map-Weather_Pr/rest/maps/Pr06@10.36.234.85_Weather_RainFall'
   },
 
   // 阻隔分析
@@ -193,35 +192,35 @@ const mapUrl = {
     layerName: 'HuangMoYLLDB',
     label: '裸露地表',
     icon: '荒漠与裸露地表颜色.png',
-    url: 'http://10.36.234.83:8090/iserver/services/map-TuDiLY/rest/maps/HuangMoYLLDB'
+    // url: 'http://10.36.234.83:8090/iserver/services/map-TuDiLY/rest/maps/HuangMoYLLDB'
   },
   ZZTD: {
     type: 'map',
     layerName: 'ZhongZhiTD',
     label: '农用地',
     icon: '种植土地颜色.png',
-    url: 'http://10.36.234.83:8090/iserver/services/map-TuDiLY/rest/maps/ZhongZhiTD'
+    // url: 'http://10.36.234.83:8090/iserver/services/map-TuDiLY/rest/maps/ZhongZhiTD'
   },
   LCFG: {
     type: 'map',
     layerName: 'LinCaoFG',
     label: '林地',
     icon: '林草覆盖颜色.png',
-    url: 'http://10.36.234.83:8090/iserver/services/map-TuDiLY/rest/maps/LinCaoFG'
+    // url: 'http://10.36.234.83:8090/iserver/services/map-TuDiLY/rest/maps/LinCaoFG'
   },
   FWJZ: {
     type: 'map',
     layerName: 'FangWuJZ',
     label: '房屋建筑（区）',
     icon: '房屋建筑（区）颜色.png',
-    url: 'http://10.36.234.83:8090/iserver/services/map-TuDiLY/rest/maps/FangWuJZ'
+    // url: 'http://10.36.234.83:8090/iserver/services/map-TuDiLY/rest/maps/FangWuJZ'
   },
   GZW: {
     type: 'map',
     layerName: 'GouZhuW',
     label: '构筑物',
     icon: '构筑物颜色.png',
-    url: 'http://10.36.234.83:8090/iserver/services/map-TuDiLY/rest/maps/GouZhuW'
+    // url: 'http://10.36.234.83:8090/iserver/services/map-TuDiLY/rest/maps/GouZhuW'
   },
 
   // 林业资源
@@ -260,7 +259,7 @@ const mapUrl = {
     label: '水系',
     icon: '水系.png',
     // url: 'http://172.20.83.218:8090/iserver/services/map-ruian/rest/maps/HYD_PY@MapManager'
-    url: 'http://10.36.234.83:8090/iserver/services/map-ruian/rest/maps/HYD_PY%40MapManager'
+    // url: 'http://10.36.234.83:8090/iserver/services/map-ruian/rest/maps/HYD_PY%40MapManager'
   },
   // 道路
   ROAD: {
@@ -269,7 +268,7 @@ const mapUrl = {
     label: '道路',
     icon: 'road.png',
 
-    url: 'http://10.36.234.83:8090/iserver/services/map-RuianRoad/rest/maps/Guodao%40MapManager'
+    // url: 'http://10.36.234.83:8090/iserver/services/map-RuianRoad/rest/maps/Guodao%40MapManager'
     // url: 'http://172.20.83.218:8090/iserver/services/map-ruian/rest/maps/Road_Classify'
     // url: 'http://10.36.234.83:8094/iserver/services/map-Network/rest/maps/TRA_NET_LN@MapManager'
   },

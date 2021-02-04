@@ -1014,148 +1014,183 @@ function wind(windData){
             minMag = Math.min(mag, minMag);
         }
     }
-    const option ={
-        visualMap: {
-            left: 'right',
-            min: minMag,
-            max: maxMag,
-            dimension: 4,
-            inRange: {
-                // color: ['green', 'yellow', 'red']
-                //风场颜色修改
-                color: [ '#ffffbf', '#fee090', '#fdae61', '#f46d43', '#d73027', '#a50026']
-            },
-            realtime: false,
-            calculable: true,
-            textStyle: {
-                color: '#fff'
-            }
+    const option = {
+      visualMap: {
+        left: 'right',
+        min: minMag,
+        max: maxMag,
+        dimension: 4,
+        show: false,
+        inRange: {
+          // color: ['green', 'yellow', 'red']
+          color: [ '#ffffbf', '#fee090', '#fdae61', '#f46d43', '#d73027', '#a50026']
         },
-        bmap: {
-            center: [0, 0],
-            zoom: 1,
-            roam: true,
-            mapStyle: {
-                'styleJson': [{
-                    'featureType': 'water',
-                    'elementType': 'all',
-                    'stylers': {
-                        'color': '#031628'
-                    }
-                }, {
-                    'featureType': 'land',
-                    'elementType': 'geometry',
-                    'stylers': {
-                        'color': '#000102'
-                    }
-                }, {
-                    'featureType': 'highway',
-                    'elementType': 'all',
-                    'stylers': {
-                        'visibility': 'off'
-                    }
-                }, {
-                    'featureType': 'arterial',
-                    'elementType': 'geometry.fill',
-                    'stylers': {
-                        'color': '#000000'
-                    }
-                }, {
-                    'featureType': 'arterial',
-                    'elementType': 'geometry.stroke',
-                    'stylers': {
-                        'color': '#0b3d51'
-                    }
-                }, {
-                    'featureType': 'local',
-                    'elementType': 'geometry',
-                    'stylers': {
-                        'color': '#000000'
-                    }
-                }, {
-                    'featureType': 'railway',
-                    'elementType': 'geometry.fill',
-                    'stylers': {
-                        'color': '#000000'
-                    }
-                }, {
-                    'featureType': 'railway',
-                    'elementType': 'geometry.stroke',
-                    'stylers': {
-                        'color': '#08304b'
-                    }
-                }, {
-                    'featureType': 'subway',
-                    'elementType': 'geometry',
-                    'stylers': {
-                        'lightness': -70
-                    }
-                }, {
-                    'featureType': 'building',
-                    'elementType': 'geometry.fill',
-                    'stylers': {
-                        'color': '#000000'
-                    }
-                }, {
-                    'featureType': 'all',
-                    'elementType': 'labels.text.fill',
-                    'stylers': {
-                        'color': '#857f7f'
-                    }
-                }, {
-                    'featureType': 'all',
-                    'elementType': 'labels.text.stroke',
-                    'stylers': {
-                        'color': '#000000'
-                    }
-                }, {
-                    'featureType': 'building',
-                    'elementType': 'geometry',
-                    'stylers': {
-                        'color': '#022338'
-                    }
-                }, {
-                    'featureType': 'green',
-                    'elementType': 'geometry',
-                    'stylers': {
-                        'color': '#062032'
-                    }
-                }, {
-                    'featureType': 'boundary',
-                    'elementType': 'all',
-                    'stylers': {
-                        'color': '#465b6c'
-                    }
-                }, {
-                    'featureType': 'manmade',
-                    'elementType': 'all',
-                    'stylers': {
-                        'color': '#022338'
-                    }
-                }, {
-                    'featureType': 'label',
-                    'elementType': 'all',
-                    'stylers': {
-                        'visibility': 'off'
-                    }
-                }]
-            }
-        },
-        series: [{
-            type: 'flowGL',
-            coordinateSystem: 'bmap',
-            data: data,
-            supersampling: 4,
-            particleType: 'line',
-            particleDensity: 128,
-            particleSpeed: 1,
-            // gridWidth: windData.nx,
-            // gridHeight: windData.ny,
-            itemStyle: {
-                opacity: 0.7
-            }
-        }]
-    };
+        realtime: false,
+        calculable: true,
+        textStyle: {
+          color: '#fff'
+        }
+      },
+      legend: {
+        show: false
+      },
+      series: [{
+        type: 'flowGL',
+        coordinateSystem: 'GLMap',
+        data: data,
+        supersampling: 4,
+        particleType: 'line',
+        particleDensity: 128,
+        particleSpeed: 1,
+        // gridWidth: windData.nx,
+        // gridHeight: windData.ny,
+        itemStyle: {
+          opacity: 0.7
+        }
+      }]
+    }
+    // const option ={
+    //     visualMap: {
+    //         left: 'right',
+    //         min: minMag,
+    //         max: maxMag,
+    //         dimension: 4,
+    //         inRange: {
+    //             // color: ['green', 'yellow', 'red']
+    //             //风场颜色修改
+    //             color: [ '#ffffbf', '#fee090', '#fdae61', '#f46d43', '#d73027', '#a50026']
+    //         },
+    //         realtime: false,
+    //         calculable: true,
+    //         textStyle: {
+    //             color: '#fff'
+    //         }
+    //     },
+    //     bmap: {
+    //         center: [0, 0],
+    //         zoom: 1,
+    //         roam: true,
+    //         mapStyle: {
+    //             'styleJson': [{
+    //                 'featureType': 'water',
+    //                 'elementType': 'all',
+    //                 'stylers': {
+    //                     'color': '#031628'
+    //                 }
+    //             }, {
+    //                 'featureType': 'land',
+    //                 'elementType': 'geometry',
+    //                 'stylers': {
+    //                     'color': '#000102'
+    //                 }
+    //             }, {
+    //                 'featureType': 'highway',
+    //                 'elementType': 'all',
+    //                 'stylers': {
+    //                     'visibility': 'off'
+    //                 }
+    //             }, {
+    //                 'featureType': 'arterial',
+    //                 'elementType': 'geometry.fill',
+    //                 'stylers': {
+    //                     'color': '#000000'
+    //                 }
+    //             }, {
+    //                 'featureType': 'arterial',
+    //                 'elementType': 'geometry.stroke',
+    //                 'stylers': {
+    //                     'color': '#0b3d51'
+    //                 }
+    //             }, {
+    //                 'featureType': 'local',
+    //                 'elementType': 'geometry',
+    //                 'stylers': {
+    //                     'color': '#000000'
+    //                 }
+    //             }, {
+    //                 'featureType': 'railway',
+    //                 'elementType': 'geometry.fill',
+    //                 'stylers': {
+    //                     'color': '#000000'
+    //                 }
+    //             }, {
+    //                 'featureType': 'railway',
+    //                 'elementType': 'geometry.stroke',
+    //                 'stylers': {
+    //                     'color': '#08304b'
+    //                 }
+    //             }, {
+    //                 'featureType': 'subway',
+    //                 'elementType': 'geometry',
+    //                 'stylers': {
+    //                     'lightness': -70
+    //                 }
+    //             }, {
+    //                 'featureType': 'building',
+    //                 'elementType': 'geometry.fill',
+    //                 'stylers': {
+    //                     'color': '#000000'
+    //                 }
+    //             }, {
+    //                 'featureType': 'all',
+    //                 'elementType': 'labels.text.fill',
+    //                 'stylers': {
+    //                     'color': '#857f7f'
+    //                 }
+    //             }, {
+    //                 'featureType': 'all',
+    //                 'elementType': 'labels.text.stroke',
+    //                 'stylers': {
+    //                     'color': '#000000'
+    //                 }
+    //             }, {
+    //                 'featureType': 'building',
+    //                 'elementType': 'geometry',
+    //                 'stylers': {
+    //                     'color': '#022338'
+    //                 }
+    //             }, {
+    //                 'featureType': 'green',
+    //                 'elementType': 'geometry',
+    //                 'stylers': {
+    //                     'color': '#062032'
+    //                 }
+    //             }, {
+    //                 'featureType': 'boundary',
+    //                 'elementType': 'all',
+    //                 'stylers': {
+    //                     'color': '#465b6c'
+    //                 }
+    //             }, {
+    //                 'featureType': 'manmade',
+    //                 'elementType': 'all',
+    //                 'stylers': {
+    //                     'color': '#022338'
+    //                 }
+    //             }, {
+    //                 'featureType': 'label',
+    //                 'elementType': 'all',
+    //                 'stylers': {
+    //                     'visibility': 'off'
+    //                 }
+    //             }]
+    //         }
+    //     },
+    //     series: [{
+    //         type: 'flowGL',
+    //         coordinateSystem: 'bmap',
+    //         data: data,
+    //         supersampling: 4,
+    //         particleType: 'line',
+    //         particleDensity: 128,
+    //         particleSpeed: 1,
+    //         // gridWidth: windData.nx,
+    //         // gridHeight: windData.ny,
+    //         itemStyle: {
+    //             opacity: 0.7
+    //         }
+    //     }]
+    // };
     //只有在地图渲染的时候才渲染
     oe = new ADLayer(option, window.g.map, echarts)
     oe.render()
