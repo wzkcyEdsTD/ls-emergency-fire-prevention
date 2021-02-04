@@ -7,6 +7,14 @@
           火灾报警点
         </div>
         <div class="search-header">
+          <!-- <el-date-picker
+            v-model="value1"
+            type="daterange"
+            range-separator="-"
+            unlink-panels
+            start-placeholder="开始日期"
+            end-placeholder="结束日期">
+          </el-date-picker> -->
           <img src="@/common/images/搜索icon.png" class="searchIcon">
           <el-input
             v-model="searchText"
@@ -54,6 +62,7 @@ export default {
         searchText:"",
         list:null,
         tempList:null,
+        value1:null,
     }
   },
   methods:{
@@ -84,6 +93,9 @@ export default {
             return item;
           }
           if (item.time.indexOf(that.searchText) != -1) {
+            return item;
+          }
+          if (item.address.indexOf(that.searchText) != -1) {
             return item;
           }
         })
@@ -420,5 +432,30 @@ export default {
   background: transparent !important;
   border: none;
   color: white;
+}
+.el-range-input{
+  background: transparent !important;
+  border: none;
+  color: white;
+}
+.el-date-editor .el-range-separator {
+    padding: 0 0.3125rem;
+    line-height: 2rem;
+    width: 5%;
+    color: white;
+    padding-right: 1vh;
+}
+.start-date, .end-date {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    font-size: 1rem;
+    height: 1.75rem;
+    margin-left: 0rem;
+    line-height: 1.75rem;
+    margin-bottom: 0rem;
+}
+.el-picker-panel, .el-time-panel{
+  background: linear-gradient(to bottom, #103224, #103224);
 }
 </style>
