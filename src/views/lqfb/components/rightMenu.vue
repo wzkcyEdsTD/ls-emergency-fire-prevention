@@ -1,6 +1,6 @@
 <template>
   <div class="right-wrapper" :style="`right: ${rydwPannelOffsetRight}rem`">
-    <!-- <div class="close" @click="closeMenu" /> -->
+    <div class="close" @click="closeMenu" />
     <div class="lb-wrapper">
       <div class="titleLine">
         <div class="title">
@@ -63,13 +63,14 @@ export default {
       this.$map.getMap().getView().setZoom(16);
     },
     closeMenu(){
-      if (this.rydwPannelOffsetRight==-30) {
+      const that = this;
+      if (that.rydwPannelOffsetRight==-30) {
         that.$nextTick(() => {
-          this.rydwPannelOffsetRight=0
+          that.rydwPannelOffsetRight=0
         })
       }else{
         that.$nextTick(() => {
-          this.rydwPannelOffsetRight=-30
+          that.rydwPannelOffsetRight=-30
         })
       }
     },

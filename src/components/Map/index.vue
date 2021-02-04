@@ -34,14 +34,27 @@
             <img src="@/common/images/定位icon.png" class="icon" alt="">
             <div id="key-value-fire" class="pop-value" />
         </div>
-        <div class="pop-item">
-          <div class="pop-key" >举报人:</div>
-          <div id="key-value-fire-jbr" class="pop-value" />
-        </div>
+        <div class="contentLine">
+          <div class="pop-item">
+            <div class="pop-key" >举报人:</div>
+            <div id="key-value-fire-jbr" class="pop-value" />
+          </div>
 
-        <div class="pop-item">
-          <div class="pop-key" >举报电话:</div>
-          <div id="key-value-fire-jbrtel" class="pop-value" />
+          <div class="pop-item">
+            <div class="pop-key" >举报电话:</div>
+            <div id="key-value-fire-jbrtel" class="pop-value" />
+          </div>
+        </div>
+        <div class="contentLine">
+          <div class="pop-item">
+            <div class="pop-key" >火灾强度:</div>
+            <div id="key-value-fire-intensity" class="pop-value" />
+          </div>
+
+          <div class="pop-item">
+            <div class="pop-key" >火灾类型:</div>
+            <div id="key-value-fire-type" class="pop-value" />
+          </div>
         </div>
         <div class="pop-item">
           <div class="pop-key" >时间:</div>
@@ -328,13 +341,13 @@ export default {
 }
 
 .fire-popup {
-  width: 310px;
-  height: 260px; 
+  width: 350px;
+  height: 22vh; 
   // background-color: rgba(1, 51, 78, 0.8);
   background-image: url("~@/common/images/详情框.png");
   background-size: 100% 100%;
   position: absolute;
-  left: -150px;
+  left: -175px;
   bottom: 22px;
   .popup-header {
     width: 100%;
@@ -405,8 +418,37 @@ export default {
           font-size: 14px;
           // display: block;
           width: 13vh;
-          height: 5vh;
+          // height: 5vh;
           word-wrap: break-word;
+        }
+      }
+    }
+    .contentLine{
+      display: flex;
+      .pop-item {
+        margin-top: 9px;
+        // margin-bottom: 9px;
+        font-size: 16px;
+        // width: 50%;
+        display: flex;
+        flex: 1;
+        .pop-key{
+          color: #00FFEB;
+          font-family: PingFang SC Regular;
+          font-size: 14px;
+          padding-right: 0.5vh;
+        }
+        .pop-value {
+          // display: inline-block;
+          // height: 4vh;
+          // flex: 1;
+          font-family: PingFang SC Regular;
+          color: #F5F5F5;
+          font-size: 14px;
+          // display: block;
+          // width: 13vh;
+          // height: 5vh;
+          // word-wrap: break-word;
         }
       }
     }

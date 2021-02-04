@@ -189,6 +189,8 @@ export default {
       const keyValueFire = document.getElementById('key-value-fire')
       const jbr = document.getElementById("key-value-fire-jbr")
       const jbrtel = document.getElementById('key-value-fire-jbrtel')
+      const firetype = document.getElementById("key-value-fire-type")
+      const fireIntensity = document.getElementById('key-value-fire-intensity')
       const contents = document.getElementById('key-value-fire-cont')
       const time = document.getElementById('key-value-fire-time')
 
@@ -350,7 +352,20 @@ export default {
       keyValueFire.innerHTML = `${value['address']}`
       jbr.innerHTML = `${value['jubaoren']}`
       jbrtel.innerHTML = `${value['jubaorentel']}`
-      contents.innerHTML = `${value['infocontent']}`
+      const text = `${value['infocontent']}`
+      // debugger
+      if (text.indexOf(",")>-1) {
+        const arr =text.split(',')
+        console.log(arr)
+
+        contents.innerHTML = arr[0]
+        fireIntensity.innerHTML = arr[1].split(":")[1]
+        firetype.innerHTML = arr[2].split(":")[1]
+        // debugger
+      }else{
+        contents.innerHTML = `${value['infocontent']}`
+      }
+
       time.innerHTML = `${value['time']}`
 
       }else{
