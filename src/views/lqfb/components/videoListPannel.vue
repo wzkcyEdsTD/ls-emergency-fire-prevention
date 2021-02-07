@@ -2,65 +2,93 @@
   <div class="video-list-pannel" :style="`right: ${videoListOffsetRight}rem`">
     <div class="close" @click="close" />
     <div class="title">
-      瑞安市
+      视频详情
     </div>
     <img src="../../../assets/images/边.png" alt="">
-    <el-collapse v-model="activeNames">
-      <el-collapse-item v-for="(item,index) in videoList" :key="index" :name="index" :title="item.FNAME">
-        <div class="ul-head">
-          <div class="number">序号</div>
-          <div class="name">名称</div>
-        </div>
-        <ul>
-          <li v-for="(i,v) in item.data" v-once :key="v" class="list-item" @click="ZoomToFeature(i)">
-            <div class="item number">{{ v + 1 }}</div>
-            <div class="item name">{{ i.name }}</div>
-          </li>
-        </ul>
-      </el-collapse-item>
-    </el-collapse>
+    <!-- <div class="content-box">
+      <div id="video-table-box" class="table-box" />
+    </div> -->
+    <div class="videoDemoPlayer" v-show="videoShow">
+      <p>{{ mc }}</p>
+      <span class="release-video" @click="releaseVideo">x</span>
+      <div id="myVideoPlayer" class="frequency-pic" />
+    </div>
   </div>
 </template>
 
 <script>
-import { getMonitorList } from '@/api/lqfb'
+
 export default {
   data() {
     return {
-      activeNames: ['1'],
-      videoList: []
+      id:null,
+      video: undefined,
+      url:undefined,
+      videoShow:false,
+      mc:undefined
     }
   },
   computed: {
     videoListOffsetRight() {
       return this.$store.getters.videoListOffsetRight
     },
-    jkLayer() {
-      return this.$store.getters.jkLayer
-    }
   },
-  mounted() {
-    // getMonitorList().then(res => {
-    //   if (res.code === 20000) {
-    //     this.videoList = res.data
-    //   }
-    // })
-  
+ async mounted() {
+    const that = this;
+    this.$bus.$on("videoData",value=>{
+      // console.log(value);
+      // that.id = value.SMID;
+      that.$nextTick(()=>{
+        that.videoShow = true
+        that.mc = value.MC
+        that.initRtmp(value.VIDEO_URL);
+      })
+
+    
+    });
   },
   methods: {
+    initRtmp(url) {
+      if (this.video) {
+        this.video.dispose();
+      }
+      return new Promise((resolve) => {
+        // this.video = undefined;
+        // if (!this.video) {
+          
+        // }
+        this.video = new window.Aliplayer(
+          {
+            id: "myVideoPlayer",
+            source:url,
+            width: "100%",
+            height: "100%",
+            autoplay: true,
+            controlBarVisibility: "hover",
+            isLive: true,
+            muted: true,
+          },
+          (player) => {
+            player.mute();
+            player.play();
+            resolve(true);
+          }
+        );
+      });
+    },
+    releaseVideo() {
+      // this.$hub.$emit("arcgis-popup-video", undefined);
+      this.video.dispose();
+      this.videoShow = false;
+    },
     close() {
       this.$store.dispatch('lqfb/changeVideoListOffsetRight', -30)
-      this.$store.dispatch('map/changeJkLayer', {
-        layer: this.jkLayer,
-        ope: 'REMOVELAYER'
-      })
-      this.$map.goHome()
     },
-    ZoomToFeature(val) {
-      this.$map.getMap().getView().setCenter([val.longitude, val.latitude])
-      this.$map.getMap().getView().setZoom(20)
-    }
-  }
+  },
+  beforeDestroy() {
+    this.$bus.$off('videoData')
+    this.video && this.video.dispose();
+  },
 }
 </script>
 <style lang="scss">
@@ -90,78 +118,107 @@ export default {
       margin: 0;
       padding: 5px 0px 4px 0px;
     }
+
+    .content-box {
+      position: relative;
+      margin-top: 20px;
+      overflow-y: scroll;
+      height: calc(100vh - 210px);
+    }
+    .table-box {
+      margin-bottom: 3px;
+      overflow: hidden;
+      .item {
+          position: relative;
+          float: left;
+          width: 100%;
+          height: 28px;
+          line-height: 28px;
+          display: flex;
+          margin-bottom: 8px;
+        .key {
+          display: block;
+          flex: 3;
+          font-size: 16px;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          color: #fff;
+          text-align: left;
+          margin-left: 30px;
+          font-size: 16px;
+          // justify-content: center;
+        }
+        .value {
+          flex: 7;
+          height: 28px;
+          line-height: 28px;
+          width: 70%;
+          background-color: rgb(12, 33, 51);
+          font-size: 14px;
+          padding-left: 20px;
+          color: hsla(195, 88%, 67%, 1);
+          margin-left: 10px;
+          font-weight: 400;
+          text-align: left;
+          overflow: hidden;
+          margin-right: 20px;
+          margin-left: 20px;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+      }
+    }
+    .tabs {
+      margin-top: 12px;
+      width: 100%;
+      height: 28px;
+      .tab-1,.tab-2 {
+        width: 33%;
+        text-align: center;
+        line-height: 28px;
+        float: left;
+        background-color: rgb(9, 46, 79);
+        color: rgba(9, 140, 168, 1);
+        cursor: pointer;
+      }
+      .active {
+        background: url(../../../assets/images/蓝色选中框.png) no-repeat;
+        background-size: 100% 100%;
+        width: 33%;
+        color:rgba(10, 204, 233, 1);
+      }
+    }
     .ul-head {
       height: 26px;
       width: 380px;
       background-color: rgb(10, 40, 68);
       margin-top: 10px;
       display: flex;
-      .number,.name{
-        margin-left: 10px;
-        width: 50px;
-        height: 26px;
-        line-height: 26px;
-        font-size: 16px;
-        margin-right: 50px;
-      }
-    }
-    /*滚动条样式*/
-    ul::-webkit-scrollbar {
-        width: 4px;
-        height: 4px;
-    }
-    ul::-webkit-scrollbar-thumb {
-        border-radius: 10px;
-        background: rgba(255,255,255,0.8);
-        width: 4px;
-        height: 30px;
-    }
-    ul::-webkit-scrollbar-track {
-        border-radius: 0;
-        background: rgba(255,255,255,0.2);
     }
     ul {
+      height: calc(100vh - 210px);
+      width: 100%;
       list-style: none;
       padding-left: 0;
-      height: 340px;
       overflow-x: hidden; overflow-y: auto;
+      margin-top: 0px;
       li {
         display: flex;
         align-items: center;
-        position: relative;
-        width: 380px;
-        height: 41px;
-        margin-bottom: 12px;
-        background: url(../../../assets/images/框.png) no-repeat;
-        background-size: 100% 100%;
-        .number {
-          width: 30px;
-          margin-left: 8px;
-          height: 30px;
-          border-radius: 15px;
-          text-align: center;
-          line-height: 30px;
-          color: rgba(0, 240, 242, 1);
-          font-weight: bolder;
-          font-size: 18px;
-          margin-right: 20px;
-        }
-        .name {
-          flex: 3;
-          text-align: left;
+        height: 38px;
+        &:hover {
+          cursor: pointer;
+          border: 1px solid rgba(18, 253, 148, 1);
+          background: rgb(8, 81, 62);
         }
       }
-      li:hover {
-        cursor: pointer;
-        background: url("../../../assets/images/选中框1.png") no-repeat;
-        background-size: 100% 100%;
-        .item {
-          color: hsla(153, 98%, 53%, 1);
-        }
-        .num {
-          color: hsla(153, 98%, 53%, 1);
-        }
+      /* li:nth-child(odd) {
+        background-color: #101518;
       }
+      li:nth-child(even) {
+        background-color: rgb(15, 34, 52);
+      } */
     }
     .item {
       text-align: center;
@@ -174,17 +231,55 @@ export default {
     .item-1 {
       flex: 1;
     }
-    .item-3 {
-      flex: 3
+    .item-2 {
+      flex: 2;
     }
-  .el-icon-arrow-right{
-    transform: none;
+    /*滚动条样式*/
+      ul::-webkit-scrollbar,.content-box::-webkit-scrollbar {
+          width: 4px;
+          height: 4px;
+      }
+      ul::-webkit-scrollbar-thumb,.content-box::-webkit-scrollbar-thumb {
+          border-radius: 10px;
+          background: rgba(255,255,255,0.8);
+          width: 4px;
+          height: 30px;
+      }
+      ul::-webkit-scrollbar-track,.content-box::-webkit-scrollbar-track {
+          border-radius: 0;
+          background: rgba(255,255,255,0.2);
+      }
   }
-  .el-icon-arrow-right:before {
-    content: "\E723";
+
+.videoDemoPlayer {
+  position: fixed;
+  width: 1000px;
+  height: 600px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 30;
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  > p {
+    color: white;
+    line-height: 30px;
   }
-  .el-collapse .is-active .el-collapse-item__header .el-icon-arrow-right::before{
-    content: "\E722";
+  .frequency-pic {
+    flex: 1;
+    border-radius: 10px;
+    overflow: hidden;
   }
+  .release-video {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    cursor: pointer;
   }
+}
+
 </style>

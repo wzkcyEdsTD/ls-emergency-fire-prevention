@@ -53,34 +53,44 @@ export const constantRoutes = [
       component: () => import('@/views/lqfb/index')
     }]
   },
+  // {
+  //   path: '/video',
+  //   component: Layout,
+  //   redirect: '/video/video',
+  //   children: [{
+  //     path: 'video',
+  //     name: 'video/video',
+  //     component: () => import('@/components/video/video')
+  //   }]
+  // }
 
-  {
-    path: '/jjya',
-    component: Layout,
-    redirect: '/jjya/index',
-    name: 'jjya',
-    children: [
-      {
-        path: 'index',
-        name: 'jjya/index',
-        component: () => import('@/views/jjya/index')
-      }
-    ]
-  },
+  // {
+  //   path: '/jjya',
+  //   component: Layout,
+  //   redirect: '/jjya/index',
+  //   name: 'jjya',
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       name: 'jjya/index',
+  //       component: () => import('@/views/jjya/index')
+  //     }
+  //   ]
+  // },
 
-  {
-    path: '/lssg',
-    component: Layout,
-    redirect: '/lssg/index',
-    name: 'lssg',
-    children: [
-      {
-        path: 'index',
-        name: 'lssg/index',
-        component: () => import('@/views/lssg/index')
-      }
-    ]
-  }
+  // {
+  //   path: '/lssg',
+  //   component: Layout,
+  //   redirect: '/lssg/index',
+  //   name: 'lssg',
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       name: 'lssg/index',
+  //       component: () => import('@/views/lssg/index')
+  //     }
+  //   ]
+  // }
 ]
 
 /**

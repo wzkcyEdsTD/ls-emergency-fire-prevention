@@ -153,7 +153,7 @@ export default {
         return false
       }
       fireCloser.onclick = () => {
-        console.log("qwe")
+        // console.log("qwe")
         this.firePopyp.setPosition(undefined)
         fireCloser.blur()
         return false
@@ -167,7 +167,7 @@ export default {
           return feature
         })
       const coordinate = evt.coordinate
-      console.log({ feature })
+      // console.log({ feature })
       if (!feature) {
         const filters = this.layerList.filter(v => v.label === '巡逻范围')
         if (filters.length > 0) {
@@ -222,27 +222,22 @@ export default {
       }
 
       const value = feature.values_
-      if (value['indexCode']) {
+      if (value['VIDEO_URL']) {
         // 查询监控视频
-        getVideoByCode(value['indexCode']).then(res => {
-          this.$store.dispatch('lqfb/changeVideoUrl', res.data)
-        })
+        this.$bus.$emit("videoData",value);
         return
       }
       // 是否为火灾点
       // debugger
       if ((value['systemcode'])) {
         this.$bus.$emit("fire",value);
-        // this.$bus.$emit("fireDetail",value);
       }else{
-        // this.$bus.$emit("noFireDetail",false);
       }
       // debugger
       if (!value['systemcode']) {
         if ((!value['NAME'] && !value['label'])) return
       }
 
-      // console.log("没有执行")
       // 判断是不是防火人员
       if (value.smid && value.smid.match(/^1[3|4|5|6|7|8|9][0-9]\d{8}$/)) {
         // this.$refs.rydwPannel.handleItemClick(value)
@@ -309,7 +304,7 @@ export default {
         table = document.getElementById('table-box')
       }
       // debugger
-      console.log(value)
+      // console.log(value)
       if (!(value['systemcode'])) {
         // console.log("不是火灾点")
         for (const key in attrData[value['TABLE_NAME']]) {
@@ -356,7 +351,7 @@ export default {
       // debugger
       if (text.indexOf(",")>-1) {
         const arr =text.split(',')
-        console.log(arr)
+        // console.log(arr)
 
         contents.innerHTML = arr[0]
         fireIntensity.innerHTML = arr[1].split(":")[1]

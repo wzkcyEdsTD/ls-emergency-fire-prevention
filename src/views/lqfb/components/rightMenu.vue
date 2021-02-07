@@ -29,31 +29,36 @@
       <img style="width: 100%;" src="@/common/images/边.png" alt="">
       <div class="ul-head">
         <div class="item item-1">地点</div>
-        <div class="item item-1">举报人</div>
+        <!-- <div class="item item-1">举报人</div> -->
         <div class="item item-1">时间</div>
         <div class="item item-1">来源</div>
       </div>
-      <ul style="height:50vh" >
+      <ul style="height:75vh" >
         <li v-for="(item, index) in tempList" 
             :key="index" 
             class="list-item" 
             :class="{active : fire == index}"
             @click="fire = index;clickFire(item)">
           <div class="item item-1">{{ item.address }}</div>
-          <div class="item item-1">{{ item.jubaoren }}</div>
+          <!-- <div class="item item-1">{{ item.jubaoren }}</div> -->
           <div class="item item-1">{{ item.time }}</div>
-          <div class="item item-1">{{ item.systemcode }}</div>
+          <div class="item item-1">{{ systemName[`${item.systemcode}`] }}</div>
         </li>
       </ul>
     </div>
-
+    <!-- <video></video> -->
   </div>
 </template>
 <script>
 
 import fireList from './fire.json'
-
+import video from '@/components/video/video'
+// import Video from '@/components/video/video.vue'
 export default {
+  components: {
+    video,
+  },
+
   data() {
     return {
         rydwPannelOffsetRight:0,
@@ -63,6 +68,10 @@ export default {
         list:null,
         tempList:null,
         value1:null,
+        systemName:{
+          "ilishui":"爱丽水",
+          "tyswxt":"天眼守望"
+        }
     }
   },
   methods:{
@@ -86,7 +95,7 @@ export default {
     searchFilter(){
       const that = this
       if (that.searchText) {
-        this.list = that.fireList.result.records
+        this.list = that.fireList.result.records.sort(that.sortUpDate)
       // debugger
         this.tempList = this.list.filter((item)=>{
           if (item.systemcode.indexOf(that.searchText) != -1) {
@@ -100,16 +109,24 @@ export default {
           }
         })
       }else{
-        this.tempList = that.fireList.result.records
+        this.tempList = that.fireList.result.records.sort(that.sortUpDate)
       }
 
       console.log(this.tempList)
     },
     searchClear(){
       // debugger
-      this.tempList = this.fireList.result.records;
+      this.tempList = this.fireList.result.records.sort(that.sortUpDate);
       this.searchText = "";
-    }
+    },
+    //正序
+    sortDownDate(a, b) {
+      return Date.parse(a.time) - Date.parse(b.time);
+    },
+    //反序
+    sortUpDate(a, b) {
+      return Date.parse(b.time) - Date.parse(a.time);
+    },
   },
   mounted() {
     const that = this;
@@ -117,7 +134,7 @@ export default {
     this.$bus.$on("fireList",value=>{
       that.$nextTick(()=>{
         that.fireList = value;
-        that.tempList =that.fireList.result.records
+        that.tempList =that.fireList.result.records.sort(that.sortUpDate)
       })
     })
     this.$bus.$on("hzjbd",(value)=>{

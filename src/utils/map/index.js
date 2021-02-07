@@ -133,7 +133,7 @@ const createTileSuperMapRestLayer = (url, options = {}) => {
 
 
 const createTianDiTuLayer = (type, options = {}) => {
-  const token = "2e6919cbe2122200fa172aaea99742e0";
+  const token = "717e5c0403f4c23654be096d2f7d6e68";
   const layer = new ol.layer.Tile({
     source: new ol.source.XYZ({
       // crossOrigin: 'anonymous',
@@ -167,7 +167,7 @@ function crtLayerWMTS(type, proj, opacity) {
     // opacity: opacity,
     source: new ol.source.WMTS({
       // attributions: 'Tiles © 天地图',
-      url: 'http://t' + Math.round(Math.random() * 7) + '.tianditu.com/' + type + '/wmts?tk=2e6919cbe2122200fa172aaea99742e0',
+      url: 'http://t' + Math.round(Math.random() * 7) + '.tianditu.com/' + type + '/wmts?tk=717e5c0403f4c23654be096d2f7d6e68',
       layer: type.substr(0, 3),
       matrixSet: type.substring(4),
       format: 'tiles',
@@ -188,7 +188,7 @@ function crtLayerWMTS(type, proj, opacity) {
 }
 
 const createTestLayer = (url, options = {}) => {
-  const token = "2e6919cbe2122200fa172aaea99742e0";
+  const token = "717e5c0403f4c23654be096d2f7d6e68";
   const layer = new ol.layer.Tile({
     source: new ol.source.XYZ({
       // crossOrigin: 'anonymous',
@@ -303,6 +303,7 @@ const createVectorLayerByDataRest = ({ url, dataSourceName, label, layerName, ic
     return styles[feature.getGeometry().getType()]
   }
   if (geomFilter) {
+    // debugger
     return getFeaturesByGeometry({ url, dataSourceName, label, layerName, attributeFilter, geomFilter, styleFunction })
   }
   return getFeaturesBySQL({ url, dataSourceName, label, layerName, attributeFilter, cropFeature, styleFunction })
@@ -320,6 +321,7 @@ const getFeaturesBySQL = ({ url, dataSourceName, layerName, label, attributeFilt
       },
       datasetNames: [`${dataSourceName}:${layerName}`]
     })
+    // debugger
     if (label == "单兵设备") {
       return
     }
@@ -444,6 +446,7 @@ const getFeaturesBySQL = ({ url, dataSourceName, layerName, label, attributeFilt
         style: styleFunction,
         // className:label
       })
+      // debugger
       // 暂时用遮罩，后面再用turfjs
       // const mask = createMaskByGeoJson(require('@/components/Map/ruian.json'))
       // resultLayer.addFilter(mask)
@@ -476,9 +479,46 @@ const getAllFeaturesBySQL = ({ url, dataSourceName, layerName, attributeFilter }
 }
 
 const getFeaturesByGeometry = ({ url, dataSourceName, label, layerName, attributeFilter, geomFilter, styleFunction }) => {
+  const that = this;
+  if(label =='监控'){
+    // return new Promise((resolve, reject) => {
+      const geometryParam = new SuperMap.GetFeaturesByGeometryParameters({
+        toIndex: 999999,
+        attributeFilter: attributeFilter || '',
+        geometry: geomFilter.getGeometry(),
+        spatialQueryMode: 'INTERSECT', // 相交空间查询模式
+        datasetNames: [`${dataSourceName}:${layerName}`]
+      })
 
+      new FeatureService(url).getFeaturesByGeometry(geometryParam, serviceResult => {
+        let features
+        if (serviceResult.result) {
+          features = new GeoJSON().readFeatures(serviceResult.result.features || [])
+        } else {
+          features = []
+        }
+        if (store.getters.isAddFeatures) {
+          store.dispatch('map/changeFeatures', features)
+        }
+        // store.dispatch('map/changeVideo', [])
+        if (features.length > 0) {
+          var vectorSource = new VectorSource({
+            features,
+            wrapX: false
+          })
+          const resultLayer = new VectorLayer({
+            source: vectorSource,
+            style: styleFunction
+          })
+          // this.$bus.$emit("videoSearch",features);
+          store.dispatch('map/changeVideo', features)
+          resolve(resultLayer)
+        }
+      })
+    // })
+  }
   return new Promise((resolve, reject) => {
-    // debugger
+        
     var geometryParam = new SuperMap.GetFeaturesByGeometryParameters({
       toIndex: 999999,
       attributeFilter: attributeFilter || '',
@@ -494,7 +534,7 @@ const getFeaturesByGeometry = ({ url, dataSourceName, label, layerName, attribut
       } else {
         features = []
       }
-
+      // debugger
       if (store.getters.isAddFeatures) {
         store.dispatch('map/changeFeatures', features)
       }
@@ -566,8 +606,6 @@ const getFeaturesByGeometry = ({ url, dataSourceName, label, layerName, attribut
           return f
         })
       }
-
-      // console.log({ features })
       if (features.length > 0) {
         var vectorSource = new VectorSource({
           features,
@@ -577,6 +615,7 @@ const getFeaturesByGeometry = ({ url, dataSourceName, label, layerName, attribut
           source: vectorSource,
           style: styleFunction
         })
+
         resolve(resultLayer)
       } else {
         resolve(null)

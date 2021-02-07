@@ -23,6 +23,7 @@ d_forest_park: {
     TYPE: '类型',
     AREA: '面积'
   },
+
   // 应急资源
   // --应急专家
   JZJZNL_YJZJ: {
@@ -42,6 +43,15 @@ d_forest_park: {
     ZW: '职务',
     DEALER: '处理人',
     SFYWLGJSB: '是否物联感知设备'
+  },
+  d_video:{
+    SMID:"id",
+    SMUSERID:'Field_SmUserID',
+    SMGEOMETRY:'User_SmGeometry',
+    MC:"地点",
+    X:"x",
+    Y:"y",
+    VIDEO_URL:"视频地址",
   },
   // --应急队伍
   d_emergency_team: {

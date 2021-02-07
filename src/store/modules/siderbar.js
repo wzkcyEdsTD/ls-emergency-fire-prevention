@@ -29,6 +29,7 @@ const actions = {
     // debugger
     const newNodes = nodes
     const oldeNodes = state.checkedLeafNodes
+    // debugger
     const oldNodesIds = oldeNodes.map(v => v.id)
     const newNodesIds = newNodes.map(v => v.id)
     const appendNodes = newNodes.filter(v => oldNodesIds.indexOf(v.id) === -1)

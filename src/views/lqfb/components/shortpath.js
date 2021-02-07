@@ -245,7 +245,7 @@ const findPath = (startPt, endPt, serviceUrl) => {
 // pt--[lon,lat]
 // buffer--半径 千米
 const findBuffer = (pt, url, buffer) => {
-  // debugger
+  debugger
   //指定点查询处理
   const point = new ol.geom.Point(pt);
   // 查询参数

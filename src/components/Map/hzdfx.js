@@ -434,6 +434,11 @@ const hzdfxNodes = [
     id: 372,
     label: '易制毒化学品企业',
     value: MAP_URL.AQFXY_QT_YZDHX
+  },
+  {
+    id:373,
+    label:'监控',
+    value:MAP_URL.VIDEO
   }
 ]
 

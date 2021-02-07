@@ -76,7 +76,6 @@
         </div>
       </div>
     </div>
-
     <layer-switch />
     <div class="toobar" :style="{ right: `${getOffsetRight()}rem` }">
       <tool-bar ref="tool-bar" />

@@ -46,6 +46,7 @@ const getters = {
   videoListOffsetRight: state => state.lqfb.videoListOffsetRight,
   jkLayer: state => state.map.jkLayer,
   lssgDetailItem: state => state.lssg.lssgDetailItem,
-  lqzyLayer: state => state.map.lqzyLayer
+  lqzyLayer: state => state.map.lqzyLayer,
+  videoData:state => state.map.videoData,
 }
 export default getters

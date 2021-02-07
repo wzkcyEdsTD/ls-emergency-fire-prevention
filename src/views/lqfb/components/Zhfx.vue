@@ -91,7 +91,8 @@
         </div>
       </div> -->
 
-      <el-collapse v-model="activeNames" accordion @change="handleChange(activeNames)">
+      <!-- <el-collapse v-model="activeNames" accordion @change="handleChange(activeNames)"> -->
+      <el-collapse v-model="activeNames" accordion >
         <el-collapse-item title="周边资源搜索成果" name="1">
           <div class="ljxq-content">
             <div
@@ -180,12 +181,16 @@
             </div>
           </div>
         </el-collapse-item> -->
+
         <el-collapse-item title="周边监控设置" name="4">
           <div class="zbjksz-container">
-            <div v-if="monitorList.length > 0">
-              <ul>
-                <li v-for="(v, i) in monitorList" :key="i" @click="handleVideoClick(v)">
-                  {{ i + 1 }}.{{ v.values_["name"] }}
+            <div v-if="videoList.length > 0">
+              <ul style="height:50vh">
+                <li v-for="(v, i) in videoList" 
+                :key="i" 
+                :class="{active : videotemp == i}"
+                @click="videotemp = i;handleVideoClick(v)">
+                  {{ v["MC"] }}
                 </li>
               </ul>
             </div>
@@ -205,7 +210,7 @@ import * as turf from "@turf/turf";
 export default {
   data() {
     return {
-      activeNames: ["1"],
+      activeNames: ["1","4"],
       pathList: [],
       ssxyPersonLayer: null, // 实时响应人员图层
       monitorLayer: null, // 监控图层
@@ -226,12 +231,17 @@ export default {
       //  自选点
       diyPtLayer: null,
       diyPathLayer: null,
+      videoList:[],
+      videotemp:undefined
 
     };
   },
   computed: {
     featuresData() {
       return this.$store.getters.featuresData;
+    },
+    videoData() {
+      return this.$store.getters.videoData;
     },
     zhfxOffsetRight() {
       return this.$store.getters.zhfxOffsetRight;
@@ -260,10 +270,18 @@ export default {
   },
   watch: {
     featuresData(val) {
-      // this.showShortPath();
-      // this.getNearestPtOnLine();
-      console.log(123456)
       this.$store.dispatch("lqfb/changezhfxOffsetRight", 0);
+    },
+    videoData(val) {
+      const that = this;
+      that.$nextTick(()=>{
+        that.videoList = [];
+        val.forEach(element => {
+          that.videoList.push(element.values_)
+        });
+        console.log(that.videoList)
+      })
+      // this.$store.dispatch("lqfb/changezhfxOffsetRight", 0);
     },
     ssxyPersonList(val) {
       this.ssxyPersonLayer && this.$map.removeLayer(this.ssxyPersonLayer);
@@ -322,10 +340,13 @@ export default {
       this.ljxqDetailVisible = true;
     },
     handleVideoClick(item) {
-      this.ZoomToFeature(item);
-      getVideoByCode(item.values_["indexCode"]).then((res) => {
-        this.$store.dispatch("lqfb/changeVideoUrl", res.data);
-      });
+      //样式待修改
+      this.$map.getMap().getView().setCenter([item.X,item.Y]);
+      this.$map.getMap().getView().setZoom(16);
+      // this.ZoomToFeature(item);
+      // getVideoByCode(item.values_["indexCode"]).then((res) => {
+      //   this.$store.dispatch("lqfb/changeVideoUrl", res.data);
+      // });
     },
     close() {
       this.$store.dispatch("lqfb/changezhfxOffsetRight", -30);
@@ -886,11 +907,23 @@ export default {
       list-style: none;
       height: 230px;
       overflow: auto;
+      font-family: PingFang SC;
+      font-size: 16px;
       li {
         height: 32px;
         font-size: 18px;
         line-height: 32px;
+        padding: 0px 0 0px 27px;
+        margin-top: 10px;
+        list-style: none;
+        background: url("../../../assets/images/框(2).png") no-repeat;
+        background-size: 100% 100%;
         cursor: pointer;
+        &.active {
+          // background: #103E29;
+          // border: 1px solid #0F7247;
+          // color: #52FEB3;
+        }
       }
       li:hover {
         color: hsla(180, 100%, 47%, 1);

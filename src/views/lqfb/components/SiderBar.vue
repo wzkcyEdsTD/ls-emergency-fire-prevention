@@ -50,6 +50,11 @@ import VectorSource from 'ol/source/Vector'
 import Feature from 'ol/Feature'
 import GeoJSON from 'ol/format/GeoJSON'
 import { Point } from 'ol/geom'
+import {
+  TileSuperMapRest,
+  FeatureService,
+  SuperMap
+} from '@supermap/iclient-ol'
 
 export default {
   components: {
@@ -72,6 +77,8 @@ export default {
       village:false,
       grid:false,
       street:false,
+      videoLayer:null,
+      videoTemp:false,
     }
   },
   computed: {
@@ -188,53 +195,42 @@ export default {
       //   this.$store.dispatch('lqfb/changezlOffsetRight', -25)
       // }
       if (data.label === '监控') {
-        if (!this.jkLayer) {
-          // 显示监控数据
-          // const loading = this.$loading({
-          //   lock: true,
-          //   text: '视频点加载中……',
-          //   spinner: 'el-icon-loading',
-          //   background: 'rgba(0, 0, 0, 0.7)'
-          // })
-          // const features = []
-          // const items = this.jkList.data.map(v => {
-          //       console.log(v)
-          //       const feature = this.$map.createFeature([v.longitude, v.latitude], '监控点', v)
-          //       feature.setStyle(this.$map.getMonitorStyle())
-          //       return feature
-          // })
-          // features.push(...items)
-          // console.log(features)
-      
-
-          //   res.data.forEach(item => {
-          //     const items = item.data.map(v => {
-          //       const feature = this.$map.createFeature([v.longitude, v.latitude], '监控点', v)
-          //       feature.setStyle(this.$map.getMonitorStyle())
-          //       return feature
-          //     })
-          //     features.push(...items)
-          //   })
-            // this.$store.dispatch('map/changeJkLayer', {
-            //   layer: this.$map.createVectorLayer(features),
-            //   ope: 'ADDLAYER'
-            // })
-          //   // this.$map.addLayer(this.jkLayer)
-          //   loading.close()
-          //   this.$store.dispatch('lqfb/changeVideoListOffsetRight', 0)
-          // getMonitorList().then(res => {
-
-          // })
-       
-       
-       } else {
-          this.$store.dispatch('map/changeJkLayer', {
-            layer: this.jkLayer,
-            ope: 'REMOVELAYER'
+        if (!this.videoLayer) {
+          var sqlParam = new SuperMap.GetFeaturesBySQLParameters({
+            toIndex: 999999,
+            queryParameter: {
+              // name: layerName,
+              attributeFilter: "",
+              maxFeatures: 99999999
+            },
+            datasetNames: [`lishui_forestfire:d_video`]
           })
-          this.$store.dispatch('lqfb/changeVideoListOffsetRight', -30)
-          this.$map.goHome()
+          const url = "http://10.53.137.59:8090/iserver/services/data-lishui_forestfire/rest/data";
+          new FeatureService(url).getFeaturesBySQL(sqlParam, serviceResult => {
+            const videoPointList = serviceResult.result.features;
+            const features = new GeoJSON().readFeatures(videoPointList)
+            var vectorSource = new VectorSource({
+              features,
+              wrapX: false
+            });
+            this.videoLayer = new VectorLayer({
+              source: vectorSource,
+              style:this.$map.getMonitorStyle()
+              })
+            
+            this.$map.addLayer(this.videoLayer)
+        })
+          this.videoTemp = true;
+          // this.$store.dispatch('lqfb/changeVideoListOffsetRight', 0)
+        }else{
+          if (this.videoTemp) {
+            this.videoTemp = false
+          }else if (!this.videoTemp) {
+            this.videoTemp = true
+          }
+          this.videoLayer.setVisible(this.videoTemp);
         }
+
         return
       }
       if(data.label === '火灾报警点'){

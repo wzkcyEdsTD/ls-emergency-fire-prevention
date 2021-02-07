@@ -12,10 +12,15 @@ const state = {
   clearFlag: false, // 清空按钮标识，值改变即清空图层
   jkLayer: null,
   isShowDeatil: true, // 是否显示查看详情
-  lqzyLayer: false // 林区资源图层
+  lqzyLayer: false, // 林区资源图层
+  videoData:[],
 }
 
 const mutations = {
+  SET_VIDEO(state, video){
+    state.videoData = video
+  },
+
   SET_LQZY_LAYER(state, payload) {
     state.lqzyLayer = payload
   },
@@ -56,20 +61,6 @@ const mutations = {
       })
       const setNameArr = [...new Set(arr.map(v => v.name))];
       state.layerList = setNameArr.map(v => obj[v])
-      // list.forEach(element => {
-      //   debugger
-      //   state.layerList.forEach(item=>{
-      //       if(item.name==element.name){
-      //         name = item.name
-      //       }
-      //     })
-      //     if(!name){
-      //       state.layerList = [...state.layerList,element]
-      //     }else{
-      //       name = null;
-      //     }
-
-      // })
     }
 
 
@@ -97,6 +88,7 @@ const mutations = {
     state.isAddFeatures = layer
   },
   SET_FEATURES_DATA(state, layer) {
+    // debugger
     state.featuresData = layer
   },
   SET_CLEAR_FLAG(state, payload) {
@@ -105,6 +97,10 @@ const mutations = {
 }
 
 const actions = {
+  changeVideo({ commit },video){
+    commit('SET_VIDEO', video)
+  },
+
   changeLqzyLayer({ commit }, payload) {
     commit('SET_LQZY_LAYER', payload)
   },
@@ -176,6 +172,8 @@ const actions = {
             layer = vue.$map.createWMSLayer(v)
           } else {
             // console.log("显示节点的图层",v);
+            // debugger
+
             layer = await vue.$map.createVectorLayerByDataRest(v)
           }
           return {
@@ -186,6 +184,7 @@ const actions = {
       })
     )
     list = list.filter(v => v.layer != null)
+    // debugger
     commit('APPEND_LAYER_LIST', list)
     list.map(v => v.layer && window.g.map.addLayer(v.layer))
   },

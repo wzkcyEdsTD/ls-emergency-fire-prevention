@@ -26,19 +26,19 @@ const mapUrl = {
   ZWPT_SG_WZ_CGCS2000: {
     type: 'map',
     layerName: 'wenzhou_emap',
-    url: 'http://t3.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=2e6919cbe2122200fa172aaea99742e0'
+    url: 'http://t3.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=717e5c0403f4c23654be096d2f7d6e68'
   },
   // 影像注记
   YJ_YXZJ_2019_CGCS2000: {
     type: 'map',
     layerName: 'img_zj',
-    url: 'http://t3.tianditu.com/DataServer?T=cia_w&x={x}&y={y}&l={z}&tk=2e6919cbe2122200fa172aaea99742e0'
+    url: 'http://t3.tianditu.com/DataServer?T=cia_w&x={x}&y={y}&l={z}&tk=717e5c0403f4c23654be096d2f7d6e68'
   },
   // 2019年影像
   IMG_2019: {
     type: 'map',
     layerName: 'img_2019',
-    url: 'http://t3.tianditu.com/DataServer?T=img_w&x={x}&y={y}&l={z}&tk=2e6919cbe2122200fa172aaea99742e0'
+    url: 'http://t3.tianditu.com/DataServer?T=img_w&x={x}&y={y}&l={z}&tk=717e5c0403f4c23654be096d2f7d6e68'
   },
   // 2018年影像
   IMG_2018: {
@@ -252,6 +252,14 @@ const mapUrl = {
     url: dataUrl
   },
 
+  VIDEO:{
+    type: 'data', // 数据服务
+    layerName: 'd_video',
+    label: '监控',
+    dataSourceName,
+    icon: '监控.png',
+    url: dataUrl
+  },
   // 水系
   WATER: {
     type: 'map',

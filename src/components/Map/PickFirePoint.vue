@@ -180,7 +180,7 @@ export default {
             },
             JZJZNL_XFJYNL: {
               name: '消防救援能力'
-            }
+            },
           },
           AQFXY: { // 安全风险源
             SLGC: {
@@ -214,7 +214,9 @@ export default {
           dbfgNum: 0
         }
         // 去除空数组
+        // debugger
         const fe = this.features.filter(v => v.length > 0)
+
         fe.forEach(item => {
           if (item[0].values_['BUFFERRADIUSRIGHT']) {
             // 道路数量
@@ -247,6 +249,7 @@ export default {
           }
         })
         this.$store.dispatch('map/changeFeaturesData', attrDic)
+        // console.log("FeaturesData",attrDic);
       }
     },
     closePicFirePoint() {
@@ -274,6 +277,7 @@ export default {
 
       this.$map.getMap().getView().setCenter([this.inputLon,this.inputLat]);
       this.$map.getMap().getView().setZoom(16);
+      this.$store.dispatch('map/changeVideo', [])//清空视频数据
       this.$store.dispatch('map/changeLqzyLayer', true)
       this.$store.dispatch('map/changeIsAddFeatures', true) // 只在选中火灾点的时候获取才重新数据
       this.$store.dispatch('map/clearFeatures', []) // 设置features为空
