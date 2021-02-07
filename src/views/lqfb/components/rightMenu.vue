@@ -71,7 +71,7 @@ export default {
         systemName:{
           "ilishui":"爱丽水",
           "tyswxt":"天眼守望"
-        }
+        },
     }
   },
   methods:{
@@ -92,30 +92,46 @@ export default {
         })
       }
     },
+    findKey (value) {
+      const that = this;
+
+      return Object.keys(that.systemName).find(k =>{
+        if (that.systemName[k].indexOf(value) != -1) {
+          return k;          
+        }
+      })
+    },
     searchFilter(){
       const that = this
       if (that.searchText) {
         this.list = that.fireList.result.records.sort(that.sortUpDate)
       // debugger
-        this.tempList = this.list.filter((item)=>{
-          if (item.systemcode.indexOf(that.searchText) != -1) {
-            return item;
-          }
-          if (item.time.indexOf(that.searchText) != -1) {
-            return item;
-          }
-          if (item.address.indexOf(that.searchText) != -1) {
-            return item;
-          }
+        const key = that.findKey(that.searchText);
+        // that.tempList = [];
+        console.log(key)
+        that.$nextTick(()=>{
+          that.tempList = that.list.filter((item)=>{
+            if (item.systemcode.indexOf(key) != -1) {
+              return item;
+            }else if (item.time.indexOf(that.searchText) != -1) {
+              return item;
+            }else if (item.address.indexOf(that.searchText) != -1) {
+              return item;
+            }
+          })
+          console.log(that.tempList)
         })
+        // debugger
+
       }else{
         this.tempList = that.fireList.result.records.sort(that.sortUpDate)
       }
 
-      console.log(this.tempList)
+      // console.log(this.tempList)
     },
     searchClear(){
       // debugger
+      const that = this
       this.tempList = this.fireList.result.records.sort(that.sortUpDate);
       this.searchText = "";
     },

@@ -129,7 +129,6 @@ export default {
       }
     }
   },
-  beforeDestroy() {},
   mounted() {
     // 默认选中林区节点
     this.$refs[`tree_1`][0].setCheckedKeys([11, 146])
@@ -206,9 +205,23 @@ export default {
             datasetNames: [`lishui_forestfire:d_video`]
           })
           const url = "http://10.53.137.59:8090/iserver/services/data-lishui_forestfire/rest/data";
+          // debugger
+
           new FeatureService(url).getFeaturesBySQL(sqlParam, serviceResult => {
-            const videoPointList = serviceResult.result.features;
-            const features = new GeoJSON().readFeatures(videoPointList)
+            const videoPointList = serviceResult.result.features.features;
+            // debugger
+            const features = [];
+            videoPointList.forEach(element => {
+              const properties = element.properties;
+
+              const feature =  new Feature({
+                    geometry: new Point([properties.X,properties.Y]),
+                    ...properties
+                })
+                // debugger
+              features.push(feature);
+            });
+ 
             var vectorSource = new VectorSource({
               features,
               wrapX: false
@@ -218,6 +231,8 @@ export default {
               style:this.$map.getMonitorStyle()
               })
             
+            //4: "119.35790729284101"
+            //5: "27.541516789796798"
             this.$map.addLayer(this.videoLayer)
         })
           this.videoTemp = true;

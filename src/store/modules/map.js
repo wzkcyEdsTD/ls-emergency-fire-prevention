@@ -184,7 +184,6 @@ const actions = {
       })
     )
     list = list.filter(v => v.layer != null)
-    // debugger
     commit('APPEND_LAYER_LIST', list)
     list.map(v => v.layer && window.g.map.addLayer(v.layer))
   },

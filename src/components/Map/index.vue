@@ -181,21 +181,7 @@ export default {
 
     initMap() {
       this.map = this.$map.createMap("map-container");
-      //const url = `http://10.53.136.100/map/tile?z={z}&x={x}&y={y}&layer=w331100:Base_20201101`;
-
-      // const appkey = "ece37a6f2fad49fb839f997f984b04c0"
-      // const yyrz = "822638e25d704ccca20a42d229ef1991"
-
-      // const request_time =  new Date().getTime();
-      // const key = appkey + yyrz + request_time
       
-      // debugger
-      // const sign = md5(key)
-      // console.log("sign",sign);
-      // console.log("time",request_time);
- 
-
-      // const wenzhouLayer = this.$map.createTianDiTuLayer("img_w");
       const wenzhouLayer = this.$map.crtLayerWMTS('img_c')
       this.$store.dispatch("map/changeBaseLayer", wenzhouLayer);
 

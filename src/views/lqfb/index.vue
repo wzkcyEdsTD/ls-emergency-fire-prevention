@@ -344,9 +344,19 @@ export default {
       table.innerHTML = infoTmpl
       if ((value['systemcode'])) {
         // keyNameFire.innerHTML = '地点：'
+        if ("null".indexOf(`${value['jubaoren']}`) != -1) {
+          jbr.innerHTML = ``
+        }else{
+          jbr.innerHTML = `${value['jubaoren']}`
+        }
+        if ("null".indexOf(`${value['jubaoren']}`) != -1) {
+          jbrtel.innerHTML = ``
+        }else{
+          jbrtel.innerHTML = `${value['jubaorentel']}`
+        }
       keyValueFire.innerHTML = `${value['address']}`
-      jbr.innerHTML = `${value['jubaoren']}`
-      jbrtel.innerHTML = `${value['jubaorentel']}`
+
+
       const text = `${value['infocontent']}`
       // debugger
       if (text.indexOf(",")>-1) {

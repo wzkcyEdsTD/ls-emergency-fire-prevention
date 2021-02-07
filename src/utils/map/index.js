@@ -304,6 +304,7 @@ const createVectorLayerByDataRest = ({ url, dataSourceName, label, layerName, ic
   }
   if (geomFilter) {
     // debugger
+    
     return getFeaturesByGeometry({ url, dataSourceName, label, layerName, attributeFilter, geomFilter, styleFunction })
   }
   return getFeaturesBySQL({ url, dataSourceName, label, layerName, attributeFilter, cropFeature, styleFunction })
@@ -480,45 +481,7 @@ const getAllFeaturesBySQL = ({ url, dataSourceName, layerName, attributeFilter }
 
 const getFeaturesByGeometry = ({ url, dataSourceName, label, layerName, attributeFilter, geomFilter, styleFunction }) => {
   const that = this;
-  if(label =='监控'){
-    // return new Promise((resolve, reject) => {
-      const geometryParam = new SuperMap.GetFeaturesByGeometryParameters({
-        toIndex: 999999,
-        attributeFilter: attributeFilter || '',
-        geometry: geomFilter.getGeometry(),
-        spatialQueryMode: 'INTERSECT', // 相交空间查询模式
-        datasetNames: [`${dataSourceName}:${layerName}`]
-      })
-
-      new FeatureService(url).getFeaturesByGeometry(geometryParam, serviceResult => {
-        let features
-        if (serviceResult.result) {
-          features = new GeoJSON().readFeatures(serviceResult.result.features || [])
-        } else {
-          features = []
-        }
-        if (store.getters.isAddFeatures) {
-          store.dispatch('map/changeFeatures', features)
-        }
-        // store.dispatch('map/changeVideo', [])
-        if (features.length > 0) {
-          var vectorSource = new VectorSource({
-            features,
-            wrapX: false
-          })
-          const resultLayer = new VectorLayer({
-            source: vectorSource,
-            style: styleFunction
-          })
-          // this.$bus.$emit("videoSearch",features);
-          store.dispatch('map/changeVideo', features)
-          resolve(resultLayer)
-        }
-      })
-    // })
-  }
   return new Promise((resolve, reject) => {
-        
     var geometryParam = new SuperMap.GetFeaturesByGeometryParameters({
       toIndex: 999999,
       attributeFilter: attributeFilter || '',
@@ -528,19 +491,39 @@ const getFeaturesByGeometry = ({ url, dataSourceName, label, layerName, attribut
     })
 
     new FeatureService(url).getFeaturesByGeometry(geometryParam, serviceResult => {
-      let features
+      let features1 = [];
+
       if (serviceResult.result) {
-        features = new GeoJSON().readFeatures(serviceResult.result.features || [])
+        if(label == '监控'){
+          const pointList = serviceResult.result.features.features;
+          // debugger
+          // const features = [];
+          pointList.forEach(element => {
+            const properties = element.properties;
+  
+            const feature =  new Feature({
+                  geometry: new Point([properties.X,properties.Y]),
+                  ...properties
+              })
+              // debugger
+              features1.push(feature);
+          });
+
+          store.dispatch('map/changeVideo', features1)
+        }else{
+          features1 = new GeoJSON().readFeatures(serviceResult.result.features || [])
+        }
+        
       } else {
-        features = []
+        features1 = []
       }
       // debugger
       if (store.getters.isAddFeatures) {
-        store.dispatch('map/changeFeatures', features)
+        store.dispatch('map/changeFeatures', features1)
       }
       if (layerName === 'SLFH_FHRY') {
         // 巡逻范围
-        features.map(f => {
+        features1.map(f => {
           const rColor = randomColor({
             luminosity: 'light',
             format: 'rgba',
@@ -560,7 +543,7 @@ const getFeaturesByGeometry = ({ url, dataSourceName, label, layerName, attribut
       }
 
       if (['国道', '省道、城市干道', '城市高架、快速路', '支线', '乡道、村道、其他道路'].indexOf(label) > -1) {
-        features.map(f => {
+        features1.map(f => {
           f.setStyle(new Style({
             stroke: new Stroke({
               color: 'rgba(249, 165, 40, 1)',
@@ -576,7 +559,7 @@ const getFeaturesByGeometry = ({ url, dataSourceName, label, layerName, attribut
       }
 
       if (['阻隔水系-1', '阻隔水系-2'].indexOf(label) > -1) {
-        features.map(f => {
+        features1.map(f => {
           f.setStyle(new Style({
             stroke: new Stroke({
               color: 'rgba(7, 231, 247, 1)',
@@ -592,7 +575,7 @@ const getFeaturesByGeometry = ({ url, dataSourceName, label, layerName, attribut
       }
 
       if (['荒漠地', '种植地'].indexOf(label) > -1) {
-        features.map(f => {
+        features1.map(f => {
           f.setStyle(new Style({
             stroke: new Stroke({
               color: 'rgba(183, 176, 176, 1)',
@@ -606,21 +589,38 @@ const getFeaturesByGeometry = ({ url, dataSourceName, label, layerName, attribut
           return f
         })
       }
-      if (features.length > 0) {
+
+      if (features1.length > 0) {
         var vectorSource = new VectorSource({
-          features,
+          features:features1,
           wrapX: false
         })
-        const resultLayer = new VectorLayer({
-          source: vectorSource,
-          style: styleFunction
-        })
-
-        resolve(resultLayer)
+        if(label == "监控"){
+          // debugger
+          const resultLayer = new VectorLayer({
+            source: vectorSource,
+            style: new Style({
+              image: new Icon({
+                anchor: [0.5, 26],
+                anchorXUnits: 'fraction',
+                anchorYUnits: 'pixels',
+                src: require(`@/assets/images/icon/${'监控.png'}`)
+              })
+            })
+          })
+          resolve(resultLayer)
+        }else{
+          const resultLayer = new VectorLayer({
+            source: vectorSource,
+            style: styleFunction
+          })
+          resolve(resultLayer)
+        }
       } else {
         resolve(null)
       }
     })
+    
   })
 }
 
