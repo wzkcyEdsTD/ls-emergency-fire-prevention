@@ -343,6 +343,9 @@ export default {
       //样式待修改
       this.$map.getMap().getView().setCenter([item.X,item.Y]);
       this.$map.getMap().getView().setZoom(16);
+
+      this.$bus.$emit("videoData",item);
+
       // this.ZoomToFeature(item);
       // getVideoByCode(item.values_["indexCode"]).then((res) => {
       //   this.$store.dispatch("lqfb/changeVideoUrl", res.data);

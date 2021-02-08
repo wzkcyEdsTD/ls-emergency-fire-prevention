@@ -323,8 +323,13 @@ export default {
     },
     nodeClick(data, node, obj) {
       console.log('nodeClick', data, node)
+
       if (data.label === '事故分级调取') {
         this.$store.dispatch('lqfb/changeyadqOffsetRight', this.yadqOffsetRight === 0 ? -30 : 0)
+      }
+      if (data.label == "火灾报警点") {
+        //123123123
+        this.$bus.$emit("hzjbd",true);
       }
       if (data.label === this.yadqPannel) {
         this.$store.dispatch('lqfb/changeyadqPannel', '')

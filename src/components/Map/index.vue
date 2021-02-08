@@ -96,6 +96,20 @@ import Util from "@/libs/cimAPI.js";
 import app from "@/store/modules/app";
 import axios from "axios";
 
+import VectorLayer from 'ol/layer/Vector'
+import VectorSource from 'ol/source/Vector'
+
+import Feature from 'ol/Feature'
+import GeoJSON from 'ol/format/GeoJSON'
+import { Point } from 'ol/geom'
+import {
+  TileSuperMapRest,
+  FeatureService,
+  SuperMap
+} from '@supermap/iclient-ol'
+
+import { Circle as CircleStyle, Fill, Stroke, Style, Icon, Text } from 'ol/style'
+
 export default {
   name: "MapBox",
   components: {
@@ -168,12 +182,43 @@ export default {
       }
       return 2;
     },
-    testPost() {},
+    getTime(times){
+      const now = new Date().getTime();
+            // debugger
+      const year = new Date().getFullYear()
+      // console.log(year)
+      const time = `${year}-${times}`
+      const d = new Date(time).getTime();
+      const temp = (now - d)/1000/60
+      // debugger
+      if (temp<120) {
+        // console.log("小于半小时")
+        return true
+      }else{
+        // console.log("大于半小时");
+        return false
+      }
+    },
 
     getData() {
       const that = this;
       Util.testAxios().then(res=>{
-        console.log(res)
+        console.log(res.result.records)
+        const list = res.result.records
+        list.forEach(element => {
+          // debugger
+          if (element.systemcode.indexOf('tyswxt')!= -1) {
+            // debugger
+            if(that.getTime(element.time)){
+              // console.log(element.address)
+              const add = element.address
+              const street = `${add.split('县')[1].split('镇')[0]}镇`
+              console.log(street)
+              that.searchStreet(street)
+            }
+          }
+
+        });
         that.$bus.$emit('fireList',res);
       })
 
@@ -223,6 +268,74 @@ export default {
       // getkey();
       // window.map = this.map;
     },
+
+    searchStreet(SZZ){
+      let attributeFilter;
+      if (SZZ) {
+        attributeFilter = `SZZ='${SZZ}'`
+      }else{
+        attributeFilter = ''
+      }
+      // debugger
+      var sqlParam = new SuperMap.GetFeaturesBySQLParameters({
+        toIndex: 999999,
+        queryParameter: {
+          // name: layerName,
+          attributeFilter: attributeFilter,
+          // attributeFilter: " ",
+          maxFeatures: 99999999
+        },
+        datasetNames: [`lishui_forestfire:d_region_street`]
+      })
+      const url = "http://10.53.137.59:8090/iserver/services/data-lishui_forestfire/rest/data";
+
+      new FeatureService(url).getFeaturesBySQL(sqlParam, serviceResult => {
+        const testList = serviceResult.result.features;
+        const features = new GeoJSON().readFeatures(testList)
+        features.map(f => {
+          f.setStyle(new Style({
+            // stroke: new Stroke({
+            //   color: 'rgba(249,219,49, 0.8)',
+            //   // lineDash: [4],
+            //   width: 1
+            // }),
+            fill: new Fill({
+              color: 'rgba(255,255,0, 0.8)'
+            }),
+            text: new Text({
+              textAlign: 'center', // 位置
+              textBaseline: 'middle', // 基准线
+              offsetY: 20,
+              font: 'normal 16px bold 微软雅黑', // 文字样式
+              text: f.get('SZZ') + '', // 文本内容
+              fill: new Fill({ // 文本填充样式（即文字颜色)
+                color: '#FC9309'
+              }),
+              stroke: new Stroke({
+                color: '#101518',
+                width: 2
+              })
+            })
+          }))
+        })
+        var vectorSource = new VectorSource({
+          features,
+          wrapX: false
+        });
+        const testLayer = new VectorLayer({
+          source: vectorSource,
+          // style:  new Style({
+          //         fill: new Fill({
+          //           color: 'rgba(249,219,49, 0.7)'
+          //         }),
+
+          // })
+        })
+        this.map.getLayers().insertAt(4, testLayer)
+      })
+
+    },
+
     collapse() {
       this.$store.dispatch(
         "lqfb/changeInfoPanelOffsetRight",

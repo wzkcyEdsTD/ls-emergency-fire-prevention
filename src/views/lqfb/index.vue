@@ -167,7 +167,7 @@ export default {
           return feature
         })
       const coordinate = evt.coordinate
-      // console.log({ feature })
+      console.log({ feature })
       if (!feature) {
         const filters = this.layerList.filter(v => v.label === '巡逻范围')
         if (filters.length > 0) {

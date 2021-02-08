@@ -69,7 +69,7 @@ export default {
         tempList:null,
         value1:null,
         systemName:{
-          "ilishui":"爱丽水",
+          "ilishui":"I丽水",
           "tyswxt":"天眼守望"
         },
     }
