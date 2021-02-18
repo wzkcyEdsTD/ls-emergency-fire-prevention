@@ -131,7 +131,6 @@ const createTileSuperMapRestLayer = (url, options = {}) => {
   return layer
 }
 
-
 const createTianDiTuLayer = (type, options = {}) => {
   const token = "717e5c0403f4c23654be096d2f7d6e68";
   const layer = new ol.layer.Tile({
@@ -147,11 +146,7 @@ const createTianDiTuLayer = (type, options = {}) => {
   return layer
 }
 
-
-
-
 //创建图层(WMTS方式)
-
 function crtLayerWMTS(type, proj, opacity) {
   var projection = ol.proj.get("EPSG:4326");
   var projectionExtent = projection.getExtent();

@@ -205,20 +205,20 @@ export default {
       Util.testAxios().then(res=>{
         console.log(res.result.records)
         const list = res.result.records
-        list.forEach(element => {
-          // debugger
-          if (element.systemcode.indexOf('tyswxt')!= -1) {
-            // debugger
-            if(that.getTime(element.time)){
-              // console.log(element.address)
-              const add = element.address
-              const street = `${add.split('县')[1].split('镇')[0]}镇`
-              console.log(street)
-              that.searchStreet(street)
-            }
-          }
+        // list.forEach(element => {
+        //   // debugger
+        //   if (element.systemcode.indexOf('tyswxt')!= -1) {
+        //     // debugger
+        //     if(that.getTime(element.time)){
+        //       // console.log(element.address)
+        //       const add = element.address
+        //       const street = `${add.split('县')[1].split('镇')[0]}镇`
+        //       console.log(street)
+        //       that.searchStreet(street)
+        //     }
+        //   }
 
-        });
+        // });
         that.$bus.$emit('fireList',res);
       })
 
