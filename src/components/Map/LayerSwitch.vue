@@ -286,12 +286,7 @@ export default {
           var canvas6 = $(".streetLayer").children('canvas')[0];//乡镇街道
           var canvas7 = $(".gridLayer").children('canvas')[0];//网格
           canvas1.getContext("2d").drawImage(canvas2,0,0);
-          if(canvas3){
-            const width = canvas3.width;
-            if(Number(width)>0){
-              canvas1.getContext("2d").drawImage(canvas3,0,0);
-            }
-          }
+
           if(canvas4){
             const width = canvas4.width;
             if(Number(width)>0){
@@ -314,6 +309,12 @@ export default {
             const width = canvas7.width;
             if(Number(width)>0){
               canvas1.getContext("2d").drawImage(canvas7,0,0);
+            }
+          }
+          if(canvas3){
+            const width = canvas3.width;
+            if(Number(width)>0){
+              canvas1.getContext("2d").drawImage(canvas3,0,0);
             }
           }
           if (navigator.msSaveBlob) {

@@ -7,6 +7,7 @@
           火灾报警点
         </div>
         <div class="search-header">
+
           <!-- <el-date-picker
             v-model="value1"
             type="daterange"
@@ -25,6 +26,7 @@
           />
           <img src="@/common/images/关闭.png" class="clearIcon" @click="searchClear">
         </div>
+        <div id="refreshIcon" class="refreshIcon" @click="refreshEvent"/>
       </div>
       <img style="width: 100%;" src="@/common/images/边.png" alt="">
       <div class="ul-head">
@@ -53,6 +55,8 @@
 
 import fireList from './fire.json'
 import video from '@/components/video/video'
+import { set } from 'ol/transform'
+import Util from "@/libs/cimAPI.js";
 // import Video from '@/components/video/video.vue'
 export default {
   components: {
@@ -75,6 +79,51 @@ export default {
     }
   },
   methods:{
+    refreshEvent(){
+      const that = this;
+      let node = $("#refreshIcon");
+      node.css("-webkit-animation", "gira 0.5s ease-out 1");
+      node.css("-ms-animation", "gira 0.5s ease-out 1");
+      node.css("animation", "gira 0.5s ease-out 1");
+      setTimeout(()=>{
+        node.css("animation", "")
+        that.$message({
+          message: '刷新成功',
+          type: 'success'
+        });
+        that.getData();
+      },500);
+
+      // this.$bus.$emit("refreshIcon")
+
+    },
+    getData() {
+      const that = this;
+      Util.testAxios().then(res=>{
+        console.log(res.result.records)
+        const list = res.result.records
+        // list.forEach(element => {
+        //   // debugger
+        //   if (element.systemcode.indexOf('tyswxt')!= -1) {
+        //     // debugger
+        //     if(that.getTime(element.time)){
+        //       // console.log(element.address)
+        //       const add = element.address
+        //       const street = `${add.split('县')[1].split('镇')[0]}镇`
+        //       console.log(street)
+        //       that.searchStreet(street)
+        //     }
+        //   }
+
+        // });
+        that.$bus.$emit('fireList',res);
+        // that.timer = setTimeout(()=>{
+        //   that.getData();
+        // },60000)
+        //一分钟获取后台数据
+      })
+
+    },
     clickFire(item){
       // console.log(item);
       this.$map.getMap().getView().setCenter([item.x,item.y]);
@@ -194,234 +243,268 @@ export default {
     background-size: contain;
     cursor: pointer;
   }
-  .title {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 6px;
-    margin-bottom: 6px;
-    font-size: 16px;
-    height: 22px;
-    font-weight: bold;
-    line-height: 22px;
-    position: relative;
-    .back {
-      cursor: pointer;
-      position: absolute;
-      right: 0;
-      top: 0;
-      color: rgb(10, 204, 233);
-    }
-    .search {
-      width: 180px;
-      height: 22px;
-      position: relative;
-      .el-input__inner {
-        height: 22px;
-        border-radius: 20px;
-        outline: none;
-        padding-left: 15px;
-        background: url(../../../assets/images/搜索底框.png) no-repeat;
-        background-size: 100%;
-        border: 0;
-        color: hsla(196, 79%, 43%, 1);
-      }
-      .el-input__inner::-webkit-input-placeholder {
-        color: hsla(196, 79%, 43%, 1);
-      }
-      .el-input__icon::before {
-        content: " ";
-        width: 25px;
-        height: 22px;
-        position: absolute;
-        top: 0;
-        right: -4px;
-        margin-left: 2px;
-        cursor: pointer;
-        background: url(../../../assets/images/搜索.png) no-repeat;
-        background-size: 100%;
-      }
-    }
-  }
-    .lb-wrapper {
-        width: 100%;
-        height: 49%;
-        // padding-bottom: 2vh;
-        .titleLine{
+  // .title {
+  //   display: flex;
+  //   justify-content: space-between;
+  //   align-items: center;
+  //   margin-top: 6px;
+  //   margin-bottom: 6px;
+  //   font-size: 16px;
+  //   height: 22px;
+  //   font-weight: bold;
+  //   line-height: 22px;
+  //   position: relative;
+  //   .back {
+  //     cursor: pointer;
+  //     position: absolute;
+  //     right: 0;
+  //     top: 0;
+  //     color: rgb(10, 204, 233);
+  //   }
+  //   .search {
+  //     width: 180px;
+  //     height: 22px;
+  //     position: relative;
+  //     .el-input__inner {
+  //       height: 22px;
+  //       border-radius: 20px;
+  //       outline: none;
+  //       padding-left: 15px;
+  //       background: url(../../../assets/images/搜索底框.png) no-repeat;
+  //       background-size: 100%;
+  //       border: 0;
+  //       color: hsla(196, 79%, 43%, 1);
+  //     }
+  //     .el-input__inner::-webkit-input-placeholder {
+  //       color: hsla(196, 79%, 43%, 1);
+  //     }
+  //     .el-input__icon::before {
+  //       content: " ";
+  //       width: 25px;
+  //       height: 22px;
+  //       position: absolute;
+  //       top: 0;
+  //       right: -4px;
+  //       margin-left: 2px;
+  //       cursor: pointer;
+  //       background: url(../../../assets/images/搜索.png) no-repeat;
+  //       background-size: 100%;
+  //     }
+  //   }
+  // }
+  .lb-wrapper {
+      width: 100%;
+      height: 49%;
+      // padding-bottom: 2vh;
+      .titleLine{
         display: flex;
         padding-right: 1vh;
-            .title {
-            width: 100%;
-            height: 2rem;
-            font-family: youshebiaotihei;
-            font-size: 1.8vh;
-            // padding-top: 4vh;
-            // padding-bottom: 4vh;
-                .search {
-                width: 180px;
-                height: 22px;
-                position: relative;
-                .el-input__inner {
-                    height: 22px;
-                    border-radius: 20px;
-                    outline: none;
-                    padding-left: 15px;
-                    background: url(../../../assets/images/搜索底框.png) no-repeat;
-                    background-size: 100%;
-                    border: 0;
-                    color: hsla(196, 79%, 43%, 1);
-                }
-                .el-input__inner::-webkit-input-placeholder {color: hsla(196, 79%, 43%, 1);}
-                .el-input__icon::before {
-                    content: ' ';
-                    width: 25px;
-                    height: 22px;
-                    position: absolute;
-                    top: 0;
-                    right: -4px;
-                    margin-left: 2px;
-                    cursor: pointer;
-                    background: url(../../../assets/images/搜索.png) no-repeat;
-                    background-size: 100%;
-                }
-                }
-            }
-            .titleInput{
-            background-color: rgba(82, 254, 179, .5);
-            color: #fff;
-            border-radius: 5px;
-            }
+        width: 100%;
+        .refreshIcon{
+          // display        : flex;
+          background-image: url('~@/common/images/刷新.png');
+          background-size: 100% 100%;
+          align-items    : center;
+          justify-content: space-between;
+          margin-top     : 1.5vh;
+          width: 2.5vh;
+          height: 2.5vh;
+          position: relative;
+          right: -2.5vh;
+          cursor: pointer;
+        }
+        @-webkit-keyframes gira {
+          from{-webkit-transform: rotate(0deg);}
+          to{-webkit-transform: rotate(360deg);}
+        }
 
+        @keyframes gira {
+          from{-webkit-transform: rotate(0deg); transform: rotate(0deg)}
+          to{-webkit-transform: rotate(360deg); transform: rotate(360deg)}
+        }
 
-
-        }
-        .imgLine{
-        display: flex;
-        justify-content: flex-end;
-        padding-top:0.5vh;
-        padding-bottom: 0.5vh;
-        .detail{
-            padding-right: 1vh;
-            padding-left: 1.5vh;
-            
-        }
-        .location{
-
-        }
-        }
-        .list-item{
-        &:hover{
-            cursor: pointer;
-        }
-        }
         .title {
-    width: 100%;
-    height: 2rem;
-    font-family: youshebiaotihei;
-    font-size: 1.8vh;
-    // padding-top: 4vh;
-    // padding-bottom: 4vh;
-        .search {
+          width: 30%;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-top: 6px;
+          margin-bottom: 6px;
+          height: 22px;
+          font-weight: bold;
+          line-height: 22px;
+          position: relative;
+
+          height: 2rem;
+          font-family: youshebiaotihei;
+          font-size: 1.8vh;
+          // padding-top: 4vh;
+          // padding-bottom: 4vh;
+            .search {
             width: 180px;
             height: 22px;
             position: relative;
             .el-input__inner {
-            height: 22px;
-            border-radius: 20px;
-            outline: none;
-            padding-left: 15px;
-            background: url(../../../assets/images/搜索底框.png) no-repeat;
-            background-size: 100%;
-            border: 0;
-            color: hsla(196, 79%, 43%, 1);
+                height: 22px;
+                border-radius: 20px;
+                outline: none;
+                padding-left: 15px;
+                background: url(../../../assets/images/搜索底框.png) no-repeat;
+                background-size: 100%;
+                border: 0;
+                color: hsla(196, 79%, 43%, 1);
             }
             .el-input__inner::-webkit-input-placeholder {color: hsla(196, 79%, 43%, 1);}
             .el-input__icon::before {
-            content: ' ';
-            width: 25px;
-            height: 22px;
-            position: absolute;
-            top: 0;
-            right: -4px;
-            margin-left: 2px;
-            cursor: pointer;
-            background: url(../../../assets/images/搜索.png) no-repeat;
-            background-size: 100%;
+                content: ' ';
+                width: 25px;
+                height: 22px;
+                position: absolute;
+                top: 0;
+                right: -4px;
+                margin-left: 2px;
+                cursor: pointer;
+                background: url(../../../assets/images/搜索.png) no-repeat;
+                background-size: 100%;
             }
-        }
-        }
-        .ul-head {
-        height: 26px;
-        width: 380px;
-        // background-color: rgb(10, 40, 68);
-        margin-top: 10px;
-        display: flex;
-        }
-        /*滚动条样式*/
-        ul::-webkit-scrollbar {
-            width: 4px;
-            height: 4px;
-        }
-        ul::-webkit-scrollbar-thumb {
-            border-radius: 10px;
-            background:#118251;
-            width: 8px;
-            height: 30px;
-        }
-        ul::-webkit-scrollbar-track {
-            border-radius: 0;
-            background:#103E29;
-        }
-        ul {
-        list-style: none;
-        padding-left: 0;
-        height: 340px;
-        overflow-x: hidden; overflow-y: auto;
-        li {
-            display: flex;
-            align-items: center;
-            position: relative;
-            width: 380px;
-            height: 30px;
-            margin-bottom: 12px;
-            font-family: PingFang SC;
-            font-size: 16px;
-            // background: url(../../../assets/images/框.png) no-repeat;
-            background-size: 100% 100%;
-            &.active {
-            background: #103E29;
-            border: 1px solid #0F7247;
-            color: #52FEB3;
             }
-            .number {
-            width: 30px;
-            margin-left: 8px;
-            height: 30px;
-            border-radius: 15px;
-            text-align: center;
-            line-height: 30px;
-            color: rgba(0, 240, 242, 1);
-            font-weight: bolder;
-            font-size: 18px;
-            margin-right: 40px;
-            }
-        }
-        }
-        .item {
-        text-align: center;
-        line-height: 26px;
-        font-size: 16px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        }
-        .item-1 {
-        flex: 1;
-        }
-        .item-3 {
-        flex: 1
-        }
-    }
+          }
+          .titleInput{
+          background-color: rgba(82, 254, 179, .5);
+          color: #fff;
+          border-radius: 5px;
+          }
+
+
+
+      }
+      .imgLine{
+      display: flex;
+      justify-content: flex-end;
+      padding-top:0.5vh;
+      padding-bottom: 0.5vh;
+      .detail{
+          padding-right: 1vh;
+          padding-left: 1.5vh;
+          
+      }
+      .location{
+
+      }
+      }
+      .list-item{
+      &:hover{
+          cursor: pointer;
+      }
+      }
+      .title {
+  width: 100%;
+  height: 2rem;
+  font-family: youshebiaotihei;
+  font-size: 1.8vh;
+  // padding-top: 4vh;
+  // padding-bottom: 4vh;
+      .search {
+          width: 180px;
+          height: 22px;
+          position: relative;
+          .el-input__inner {
+          height: 22px;
+          border-radius: 20px;
+          outline: none;
+          padding-left: 15px;
+          background: url(../../../assets/images/搜索底框.png) no-repeat;
+          background-size: 100%;
+          border: 0;
+          color: hsla(196, 79%, 43%, 1);
+          }
+          .el-input__inner::-webkit-input-placeholder {color: hsla(196, 79%, 43%, 1);}
+          .el-input__icon::before {
+          content: ' ';
+          width: 25px;
+          height: 22px;
+          position: absolute;
+          top: 0;
+          right: -4px;
+          margin-left: 2px;
+          cursor: pointer;
+          background: url(../../../assets/images/搜索.png) no-repeat;
+          background-size: 100%;
+          }
+      }
+      }
+      .ul-head {
+      height: 26px;
+      width: 380px;
+      // background-color: rgb(10, 40, 68);
+      margin-top: 10px;
+      display: flex;
+      }
+      /*滚动条样式*/
+      ul::-webkit-scrollbar {
+          width: 4px;
+          height: 4px;
+      }
+      ul::-webkit-scrollbar-thumb {
+          border-radius: 10px;
+          background:#118251;
+          width: 8px;
+          height: 30px;
+      }
+      ul::-webkit-scrollbar-track {
+          border-radius: 0;
+          background:#103E29;
+      }
+      ul {
+      list-style: none;
+      padding-left: 0;
+      height: 340px;
+      overflow-x: hidden; overflow-y: auto;
+      li {
+          display: flex;
+          align-items: center;
+          position: relative;
+          width: 380px;
+          height: 30px;
+          margin-bottom: 12px;
+          font-family: PingFang SC;
+          font-size: 16px;
+          // background: url(../../../assets/images/框.png) no-repeat;
+          background-size: 100% 100%;
+          &.active {
+          background: #103E29;
+          border: 1px solid #0F7247;
+          color: #52FEB3;
+          }
+          .number {
+          width: 30px;
+          margin-left: 8px;
+          height: 30px;
+          border-radius: 15px;
+          text-align: center;
+          line-height: 30px;
+          color: rgba(0, 240, 242, 1);
+          font-weight: bolder;
+          font-size: 18px;
+          margin-right: 40px;
+          }
+      }
+      }
+      .item {
+      text-align: center;
+      line-height: 26px;
+      font-size: 16px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      }
+      .item-1 {
+      flex: 1;
+      }
+      .item-3 {
+      flex: 1
+      }
+  }
 }
 
 

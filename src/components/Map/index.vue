@@ -126,6 +126,7 @@ export default {
       detailShow: false,
       tempData: null,
       key: null,
+      timer:undefined,
     };
   },
   computed: {
@@ -159,10 +160,16 @@ export default {
     const that = this;
     await this.initMap();
     this.getData();
+    // this.$bus.$on("refreshIcon",()=>{
+    //   that.getData();
+    // })
   },
-  beforeDestroy() {
-
-  },
+  // beforeDestroy() {
+  //   // if (that.timer) {
+  //   //   clearTimeout(that.timer)
+  //   // }
+  //   this.$bus.$off("refreshIcon");
+  // },
   methods: {
     zbfx() {
       this.$bus.$emit("fireShow", this.tempData);
@@ -220,6 +227,10 @@ export default {
 
         // });
         that.$bus.$emit('fireList',res);
+        // that.timer = setTimeout(()=>{
+        //   that.getData();
+        // },60000)
+        //一分钟获取后台数据
       })
 
     },
@@ -236,7 +247,7 @@ export default {
       // // zjLayer.addFilter(mask)
       this.$store.dispatch("map/changeZjLayer", zjLayer);
 
-      // //行政区划
+      //行政区划
       const baseUrl = `http://10.53.137.59:8090/iserver/services/map-lishui_region/rest/maps/`;
       const district = `${baseUrl}district`;
       const village = `${baseUrl}village`;
