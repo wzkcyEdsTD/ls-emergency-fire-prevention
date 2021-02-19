@@ -614,18 +614,18 @@ export default {
     }
   }
 }
-.fire-popup::before {
-  position: absolute;
-  top: 100%;
-  left: calc(50% -10px);
-  border-top: 20px solid transparent;
-  content: " ";
-  width: 0px;
-  height: 0px;
-  border-right: 10px solid transparent;
-  border-top: 10px solid rgba(1, 51, 78, 0.8);
-  border-left: 10px solid transparent;
-}
+// .fire-popup::before {
+//   position: absolute;
+//   top: 100%;
+//   left: calc(50% -10px);
+//   border-top: 20px solid transparent;
+//   content: " ";
+//   width: 0px;
+//   height: 0px;
+//   border-right: 10px solid transparent;
+//   border-top: 10px solid rgba(1, 51, 78, 0.8);
+//   border-left: 10px solid transparent;
+// }
 
 .toobar {
   position: absolute;
