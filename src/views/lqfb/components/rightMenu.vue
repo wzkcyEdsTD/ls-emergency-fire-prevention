@@ -3,28 +3,24 @@
     <div class="close" @click="closeMenu" />
     <div class="lb-wrapper">
       <div class="titleLine">
-        <div class="title">
+        <div class="titleHistory">
           火灾报警点
         </div>
+      </div>
+      <div class="titleLine">
+        <div class="titleHistory">
+          未处理或已处理未办结
+        </div>
         <div class="search-header">
-
-          <!-- <el-date-picker
-            v-model="value1"
-            type="daterange"
-            range-separator="-"
-            unlink-panels
-            start-placeholder="开始日期"
-            end-placeholder="结束日期">
-          </el-date-picker> -->
           <img src="@/common/images/搜索icon.png" class="searchIcon">
           <el-input
-            v-model="searchText"
+            v-model="searchTextUnresolve"
             class="searchFilterInput"
             placeholder="查找火灾点"
             size="small"
-            @keyup.enter.native="searchFilter"
+            @keyup.enter.native="searchFilterUnresolve"
           />
-          <img src="@/common/images/关闭.png" class="clearIcon" @click="searchClear">
+          <img src="@/common/images/关闭.png" class="clearIcon" @click="searchClearUnresolve">
         </div>
         <div id="refreshIcon" class="refreshIcon" @click="refreshEvent"/>
       </div>
@@ -35,18 +31,55 @@
         <div class="item item-1">时间</div>
         <div class="item item-1">来源</div>
       </div>
-      <ul style="height:75vh" >
-        <li v-for="(item, index) in tempList" 
+      <ul style="height:30vh" >
+        <li v-for="(item, index) in unresolveList" 
             :key="index" 
             class="list-item" 
-            :class="{active : fire == index}"
-            @click="fire = index;clickFire(item)">
+            :class="{active : fireUnresolve == index}"
+            @click="fireUnresolve = index;clickFire(item)">
           <div class="item item-1">{{ item.address }}</div>
           <!-- <div class="item item-1">{{ item.jubaoren }}</div> -->
           <div class="item item-1">{{ item.time }}</div>
           <div class="item item-1">{{ systemName[`${item.systemcode}`] }}</div>
         </li>
       </ul>
+      <div>
+        <div class="titleLine">
+          <div class="title">
+            {{`历史数据`}}
+          </div>
+          <div class="search-header">
+            <img src="@/common/images/搜索icon.png" class="searchIcon">
+            <el-input
+              v-model="searchText"
+              class="searchFilterInput"
+              placeholder="查找火灾点"
+              size="small"
+              @keyup.enter.native="searchFilter"
+            />
+            <img src="@/common/images/关闭.png" class="clearIcon" @click="searchClear">
+          </div>
+        </div>
+        <img style="width: 100%;" src="@/common/images/边.png" alt="">
+        <div class="ul-head">
+          <div class="item item-1">地点</div>
+          <!-- <div class="item item-1">举报人</div> -->
+          <div class="item item-1">时间</div>
+          <div class="item item-1">来源</div>
+        </div>
+        <ul style="height:30vh" >
+          <li v-for="(item, index) in tempList" 
+              :key="index" 
+              class="list-item" 
+              :class="{active : fire == index}"
+              @click="fire = index;clickFire(item)">
+            <div class="item item-1">{{ item.address }}</div>
+            <!-- <div class="item item-1">{{ item.jubaoren }}</div> -->
+            <div class="item item-1">{{ item.time }}</div>
+            <div class="item item-1">{{ systemName[`${item.systemcode}`] }}</div>
+          </li>
+        </ul>
+      </div>
     </div>
     <!-- <video></video> -->
   </div>
@@ -56,7 +89,17 @@
 import fireList from './fire.json'
 import video from '@/components/video/video'
 import { set } from 'ol/transform'
+import { Point } from 'ol/geom'
+import VectorLayer from 'ol/layer/Vector'
+import VectorSource from 'ol/source/Vector'
 import Util from "@/libs/cimAPI.js";
+import GeoJSON from 'ol/format/GeoJSON'
+import { Circle as CircleStyle, Fill, Stroke, Style, Icon, Text } from 'ol/style'
+import {
+  TileSuperMapRest,
+  FeatureService,
+  SuperMap
+} from '@supermap/iclient-ol'
 // import Video from '@/components/video/video.vue'
 export default {
   components: {
@@ -68,8 +111,11 @@ export default {
         rydwPannelOffsetRight:0,
         fireList,
         fire:null,
+        fireUnresolve:null,
         searchText:"",
+        searchTextUnresolve:"",
         list:null,
+        unresolveList:null,
         tempList:null,
         value1:null,
         systemName:{
@@ -102,25 +148,7 @@ export default {
       Util.testAxios().then(res=>{
         console.log(res.result.records)
         const list = res.result.records
-        // list.forEach(element => {
-        //   // debugger
-        //   if (element.systemcode.indexOf('tyswxt')!= -1) {
-        //     // debugger
-        //     if(that.getTime(element.time)){
-        //       // console.log(element.address)
-        //       const add = element.address
-        //       const street = `${add.split('县')[1].split('镇')[0]}镇`
-        //       console.log(street)
-        //       that.searchStreet(street)
-        //     }
-        //   }
-
-        // });
         that.$bus.$emit('fireList',res);
-        // that.timer = setTimeout(()=>{
-        //   that.getData();
-        // },60000)
-        //一分钟获取后台数据
       })
 
     },
@@ -128,6 +156,52 @@ export default {
       // console.log(item);
       this.$map.getMap().getView().setCenter([item.x,item.y]);
       this.$map.getMap().getView().setZoom(16);
+    },
+    searchStreet(point){
+      let geometryParam = new SuperMap.GetFeaturesByGeometryParameters({
+        toIndex: 999999,
+        attributeFilter:'',
+        geometry: point,
+        spatialQueryMode: 'INTERSECT', // 相交空间查询模式
+        datasetNames: [`lishui_forestfire:d_region_street`]
+      })
+      // debugger
+      const url = "http://10.53.137.59:8090/iserver/services/data-lishui_forestfire/rest/data";
+      new FeatureService(url).getFeaturesByGeometry(geometryParam, serviceResult => {
+        // debugger
+        console.log(serviceResult)
+        const testList = serviceResult.result.features;
+        const features = new GeoJSON().readFeatures(testList)
+        features.map(f => {
+          f.setStyle(new Style({
+            fill: new Fill({
+              color: 'rgba(238,221,130, 0.8)'
+            }),
+            text: new Text({
+              textAlign: 'center', // 位置
+              textBaseline: 'middle', // 基准线
+              offsetY: 20,
+              font: 'normal 16px bold 微软雅黑', // 文字样式
+              text: f.get('SZZ') + '', // 文本内容
+              fill: new Fill({ // 文本填充样式（即文字颜色)
+                color: '#FC9309'
+              }),
+              stroke: new Stroke({
+                color: '#101518',
+                width: 2
+              })
+            })
+          }))
+        })
+        let vectorSource = new VectorSource({
+          features,
+          wrapX: false
+        });
+        let testLayer = new VectorLayer({
+          source: vectorSource,
+        })
+        window.g.map.getLayers().insertAt(4, testLayer)
+      })
     },
     closeMenu(){
       const that = this;
@@ -175,14 +249,64 @@ export default {
       }else{
         this.tempList = that.fireList.result.records.sort(that.sortUpDate)
       }
-
-      // console.log(this.tempList)
+    },
+    searchFilterUnresolve(){
+      const that = this
+      if (that.searchTextUnresolve) {
+        const list = that.fireList.result.records.sort(that.sortUpDate)
+        that.unresolveList = list.filter((v) =>{
+          if (v.status && v.status.indexOf(`已办结`) == -1) {
+            return v
+          }else if (!v.status) {
+            return v            
+          }
+        })
+      // debugger
+        const key = that.findKey(that.searchTextUnresolve);
+        // that.tempList = [];
+        // console.log(key)
+        that.$nextTick(()=>{
+          // debugger
+          that.unresolveList = that.unresolveList.filter((item)=>{
+            if (item.systemcode.indexOf(key) != -1) {
+              return item;
+            }else if (item.time.indexOf(that.searchTextUnresolve) != -1) {
+              return item;
+            }else if (item.address.indexOf(that.searchTextUnresolve) != -1) {
+              return item;
+            }
+          })
+          console.log(that.unresolveList)
+        })
+      }else{
+        const tempList = that.fireList.result.records.sort(that.sortUpDate)
+        that.unresolveList = tempList.filter((v) =>{
+          if (v.status && v.status.indexOf(`已办结`) == -1) {
+            return v
+          }else if (!v.status) {
+            return v            
+          }
+        })
+      }
     },
     searchClear(){
       // debugger
       const that = this
       this.tempList = this.fireList.result.records.sort(that.sortUpDate);
       this.searchText = "";
+    },
+    searchClearUnresolve(){
+      // debugger
+      const that = this
+      const tempList = this.fireList.result.records.sort(that.sortUpDate);
+      that.unresolveList = tempList.filter((v) =>{
+        if (v.status && v.status.indexOf(`已办结`) == -1) {
+          return v
+        }else if (!v.status) {
+          return v            
+        }
+      })
+      this.searchTextUnresolve = "";
     },
     //正序
     sortDownDate(a, b) {
@@ -199,7 +323,23 @@ export default {
     this.$bus.$on("fireList",value=>{
       that.$nextTick(()=>{
         that.fireList = value;
+        // debugger
         that.tempList =that.fireList.result.records.sort(that.sortUpDate)
+        // debugger
+        that.unresolveList = that.tempList.filter((v) =>{
+          if (v.status && v.status.indexOf(`已办结`) == -1) {
+            return v
+          }else if (!v.status) {
+            return v            
+          }
+        } )
+        that.unresolveList.forEach(element => {
+          if (element.systemcode.indexOf('ilishui')!=-1) {
+            // debugger
+            // console.log(element)
+            that.searchStreet(new Point([Number(element.x),Number(element.y)]))
+          }
+        });
       })
     })
     this.$bus.$on("hzjbd",(value)=>{
@@ -323,8 +463,55 @@ export default {
           to{-webkit-transform: rotate(360deg); transform: rotate(360deg)}
         }
 
-        .title {
+        .titleHistory {
           width: 30%;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-top: 6px;
+          margin-bottom: 6px;
+          height: 22px;
+          font-weight: bold;
+          line-height: 22px;
+          position: relative;
+
+          height: 2rem;
+          font-family: youshebiaotihei;
+          font-size: 1.8vh;
+          // padding-top: 4vh;
+          // padding-bottom: 4vh;
+            .search {
+              width: 180px;
+              height: 22px;
+              position: relative;
+            .el-input__inner {
+                height: 22px;
+                border-radius: 20px;
+                outline: none;
+                padding-left: 15px;
+                background: url(../../../assets/images/搜索底框.png) no-repeat;
+                background-size: 100%;
+                border: 0;
+                color: hsla(196, 79%, 43%, 1);
+            }
+            .el-input__inner::-webkit-input-placeholder {color: hsla(196, 79%, 43%, 1);}
+            .el-input__icon::before {
+                content: ' ';
+                width: 25px;
+                height: 22px;
+                position: absolute;
+                top: 0;
+                right: -4px;
+                margin-left: 2px;
+                cursor: pointer;
+                background: url(../../../assets/images/搜索.png) no-repeat;
+                background-size: 100%;
+            }
+            }
+          }
+
+          .title {
+          width: 100%;
           display: flex;
           justify-content: space-between;
           align-items: center;

@@ -32,7 +32,7 @@ function getData(sign,requestTime) {
 
 function testAxios() {
     const method = "get"
-    return getAxios(`front/forestfire/forestFireCaseCurdate/list?pageSize=100`
+    return getAxios(`front/forestfire/forestFireCaseCurdate/queryForestFireCaseCurData?pageSize=1000`
     ,{},method)
 };
 

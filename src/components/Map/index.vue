@@ -160,6 +160,7 @@ export default {
     const that = this;
     await this.initMap();
     this.getData();
+    // that.searchStreet(new Point([119.3574,27.5408]))
     // this.$bus.$on("refreshIcon",()=>{
     //   that.getData();
     // })
@@ -210,22 +211,6 @@ export default {
     getData() {
       const that = this;
       Util.testAxios().then(res=>{
-        console.log(res.result.records)
-        const list = res.result.records
-        // list.forEach(element => {
-        //   // debugger
-        //   if (element.systemcode.indexOf('tyswxt')!= -1) {
-        //     // debugger
-        //     if(that.getTime(element.time)){
-        //       // console.log(element.address)
-        //       const add = element.address
-        //       const street = `${add.split('县')[1].split('镇')[0]}镇`
-        //       console.log(street)
-        //       that.searchStreet(street)
-        //     }
-        //   }
-
-        // });
         that.$bus.$emit('fireList',res);
         // that.timer = setTimeout(()=>{
         //   that.getData();
@@ -280,27 +265,18 @@ export default {
       // window.map = this.map;
     },
 
-    searchStreet(SZZ){
-      let attributeFilter;
-      if (SZZ) {
-        attributeFilter = `SZZ='${SZZ}'`
-      }else{
-        attributeFilter = ''
-      }
-      // debugger
-      var sqlParam = new SuperMap.GetFeaturesBySQLParameters({
+    searchStreet(point){
+      var geometryParam = new SuperMap.GetFeaturesByGeometryParameters({
         toIndex: 999999,
-        queryParameter: {
-          // name: layerName,
-          attributeFilter: attributeFilter,
-          // attributeFilter: " ",
-          maxFeatures: 99999999
-        },
+        attributeFilter:'',
+        geometry: point,
+        spatialQueryMode: 'INTERSECT', // 相交空间查询模式
         datasetNames: [`lishui_forestfire:d_region_street`]
       })
       const url = "http://10.53.137.59:8090/iserver/services/data-lishui_forestfire/rest/data";
-
-      new FeatureService(url).getFeaturesBySQL(sqlParam, serviceResult => {
+      new FeatureService(url).getFeaturesByGeometry(geometryParam, serviceResult => {
+        // debugger
+        console.log(serviceResult)
         const testList = serviceResult.result.features;
         const features = new GeoJSON().readFeatures(testList)
         features.map(f => {
@@ -335,16 +311,9 @@ export default {
         });
         const testLayer = new VectorLayer({
           source: vectorSource,
-          // style:  new Style({
-          //         fill: new Fill({
-          //           color: 'rgba(249,219,49, 0.7)'
-          //         }),
-
-          // })
         })
         this.map.getLayers().insertAt(4, testLayer)
       })
-
     },
 
     collapse() {
