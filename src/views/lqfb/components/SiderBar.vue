@@ -50,6 +50,7 @@ import VectorSource from 'ol/source/Vector'
 import Feature from 'ol/Feature'
 import GeoJSON from 'ol/format/GeoJSON'
 import { Point } from 'ol/geom'
+import { Circle as CircleStyle, Fill, Stroke, Style, Icon, Text } from 'ol/style'
 import {
   TileSuperMapRest,
   FeatureService,
@@ -157,6 +158,33 @@ export default {
                 geometry: new Point([element.x,element.y]),
                 ...properties
             })
+
+          if (element.systemcode.indexOf("tyswxt")) {
+           const style = new Style({
+              image: new Icon({
+                anchor: [0.5, 0.5],
+                anchorXUnits: 'fraction',
+                anchorYUnits: 'fraction',
+                src: require(`@/assets/images/icon/${'火灾点.png'}`)
+              }),
+              stroke: new Stroke({ color: 'red', width: 2 })
+            })
+            feature.setStyle(style)
+          }else{
+            const style = new Style({
+              image: new Icon({
+                anchor: [0.5, 0.5],
+                anchorXUnits: 'fraction',
+                anchorYUnits: 'fraction',
+                // scale:0.3,
+                src: require(`@/assets/images/icon/${'着火.png'}`)
+              }),
+              stroke: new Stroke({ color: 'red', width: 2 })
+            })
+            feature.setStyle(style)
+          }
+
+
           features.push(feature);
         });
 
@@ -167,7 +195,7 @@ export default {
         var fireLayer = new VectorLayer({
           source: vectorSource,
         })
-        fireLayer.setStyle(this.$map.getFirePointStyle())
+        // fireLayer.setStyle(this.$map.getFirePointStyle())
         this.firelayer = fireLayer;
         this.temp = true;
         this.$map.addLayer(fireLayer)

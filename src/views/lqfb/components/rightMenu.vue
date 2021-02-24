@@ -175,22 +175,22 @@ export default {
         features.map(f => {
           f.setStyle(new Style({
             fill: new Fill({
-              color: 'rgba(238,221,130, 0.8)'
+              color: 'rgba(205, 128, 56, 0.4)'
             }),
-            text: new Text({
-              textAlign: 'center', // 位置
-              textBaseline: 'middle', // 基准线
-              offsetY: 20,
-              font: 'normal 16px bold 微软雅黑', // 文字样式
-              text: f.get('SZZ') + '', // 文本内容
-              fill: new Fill({ // 文本填充样式（即文字颜色)
-                color: '#FC9309'
-              }),
-              stroke: new Stroke({
-                color: '#101518',
-                width: 2
-              })
-            })
+            // text: new Text({
+            //   textAlign: 'center', // 位置
+            //   textBaseline: 'middle', // 基准线
+            //   offsetY: 20,
+            //   font: 'normal 16px bold 微软雅黑', // 文字样式
+            //   text: f.get('SZZ') + '', // 文本内容
+            //   fill: new Fill({ // 文本填充样式（即文字颜色)
+            //     color: '#FC9309'
+            //   }),
+            //   stroke: new Stroke({
+            //     color: '#101518',
+            //     width: 2
+            //   })
+            // })
           }))
         })
         let vectorSource = new VectorSource({

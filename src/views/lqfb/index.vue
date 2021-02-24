@@ -72,6 +72,17 @@ export default {
       infoPopup: null,
       rydwPopyp: null,
       firePopyp: null,
+      fireStrong:{
+        "1":"一级",
+        "2":"二级",
+        "3":"三级",
+        "4":"四级",
+        "5":"五级",
+        "6":"六级",
+        "7":"七级",
+        "8":"八级",
+        "9":"九级",
+      }
     }
   },
   computed: {
@@ -160,6 +171,7 @@ export default {
       }
     },
     async showPopup(evt) {
+      const that = this;
       this.clearPopup()
       let feature = this.$map
         .getMap()
@@ -364,7 +376,8 @@ export default {
         // console.log(arr)
 
         contents.innerHTML = arr[0]
-        fireIntensity.innerHTML = arr[1].split(":")[1]
+        
+        fireIntensity.innerHTML = that.fireStrong[arr[1].split(":")[1]]
         firetype.innerHTML = arr[2].split(":")[1]
         // debugger
       }else{
