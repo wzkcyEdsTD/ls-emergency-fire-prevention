@@ -48,13 +48,19 @@ import * as turf from '@turf/turf'
 import GeoJSON from 'ol/format/GeoJSON'
 // import MAP_URL from '@/utils/map/map-url'
 import hzdfxNodes from './hzdfx'
-
+import { Point } from 'ol/geom'
+import {
+  TileSuperMapRest,
+  FeatureService,
+  SuperMap
+} from '@supermap/iclient-ol'
 export default {
   data() {
     return {
       inputSearchRadius: 1000,
       inputLon: null,
-      inputLat: null
+      inputLat: null,
+      code:"",
     }
   },
   computed: {
@@ -80,6 +86,42 @@ export default {
     }
   },
   methods: {
+
+    searchGrid(point){
+      const that = this;
+      let geometryParam = new SuperMap.GetFeaturesByGeometryParameters({
+        toIndex: 999999,
+        attributeFilter:'',
+        geometry: point,
+        spatialQueryMode: 'INTERSECT', // 相交空间查询模式
+        datasetNames: [`lishui_forestfire:d_region_grid`]
+      })
+      const url = "http://10.53.137.59:8090/iserver/services/data-lishui_forestfire/rest/data";
+      new FeatureService(url).getFeaturesByGeometry(geometryParam, serviceResult => {
+        const list = serviceResult.result.features.features;
+        list.forEach(element => {
+          that.code = element.properties.ADCODE;
+        });
+        const sqlParam = new SuperMap.GetFeaturesBySQLParameters({
+          toIndex: 999999,
+          queryParameter: {
+            // name: layerName,
+            attributeFilter: `ADCODE='${that.code}'`,
+            maxFeatures: 99999999
+          },
+          datasetNames: [`lishui_forestfire:d_region_grid_member`]
+        })
+
+        new FeatureService(url).getFeaturesBySQL(sqlParam, serviceResult => {
+          const gridInfo = serviceResult.result.features;
+          // debugger
+          that.$bus.$emit("gridInfo",gridInfo)
+        })
+
+      })
+    },
+
+
     handlePickClick() {
       if (this.inputSearchRadius === 0 || !this.inputSearchRadius) {
         this.$message.info('请设置分析范围！')
@@ -263,6 +305,7 @@ export default {
     },
     handleComfirmClick() {
       // const that = this;
+      this.searchGrid(new Point([this.inputLon,this.inputLat]))
       this.clearFire();
       const fireFeat = this.$map.createFeature([this.inputLon, this.inputLat])
       this.showFireFeature(fireFeat)
@@ -274,9 +317,9 @@ export default {
         this.$message.info('请先设置火灾点！')
         return
       }
-
       this.$map.getMap().getView().setCenter([this.inputLon,this.inputLat]);
       this.$map.getMap().getView().setZoom(16);
+      // debugger
       this.$store.dispatch('map/changeVideo', [])//清空视频数据
       this.$store.dispatch('map/changeLqzyLayer', true)
       this.$store.dispatch('map/changeIsAddFeatures', true) // 只在选中火灾点的时候获取才重新数据
@@ -293,6 +336,7 @@ export default {
       // console.log("传过来了",value)
       // that.handleClearClick();
       if (that.firePtLayer) {
+        // debugger
         that.$store.dispatch('map/changeClearFlag', null)
         that.$store.dispatch('map/changeIsAddFeatures', false)
         that.firePtLayer && that.$map.removeLayer(that.firePtLayer)
@@ -304,9 +348,33 @@ export default {
         that.inputLat = value.y;
         // that.handlePickClick();
     })
+
+    that.$bus.$on('fireAndId',(value)=>{
+      // that.inputSearchRadius = 1000;//半径
+      if (that.firePtLayer) {
+        that.$store.dispatch('map/changeClearFlag', null)
+        that.$store.dispatch('map/changeIsAddFeatures', false)
+        that.firePtLayer && that.$map.removeLayer(that.firePtLayer)
+        that.$store.dispatch('jjya/changeFirePtLayer', null)
+        that.$store.dispatch('jjya/changeBuffer', null)
+        that.$store.dispatch('jjya/changeFirePt', null)
+      }
+      that.inputLon = value.x;
+      that.inputLat = value.y;
+      // debugger
+      // that.$store.dispatch("map/clearLayerList",[]);
+      // that.initData()
+      
+      //等待资源加载完
+      setTimeout(()=>{
+        that.handleComfirmClick();
+      },600);
+
+    })
   },
   beforeDestroy(){
     this.$bus.$off('fire');
+    this.$bus.$off('fireAndId');
   }
 }
 </script>

@@ -260,6 +260,7 @@ const mapUrl = {
     icon: '监控.png',
     url: dataUrl
   },
+
   // 水系
   WATER: {
     type: 'map',

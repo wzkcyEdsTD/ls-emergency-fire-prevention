@@ -31,11 +31,11 @@ import Layout from '@/layout'
  * all roles can be accessed
  */
 export const constantRoutes = [
-  {
-    path: '/login',
-    component: () => import('@/views/login/index'),
-    hidden: true
-  },
+  // {
+  //   path: '/login',
+  //   component: () => import('@/views/login/index'),
+  //   hidden: true
+  // },
 
   {
     path: '/404',
@@ -51,8 +51,18 @@ export const constantRoutes = [
       path: 'lqfb',
       name: 'lqfb',
       component: () => import('@/views/lqfb/index')
+    },{
+      path: 'lqfb/printMap',
+      name: 'lqfb/printMap',
+      component: () => import('@/views/lqfb/printMap')
     }]
   },
+
+  // {
+  //   path: '/printMap',
+  //   component: Layout,
+  //   component: () => import('@/views/lqfb/printMap'),
+  // },
   // {
   //   path: '/video',
   //   component: Layout,

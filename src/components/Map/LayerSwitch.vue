@@ -1,5 +1,5 @@
 <template>
-  <div class="layer-switch-wrapper">
+  <div class="layer-switch-wrapper" v-show="showPrintMap">
     <ul>
       <li class="vector" :title="'地图定位'" @click="handleToolChange('定位')">
         <img
@@ -86,9 +86,11 @@
 <script>
 import MAP_URL from '@/utils/map/map-url'
 import Measure from "@/utils/map/measure_new.js";
+import html2canvas from 'html2canvas';
 export default {
   data() {
     return {
+      showPrintMap:true,
       activeType: '',
       radio: '标准地图',
       measureLayers: [],
@@ -271,61 +273,77 @@ export default {
       if (val === '打印') {
         let map = this.$map.getMap();
         const that = this;
-        map.once("postcompose", function(event) {
-          var canvas1,canvas2;
-          if(that.mapType == "img_c"){
-            canvas1 = $(".img_c").children('canvas')[0];//底图
-            canvas2 = $(".cia_c").children('canvas')[0];//注记
-          }else if(that.mapType=="vec_c"){
-            canvas1 = $(".vec_c").children('canvas')[0];//底图
-            canvas2 = $(".cva_c").children('canvas')[0];//注记
-          }
-          var canvas3 = $(".ol-layer").children('canvas')[0];//各种矢量图
-          var canvas4 = $(".districtLayer").children('canvas')[0];//区县
-          var canvas5 = $(".villageLayer").children('canvas')[0];//行政村社区
-          var canvas6 = $(".streetLayer").children('canvas')[0];//乡镇街道
-          var canvas7 = $(".gridLayer").children('canvas')[0];//网格
-          canvas1.getContext("2d").drawImage(canvas2,0,0);
 
-          if(canvas4){
-            const width = canvas4.width;
-            if(Number(width)>0){
-              canvas1.getContext("2d").drawImage(canvas4,0,0);
-            }
-          }
-          if(canvas5){
-            const width = canvas5.width;
-            if(Number(width)>0){
-              canvas1.getContext("2d").drawImage(canvas5,0,0);
-            }
-          }
-          if(canvas6){
-            const width = canvas6.width;
-            if(Number(width)>0){
-              canvas1.getContext("2d").drawImage(canvas6,0,0);
-            }
-          }
-          if(canvas7){
-            const width = canvas7.width;
-            if(Number(width)>0){
-              canvas1.getContext("2d").drawImage(canvas7,0,0);
-            }
-          }
-          if(canvas3){
-            const width = canvas3.width;
-            if(Number(width)>0){
-              canvas1.getContext("2d").drawImage(canvas3,0,0);
-            }
-          }
-          if (navigator.msSaveBlob) {
-            navigator.msSaveBlob(canvas1.msToBlob(), 'map.png');
-          } else {
-            canvas1.toBlob(function(blob) {
-              saveAs(blob, 'map.png');
-            });
-          }
-        });
-        map.renderSync();
+        this.$bus.$emit("printMap",false);
+        // that.printShow = true;
+        setTimeout(()=>{
+          html2canvas(document.getElementById("app"),{
+            useCORS: true,
+            backgroundColor: null
+            }).then((canvas)=>{
+              canvas.toBlob(function(blob) {
+                saveAs(blob, 'map.png');
+              });
+          })
+        this.$bus.$emit("printMap",true);
+        })
+
+
+        // map.once("postcompose", function(event) {
+        //   var canvas1,canvas2;
+        //   if(that.mapType == "img_c"){
+        //     canvas1 = $(".img_c").children('canvas')[0];//底图
+        //     canvas2 = $(".cia_c").children('canvas')[0];//注记
+        //   }else if(that.mapType=="vec_c"){
+        //     canvas1 = $(".vec_c").children('canvas')[0];//底图
+        //     canvas2 = $(".cva_c").children('canvas')[0];//注记
+        //   }
+        //   var canvas3 = $(".ol-layer").children('canvas')[0];//各种矢量图
+        //   var canvas4 = $(".districtLayer").children('canvas')[0];//区县
+        //   var canvas5 = $(".villageLayer").children('canvas')[0];//行政村社区
+        //   var canvas6 = $(".streetLayer").children('canvas')[0];//乡镇街道
+        //   var canvas7 = $(".gridLayer").children('canvas')[0];//网格
+        //   canvas1.getContext("2d").drawImage(canvas2,0,0);
+
+        //   if(canvas4){
+        //     const width = canvas4.width;
+        //     if(Number(width)>0){
+        //       canvas1.getContext("2d").drawImage(canvas4,0,0);
+        //     }
+        //   }
+        //   if(canvas5){
+        //     const width = canvas5.width;
+        //     if(Number(width)>0){
+        //       canvas1.getContext("2d").drawImage(canvas5,0,0);
+        //     }
+        //   }
+        //   if(canvas6){
+        //     const width = canvas6.width;
+        //     if(Number(width)>0){
+        //       canvas1.getContext("2d").drawImage(canvas6,0,0);
+        //     }
+        //   }
+        //   if(canvas7){
+        //     const width = canvas7.width;
+        //     if(Number(width)>0){
+        //       canvas1.getContext("2d").drawImage(canvas7,0,0);
+        //     }
+        //   }
+        //   if(canvas3){
+        //     const width = canvas3.width;
+        //     if(Number(width)>0){
+        //       canvas1.getContext("2d").drawImage(canvas3,0,0);
+        //     }
+        //   }
+        //   if (navigator.msSaveBlob) {
+        //     navigator.msSaveBlob(canvas1.msToBlob(), 'map.png');
+        //   } else {
+        //     canvas1.toBlob(function(blob) {
+        //       saveAs(blob, 'map.png');
+        //     });
+        //   }
+        // });
+        // map.renderSync();
 
       }
       if (val === '定位'){
@@ -354,7 +372,26 @@ export default {
       this.$store.dispatch('map/changeLqzyLayer', true)
     }
   },
-  mounted:{
+  mounted(){
+    const that = this;
+    that.$nextTick(()=>{
+      that.showPrintMap=true
+      const fireEvent = this.$route.query
+      // console.log(this.fireId);
+      if (fireEvent["id"]) {
+        that.showPrintMap=false;
+      }
+    })
+    that.$bus.$on("printMap",value=>{
+      console.log(value);
+      that.$nextTick(()=>{
+        that.showPrintMap = value
+      })
+    });
+  },
+  beforeDestroy(){
+    const that = this;
+    that.$bus.$off("printMap")
   }
 }
 </script>

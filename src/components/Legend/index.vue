@@ -14,6 +14,7 @@
 export default {
   computed: {
     layerList() {
+      console.log(this.$store.getters.layerList.length)
       return this.$store.getters.layerList
     },
     zlOffsetRight() {

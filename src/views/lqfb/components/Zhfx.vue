@@ -1,6 +1,6 @@
 <template>
   <div class="zhfxlb-wrapper" :style="{ right: `${zhfxOffsetRight}rem` }">
-    <div class="close" @click="close" />
+    <div class="close" @click="close" v-show="!hasID"/>
     <!-- <div class="zgfx-container">
       <div class="title">阻隔分析</div>
       <img src="../../../assets/images/边.png" alt />
@@ -91,8 +91,173 @@
         </div>
       </div> -->
 
+      <div v-show="hasID">
+        <div class="titleLine">
+          <div class="titleHistory">
+            地址火灾点详情
+          </div>
+        </div>
+        <img style="width: 100%;" src="@/common/images/边.png" alt="">
+        <div 
+        style="height:25vh"
+        class="result-wrapper">
+          <ul class="result-list" id="table">
+            <li class="result-data">
+              <span class="indexList">地址</span>
+              <div class="line"></div> 
+              <img src="@/assets/images/地址.png" alt="" class="icon">
+              <span
+                class="contentList">{{address}}</span
+              >
+            </li>
+            <li class="result-data">
+              <span class="indexList">举报人</span>
+              <div class="line"></div> 
+              <span
+                style="padding-left:0.5vh"
+                class="contentList">{{jubaoren}}</span
+              >
+            </li>
+            <li class="result-data">
+              <span class="indexList">举报人电话</span>
+              <div class="line"></div>
+              <span
+                style="padding-left:0.5vh"
+                class="contentList">{{jubaorentel}}</span
+              >
+            </li>
+            <li class="result-data">
+              <span class="indexList">火灾强度</span>
+              <div class="line"></div>
+              <span
+                style="padding-left:0.5vh"
+                class="contentList">{{fireIntensity}}</span
+              >
+            </li>
+            <li class="result-data">
+              <span class="indexList">火灾类型</span>
+              <div class="line"></div>
+              <span
+                style="padding-left:0.5vh"
+                class="contentList">{{firetype}}</span
+              >
+            </li>
+            <li class="result-data">
+              <span class="indexList">时间</span>
+              <div class="line"></div>
+              <span
+                style="padding-left:0.5vh"
+                class="contentList">{{time}}</span
+              >
+            </li>
+            <li class="result-data">
+              <span class="indexList">内容</span>
+              <div class="line"></div>
+              <span
+                style="padding-left:0.5vh"
+                class="contentList">{{contents}}</span
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <div class="titleLine">
+          <div class="titleHistory">
+            责任人
+          </div>
+        </div>
+        <img style="width: 100%;" src="@/common/images/边.png" alt="">
+        <div 
+        :style="{height:syscode=='tyswxt'?'15vh':'8vh'}"
+        style="height:15vh"
+        class="result-wrapper">
+          <ul class="result-list" id="table">
+            <li
+             class="result-data">
+
+              <span class="indexList">乡镇业务负责人</span>
+              <div class="line"></div> 
+              <!-- <div class = "iconAndName">
+                <img src="@/assets/images/乡镇人员.png" alt="" class="icon"> -->
+                <span
+                  class="contentList">{{gridPerson}}</span
+                >
+              <!-- </div> -->
+
+            </li>
+            <li class="result-data">
+              <span class="indexList">联系方式</span>
+              <div class="line"></div> 
+              <span
+                class="contentList">{{gridPersonPhone}}</span
+              >
+            </li>
+            <li 
+            v-show="syscode=='tyswxt'"
+            class="result-data">
+              <span class="indexList">网格负责人</span>
+              <div class="line"></div> 
+              <!-- <img src="@/assets/images/乡镇人员.png" alt="" class="icon"> -->
+              <span
+                class="contentList">暂无数据</span
+              >
+            </li>
+            <li 
+            v-show="syscode=='tyswxt'"
+            class="result-data">
+              <span class="indexList">联系方式</span>
+              <div class="line"></div> 
+              <span
+                class="contentList">暂无数据</span
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div v-show="hasID">
+        <div class="titleLine">
+          <div class="titleHistory">
+            周边分析结果
+          </div>
+        </div>
+        <img style="width: 100%;" src="@/common/images/边.png" alt="">
+        <div 
+        style="height:15vh"
+        class="result-wrapper">
+          <ul class="result-list-around" id="table">
+            <li
+             class="result-data">
+
+              <span class="indexList">应急队伍</span>
+              <div class="line"></div> 
+              <!-- <div class = "iconAndName">
+                <img src="@/assets/images/乡镇人员.png" alt="" class="icon"> -->
+              <span
+                class="contentList" v-if="videoList.length > 0">{{aroundVideo}}</span
+              >
+              <span
+                class="contentList" v-else>{{`周边无应急队伍`}}</span
+              >
+              <!-- </div> -->
+
+            </li>
+            <li class="result-data">
+              <span class="indexList">监控</span>
+              <div class="line"></div> 
+              <span
+                class="contentList" v-if="videoList.length > 0">{{aroundVideo}}</span
+              >
+              <span
+                class="contentList" v-else>{{`周边无监控设施`}}</span
+              >
+            </li>
+
+          </ul>
+        </div>
+      </div>
       <!-- <el-collapse v-model="activeNames" accordion @change="handleChange(activeNames)"> -->
-      <el-collapse v-model="activeNames" accordion >
+      <el-collapse v-model="activeNames" accordion  v-show="!hasID">
         <el-collapse-item title="周边资源搜索成果" name="1">
           <div class="ljxq-content">
             <div
@@ -185,7 +350,7 @@
         <el-collapse-item title="周边监控设置" name="4">
           <div class="zbjksz-container">
             <div v-if="videoList.length > 0">
-              <ul style="height:50vh">
+              <ul style="height:25vh">
                 <li v-for="(v, i) in videoList" 
                 :key="i" 
                 :class="{active : videotemp == i}"
@@ -199,6 +364,7 @@
         </el-collapse-item>
       </el-collapse>
     </div>
+    <div id="temp"></div>
   </div>
 </template>
 <script>
@@ -206,10 +372,23 @@ import spUtils from "./shortpath";
 import { getVideoByCode } from "@/api/lqfb";
 import { TurnType } from "@supermap/iclient-ol";
 import * as turf from "@turf/turf";
+import { log } from 'video.js';
 
 export default {
   data() {
     return {
+      fireStrong:{
+        "1":"一级",
+        "2":"二级",
+        "3":"三级",
+        "4":"四级",
+        "5":"五级",
+        "6":"六级",
+        "7":"七级",
+        "8":"八级",
+        "9":"九级",
+      },
+      hasID:false,
       activeNames: ["1","4"],
       pathList: [],
       ssxyPersonLayer: null, // 实时响应人员图层
@@ -221,6 +400,7 @@ export default {
         arr: [],
         name: "",
       },
+      syscode:'ilishui',
       ljxqDetailVisible: false,
       lineLayerList: [],
       lastLineLayerList: [],
@@ -232,8 +412,21 @@ export default {
       diyPtLayer: null,
       diyPathLayer: null,
       videoList:[],
-      videotemp:undefined
+      videotemp:undefined,
 
+      jubaoren:undefined,
+      jubaorentel:undefined,
+      address:undefined,
+      time:undefined,
+      contents:undefined,
+      fireIntensity:undefined,
+      firetype:undefined,
+
+      gridList:undefined,
+      gridPerson:'',
+      gridPersonPhone:'',
+
+      aroundVideo:'',
     };
   },
   computed: {
@@ -270,18 +463,43 @@ export default {
   },
   watch: {
     featuresData(val) {
+      // debugger
       this.$store.dispatch("lqfb/changezhfxOffsetRight", 0);
     },
     videoData(val) {
       const that = this;
       that.$nextTick(()=>{
         that.videoList = [];
+
         val.forEach(element => {
           that.videoList.push(element.values_)
         });
-        console.log(that.videoList)
+        if (val.length>0) {
+          that.aroundVideo = '';
+          val.forEach(element => {
+            that.aroundVideo += element.values_.MC
+            that.aroundVideo += " "
+          })
+        }
+        // var node = document.createElement();
+        // node.setid
       })
       // this.$store.dispatch("lqfb/changezhfxOffsetRight", 0);
+      this.$nextTick(function(){
+          const fireEvent = this.$route.query
+          // console.log(this.fireId);
+          if (fireEvent["id"]) {
+            let node = $(`#finish`)
+            if (node) {
+              node.remove();
+              $(`#temp`).after(`<div id = 'finish'></div>`)
+            }else{
+              $(`#temp`).after(`<div id = 'finish'></div>`)
+            }
+          }
+      })
+      // console.log(that.videoList)
+
     },
     ssxyPersonList(val) {
       this.ssxyPersonLayer && this.$map.removeLayer(this.ssxyPersonLayer);
@@ -539,19 +757,82 @@ export default {
     nodetaisBtn() {
       this.RouteDetails = true;
     },
+
   },
   mounted(){
     const that = this;
     this.$bus.$on('clearAll',()=>{
       that.close()
     })
+    // const fireEvent = this.$route.query
+    // console.log(this.fireId);
+    that.$bus.$on("fireAndId",value=>{
+      console.log(value)
+      // debugger
+      that.$nextTick(()=>{
+        that.hasID = true;
+        that.address = value.address;
+        that.jubaoren = value.jubaoren;
+        that.jubaorentel = value.jubaorentel;
+        that.time = value.time;
+        const text =value['infocontent']
+        that.syscode = value.systemcode
+        if (text.indexOf(",")>-1) {
+          const arr =text.split(',')
+          that.contents = arr[0]
+          that.fireIntensity = that.fireStrong[arr[1].split(":")[1]]
+          that.firetype = arr[2].split(":")[1]
+        }else{
+          that.contents = value['infocontent']
+        }
+        // that.address = value.address;
+        // that.address = value.address;
+        // that.address = value.address;
+      })
+    })
+    // if (fireEvent["id"]) {
+    //   console.log(fireEvent["id"])
+    //   Util.detailAxios(fireEvent["id"]).then((res)=>{
+    //     const value = res.result;
+    //     // that.showPopup(value);
+    //     // debugger
+    //     that.$bus.$emit("fireAndId",value);
+    //   })
+    // }
+    that.$bus.$on("gridInfo",gridInfo=>{
+      console.log(gridInfo)
+      // debugger
+      if (gridInfo.features.length>0) {
+        that.gridPerson = '';
+        that.gridPersonPhone = '';
+        that.$nextTick(()=>{
+          that.gridList = gridInfo.features
+          that.gridList.forEach(element => {
+            // debugger
+            that.gridPerson += element.properties.NAME
+            that.gridPerson += ' '
+
+            that.gridPersonPhone += element.properties.TELEPHONE
+            that.gridPersonPhone += ' '
+          });
+        }) 
+      }else{
+        that.$nextTick(()=>{
+          that.gridPerson = '暂无数据'
+          that.gridPersonPhone = '暂无数据'
+        });
+      }
+
+    })
   },
   beforeDestroy(){
     this.$bus.$off('clearAll')
+    this.$bus.$off('fireAndId')
+    this.$bus.$off('gridInfo')
   }
 };
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .zhfxlb-wrapper {
   width: 400px;
   height: calc(100vh - 60px);
@@ -572,8 +853,9 @@ export default {
     background-size: contain;
     cursor: pointer;
   }
-  .el-collapse-item__wrap {
+  /deep/ .el-collapse-item__wrap {
     background-color: transparent;
+    // background-color: #000;
   }
   .zgfx-container {
     height: 120px;
@@ -625,6 +907,235 @@ export default {
     height: calc(100% - 120px);
     width: 100%;
     padding-top: 4vh;
+
+    .titleLine{
+      display: flex;
+      padding-right: 1vh;
+      width: 100%;
+
+      .titleHistory {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        // margin-top: 6px;
+        // margin-bottom: 6px;
+        height: 22px;
+        font-weight: bold;
+        line-height: 22px;
+        position: relative;
+
+        height: 2rem;
+        font-family: youshebiaotihei;
+        font-size: 1.8vh;
+
+        }
+
+        .title {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 6px;
+        margin-bottom: 6px;
+        height: 22px;
+        font-weight: bold;
+        line-height: 22px;
+        position: relative;
+
+        height: 2rem;
+        font-family: youshebiaotihei;
+        font-size: 1.8vh;
+        // padding-top: 4vh;
+        // padding-bottom: 4vh;
+          .search {
+          width: 180px;
+          height: 22px;
+          position: relative;
+          .el-input__inner {
+              height: 22px;
+              border-radius: 20px;
+              outline: none;
+              padding-left: 15px;
+              background: url(../../../assets/images/搜索底框.png) no-repeat;
+              background-size: 100%;
+              border: 0;
+              color: hsla(196, 79%, 43%, 1);
+          }
+          .el-input__inner::-webkit-input-placeholder {color: hsla(196, 79%, 43%, 1);}
+          .el-input__icon::before {
+              content: ' ';
+              width: 25px;
+              height: 22px;
+              position: absolute;
+              top: 0;
+              right: -4px;
+              margin-left: 2px;
+              cursor: pointer;
+              background: url(../../../assets/images/搜索.png) no-repeat;
+              background-size: 100%;
+          }
+          }
+        }
+        .titleInput{
+        background-color: rgba(82, 254, 179, .5);
+        color: #fff;
+        border-radius: 5px;
+        }
+
+
+
+    }
+
+    .result-wrapper {
+      margin-top: 1vh;
+      width: 100%;
+
+      font-family: PingFang;
+      color: #fff;
+      .result-list {
+        height: 100%;
+        overflow-y: auto;
+        padding-left: 0.5vh;
+        padding-right: 0.1vh;
+        // background-image: url("~@/assets/images/火灾框.png");
+
+        .result-data {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 0.1vh 0 0.1vh 0vh;
+          line-height: 3.8vh;
+          font-size: 1.4vh;
+          height: 3.5vh;
+          font-family: "PingFang SC";
+          color: #ffffff;
+
+          .iconAndName{
+            width: 20vh;
+          }
+
+          .indexList {
+            text-align: center;
+            width: 11vh;
+
+          }
+          .line{
+            position: relative;
+            left: -0.5vh;
+            float:left;
+            width: 0.15vh;
+            height: 2.5vh;
+            background: #fff;
+          }
+          .gridIcon{
+            padding-left: 1vh;
+
+          }
+          .icon{
+            padding-left: 0.5vh;
+            padding-right: 0.7vh;
+          }
+          .contentList {
+            flex: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            // cursor: pointer;
+
+            // &.active {
+            //   background: rgba(9, 226, 241, 0.6);
+            // }
+          }
+        }
+
+        li:nth-child(even) {
+          // background:rgba(5, 88, 63, 0.29);
+          background-image: url("~@/assets/images/1.png");
+          background-size: 100% 100%;
+        }
+        li:nth-child(odd) {
+          //background: linear-gradient(rgba(76, 227, 212, 0.7), rgba(23, 145, 120, 0.7), rgba(5, 88, 63, 0.29)); 
+          background-image: url("~@/assets/images/2.png");
+          background-size: 100% 100%;
+        }
+      }
+
+      .result-list-around {
+        height: 100%;
+        overflow-y: auto;
+        padding-left: 0.5vh;
+        padding-right: 0.1vh;
+        // background-image: url("~@/assets/images/火灾框.png");
+
+        .result-data {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 0.1vh 0 0.1vh 0vh;
+          line-height: 5.8vh;
+          font-size: 1.4vh;
+          height: 5.5vh;
+          font-family: "PingFang SC";
+          color: #ffffff;
+          margin-bottom: 1.3vh;
+          
+          .iconAndName{
+            width: 20vh;
+          }
+
+          .indexList {
+            text-align: center;
+            width: 11vh;
+            background-image: url("~@/assets/images/2.png");
+            background-size: 100% 100%;
+          }
+          .line{
+            position: relative;
+            float: left;
+            width: 0.1vh;
+            height: 5.8vh;
+            background: #fff;
+          }
+          .gridIcon{
+            padding-left: 1vh;
+
+          }
+          .icon{
+            padding-left: 0.5vh;
+            padding-right: 0.7vh;
+          }
+          .contentList {
+            flex: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            padding-left: 0.5vh;
+            background-image: url("~@/assets/images/1.png");
+            background-size: 100% 100%;
+            // &.active {
+            //   background: rgba(9, 226, 241, 0.6);
+            // }
+          }
+        }
+
+        // li:nth-child(even) {
+        //   // background:rgba(5, 88, 63, 0.29);
+        //   background-image: url("~@/assets/images/1.png");
+        //   background-size: 100% 100%;
+        // }
+        // li:nth-child(odd) {
+        //   //background: linear-gradient(rgba(76, 227, 212, 0.7), rgba(23, 145, 120, 0.7), rgba(5, 88, 63, 0.29)); 
+        //   background-image: url("~@/assets/images/2.png");
+        //   background-size: 100% 100%;
+        // }
+      }
+
+    }
+
+
     .ljxq-box {
       height: 260px;
       .route-box {
@@ -822,7 +1333,9 @@ export default {
       justify-content: space-between;
       overflow-y: scroll;
       .item {
-        background-color: rgb(11, 35, 57);
+        // background-color: rgb(11, 35, 57);
+        background-image: url('~@/assets/images/1.png');
+        background-size: 100% 100%;
         flex: 1;
         width: 185px;
         height: 40px;
@@ -863,7 +1376,9 @@ export default {
           justify-content: space-between;
           margin-top: 10px;
           padding: 3px 0 3px 22px;
-          background: #092e4f;
+          // background: #092e4f;
+          background-image: url('~@/assets/images/1.png');
+          background-size: 100% 100%;
           align-items: center;
           span:first-of-type {
             span {
@@ -881,7 +1396,8 @@ export default {
       height: 19px;
       font-size: 12px;
       display: inline-block;
-      background-image: linear-gradient(#0d73c1, #38cbee);
+      // background-image: linear-gradient(#0d73c1, #38cbee);
+      background-image: url('~@/assets/images/2.png');
       border-radius: 2px;
       cursor: pointer;
       span {
@@ -906,20 +1422,20 @@ export default {
       width: 100%;
     }
     ul {
-      padding-left: 20px;
+      padding-left: 0;
       list-style: none;
-      height: 230px;
+      // height: 230px;
       overflow: auto;
       font-family: PingFang SC;
       font-size: 16px;
       li {
         height: 32px;
-        font-size: 18px;
+        font-size: 16px;
         line-height: 32px;
         padding: 0px 0 0px 27px;
-        margin-top: 10px;
+        // margin-top: 10px;
         list-style: none;
-        background: url("../../../assets/images/框(2).png") no-repeat;
+        background: url("~@/assets/images/1.png") no-repeat;
         background-size: 100% 100%;
         cursor: pointer;
         &.active {
@@ -929,7 +1445,7 @@ export default {
         }
       }
       li:hover {
-        color: hsla(180, 100%, 47%, 1);
+        // color: hsla(180, 100%, 47%, 1);
       }
     }
     ul::-webkit-scrollbar {
@@ -1008,6 +1524,14 @@ export default {
   }
   .el-collapse .is-active .el-collapse-item__header .el-icon-arrow-right::before {
     content: "\E722";
+    // background-image: url('~@/assets/images/1.png');
+    // background-size: 100% 100%;
   }
+
+  /deep/ .el-collapse-item__header{
+    background-image: url('~@/assets/images/2.png');
+    background-size: 100% 100%;
+  }
+
 }
 </style>

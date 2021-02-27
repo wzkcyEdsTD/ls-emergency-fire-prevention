@@ -30,7 +30,7 @@
           />
         </el-select>
       </li> -->
-      <li :class="checkedWind ? 'li-active' : ''" @click="showWind">实时风场</li>
+      <li :class="checkedWind ? 'li-active' : ''" @click="showWind" v-show="showPrintMap">实时风场</li>
       <!-- <li :class="showFire ? 'li-active' : ''" @click="clickFire">火灾报警点</li> -->
       <!-- <li :class="activeType==='预测风向' ? 'li-active' : ''">
         <el-select v-model="windPrValue" clearable placeholder="预测风向">
@@ -86,6 +86,7 @@ export default {
   data() {
     const mask = this.$map.createMaskByGeoJson(ruianGeoJson)
     return {
+      showPrintMap:true,
       isHzhzd: false, // 是否显示绘制火灾点框
       activeType: '',
       checkedRadar: false, // 实时雷达
@@ -356,6 +357,15 @@ export default {
   },
   mounted(){
     const that = this;
+    that.$nextTick(()=>{
+      that.showPrintMap=true
+      const fireEvent = this.$route.query
+      // console.log(this.fireId);
+      if (fireEvent["id"]) {
+        that.showPrintMap=false;
+      }
+    })
+
     this.$bus.$on("fireShow",(value)=>{
       that.isHzhzd = true
       that.$parent.isShowPickFirePoint = true

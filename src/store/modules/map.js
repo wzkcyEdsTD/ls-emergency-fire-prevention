@@ -46,11 +46,13 @@ const mutations = {
     state.zjLayer = layer
   },
   SET_LAYER_LIST(state, list) {
+    // debugger
     state.layerList = list
+    // debugger
   },
   APPEND_LAYER_LIST(state, list) {
     const name = null;
-
+    // debugger
     if (state.layerList.length == 0) {
       state.layerList = [...state.layerList, ...list]
     } else {
@@ -100,7 +102,9 @@ const actions = {
   changeVideo({ commit },video){
     commit('SET_VIDEO', video)
   },
-
+  addLayerList({ commit },list){
+    commit('APPEND_LAYER_LIST', list)
+  },
   changeLqzyLayer({ commit }, payload) {
     commit('SET_LQZY_LAYER', payload)
   },
@@ -139,6 +143,7 @@ const actions = {
     commit('SET_LAYER_LIST', list)
   },
   async changeLayerListByUrl({ state, commit }, { appendLayerUrlList, removeLayerUrlList }) {
+    // debugger
     removeLayerUrlList.map(v => {
       state.layerList.map(item => {
         if (item.name === v.label) {
@@ -183,6 +188,7 @@ const actions = {
           }
       })
     )
+
     list = list.filter(v => v.layer != null)
     commit('APPEND_LAYER_LIST', list)
     list.map(v => v.layer && window.g.map.addLayer(v.layer))

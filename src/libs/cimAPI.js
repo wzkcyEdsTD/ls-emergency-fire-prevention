@@ -36,8 +36,22 @@ function testAxios() {
     ,{},method)
 };
 
+function listAxios() {
+    const method = "get"
+    return getAxios(`front/forestfire/forestFireCaseCurdate/list?pageSize=1000`
+    ,{},method)
+};
+
+function detailAxios(id) {
+    const method = "get"
+    return getAxios(`front/forestfire/forestFireCaseCurdate/queryById?id=${id}`
+    ,{},method)
+};
+
 export default {
     getKey,
     getData,
-    testAxios
+    testAxios,
+    listAxios,
+    detailAxios,
 }

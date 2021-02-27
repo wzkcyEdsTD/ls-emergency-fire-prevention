@@ -1,27 +1,21 @@
 <template>
   <div class="lqfb-container">
-    <sider-bar />
-    <info-pannel ref="infoPannel" />
-    <rydw-pannel ref="rydwPannel" />
-    <rightMenu/>
-    <!-- <rydw-tool-bar /> -->
-    <rydw-popup />
-    <!-- <firePopup/> -->
+    <sider-bar v-show="false"/>
+    <info-pannel ref="infoPannel" v-show="false" />
+    <rydw-pannel ref="rydwPannel" v-show="false" />
+    <rightMenu v-show="false" />
+
+    <rydw-popup v-show="false" />
+
     <legend-box />
-    <overview />
+    <overview v-show="false" />
     <zhfx />
-    <qdtj v-show="yadqPannel === '预案启动条件'" />
-    <sgfj />
-    <zztx v-show="yadqPannel === '组织指挥体系及职责'" />
-    <video-box />
-    <zllb-tab ref="zlTab" />
-    <video-list-pannel />
-    <!-- <div class="video-wrapper">
-      <video id="my-video" class="video-js vjs-default-skin" controls preload="auto" poster="https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg">
-        <source src="http://10.20.103.167:83/ncg/10.20.103.166/7099/0/33038111001322200202/MAIN/TCP/live.m3u8?checkinfo=ewogICAidGltZSIgOiAiMjAyMDA3MTVUMjIyOTMyWiIsCiAgICJ1cmwiIDogImh0dHA6Ly8xMC4yMC4xMDMuMTY3OjgzL25jZy8xMC4yMC4xMDMuMTY2LzcwOTkvMC8zMzAzODExMTAwMTMyMjIwMDIwMi9NQUlOL1RDUC9saXZlLm0zdTgiCn0K&idinfo=EAAAAAAQAAC4gm0bX7cgKBhtPkyaBnSxWWEUGZS7zTyPvg5%2FCOj%2BqUzgKBuq8pvgEAh8gRsn5VM%3D" type="application/x-mpegURL">
-      </video>
-    </div> -->
-    <!-- <jylj /> -->
+    <qdtj v-show="false" />
+    <sgfj v-show="false" />
+    <zztx v-show="false" />
+    <video-box v-show="false"/>
+    <zllb-tab ref="zlTab" v-show="false" />
+    <video-list-pannel v-show="false" />
   </div>
 </template>
 
@@ -48,12 +42,6 @@ import attrData from './components/attrDictionary'
 import MAP_URL from '@/utils/map/map-url'
 import { getVideoByCode, getFiremanByTeamName, getEquipment, getLqzyByCoordinate } from '@/api/lqfb'
 import detailAxios from "@/libs/cimAPI"
-import { Point } from 'ol/geom'
-import {
-  TileSuperMapRest,
-  FeatureService,
-  SuperMap
-} from '@supermap/iclient-ol'
 export default {
   name: 'Lqfb',
   components: {
@@ -181,9 +169,6 @@ export default {
         return false
       }
     },
-
-
-
     async showPopup(evt) {
       const that = this;
       this.clearPopup()
@@ -256,8 +241,6 @@ export default {
       // 是否为火灾点
       // debugger
       if ((value['systemcode'])) {
-        // debugger
-        // that.searchGrid(new Point([value.x,value.y]));
         this.$bus.$emit("fire",value);
       }else{
       }

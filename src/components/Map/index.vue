@@ -107,7 +107,6 @@ import {
   FeatureService,
   SuperMap
 } from '@supermap/iclient-ol'
-
 import { Circle as CircleStyle, Fill, Stroke, Style, Icon, Text } from 'ol/style'
 
 export default {
@@ -160,10 +159,22 @@ export default {
     const that = this;
     await this.initMap();
     this.getData();
-    // that.searchStreet(new Point([119.3574,27.5408]))
-    // this.$bus.$on("refreshIcon",()=>{
-    //   that.getData();
-    // })
+
+    const fireEvent = this.$route.query
+    // console.log(this.fireId);
+    if (fireEvent["id"]) {
+      console.log(fireEvent["id"])
+      Util.detailAxios(fireEvent["id"]).then((res)=>{
+        const value = res.result;
+        // that.showPopup(value);
+        // debugger
+        that.$bus.$emit("fireAndId",value);
+        that.searchGrid(new Point([value.x,value.y]))
+        // debugger
+
+      })
+    }
+
   },
   // beforeDestroy() {
   //   // if (that.timer) {
@@ -172,6 +183,125 @@ export default {
   //   this.$bus.$off("refreshIcon");
   // },
   methods: {
+    searchGrid(point){
+      const that = this;
+      let geometryParam = new SuperMap.GetFeaturesByGeometryParameters({
+        toIndex: 999999,
+        attributeFilter:'',
+        geometry: point,
+        spatialQueryMode: 'INTERSECT', // 相交空间查询模式
+        datasetNames: [`lishui_forestfire:d_region_grid`]
+      })
+      const url = "http://10.53.137.59:8090/iserver/services/data-lishui_forestfire/rest/data";
+      new FeatureService(url).getFeaturesByGeometry(geometryParam, serviceResult => {
+
+        const list = serviceResult.result.features.features;
+        let code;
+        list.forEach(element => {
+          code = element.properties.ADCODE;
+        });
+
+        const sqlParam = new SuperMap.GetFeaturesBySQLParameters({
+          toIndex: 999999,
+          queryParameter: {
+            // name: layerName,
+            attributeFilter: `ADCODE='${code}'`,
+            maxFeatures: 99999999
+          },
+          datasetNames: [`lishui_forestfire:d_region_grid_member`]
+        })
+
+        new FeatureService(url).getFeaturesBySQL(sqlParam, serviceResult => {
+          const gridInfo = serviceResult.result.features;
+          // debugger
+          that.$bus.$emit("gridInfo",gridInfo)
+        })
+
+      })
+    },
+
+
+    async showPopup(fireValue) {
+      const that = this;
+      // this.clearPopup()
+
+      const keyValueFire = document.getElementById('key-value-fire')
+      const jbr = document.getElementById("key-value-fire-jbr")
+      const jbrtel = document.getElementById('key-value-fire-jbrtel')
+      const firetype = document.getElementById("key-value-fire-type")
+      const fireIntensity = document.getElementById('key-value-fire-intensity')
+      const contents = document.getElementById('key-value-fire-cont')
+      const time = document.getElementById('key-value-fire-time')
+
+      const value = fireValue
+
+      if ((value['systemcode'])) {
+        this.$bus.$emit("fire",value);
+
+      }else{
+      }
+      // debugger
+      if (!value['systemcode']) {
+        if ((!value['NAME'] && !value['label'])) return
+      }
+
+      // 显示属性框
+      if (!(value['systemcode'])) {
+        switch (value.type) {
+          case '人员定位':
+            this.rydwPopyp.setPosition(coordinate)
+            break
+          default:
+            this.infoPopup.setPosition(coordinate)
+            break
+        }
+      }
+
+      this.$store.dispatch('map/changeIsShowDetail', true)
+      let table; let infoTmpl = ``
+      // debugger
+      this.$store.dispatch('lqfb/changeIsXFDW', '')
+      table = document.getElementById('table-box')
+      
+      if ((value['systemcode'])) {
+        this.firePopyp.setPosition([value.x,value.y])
+      }
+
+      table.innerHTML = infoTmpl
+      if ((value['systemcode'])) {
+        // keyNameFire.innerHTML = '地点：'
+        if ("null".indexOf(`${value['jubaoren']}`) != -1) {
+          jbr.innerHTML = ``
+        }else{
+          jbr.innerHTML = `${value['jubaoren']}`
+        }
+        if ("null".indexOf(`${value['jubaoren']}`) != -1) {
+          jbrtel.innerHTML = ``
+        }else{
+          jbrtel.innerHTML = `${value['jubaorentel']}`
+        }
+      keyValueFire.innerHTML = `${value['address']}`
+
+      const text = `${value['infocontent']}`
+      // debugger
+      if (text.indexOf(",")>-1) {
+        const arr =text.split(',')
+        // console.log(arr)
+
+        contents.innerHTML = arr[0]
+        
+        fireIntensity.innerHTML = that.fireStrong[arr[1].split(":")[1]]
+        firetype.innerHTML = arr[2].split(":")[1]
+        // debugger
+      }else{
+        contents.innerHTML = `${value['infocontent']}`
+      }
+
+      time.innerHTML = `${value['time']}`
+
+      }
+    },
+
     zbfx() {
       this.$bus.$emit("fireShow", this.tempData);
       console.log(this.detailShow)
@@ -210,8 +340,10 @@ export default {
 
     getData() {
       const that = this;
-      Util.testAxios().then(res=>{
+      Util.listAxios().then(res=>{
         that.$bus.$emit('fireList',res);
+        // const value = res.result;
+        // that.searchGrid(new Point([value.x,value.y]))
         // that.timer = setTimeout(()=>{
         //   that.getData();
         // },60000)
@@ -287,7 +419,7 @@ export default {
             //   width: 1
             // }),
             fill: new Fill({
-              color: 'rgba(205, 128, 56, 0.4)'
+              color: 'rgba(205, 128, 56, 0.2)'
             }),
             // text: new Text({
             //   textAlign: 'center', // 位置
