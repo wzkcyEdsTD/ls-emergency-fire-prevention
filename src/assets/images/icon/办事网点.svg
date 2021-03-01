@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="48" height="48" viewBox="0 0 48 48">
+  <defs>
+    <clipPath id="clip-path">
+      <rect id="矩形_1253" data-name="矩形 1253" width="48" height="48" transform="translate(8533 607)" fill="#fff"/>
+    </clipPath>
+    <filter id="联合_50" x="-0.5" y="-2.5" width="48.532" height="53.3" filterUnits="userSpaceOnUse">
+      <feOffset dy="2" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="1.5" result="blur"/>
+      <feFlood flood-color="#0c110b" flood-opacity="0.251"/>
+      <feComposite operator="in" in2="blur"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+  </defs>
+  <g id="办事网点" transform="translate(-8533 -607)" clip-path="url(#clip-path)">
+    <g transform="matrix(1, 0, 0, 1, 8533, 607)" filter="url(#联合_50)">
+      <path id="联合_50-2" data-name="联合 50" d="M16.7,39.979A20.012,20.012,0,0,1,0,20.11,19.94,19.94,0,0,1,19.766,0,19.94,19.94,0,0,1,39.532,20.11,20.012,20.012,0,0,1,22.837,39.979L19.766,44.3Z" transform="translate(4 0)" fill="#0044fe"/>
+    </g>
+    <path id="路径_2729" data-name="路径 2729" d="M10.876,90.657h1.67v9.373H10.254v1.005h24V100.03H31.106V90.657h2.387a.98.98,0,0,0,1-1.005,1,1,0,0,0-.478-.86L22.661,82.143A.814.814,0,0,0,22.183,82a.965.965,0,0,0-.524.143l-11.31,6.649a1.006,1.006,0,0,0-.478.86A.983.983,0,0,0,10.876,90.657Zm9.964-2.481,1.32-2.32,1.32,2.32,2.683.5L24.3,90.608l.34,2.63-2.474-1.126-2.474,1.126.34-2.63-1.867-1.934ZM9.3,101.068V104H35.02v-2.932Z" transform="translate(8534.879 532.749)" fill="#fff"/>
+    <rect id="矩形_1254" data-name="矩形 1254" width="4" height="5" transform="translate(8555 627)" fill="#0044fe"/>
+    <rect id="矩形_1255" data-name="矩形 1255" width="3" height="5" transform="translate(8560.5 627)" fill="#0044fe"/>
+    <rect id="矩形_1256" data-name="矩形 1256" width="3" height="5" transform="translate(8550.5 627)" fill="#0044fe"/>
+  </g>
+</svg>

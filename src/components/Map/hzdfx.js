@@ -439,6 +439,11 @@ const hzdfxNodes = [
     id:373,
     label:'监控',
     value:MAP_URL.VIDEO
+  },
+  {
+    id:374,
+    label:'办事网点',
+    value:MAP_URL.NETWORK
   }
 ]
 

@@ -253,12 +253,18 @@ export default {
         this.$bus.$emit("videoData",value);
         return
       }
+      //办事网点
+      if (value['BSWD_TYPE']) {
+        return
+      }
       // 是否为火灾点
       // debugger
       if ((value['systemcode'])) {
         // debugger
         // that.searchGrid(new Point([value.x,value.y]));
         this.$bus.$emit("fire",value);
+        this.$bus.$emit("gridInfo",null);
+        this.$bus.$emit("streetInfo",null);
       }else{
       }
       // debugger

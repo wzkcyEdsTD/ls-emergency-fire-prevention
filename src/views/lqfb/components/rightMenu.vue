@@ -164,10 +164,10 @@ export default {
         attributeFilter:'',
         geometry: point,
         spatialQueryMode: 'INTERSECT', // 相交空间查询模式
-        datasetNames: [`lishui_forestfire:d_region_street`]
+        datasetNames: [`lishui_forestfire_v2:d_region_street`]
       })
       // debugger
-      const url = "http://10.53.137.59:8090/iserver/services/data-lishui_forestfire/rest/data";
+      const url = "http://10.53.137.59:8090/iserver/services/data-lishui_forestfire_v2/rest/data";
       new FeatureService(url).getFeaturesByGeometry(geometryParam, serviceResult => {
         // debugger
         console.log(serviceResult)

@@ -75,7 +75,7 @@ export default {
     },
     lqzyLayer() {
       return this.$store.getters.lqzyLayer
-    }
+    },
   },
   watch: {
     features(val) {
@@ -83,7 +83,7 @@ export default {
     },
     clearFlag() {
       this.clearFire()
-    }
+    },
   },
   methods: {
 
@@ -94,9 +94,9 @@ export default {
         attributeFilter:'',
         geometry: point,
         spatialQueryMode: 'INTERSECT', // 相交空间查询模式
-        datasetNames: [`lishui_forestfire:d_region_grid`]
+        datasetNames: [`lishui_forestfire_v2:d_region_grid`]
       })
-      const url = "http://10.53.137.59:8090/iserver/services/data-lishui_forestfire/rest/data";
+      const url = "http://10.53.137.59:8090/iserver/services/data-lishui_forestfire_v2/rest/data";
       new FeatureService(url).getFeaturesByGeometry(geometryParam, serviceResult => {
         const list = serviceResult.result.features.features;
         list.forEach(element => {
@@ -109,7 +109,7 @@ export default {
             attributeFilter: `ADCODE='${that.code}'`,
             maxFeatures: 99999999
           },
-          datasetNames: [`lishui_forestfire:d_region_grid_member`]
+          datasetNames: [`lishui_forestfire_v2:d_region_grid_member`]
         })
 
         new FeatureService(url).getFeaturesBySQL(sqlParam, serviceResult => {
@@ -121,7 +121,43 @@ export default {
       })
     },
 
+    streetDetail(point){
+      const that = this;
+      let geometryParam = new SuperMap.GetFeaturesByGeometryParameters({
+        toIndex: 999999,
+        attributeFilter:'',
+        geometry: point,
+        spatialQueryMode: 'INTERSECT', // 相交空间查询模式
+        datasetNames: [`lishui_forestfire_v2:d_region_street`]
+      })
+      // debugger
+      const url = "http://10.53.137.59:8090/iserver/services/data-lishui_forestfire_v2/rest/data";
+      new FeatureService(url).getFeaturesByGeometry(geometryParam, serviceResult => {
+        // debugger
+        console.log("街道信息查询",serviceResult)
+        const list = serviceResult.result.features.features;
+        let sql;
+        list.forEach(element => {
+          sql = element.properties.SZZ
+        });
+        // debugger
+        const sqlParam = new SuperMap.GetFeaturesBySQLParameters({
+          toIndex: 999999,
+          queryParameter: {
+            // name: layerName,
+            attributeFilter: `SZQX='${sql}'`,
+            maxFeatures: 99999999
+          },
+          datasetNames: [`lishui_forestfire_v2:d_region_street_member`]
+        })
 
+        new FeatureService(url).getFeaturesBySQL(sqlParam, serviceResult => {
+          const gridInfo = serviceResult.result.features;
+          that.$bus.$emit("streetInfo",gridInfo)
+        })
+
+      })
+    },
     handlePickClick() {
       if (this.inputSearchRadius === 0 || !this.inputSearchRadius) {
         this.$message.info('请设置分析范围！')
@@ -198,7 +234,11 @@ export default {
     initData() {
       if (this.features.length === 81) {
         const attrDic = {
-          ZBZY: { // 周边资源
+          ZBZY: {
+             // 周边资源
+            netWork:{
+              name:"办事网点"
+            },
             d_emergency_team: {
               name: '应急队伍'
             },
@@ -290,6 +330,7 @@ export default {
             attrDic.dbfgNum += item.length
           }
         })
+        
         this.$store.dispatch('map/changeFeaturesData', attrDic)
         // console.log("FeaturesData",attrDic);
       }
@@ -306,6 +347,7 @@ export default {
     handleComfirmClick() {
       // const that = this;
       this.searchGrid(new Point([this.inputLon,this.inputLat]))
+      this.streetDetail(new Point([this.inputLon,this.inputLat]))
       this.clearFire();
       const fireFeat = this.$map.createFeature([this.inputLon, this.inputLat])
       this.showFireFeature(fireFeat)
@@ -346,6 +388,10 @@ export default {
       }
         that.inputLon = value.x;
         that.inputLat = value.y;
+        // debugger
+        // that.streetDetail(new Point([value.x,value.y]))
+        // that.streetDetail(new Point([value.x,value.y]))
+        that.$bus.$emit("sysCode",value.systemcode)
         // that.handlePickClick();
     })
 

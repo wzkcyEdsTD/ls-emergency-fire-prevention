@@ -437,6 +437,7 @@ const getFeaturesBySQL = ({ url, dataSourceName, layerName, label, attributeFilt
         features,
         wrapX: false
       })
+
       const resultLayer = new VectorLayer({
         source: vectorSource,
         style: styleFunction,
@@ -487,8 +488,12 @@ const getFeaturesByGeometry = ({ url, dataSourceName, label, layerName, attribut
 
     new FeatureService(url).getFeaturesByGeometry(geometryParam, serviceResult => {
       let features1 = [];
-
+      
+      
       if (serviceResult.result) {
+        // if (label=='综合救援队伍' || label=='森林消防救援队伍'||label=='专业救援队伍'||label=='志愿者救援队伍') {
+        //   return
+        // }
         if(label == '监控'){
           const pointList = serviceResult.result.features.features;
           // debugger
@@ -505,6 +510,20 @@ const getFeaturesByGeometry = ({ url, dataSourceName, label, layerName, attribut
           });
 
           store.dispatch('map/changeVideo', features1)
+        }else if(label == '办事网点'){
+          const list = serviceResult.result.features.features;
+
+          list.forEach(element => {
+            const properties = element.properties;
+            const feature =  new Feature({
+                  geometry: new Point([properties.LONGITUDE,properties.LATITUDE]),
+                  ...properties
+              })
+              // debugger
+              features1.push(feature);
+          });
+          // store.dispatch('map/changeFeatures', features1)
+          store.dispatch('map/changeNetWork', features1)
         }else{
           features1 = new GeoJSON().readFeatures(serviceResult.result.features || [])
         }
@@ -600,6 +619,20 @@ const getFeaturesByGeometry = ({ url, dataSourceName, label, layerName, attribut
                 anchorXUnits: 'fraction',
                 anchorYUnits: 'pixels',
                 src: require(`@/assets/images/icon/${'监控.png'}`)
+              })
+            })
+          })
+          resolve(resultLayer)
+        }else if(label == '办事网点'){
+          const resultLayer = new VectorLayer({
+            source: vectorSource,
+            style: new Style({
+              image: new Icon({
+                anchor: [0.5, 26],
+                anchorXUnits: 'fraction',
+                anchorYUnits: 'pixels',
+                scale: 0.8,
+                src: require(`@/assets/images/icon/${'办事网点.png'}`)
               })
             })
           })

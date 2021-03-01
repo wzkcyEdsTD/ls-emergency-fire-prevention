@@ -170,42 +170,42 @@ const treeData = [
       //     }
       //   ]
       // },
-      {
-        id: 22,
-        label: '应急队伍',
-        children: [
-          {
-            id: 221,
-            label: '综合救援队伍',
-            value: MAP_URL.JZJZNL_YJDW_ZH,
-            isZLZY: true
-          },
-          {
-            id: 222,
-            label: '森林消防救援队伍',
-            value: MAP_URL.JZJZNL_YJDW_GG,
-            isZLZY: true
-          },
-          {
-            id: 223,
-            label: '专业救援队伍',
-            value: MAP_URL.JZJZNL_YJDW_ZY,
-            isZLZY: true
-          },
-          {
-            id: 224,
-            label: '志愿者救援队伍',
-            value: MAP_URL.JZJZNL_YJDW_ZYZ,
-            isZLZY: true
-          }
-          // {
-          //   id: 225,
-          //   label: '森林消防救援队伍',
-          //   value: MAP_URL.JZJZNL_YJDW_XFDW,
-          //   isZLZY: true
-          // }
-        ]
-      },
+      // {
+      //   id: 22,
+      //   label: '应急队伍',
+      //   // children: [
+      //   //   {
+      //   //     id: 221,
+      //   //     label: '综合救援队伍',
+      //   //     value: MAP_URL.JZJZNL_YJDW_ZH,
+      //   //     isZLZY: true
+      //   //   },
+      //   //   {
+      //   //     id: 222,
+      //   //     label: '森林消防救援队伍',
+      //   //     value: MAP_URL.JZJZNL_YJDW_GG,
+      //   //     isZLZY: true
+      //   //   },
+      //   //   {
+      //   //     id: 223,
+      //   //     label: '专业救援队伍',
+      //   //     value: MAP_URL.JZJZNL_YJDW_ZY,
+      //   //     isZLZY: true
+      //   //   },
+      //   //   {
+      //   //     id: 224,
+      //   //     label: '志愿者救援队伍',
+      //   //     value: MAP_URL.JZJZNL_YJDW_ZYZ,
+      //   //     isZLZY: true
+      //   //   }
+      //   //   // {
+      //   //   //   id: 225,
+      //   //   //   label: '森林消防救援队伍',
+      //   //   //   value: MAP_URL.JZJZNL_YJDW_XFDW,
+      //   //   //   isZLZY: true
+      //   //   // }
+      //   // ]
+      // },
       {
         id: 27,
         label: '应急避难场所',
@@ -434,12 +434,10 @@ const treeData = [
             isZLZY: true
           }
         ]
-      }
-      // {
-      //   id: 29,
-      //   label: '党政行政机关'
-      // }
+      },
+
     ]
+      
   },
   // {
   //   id: 3,
@@ -710,6 +708,17 @@ const treeData = [
       {
         id: 71,
         label: '监控'
+      }
+    ]
+  },
+  {
+    id: 3,
+    label: '办事网点',
+    showCheck: true,
+    children: [
+      {
+        id: 31,
+        label: '办事网点',
       }
     ]
   },

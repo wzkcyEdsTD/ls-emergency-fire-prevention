@@ -48,5 +48,6 @@ const getters = {
   lssgDetailItem: state => state.lssg.lssgDetailItem,
   lqzyLayer: state => state.map.lqzyLayer,
   videoData:state => state.map.videoData,
+  netWorkData:state => state.map.netWorkData,
 }
 export default getters

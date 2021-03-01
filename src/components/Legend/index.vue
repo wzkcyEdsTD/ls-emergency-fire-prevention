@@ -3,7 +3,7 @@
     <div class="title">图例</div>
     <div class="item-list">
       <div v-for="(v, i) in layerList" v-show="v.icon" :key="i" class="item">
-        <img v-if="v.icon" :src="require(`@/assets/images/icon/${v.icon}`)">
+        <img v-if="v.icon" class="icon" :src="require(`@/assets/images/icon/${v.icon}`)">
         <span>{{ getLabel(v.label) }}</span>
       </div>
     </div>
@@ -81,6 +81,10 @@ export default {
       align-items: center;
       >span{
         margin-left: 5px;
+      }
+      .icon{
+        width: 26px;
+        height: 26px;
       }
     }
   }

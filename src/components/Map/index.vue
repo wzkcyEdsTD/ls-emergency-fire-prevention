@@ -169,9 +169,12 @@ export default {
         // that.showPopup(value);
         // debugger
         that.$bus.$emit("fireAndId",value);
-        that.searchGrid(new Point([value.x,value.y]))
+        if (value.systemcode.indexOf("ilishui")!=-1) {
+          that.searchStreet(new Point([value.x,value.y]))
+        }
+        // that.searchGrid(new Point([value.x,value.y]))
         // debugger
-
+        
       })
     }
 
@@ -190,9 +193,9 @@ export default {
         attributeFilter:'',
         geometry: point,
         spatialQueryMode: 'INTERSECT', // 相交空间查询模式
-        datasetNames: [`lishui_forestfire:d_region_grid`]
+        datasetNames: [`lishui_forestfire_v2:d_region_grid`]
       })
-      const url = "http://10.53.137.59:8090/iserver/services/data-lishui_forestfire/rest/data";
+      const url = "http://10.53.137.59:8090/iserver/services/data-lishui_forestfire_v2/rest/data";
       new FeatureService(url).getFeaturesByGeometry(geometryParam, serviceResult => {
 
         const list = serviceResult.result.features.features;
@@ -208,7 +211,7 @@ export default {
             attributeFilter: `ADCODE='${code}'`,
             maxFeatures: 99999999
           },
-          datasetNames: [`lishui_forestfire:d_region_grid_member`]
+          datasetNames: [`lishui_forestfire_v2:d_region_grid_member`]
         })
 
         new FeatureService(url).getFeaturesBySQL(sqlParam, serviceResult => {
@@ -219,8 +222,43 @@ export default {
 
       })
     },
+    streetDetail(point){
+      const that = this;
+      let geometryParam = new SuperMap.GetFeaturesByGeometryParameters({
+        toIndex: 999999,
+        attributeFilter:'',
+        geometry: point,
+        spatialQueryMode: 'INTERSECT', // 相交空间查询模式
+        datasetNames: [`lishui_forestfire_v2:d_region_street`]
+      })
+      // debugger
+      const url = "http://10.53.137.59:8090/iserver/services/data-lishui_forestfire_v2/rest/data";
+      new FeatureService(url).getFeaturesByGeometry(geometryParam, serviceResult => {
+        // debugger
+        console.log("街道信息查询",serviceResult)
+        const list = serviceResult.result.features.features;
+        let sql;
+        list.forEach(element => {
+          sql = element.properties.SZZ
+        });
+        // debugger
+        const sqlParam = new SuperMap.GetFeaturesBySQLParameters({
+          toIndex: 999999,
+          queryParameter: {
+            // name: layerName,
+            attributeFilter: `SZQX='${sql}'`,
+            maxFeatures: 99999999
+          },
+          datasetNames: [`lishui_forestfire_v2:d_region_street_member`]
+        })
 
+        new FeatureService(url).getFeaturesBySQL(sqlParam, serviceResult => {
+          const gridInfo = serviceResult.result.features;
+          that.$bus.$emit("streetInfo",gridInfo)
+        })
 
+      })
+    },
     async showPopup(fireValue) {
       const that = this;
       // this.clearPopup()
@@ -403,12 +441,11 @@ export default {
         attributeFilter:'',
         geometry: point,
         spatialQueryMode: 'INTERSECT', // 相交空间查询模式
-        datasetNames: [`lishui_forestfire:d_region_street`]
+        datasetNames: [`lishui_forestfire_v2:d_region_street`]
       })
-      const url = "http://10.53.137.59:8090/iserver/services/data-lishui_forestfire/rest/data";
+      const url = "http://10.53.137.59:8090/iserver/services/data-lishui_forestfire_v2/rest/data";
       new FeatureService(url).getFeaturesByGeometry(geometryParam, serviceResult => {
         // debugger
-        console.log(serviceResult)
         const testList = serviceResult.result.features;
         const features = new GeoJSON().readFeatures(testList)
         features.map(f => {
@@ -445,6 +482,7 @@ export default {
           source: vectorSource,
         })
         this.map.getLayers().insertAt(4, testLayer)
+
       })
     },
 

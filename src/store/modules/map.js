@@ -14,13 +14,16 @@ const state = {
   isShowDeatil: true, // 是否显示查看详情
   lqzyLayer: false, // 林区资源图层
   videoData:[],
+  netWorkData:[],
 }
 
 const mutations = {
   SET_VIDEO(state, video){
     state.videoData = video
   },
-
+  SET_NETWORK(state, list){
+    state.netWorkData = list
+  },
   SET_LQZY_LAYER(state, payload) {
     state.lqzyLayer = payload
   },
@@ -64,12 +67,6 @@ const mutations = {
       const setNameArr = [...new Set(arr.map(v => v.name))];
       state.layerList = setNameArr.map(v => obj[v])
     }
-
-
-
-
-
-
   },
   REMOVE_FROM_LAYER_LIST(state, item) {
     state.layerList = state.layerList.filter(v => v.name !== item.name)
@@ -101,6 +98,9 @@ const mutations = {
 const actions = {
   changeVideo({ commit },video){
     commit('SET_VIDEO', video)
+  },
+  changeNetWork({ commit },list){
+    commit('SET_NETWORK',list)
   },
   addLayerList({ commit },list){
     commit('APPEND_LAYER_LIST', list)
@@ -188,7 +188,6 @@ const actions = {
           }
       })
     )
-
     list = list.filter(v => v.layer != null)
     commit('APPEND_LAYER_LIST', list)
     list.map(v => v.layer && window.g.map.addLayer(v.layer))

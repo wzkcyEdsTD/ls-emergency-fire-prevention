@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="48" height="48" viewBox="0 0 48 48">
+  <defs>
+    <clipPath id="clip-path">
+      <rect id="矩形_1218" data-name="矩形 1218" width="48" height="48" transform="translate(8533 607)" fill="#fff"/>
+    </clipPath>
+    <filter id="联合_48" x="-0.5" y="-2.5" width="48.532" height="53.3" filterUnits="userSpaceOnUse">
+      <feOffset dy="2" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="1.5" result="blur"/>
+      <feFlood flood-color="#0c110b" flood-opacity="0.251"/>
+      <feComposite operator="in" in2="blur"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+  </defs>
+  <g id="着火点" transform="translate(-8533 -607)" clip-path="url(#clip-path)">
+    <g transform="matrix(1, 0, 0, 1, 8533, 607)" filter="url(#联合_48)">
+      <path id="联合_48-2" data-name="联合 48" d="M16.7,39.979A20.012,20.012,0,0,1,0,20.11,19.94,19.94,0,0,1,19.766,0,19.94,19.94,0,0,1,39.532,20.11,20.012,20.012,0,0,1,22.837,39.979L19.766,44.3Z" transform="translate(4 0)" fill="#f90a0a"/>
+    </g>
+    <path id="路径_2725" data-name="路径 2725" d="M24.766,3.254,15.613,19.9H33.919L24.767,3.254ZM25.7.551l10.939,19.9a1.045,1.045,0,0,1-.019,1.04,1.062,1.062,0,0,1-.911.515H13.826a1.062,1.062,0,0,1-.912-.515,1.045,1.045,0,0,1-.019-1.041L23.835.552a1.065,1.065,0,0,1,1.862,0ZM22.884,18.8c-2.338-1.266-2.951-2.424-2.606-4.05.268-1.193,1.226-2.133,1.3-3.326a3.283,3.283,0,0,1,.459,1.736c1.151-1.338,2.338-3.11,2.07-4.737,0,0,2.185.615,3.065,3.8a1.623,1.623,0,0,0,.231-1.88c.767.506,5.212,5.243-.689,8.425a4.817,4.817,0,0,0-1.649-6.074,3.825,3.825,0,0,1-.881,2.893,1.854,1.854,0,0,0-.306-1.519,4.793,4.793,0,0,1-.767,1.7,2.5,2.5,0,0,0-.23,3.037Z" transform="translate(8532.234 614.745)" fill="#fff"/>
+  </g>
+</svg>

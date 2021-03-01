@@ -181,7 +181,7 @@
               <!-- <div class = "iconAndName">
                 <img src="@/assets/images/乡镇人员.png" alt="" class="icon"> -->
                 <span
-                  class="contentList">{{gridPerson}}</span
+                  class="contentList">{{streetPerson}}</span
                 >
               <!-- </div> -->
 
@@ -190,7 +190,7 @@
               <span class="indexList">联系方式</span>
               <div class="line"></div> 
               <span
-                class="contentList">{{gridPersonPhone}}</span
+                class="contentList">{{streetPersonPhone}}</span
               >
             </li>
             <li 
@@ -200,7 +200,7 @@
               <div class="line"></div> 
               <!-- <img src="@/assets/images/乡镇人员.png" alt="" class="icon"> -->
               <span
-                class="contentList">暂无数据</span
+                class="contentList">{{gridPerson}}</span
               >
             </li>
             <li 
@@ -209,7 +209,7 @@
               <span class="indexList">联系方式</span>
               <div class="line"></div> 
               <span
-                class="contentList">暂无数据</span
+                class="contentList">{{gridPersonPhone}}</span
               >
             </li>
           </ul>
@@ -228,19 +228,11 @@
           <ul class="result-list-around" id="table">
             <li
              class="result-data">
-
-              <span class="indexList">应急队伍</span>
+              <span class="indexList">办事网点</span>
               <div class="line"></div> 
-              <!-- <div class = "iconAndName">
-                <img src="@/assets/images/乡镇人员.png" alt="" class="icon"> -->
               <span
-                class="contentList" v-if="videoList.length > 0">{{aroundVideo}}</span
+                class="contentList" >{{aroundDetail}}</span
               >
-              <span
-                class="contentList" v-else>{{`周边无应急队伍`}}</span
-              >
-              <!-- </div> -->
-
             </li>
             <li class="result-data">
               <span class="indexList">监控</span>
@@ -256,20 +248,19 @@
           </ul>
         </div>
       </div>
-      <!-- <el-collapse v-model="activeNames" accordion @change="handleChange(activeNames)"> -->
       <el-collapse v-model="activeNames" accordion  v-show="!hasID">
         <el-collapse-item title="周边资源搜索成果" name="1">
           <div class="ljxq-content">
             <div
-              v-for="(item, index) in featuresData.ZBZY"
+              v-for="(item, index) in tempdata.ZBZY"
               v-show="!ljxqDetailVisible"
               :key="index"
             >
-              <div class="item" @click="handleLabelClick(featuresData.ZBZY[index])">
-                <img :src="getImgSrc(featuresData.ZBZY[index].name)" alt />
+              <div v-show="item" class="item" @click="handleLabelClick(tempdata.ZBZY[index])">
+                <img :src="getImgSrc(tempdata.ZBZY[index].name)" style="width: 26px;height: 26px;" alt />
                 <div class="label">
-                  {{ featuresData.ZBZY[index].name }}：{{
-                    featuresData.ZBZY[index].arr ? featuresData.ZBZY[index].arr.length : 0
+                  {{ tempdata.ZBZY[index].name }}：{{
+                    tempdata.ZBZY[index].arr ? tempdata.ZBZY[index].arr.length : 0
                   }}
                 </div>
               </div>
@@ -297,56 +288,6 @@
             </div>
           </div>
         </el-collapse-item>
-        <!-- <el-collapse-item title="实时响应人员" name="2">
-          <div v-if="ssxyPersonList.length > 0">
-            <ul>
-              <li v-for="(v, i) in ssxyPersonList" :key="i">{{ v.values_["smid"] }}</li>
-            </ul>
-          </div>
-          <div v-else>周边无实时响应人员</div>
-        </el-collapse-item> -->
-        <!-- <el-collapse-item title="安全风险源搜索成果" name="3">
-          <div class="ljxq-content">
-            <div
-              v-for="(item, index) in featuresData.AQFXY"
-              v-show="!ljxqDetailVisible"
-              :key="index"
-            >
-              <div class="item">
-                <img :src="getImgSrc(featuresData.AQFXY[index].name)" alt />
-                <div class="label" @click="handleLabelClick(featuresData.AQFXY[index])">
-                  {{ featuresData.AQFXY[index].name }}：{{
-                    featuresData.AQFXY[index].arr
-                      ? featuresData.AQFXY[index].arr.length
-                      : 0
-                  }}
-                </div>
-              </div>
-            </div>
-            <div v-show="ljxqDetailVisible" class="ljxq-detail">
-              <div>
-                <span
-                  >{{ selectedItem.name }}:<span>{{
-                    selectedItem.arr ? selectedItem.arr.length : 0
-                  }}</span></span
-                >
-                <span class="go-back" @click="ljxqDetailVisible = false">
-                  <span>返回</span>
-                </span>
-              </div>
-              <ul>
-                <li
-                  v-for="(v, i) in selectedItem.arr"
-                  :key="i"
-                  @click="ZoomToFeature(v.feature)"
-                >
-                  {{ v.name }}
-                </li>
-              </ul>
-            </div>
-          </div>
-        </el-collapse-item> -->
-
         <el-collapse-item title="周边监控设置" name="4">
           <div class="zbjksz-container">
             <div v-if="videoList.length > 0">
@@ -425,16 +366,26 @@ export default {
       gridList:undefined,
       gridPerson:'',
       gridPersonPhone:'',
+      streetPerson:'',
+      streetPersonPhone:'',
 
       aroundVideo:'',
+      aroundDetail:"",
+
+      tempdata:{
+        ZBZY:undefined
+      }
     };
   },
   computed: {
     featuresData() {
-      return this.$store.getters.featuresData;
+      return this.$store.getters.featuresData
     },
     videoData() {
       return this.$store.getters.videoData;
+    },
+    netWorkData() {
+      return this.$store.getters.netWorkData;
     },
     zhfxOffsetRight() {
       return this.$store.getters.zhfxOffsetRight;
@@ -463,7 +414,8 @@ export default {
   },
   watch: {
     featuresData(val) {
-      // debugger
+      // console.log(this.$store.getters.featuresData.ZBZY[1]);
+      const that = this;
       this.$store.dispatch("lqfb/changezhfxOffsetRight", 0);
     },
     videoData(val) {
@@ -500,6 +452,43 @@ export default {
       })
       // console.log(that.videoList)
 
+    },
+    netWorkData(val){
+      // console.log("办事网点",val)
+      const that = this;
+      const data = this.featuresData
+      // data.ZBZY.netWork.arr = val
+      // const tempdata = data
+
+      // debugger
+      let list = []
+      val.forEach(item => {
+        const json = {
+          name:item.values_.NAME,
+          feature:item,
+        }
+        list.push(json)
+      })
+      // debugger
+      data.ZBZY.netWork.arr = list
+
+      this.$nextTick(()=>{
+          // debugger
+        if (val && val.length>0) {
+
+          that.aroundDetail = ""
+          val.forEach(element => {
+            that.aroundDetail += element.values_.NAME
+            that.aroundDetail += " "
+          });
+          // debugger
+        }else{
+          that.aroundDetail = "周边无办事网点"
+        }
+
+        that.tempdata = data
+      })
+      // this.$store.dispatch('map/changeFeaturesData', data)
     },
     ssxyPersonList(val) {
       this.ssxyPersonLayer && this.$map.removeLayer(this.ssxyPersonLayer);
@@ -554,8 +543,10 @@ export default {
       this.$map.getMap().getView().setZoom(18);
     },
     handleLabelClick(item) {
+      // debugger
       this.selectedItem = item;
       this.ljxqDetailVisible = true;
+      // debugger
     },
     handleVideoClick(item) {
       //样式待修改
@@ -764,8 +755,7 @@ export default {
     this.$bus.$on('clearAll',()=>{
       that.close()
     })
-    // const fireEvent = this.$route.query
-    // console.log(this.fireId);
+
     that.$bus.$on("fireAndId",value=>{
       console.log(value)
       // debugger
@@ -790,19 +780,11 @@ export default {
         // that.address = value.address;
       })
     })
-    // if (fireEvent["id"]) {
-    //   console.log(fireEvent["id"])
-    //   Util.detailAxios(fireEvent["id"]).then((res)=>{
-    //     const value = res.result;
-    //     // that.showPopup(value);
-    //     // debugger
-    //     that.$bus.$emit("fireAndId",value);
-    //   })
-    // }
+
     that.$bus.$on("gridInfo",gridInfo=>{
-      console.log(gridInfo)
+      console.log("网格信息",gridInfo)
       // debugger
-      if (gridInfo.features.length>0) {
+      if (gridInfo && gridInfo.features.length>0) {
         that.gridPerson = '';
         that.gridPersonPhone = '';
         that.$nextTick(()=>{
@@ -822,13 +804,43 @@ export default {
           that.gridPersonPhone = '暂无数据'
         });
       }
+    })
+    that.$bus.$on("streetInfo",streetInfo=>{
+      // console.log(streetInfo)
+      if (streetInfo && streetInfo.features.length>0) {
+        that.streetPerson = '';
+        that.streetPersonPhone = '';
+        that.$nextTick(()=>{
+          const list = streetInfo.features
+          list.forEach(element => {
+            // debugger
+            that.streetPerson += element.properties.NAME
+            that.streetPerson += ' '
 
+            that.streetPersonPhone += element.properties.TEL
+            that.streetPersonPhone += ' '
+          });
+        }) 
+      }else{
+        that.$nextTick(()=>{
+          that.streetPerson = '暂无数据'
+          that.streetPersonPhone = '暂无数据'
+        });
+      }
+    })
+    that.$bus.$on("sysCode",value=>{
+      // debugger
+      that.$nextTick(()=>{
+        that.syscode = value
+      })
     })
   },
   beforeDestroy(){
     this.$bus.$off('clearAll')
     this.$bus.$off('fireAndId')
     this.$bus.$off('gridInfo')
+    this.$bus.$off('streetInfo')
+    this.$bus.$off('sysCode')
   }
 };
 </script>
@@ -1365,7 +1377,9 @@ export default {
           margin-top: 10px;
           cursor: pointer;
           list-style: none;
-          background: url("../../../assets/images/框(2).png") no-repeat;
+          // background: url("../../../assets/images/框(2).png") no-repeat;
+          background-image: url('~@/assets/images/1.png');
+          background-size: 100% 100%;
         }
       }
       .ljxq-detail {

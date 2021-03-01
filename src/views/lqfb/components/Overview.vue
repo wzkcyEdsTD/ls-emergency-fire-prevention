@@ -1,5 +1,5 @@
 <template>
-  <div class="overview-wrapper" :style="`right: ${zlOffsetRight}rem`">
+  <div class="overview-wrapper" :style="`right: ${zlOffsetRight}rem`" v-show="false">
     <div class="close" @click="close" />
     <!-- 基础要素总览 start -->
     <!-- <div v-show="lqfbActiveMenu === '基础要素' || lqfbActiveMenu === '林区'" class="yjzyzl-wrapper"> -->

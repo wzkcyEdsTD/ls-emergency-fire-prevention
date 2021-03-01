@@ -1,7 +1,7 @@
 import { getForRain_3H } from '@/api/lqfb'
 
-const dataSourceName = 'lishui_forestfire'
-const dataUrl = 'http://10.53.137.59:8090/iserver/services/data-lishui_forestfire/rest/data'
+const dataSourceName = 'lishui_forestfire_v2'
+const dataUrl = 'http://10.53.137.59:8090/iserver/services/data-lishui_forestfire_v2/rest/data'
 // const bufferUrl = 'http://10.36.234.83:8090/iserver/services/data-buffer/rest/data'
 const bufferUrl = ''
 const mapUrl = {
@@ -260,7 +260,14 @@ const mapUrl = {
     icon: '监控.png',
     url: dataUrl
   },
-
+  NETWORK:{
+    type: 'data', // 数据服务
+    layerName: 'd_handle_network',
+    label: '办事网点',
+    dataSourceName,
+    icon: '办事网点.png',
+    url: dataUrl
+  },
   // 水系
   WATER: {
     type: 'map',

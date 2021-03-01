@@ -80,6 +80,8 @@ export default {
       street:false,
       videoLayer:null,
       videoTemp:false,
+      networkLayer:null,
+      networkTemp:false,
     }
   },
   computed: {
@@ -159,7 +161,7 @@ export default {
                 ...properties
             })
 
-          if (element.systemcode.indexOf("tyswxt")) {
+          if (element.systemcode.indexOf("tyswxt")!= -1) {
            const style = new Style({
               image: new Icon({
                 anchor: [0.5, 0.5],
@@ -230,9 +232,9 @@ export default {
               attributeFilter: "",
               maxFeatures: 99999999
             },
-            datasetNames: [`lishui_forestfire:d_video`]
+            datasetNames: [`lishui_forestfire_v2:d_video`]
           })
-          const url = "http://10.53.137.59:8090/iserver/services/data-lishui_forestfire/rest/data";
+          const url = "http://10.53.137.59:8090/iserver/services/data-lishui_forestfire_v2/rest/data";
           // debugger
 
           new FeatureService(url).getFeaturesBySQL(sqlParam, serviceResult => {
@@ -288,7 +290,72 @@ export default {
         }
         this.$store.dispatch('lqfb/changezlOffsetRight', 0)
       }
+      if(data.label === '办事网点'){
+        if (!this.networkLayer) {
+          var sqlParam = new SuperMap.GetFeaturesBySQLParameters({
+            toIndex: 999999,
+            queryParameter: {
+              // name: layerName,
+              attributeFilter: "",
+              maxFeatures: 99999999
+            },
+            datasetNames: [`lishui_forestfire_v2:d_handle_network`]
+          })
+          const url = "http://10.53.137.59:8090/iserver/services/data-lishui_forestfire_v2/rest/data";
+          // debugger
 
+          new FeatureService(url).getFeaturesBySQL(sqlParam, serviceResult => {
+            const videoPointList = serviceResult.result.features.features;
+            // debugger
+            const features = [];
+            videoPointList.forEach(element => {
+              const properties = element.properties;
+
+              const feature =  new Feature({
+                    geometry: new Point([properties.LONGITUDE,properties.LATITUDE]),
+                    ...properties
+                })
+                // debugger
+              const style = new Style({
+                image: new Icon({
+                  anchor: [0.5, 0.5],
+                  anchorXUnits: 'fraction',
+                  anchorYUnits: 'fraction',
+                  scale: 0.8,
+                  src: require(`@/assets/images/icon/${'办事网点.png'}`)
+                }),
+                stroke: new Stroke({ color: 'red', width: 2 })
+              })
+              feature.setStyle(style)
+              features.push(feature);
+            });
+ 
+            var vectorSource = new VectorSource({
+              features,
+              wrapX: false
+            });
+            this.networkLayer = new VectorLayer({
+              source: vectorSource,
+              style:this.$map.getMonitorStyle()
+              })
+            
+            //4: "119.35790729284101"
+            //5: "27.541516789796798"
+            this.$map.addLayer(this.networkLayer)
+        })
+          this.networkTemp = true;
+          // this.$store.dispatch('lqfb/changeVideoListOffsetRight', 0)
+        }else{
+          if (this.networkTemp) {
+            this.networkTemp = false
+          }else if (!this.networkTemp) {
+            this.networkTemp = true
+          }
+          this.networkLayer.setVisible(this.networkTemp);
+        }
+
+        return
+      }
       if(data.label === '区县'){
         this.district = !this.district
         list.forEach(element => {
