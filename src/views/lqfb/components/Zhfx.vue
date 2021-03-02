@@ -1,5 +1,5 @@
 <template>
-  <div class="zhfxlb-wrapper" :style="{ right: `${zhfxOffsetRight}rem` }">
+  <div class="zhfxlb-wrapper" v-show="zhfxOffsetRight==0" >
     <div class="close" @click="close" v-show="!hasID"/>
     <!-- <div class="zgfx-container">
       <div class="title">阻隔分析</div>
@@ -437,20 +437,6 @@ export default {
         // node.setid
       })
       // this.$store.dispatch("lqfb/changezhfxOffsetRight", 0);
-      this.$nextTick(function(){
-          const fireEvent = this.$route.query
-          // console.log(this.fireId);
-          if (fireEvent["id"]) {
-            let node = $(`#finish`)
-            if (node) {
-              node.remove();
-              $(`#temp`).after(`<div id = 'finish'></div>`)
-            }else{
-              $(`#temp`).after(`<div id = 'finish'></div>`)
-            }
-          }
-      })
-      // console.log(that.videoList)
 
     },
     netWorkData(val){
@@ -487,8 +473,33 @@ export default {
         }
 
         that.tempdata = data
+
+
+        const fireEvent = this.$route.query
+        // console.log(this.fireId);
+
+
+        document.onreadystatechange = function () {      
+            if(document.readyState=="complete") {            
+
+            if (fireEvent["id"]) {
+              let node = $(`#finish`)
+              if (node) {
+                node.remove();
+                $(`#temp`).after(`<div id = 'finish'></div>`)
+              }else{
+                $(`#temp`).after(`<div id = 'finish'></div>`)
+              }
+              console.log("已添加finish节点"); 
+            }   
+            }     
+        }
+
+
       })
       // this.$store.dispatch('map/changeFeaturesData', data)
+
+
     },
     ssxyPersonList(val) {
       this.ssxyPersonLayer && this.$map.removeLayer(this.ssxyPersonLayer);
@@ -853,6 +864,7 @@ export default {
   position: absolute;
   z-index: 1000;
   top: 0;
+  right: 0;
   padding: 10px;
   z-index: 1999;
   .close {

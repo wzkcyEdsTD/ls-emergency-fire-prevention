@@ -185,8 +185,6 @@ export default {
             })
             feature.setStyle(style)
           }
-
-
           features.push(feature);
         });
 

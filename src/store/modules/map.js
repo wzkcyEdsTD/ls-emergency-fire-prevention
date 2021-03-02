@@ -64,9 +64,11 @@ const mutations = {
       arr.map(v => {
         if (!obj[v.name]) { obj[v.name] = v }
       })
+
       const setNameArr = [...new Set(arr.map(v => v.name))];
       state.layerList = setNameArr.map(v => obj[v])
     }
+
   },
   REMOVE_FROM_LAYER_LIST(state, item) {
     state.layerList = state.layerList.filter(v => v.name !== item.name)

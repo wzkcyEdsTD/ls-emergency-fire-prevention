@@ -1,8 +1,8 @@
 <template>
-  <div v-show="layerList.length > 0" class="legend-wrapper" :style="{right: `${getOffsetRight()}rem`}">
+  <div v-show="allLayerList.length > 0" class="legend-wrapper" :style="{right: `${getOffsetRight()}rem`}">
     <div class="title">图例</div>
     <div class="item-list">
-      <div v-for="(v, i) in layerList" v-show="v.icon" :key="i" class="item">
+      <div v-for="(v, i) in allLayerList" v-show="v.icon" :key="i" class="item">
         <img v-if="v.icon" class="icon" :src="require(`@/assets/images/icon/${v.icon}`)">
         <span>{{ getLabel(v.label) }}</span>
       </div>
@@ -14,8 +14,8 @@
 export default {
   computed: {
     layerList() {
-      console.log(this.$store.getters.layerList.length)
-      return this.$store.getters.layerList
+      let list = this.$store.getters.layerList
+      return list
     },
     zlOffsetRight() {
       return this.$store.getters.zlOffsetRight
@@ -39,6 +39,49 @@ export default {
       return this.$store.getters.videoListOffsetRight
     }
   },
+  watch:{
+    layerList(val) {
+      const that = this;
+      console.log(val);
+      this.allLayerList = val;
+      if (that.fireLayerTemp) {
+        const legend = {
+          icon:"火灾点.png",
+          label:"火灾点（天眼守望）",
+          name:"火灾点（天眼守望）",
+        }
+        const legend1 = {
+          icon:"着火.png",
+          label:"火灾点（I丽水）",
+          name:"火灾点（I丽水）",
+        }
+        const list = []
+        list.push(legend)
+        list.push(legend1)
+        //过滤重复item
+        if (this.allLayerList.length == 0) {
+          this.allLayerList = [...this.allLayerList, ...list]
+        } else {
+          const obj = {};
+          const arr = [...this.allLayerList, ...list];
+          arr.map(v => {
+            if (!obj[v.name]) { obj[v.name] = v }
+          })
+
+          const setNameArr = [...new Set(arr.map(v => v.name))];
+          this.allLayerList = setNameArr.map(v => obj[v])
+        }
+      }
+      // debugger
+      console.log('过滤后的list',this.allLayerList)
+    }
+  },
+  data() {
+    return {
+      allLayerList:[],
+      fireLayerTemp:true,
+    }
+  },
   methods: {
     getOffsetRight() {
       if (this.zlOffsetRight === 0 || this.zhfxOffsetRight === 0 ||
@@ -53,6 +96,25 @@ export default {
       if (['道路'].indexOf(label) > -1) return ''
       return label
     }
+  },
+  mounted(){
+    const that = this;
+    this.$bus.$on('hzjbd',temp=>{
+      console.log(temp)
+      // debugger
+      that.$nextTick(()=>{
+        that.fireLayerTemp = temp;
+        that.allLayerList = that.allLayerList.filter(v=>{
+          if (!(v.name.indexOf('火灾点')!=-1)) {
+            return v
+          }
+        })
+        console.log(that.allLayerList)
+      })
+    });
+  },
+  beforeDestroy(){
+    this.$bus.$off('hzjbd');
   }
 }
 </script>

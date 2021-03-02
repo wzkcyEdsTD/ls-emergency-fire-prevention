@@ -54,6 +54,7 @@ import {
   FeatureService,
   SuperMap
 } from '@supermap/iclient-ol'
+import { Circle as CircleStyle, Fill, Stroke, Style, Icon, Text } from 'ol/style'
 export default {
   data() {
     return {
@@ -61,6 +62,7 @@ export default {
       inputLon: null,
       inputLat: null,
       code:"",
+      systemcode:"",
     }
   },
   computed: {
@@ -188,7 +190,36 @@ export default {
 
     showFireFeature(fireFeature) {
       // this.$map.zoomToFeature(fireFeature, 15)
-      fireFeature.setStyle(this.$map.getFirePointStyle())
+      const that = this;
+              // debugger
+      if (that.systemcode.indexOf("tyswxt")!=-1) {
+
+        const style = new Style({
+          image: new Icon({
+            anchor: [0.5, 0.5],
+            anchorXUnits: 'fraction',
+            anchorYUnits: 'fraction',
+            // scale:0.3,
+            src: require(`@/assets/images/icon/${'火灾点.png'}`)
+          }),
+          stroke: new Stroke({ color: 'red', width: 2 })
+        })
+        fireFeature.setStyle(style)
+      }else{
+        const style = new Style({
+          image: new Icon({
+            anchor: [0.5, 0.5],
+            anchorXUnits: 'fraction',
+            anchorYUnits: 'fraction',
+            // scale:0.3,
+            src: require(`@/assets/images/icon/${'着火.png'}`)
+          }),
+          stroke: new Stroke({ color: 'red', width: 2 })
+        })
+        fireFeature.setStyle(style)
+      }
+
+
       this.$store.dispatch('jjya/changeFirePt', fireFeature)
       const layer = this.$map.createVectorLayer([fireFeature])
       this.$map.addLayer(layer)
@@ -388,6 +419,7 @@ export default {
       }
         that.inputLon = value.x;
         that.inputLat = value.y;
+        that.systemcode = value.systemcode
         // debugger
         // that.streetDetail(new Point([value.x,value.y]))
         // that.streetDetail(new Point([value.x,value.y]))
