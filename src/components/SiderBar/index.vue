@@ -37,7 +37,7 @@ export default {
   position: relative;
   z-index: 999;
   left: 0;
-  padding-top: 4vh;
+  padding-top: 2vh;
   top: 0;
   transition: left 0.9s;
   overflow-y: scroll;
