@@ -370,9 +370,16 @@ export default {
       that.isHzhzd = true
       that.$parent.isShowPickFirePoint = true
     })
+    that.$bus.$on("printMap",value=>{
+      console.log(value);
+      that.$nextTick(()=>{
+        that.showPrintMap = value
+      })
+    });
   },
   beforeDestroy(){
     this.$bus.$off("fireShow");
+    this.$bus.$off("printMap");
   }
 }
 </script>

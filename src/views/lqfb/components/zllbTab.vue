@@ -1,5 +1,5 @@
 <template>
-  <div v-show="!isAddFeatures" class="zllb-tabs">
+  <div v-show="!isAddFeatures && showPrintMap" class="zllb-tabs">
     <div
       v-for="(item, index) in checkedLeafNodes"
       v-show="item.isZLZY === true"
@@ -27,8 +27,19 @@ export default {
       return this.$store.getters.isAddFeatures
     }
   },
+  data(){
+    return{
+      showPrintMap:true
+    }
+  },
   mounted() {
-
+    const that = this;
+    that.$bus.$on("printMap",value=>{
+      console.log(value);
+      that.$nextTick(()=>{
+        that.showPrintMap = value
+      })
+    });
   },
   methods: {
     handleTab(tabName) {
@@ -46,6 +57,9 @@ export default {
         ? this.$store.dispatch('lqfb/changezlActiveTab', nodes[0].label)
         : this.$store.dispatch('lqfb/changezlActiveTab', null)
     }
+  },
+  beforeDestroy(){
+    this.$bus.$off("printMap");
   }
 }
 </script>

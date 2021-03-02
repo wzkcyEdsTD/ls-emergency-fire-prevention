@@ -442,7 +442,8 @@ export default {
       // debugger
       // that.$store.dispatch("map/clearLayerList",[]);
       // that.initData()
-      
+      that.systemcode = value.systemcode
+      that.$bus.$emit("sysCode",value.systemcode)
       //等待资源加载完
       setTimeout(()=>{
         that.handleComfirmClick();

@@ -192,13 +192,13 @@ export default {
     },
     closeMenu(){
       const that = this;
-      if (that.rydwPannelOffsetRight==-30) {
+      if (that.rydwPannelOffsetRight==-25) {
         that.$nextTick(() => {
           that.rydwPannelOffsetRight=0
         })
       }else{
         that.$nextTick(() => {
-          that.rydwPannelOffsetRight=-30
+          that.rydwPannelOffsetRight=-25
         })
       }
     },
@@ -336,7 +336,7 @@ export default {
         if (value) {
             this.rydwPannelOffsetRight=0
         }else{
-            this.rydwPannelOffsetRight=-30
+            this.rydwPannelOffsetRight=-25
         }
       })
     })

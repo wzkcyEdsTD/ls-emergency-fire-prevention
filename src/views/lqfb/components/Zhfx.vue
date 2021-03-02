@@ -445,7 +445,6 @@ export default {
       const data = this.featuresData
       // data.ZBZY.netWork.arr = val
       // const tempdata = data
-
       // debugger
       let list = []
       val.forEach(item => {
@@ -457,7 +456,6 @@ export default {
       })
       // debugger
       data.ZBZY.netWork.arr = list
-
       this.$nextTick(()=>{
           // debugger
         if (val && val.length>0) {
@@ -471,17 +469,11 @@ export default {
         }else{
           that.aroundDetail = "周边无办事网点"
         }
-
         that.tempdata = data
-
-
         const fireEvent = this.$route.query
         // console.log(this.fireId);
-
-
-        document.onreadystatechange = function () {      
-            if(document.readyState=="complete") {            
-
+        document.onreadystatechange = function () {
+          if(document.readyState=="complete") {
             if (fireEvent["id"]) {
               let node = $(`#finish`)
               if (node) {
@@ -491,15 +483,11 @@ export default {
                 $(`#temp`).after(`<div id = 'finish'></div>`)
               }
               console.log("已添加finish节点"); 
-            }   
-            }     
+            }
+          }
         }
-
-
       })
       // this.$store.dispatch('map/changeFeaturesData', data)
-
-
     },
     ssxyPersonList(val) {
       this.ssxyPersonLayer && this.$map.removeLayer(this.ssxyPersonLayer);
