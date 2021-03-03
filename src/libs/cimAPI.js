@@ -31,15 +31,15 @@ function getData(sign,requestTime) {
 };
 
 
-function testAxios() {
+function testAxios(pageSize) {
     const method = "get"
-    return getAxios(`front/forestfire/forestFireCaseCurdate/queryForestFireCaseCurData?pageSize=1000`
+    return getAxios(`front/forestfire/forestFireCaseCurdate/queryForestFireCaseCurData?pageSize=${pageSize}`
     ,{},method)
 };
 
-function listAxios() {
+function listAxios(pageSize) {
     const method = "get"
-    return getAxios(`front/forestfire/forestFireCaseCurdate/list?pageSize=1000`
+    return getAxios(`front/forestfire/forestFireCaseCurdate/list?pageSize=${pageSize}`
     ,{},method)
 };
 

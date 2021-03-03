@@ -182,6 +182,44 @@ function crtLayerWMTS(type, proj, opacity) {
   return layer;
 }
 
+
+//后端访问的底图地址
+function crtLayerWMTSAndID(type, proj, opacity) {
+  var projection = ol.proj.get("EPSG:4326");
+  var projectionExtent = projection.getExtent();
+  var size = ol.extent.getWidth(projectionExtent) / 256;
+  var resolutions = new Array(19);
+  var matrixIds = new Array(19);
+  for (var z = 1; z < 19; ++z) {
+    // generate resolutions and matrixIds arrays for this WMTS
+    resolutions[z] = size / Math.pow(2, z);
+    matrixIds[z] = z;
+  }
+  var layer = new ol.layer.Tile({
+    // opacity: opacity,
+    source: new ol.source.WMTS({
+      // attributions: 'Tiles © 天地图',
+      // url: 'http://t0.tianditu.com/' + type + '/wmts?tk=717e5c0403f4c23654be096d2f7d6e68',
+      url:'http://10.53.137.235/tianditu/'+type+'/wmts?tk=717e5c0403f4c23654be096d2f7d6e68',
+      layer: type.substr(0, 3),
+      matrixSet: type.substring(4),
+      format: 'tiles',
+      projection: projection,
+      tileGrid: new ol.tilegrid.WMTS({
+        origin: ol.extent.getTopLeft(projectionExtent),
+        resolutions: resolutions,
+        matrixIds: matrixIds
+      }),
+      style: 'default',
+      wrapX: true,
+      crossOrigin: "Anonymous"
+    }),
+    className: type
+  });
+  layer.id = type;
+  return layer;
+}
+
 const createTestLayer = (url, options = {}) => {
   const token = "717e5c0403f4c23654be096d2f7d6e68";
   const layer = new ol.layer.Tile({
@@ -1241,5 +1279,6 @@ export default {
   doPolygonMeasure,
   wind,
   createTestLayer,
-  crtLayerWMTS
+  crtLayerWMTS,
+  crtLayerWMTSAndID
 }

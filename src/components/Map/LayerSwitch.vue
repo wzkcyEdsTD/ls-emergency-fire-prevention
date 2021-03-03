@@ -118,6 +118,7 @@ export default {
       toolList: ['绘点', '绘线',"绘面",'清空',"打印"],
       dgxLayer: null ,// 示高线图层
       mapType:"img_c",
+      hasID:false,
     }
   },
   computed: {
@@ -143,6 +144,7 @@ export default {
     },
 
     handleDropdownChange(data) {
+      const that = this;
       const map = window.g.map;
       if (data.label === '示高线') {
         this.showDGX()
@@ -168,9 +170,15 @@ export default {
         })
         //若无矢量图
         if(!temp){
-          const vec_layer = this.$map.crtLayerWMTS("vec_c")
-          const cva_layer = this.$map.crtLayerWMTS("cva_c")
-                    // const cva_layer = this.$map.crtLayerWMTS("cva_c")
+          let vec_layer = ''
+          let cva_layer = ''
+          if (that.hasID) {
+            vec_layer = this.$map.crtLayerWMTSAndID("vec_c")
+            cva_layer = this.$map.crtLayerWMTSAndID("cva_c")
+          } else{
+            vec_layer = this.$map.crtLayerWMTS("vec_c")
+            cva_layer = this.$map.crtLayerWMTS("cva_c")
+          }
           temp = vec_layer;
           map.getLayers().item(0).setVisible(false)//影像图
           map.getLayers().item(1).setVisible(false)//影像图注记
@@ -214,8 +222,16 @@ export default {
         })
         //若无矢量图
         if(!temp){
-          const vec_layer = this.$map.crtLayerWMTS("vec_c")
-          const cva_layer = this.$map.crtLayerWMTS("cva_c")
+          let vec_layer = ''
+          let cva_layer = ''
+
+          if (that.hasID) {
+            vec_layer = this.$map.crtLayerWMTSAndID("vec_c")
+            cva_layer = this.$map.crtLayerWMTSAndID("cva_c")
+          } else{
+            vec_layer = this.$map.crtLayerWMTS("vec_c")
+            cva_layer = this.$map.crtLayerWMTS("cva_c")
+          }
           temp = vec_layer;
           map.getLayers().item(0).setVisible(false)//影像图
           map.getLayers().item(1).setVisible(false)//影像图注记
@@ -374,6 +390,15 @@ export default {
   },
   mounted(){
     const that = this;
+
+    const fireEvent = that.$route.query
+    if (fireEvent["id"]) {
+      console.log(fireEvent["id"])
+      that.hasID = true;
+    }else{
+      that.hasID = false;
+    }
+
     that.$nextTick(()=>{
       that.showPrintMap=true
       const fireEvent = this.$route.query
@@ -388,6 +413,8 @@ export default {
         that.showPrintMap = value
       })
     });
+
+
   },
   beforeDestroy(){
     const that = this;

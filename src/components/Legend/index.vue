@@ -51,7 +51,7 @@ export default {
           name:"火灾点（天眼守望）",
         }
         const legend1 = {
-          icon:"着火.png",
+          icon:"举报人icon.png",
           label:"火灾点（I丽水）",
           name:"火灾点（I丽水）",
         }

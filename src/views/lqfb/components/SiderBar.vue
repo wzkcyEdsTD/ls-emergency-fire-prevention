@@ -179,7 +179,7 @@ export default {
                 anchorXUnits: 'fraction',
                 anchorYUnits: 'fraction',
                 // scale:0.3,
-                src: require(`@/assets/images/icon/${'着火.png'}`)
+                src: require(`@/assets/images/icon/${'举报人icon.png'}`)
               }),
               stroke: new Stroke({ color: 'red', width: 2 })
             })

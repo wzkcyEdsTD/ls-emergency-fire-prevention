@@ -37,12 +37,19 @@
             class="list-item" 
             :class="{active : fireUnresolve == index}"
             @click="fireUnresolve = index;clickFire(item)">
-          <div class="item item-1">{{ item.address }}</div>
+          <div @mouseenter="titeEnter" class="item item-1">{{ item.address }}</div>
           <!-- <div class="item item-1">{{ item.jubaoren }}</div> -->
           <div class="item item-1">{{ item.time }}</div>
           <div class="item item-1">{{ systemName[`${item.systemcode}`] }}</div>
         </li>
+        <!-- <div class="more" @click="viewMore">查看更多</div> -->
+        <div class="allmore" v-show="hasMore && !hasSearch" @click="viewMore">
+          <div class="moreText">查看更多</div>
+          <div class="more" />
+        </div>
+        
       </ul>
+
       <div>
         <div class="titleLine">
           <div class="title">
@@ -73,11 +80,15 @@
               class="list-item" 
               :class="{active : fire == index}"
               @click="fire = index;clickFire(item)">
-            <div class="item item-1">{{ item.address }}</div>
+            <div @mouseenter="titeEnter" class="item item-1">{{ item.address }}</div>
             <!-- <div class="item item-1">{{ item.jubaoren }}</div> -->
             <div class="item item-1">{{ item.time }}</div>
             <div class="item item-1">{{ systemName[`${item.systemcode}`] }}</div>
           </li>
+          <div class="allmore" v-show="hasMoreHistory && !hasSearchHistory" @click="viewMoreHistory">
+            <div class="moreText">查看更多</div>
+            <div class="more" />
+          </div>
         </ul>
       </div>
     </div>
@@ -108,6 +119,10 @@ export default {
 
   data() {
     return {
+        hasSearch:false,
+        hasSearchHistory:false,
+        hasMore:true,
+        hasMoreHistory:true,
         rydwPannelOffsetRight:0,
         fireList,
         fire:null,
@@ -122,9 +137,42 @@ export default {
           "ilishui":"I丽水",
           "tyswxt":"天眼守望"
         },
+        size:1000,
     }
   },
   methods:{
+    viewMoreHistory(){
+      const that = this;
+      that.$nextTick(()=>{
+        that.hasMoreHistory = false;
+        const templist1 = that.fireList.result.records.sort(that.sortUpDate);
+        that.tempList = templist1.filter(v=>{
+          if (v.status && v.status.indexOf('已办结')!=-1) {
+            return v
+          }
+        })
+      })
+    },
+    viewMore(){
+      const that = this;
+      that.$nextTick(()=>{
+        that.hasMore = false;
+        const list = that.fireList.result.records.sort(that.sortUpDate)
+        that.unresolveList = list.filter((v) =>{
+          if (v.status && v.status.indexOf(`已办结`) == -1) {
+            return v
+          }else if (!v.status) {
+            return v            
+          }
+        })
+      })
+      // console.log('1233211234567');
+    },
+    titeEnter(e) {
+      const target = e.target;
+      const { clientWidth, scrollWidth, title } = target;
+      if (!title && scrollWidth > clientWidth) target.title = target.innerText;
+    },
     refreshEvent(){
       const that = this;
       let node = $("#refreshIcon");
@@ -146,10 +194,25 @@ export default {
     getData() {
       const that = this;
       //主动刷新
-      Util.testAxios().then(res=>{
-        console.log(res.result.records)
-        const list = res.result.records
-        that.$bus.$emit('fireList',res);
+      const size = window.size;
+      that.size = size;
+      // debugger
+      Util.testAxios(Number(that.size)).then(res=>{
+        if(res.message.indexOf('成功')!=-1){
+          // debugger
+          if (that.size < Number(res.result.total)) {
+            that.size = (res.result.total + 100);
+            console.log(that.size);
+            Util.testAxios(Number(that.size)).then(r=>{
+              that.$bus.$emit('fireList',r);
+            })
+          }else{
+            that.$bus.$emit('fireList',res);
+          }
+        }
+        // console.log(res.result.records)
+        // const list = res.result.records
+        // that.$bus.$emit('fireList',res);
       })
 
     },
@@ -175,6 +238,11 @@ export default {
         const features = new GeoJSON().readFeatures(testList)
         features.map(f => {
           f.setStyle(new Style({
+            stroke: new Stroke({
+              color: 'rgba(255, 0, 0, 0.8)',
+              lineDash:[1,15,1],
+              width: 3
+            }),
             fill: new Fill({
               color: 'rgba(205, 128, 56, 0.2)'
             }),
@@ -214,8 +282,15 @@ export default {
     searchFilter(){
       const that = this
       if (that.searchText) {
-        this.list = that.fireList.result.records.sort(that.sortUpDate)
+        this.list = that.fireList.result.records.sort(that.sortUpDate).filter(v=>{
+          if (v.status && v.status.indexOf('已办结')!=-1) {
+            return v
+          }
+        })
       // debugger
+        if (that.hasMoreHistory) {
+          this.list = this.list.slice(0,10)
+        }
         const key = that.findKey(that.searchText);
         // that.tempList = [];
         console.log(key)
@@ -232,15 +307,29 @@ export default {
           console.log(that.tempList)
         })
         // debugger
-
+        that.hasSearchHistory = true;
       }else{
-        this.tempList = that.fireList.result.records.sort(that.sortUpDate)
+        that.hasSearchHistory = false;
+        let templist = that.fireList.result.records.sort(that.sortUpDate)
+        if (that.hasMoreHistory) {
+          templist = templist.slice(0,10)
+        }
+        this.tempList = templist.filter(v=>{
+          if (v.status && v.status.indexOf('已办结')!=-1) {
+            return v
+          }
+        })
       }
+      
     },
     searchFilterUnresolve(){
       const that = this
       if (that.searchTextUnresolve) {
-        const list = that.fireList.result.records.sort(that.sortUpDate)
+        that.hasSearch = true;
+        let list = that.fireList.result.records.sort(that.sortUpDate)
+        if (that.hasMore) {
+          list = list.slice(0,10);
+        }
         that.unresolveList = list.filter((v) =>{
           if (v.status && v.status.indexOf(`已办结`) == -1) {
             return v
@@ -266,7 +355,11 @@ export default {
           console.log(that.unresolveList)
         })
       }else{
-        const tempList = that.fireList.result.records.sort(that.sortUpDate)
+        that.hasSearch = false;
+        let tempList = that.fireList.result.records.sort(that.sortUpDate)
+        if (that.hasMore) {
+          tempList = tempList.slice(0,10);
+        }
         that.unresolveList = tempList.filter((v) =>{
           if (v.status && v.status.indexOf(`已办结`) == -1) {
             return v
@@ -275,17 +368,30 @@ export default {
           }
         })
       }
+      
     },
     searchClear(){
       // debugger
       const that = this
-      this.tempList = this.fireList.result.records.sort(that.sortUpDate);
+      let templist = this.fireList.result.records.sort(that.sortUpDate);
+      if (that.hasMoreHistory) {
+          templist = templist.slice(0,10);
+      }
+      this.tempList = templist.filter(v=>{
+        if (v.status && v.status.indexOf('已办结')!=-1) {
+          return v
+        }
+      })
       this.searchText = "";
+      that.hasSearchHistory = false;
     },
     searchClearUnresolve(){
       // debugger
       const that = this
-      const tempList = this.fireList.result.records.sort(that.sortUpDate);
+      let tempList = this.fireList.result.records.sort(that.sortUpDate);
+      if (that.hasMore) {
+        tempList = tempList.slice(0,10);
+      }
       that.unresolveList = tempList.filter((v) =>{
         if (v.status && v.status.indexOf(`已办结`) == -1) {
           return v
@@ -294,6 +400,7 @@ export default {
         }
       })
       this.searchTextUnresolve = "";
+      that.hasSearch = false;
     },
     //正序
     sortDownDate(a, b) {
@@ -311,9 +418,15 @@ export default {
       that.$nextTick(()=>{
         that.fireList = value;
         // debugger
-        that.tempList =that.fireList.result.records.sort(that.sortUpDate)
+        //that.tempList =that.fireList.result.records.sort(that.sortUpDate)
         // debugger
-        that.unresolveList = that.tempList.filter((v) =>{
+        const templist1 = that.fireList.result.records.sort(that.sortUpDate);
+        that.tempList = templist1.filter(v=>{
+          if (v.status && v.status.indexOf('已办结')!=-1) {
+            return v
+          }
+        })
+        that.unresolveList = templist1.filter((v) =>{
           if (v.status && v.status.indexOf(`已办结`) == -1) {
             return v
           }else if (!v.status) {
@@ -327,6 +440,19 @@ export default {
             that.searchStreet(new Point([Number(element.x),Number(element.y)]))
           }
         });
+        if (that.unresolveList.length>10) {
+          that.unresolveList = that.unresolveList.slice(0,10);
+          that.hasMore = true;
+        }else{
+          that.hasMore = false;
+        }
+        if (that.tempList.length>10) {
+          that.tempList = that.tempList.slice(0,10);
+          that.hasMoreHistory = true;
+        }else{
+          that.hasMoreHistory = false;
+        }
+        
       })
     })
     this.$bus.$on("hzjbd",(value)=>{
@@ -678,6 +804,26 @@ export default {
       .item-3 {
       flex: 1
       }
+      .allmore{
+        cursor: pointer;
+        display:flex;
+        justify-content:center;
+        flex-flow: column;
+        padding-left: 15vh;
+        .more{
+          background: url('~@/assets/images/查看更多.png');
+          background-size: 100% 100%;
+          width: 5vh;
+          height: 4vh;
+          position: relative;
+          top: -1vh;
+          left: 0.5vh;
+        }
+        .moreText{
+          font-size: 16px;
+        }
+      }
+
   }
 }
 

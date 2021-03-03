@@ -1,5 +1,5 @@
 <template>
-  <div class="zhfxlb-wrapper" v-show="zhfxOffsetRight==0" >
+  <div class="zhfxlb-wrapper" :style="{ right: `${zhfxOffsetRight}rem` }" >
     <div class="close" @click="close" v-show="!hasID"/>
     <!-- <div class="zgfx-container">
       <div class="title">阻隔分析</div>
@@ -107,6 +107,7 @@
               <div class="line"></div> 
               <img src="@/assets/images/地址.png" alt="" class="icon">
               <span
+                @mouseenter="titeEnter"
                 class="contentList">{{address}}</span
               >
             </li>
@@ -181,6 +182,7 @@
               <!-- <div class = "iconAndName">
                 <img src="@/assets/images/乡镇人员.png" alt="" class="icon"> -->
                 <span
+                  @mouseenter="titeEnter"
                   class="contentList">{{streetPerson}}</span
                 >
               <!-- </div> -->
@@ -190,6 +192,7 @@
               <span class="indexList">联系方式</span>
               <div class="line"></div> 
               <span
+                @mouseenter="titeEnter"
                 class="contentList">{{streetPersonPhone}}</span
               >
             </li>
@@ -200,6 +203,7 @@
               <div class="line"></div> 
               <!-- <img src="@/assets/images/乡镇人员.png" alt="" class="icon"> -->
               <span
+                @mouseenter="titeEnter"
                 class="contentList">{{gridPerson}}</span
               >
             </li>
@@ -209,6 +213,7 @@
               <span class="indexList">联系方式</span>
               <div class="line"></div> 
               <span
+                @mouseenter="titeEnter"
                 class="contentList">{{gridPersonPhone}}</span
               >
             </li>
@@ -228,9 +233,10 @@
           <ul class="result-list-around" id="table">
             <li
              class="result-data">
-              <span class="indexList">办事网点</span>
+              <span  class="indexList">办事网点</span>
               <div class="line"></div> 
               <span
+                @mouseenter="titeEnter"
                 class="contentList" >{{aroundDetail}}</span
               >
             </li>
@@ -430,7 +436,7 @@ export default {
           that.aroundVideo = '';
           val.forEach(element => {
             that.aroundVideo += element.values_.MC
-            that.aroundVideo += " "
+            that.aroundVideo += "   "
           })
         }
         // var node = document.createElement();
@@ -463,7 +469,7 @@ export default {
           that.aroundDetail = ""
           val.forEach(element => {
             that.aroundDetail += element.values_.NAME
-            that.aroundDetail += " "
+            that.aroundDetail += "   "
           });
           // debugger
         }else{
@@ -526,6 +532,11 @@ export default {
     },
   },
   methods: {
+    titeEnter(e) {
+      const target = e.target;
+      const { clientWidth, scrollWidth, title } = target;
+      if (!title && scrollWidth > clientWidth) target.title = target.innerText;
+    },
     handleCheckedLineChange(val) {
       const checkedCount = val.length;
       this.checkAll = checkedCount === this.pathList.length;
@@ -918,7 +929,7 @@ export default {
     // height: 450px;
     height: calc(100% - 120px);
     width: 100%;
-    padding-top: 4vh;
+    padding-top: 1vh;
 
     .titleLine{
       display: flex;

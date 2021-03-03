@@ -126,6 +126,8 @@ export default {
       tempData: null,
       key: null,
       timer:undefined,
+      hasID:false,
+      size:1000,
     };
   },
   computed: {
@@ -157,13 +159,11 @@ export default {
   },
   async mounted() {
     const that = this;
-    await this.initMap();
-    this.getData();
-
     const fireEvent = this.$route.query
     // console.log(this.fireId);
     if (fireEvent["id"]) {
       console.log(fireEvent["id"])
+      that.hasID = true;
       Util.detailAxios(fireEvent["id"]).then((res)=>{
         const value = res.result;
         // that.showPopup(value);
@@ -176,7 +176,14 @@ export default {
         // debugger
         
       })
+    }else{
+      that.hasID = false;
     }
+    await this.initMap();
+    this.getData();
+
+
+
 
   },
   // beforeDestroy() {
@@ -378,8 +385,22 @@ export default {
 
     getData() {
       const that = this;
-      Util.listAxios().then(res=>{
-        that.$bus.$emit('fireList',res);
+      Util.listAxios(that.size).then(res=>{
+        if(res.message.indexOf('成功')!=-1){
+          // debugger
+          if (that.size < Number(res.result.total)) {
+            that.size = (res.result.total + 100);
+            console.log(that.size);
+            window.size = that.size;
+            Util.listAxios(that.size).then(r=>{
+              that.$bus.$emit('fireList',r);
+            })
+          }else{
+            window.size = that.size;
+            that.$bus.$emit('fireList',res);
+          }
+        }
+        
         // const value = res.result;
         // that.searchGrid(new Point([value.x,value.y]))
         // that.timer = setTimeout(()=>{
@@ -392,15 +413,29 @@ export default {
 
     initMap() {
       this.map = this.$map.createMap("map-container");
-      
-      const wenzhouLayer = this.$map.crtLayerWMTS('img_c')
-      this.$store.dispatch("map/changeBaseLayer", wenzhouLayer);
+      const that = this;
 
-      // const zjLayer = this.$map.createTianDiTuLayer("cia_w");
-      const zjLayer = this.$map.crtLayerWMTS("cia_c");
+      let wenzhouLayer = ''
+      let zjLayer = ''
+      if (that.hasID) {
+        wenzhouLayer = this.$map.crtLayerWMTSAndID('img_c')
+        this.$store.dispatch("map/changeBaseLayer", wenzhouLayer);
 
-      // // zjLayer.addFilter(mask)
-      this.$store.dispatch("map/changeZjLayer", zjLayer);
+        // const zjLayer = this.$map.createTianDiTuLayer("cia_w");
+        zjLayer = this.$map.crtLayerWMTSAndID("cia_c");
+
+        // // zjLayer.addFilter(mask)
+        this.$store.dispatch("map/changeZjLayer", zjLayer);
+      }else{
+        wenzhouLayer = this.$map.crtLayerWMTS('img_c')
+        this.$store.dispatch("map/changeBaseLayer", wenzhouLayer);
+
+        // const zjLayer = this.$map.createTianDiTuLayer("cia_w");
+        zjLayer = this.$map.crtLayerWMTS("cia_c");
+
+        // // zjLayer.addFilter(mask)
+        this.$store.dispatch("map/changeZjLayer", zjLayer);
+      }
 
       //行政区划
       const baseUrl = `http://10.53.137.59:8090/iserver/services/map-lishui_region/rest/maps/`;
@@ -450,11 +485,11 @@ export default {
         const features = new GeoJSON().readFeatures(testList)
         features.map(f => {
           f.setStyle(new Style({
-            // stroke: new Stroke({
-            //   color: 'rgba(249,219,49, 0.8)',
-            //   // lineDash: [4],
-            //   width: 1
-            // }),
+            stroke: new Stroke({
+              color: 'rgba(255, 0, 0, 0.8)',
+              lineDash:[1,15,1],
+              width: 3
+            }),
             fill: new Fill({
               color: 'rgba(205, 128, 56, 0.2)'
             }),
