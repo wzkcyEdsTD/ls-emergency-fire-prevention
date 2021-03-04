@@ -1,5 +1,6 @@
 <template>
-  <div v-show="!isAddFeatures && showPrintMap" class="zllb-tabs">
+  <!-- <div v-show="!isAddFeatures && showPrintMap" class="zllb-tabs" > -->
+  <div v-show="false" class="zllb-tabs" >
     <div
       v-for="(item, index) in checkedLeafNodes"
       v-show="item.isZLZY === true"

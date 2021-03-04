@@ -1205,6 +1205,10 @@ function wind(windData) {
 const removeWindLayer = function (ADLayer) {
   let oe = ADLayer;
   oe && oe.clear()
+  let node = $(`#e_container`)
+  if (node) {
+    node.remove()
+  }
 }
 
 // 测距

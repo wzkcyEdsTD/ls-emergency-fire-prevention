@@ -233,7 +233,7 @@ export default {
       const url = "http://10.53.137.59:8090/iserver/services/data-lishui_forestfire_v2/rest/data";
       new FeatureService(url).getFeaturesByGeometry(geometryParam, serviceResult => {
         // debugger
-        console.log(serviceResult)
+        // console.log(serviceResult)
         const testList = serviceResult.result.features;
         const features = new GeoJSON().readFeatures(testList)
         features.map(f => {

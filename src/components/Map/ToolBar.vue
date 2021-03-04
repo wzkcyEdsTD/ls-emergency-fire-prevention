@@ -230,10 +230,10 @@ export default {
     
     showWind(){
       const that = this;
-      if (!that.checkedWind) {
-        that.$map.getMap().getView().setCenter([119.923238,28.467972])
-        that.$map.getMap().getView().setZoom(5)
-      }
+      // if (!that.checkedWind) {
+      //   that.$map.getMap().getView().setCenter([119.923238,28.467972])
+      //   that.$map.getMap().getView().setZoom(5)
+      // }
       that.$nextTick(()=>{
         that.checkedWind = !that.checkedWind
       })
@@ -274,11 +274,29 @@ export default {
     addWindCur() {
       const url = `https://datacenter.istrongcloud.com`
       const that = this;
-      axios.get(`${url}/data/gfs/fcdata/202101/25/08/132.json?v=1611565356612`).then(res => {
-         const temp = res.data["2021013020"]
-         console.log(temp)
+      axios.get(`${url}/data/gfs/fcdata/202103/04/02/006.json?v=1614821921256`).then(res => {
+         const temp = res.data["2021030408"]
+        //  console.log(temp)
          that.oe = that.$map.wind(temp);
-         console.log(that.oe);
+          // console.log("7777777777",window.g.map.getLayers())
+        //  that.$nextTick(()=>{
+        //   console.log("2222222222");
+        //   document.onreadystatechange = function () {
+        //     if(document.readyState=="complete") {
+        //       if (fireEvent["id"]) {
+        //         let node = $(`#finish`)
+        //         if (node) {
+        //           node.remove();
+        //           $(`#temp`).after(`<div id = 'finish'></div>`)
+        //         }else{
+        //           $(`#temp`).after(`<div id = 'finish'></div>`)
+        //         }
+        //         console.log("已添加finish节点11111111111"); 
+        //       }
+        //     }
+        //   }
+        //  })
+
       })
 
       // this.$map.removeWindLayer()
@@ -363,6 +381,7 @@ export default {
       // console.log(this.fireId);
       if (fireEvent["id"]) {
         that.showPrintMap=false;
+        that.addWindCur()
       }
     })
 

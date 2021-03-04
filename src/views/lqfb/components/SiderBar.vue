@@ -63,6 +63,7 @@ export default {
   },
   data() {
     return {
+      videoList:undefined,
       jkList,
       firePointList,
       dbsbList,
@@ -134,7 +135,7 @@ export default {
   },
   mounted() {
     // 默认选中林区节点
-    this.$refs[`tree_1`][0].setCheckedKeys([11, 146])
+    // this.$refs[`tree_1`][0].setCheckedKeys([11, 146])
     this.$refs[`tree_6`][0].setCheckedKeys([61])
     this.$refs[`tree_5`][0].setCheckedKeys([51])
     // this.createFireLayer()
@@ -209,6 +210,7 @@ export default {
       //console.log('handleCheckChange', data, checked)
       // 勾选目录树控制总览显示资源
       // debugger
+      const that = this;
       let list = window.g.map.getLayers().array_
 
       if ((data.id + '').substring(0, 2) === '11') {
@@ -238,6 +240,8 @@ export default {
           new FeatureService(url).getFeaturesBySQL(sqlParam, serviceResult => {
             const videoPointList = serviceResult.result.features.features;
             // debugger
+            // that.videoList = videoPointList;
+            // console.log("qwe",that.videoList);
             const features = [];
             videoPointList.forEach(element => {
               const properties = element.properties;
@@ -262,14 +266,18 @@ export default {
             //4: "119.35790729284101"
             //5: "27.541516789796798"
             this.$map.addLayer(this.videoLayer)
+            that.$bus.$emit("showVideoList",true);
+            that.$bus.$emit("sendVideoListData",videoPointList);
         })
           this.videoTemp = true;
           // this.$store.dispatch('lqfb/changeVideoListOffsetRight', 0)
         }else{
           if (this.videoTemp) {
             this.videoTemp = false
+            that.$bus.$emit("showVideoList",false);
           }else if (!this.videoTemp) {
             this.videoTemp = true
+            that.$bus.$emit("showVideoList",true);
           }
           this.videoLayer.setVisible(this.videoTemp);
         }
@@ -417,22 +425,28 @@ export default {
     nodeClick(data, node, obj) {
       console.log('nodeClick', data, node)
 
-      if (data.label === '事故分级调取') {
-        this.$store.dispatch('lqfb/changeyadqOffsetRight', this.yadqOffsetRight === 0 ? -30 : 0)
-      }
+      // if (data.label === '事故分级调取') {
+      //   this.$store.dispatch('lqfb/changeyadqOffsetRight', this.yadqOffsetRight === 0 ? -30 : 0)
+      // }
       if (data.label == "火灾报警点") {
         //123123123
         this.$bus.$emit("hzjbd",true);
       }
-      if (data.label === this.yadqPannel) {
-        this.$store.dispatch('lqfb/changeyadqPannel', '')
-      } else if (data.label !== this.yadqPannel) {
-        this.$store.dispatch('lqfb/changeyadqPannel', data.label)
+      // debugger
+      if (data.label == "监控") {
+        //123123123
+        // that.$bus.$emit("showVideoList",true);
+        return
       }
-      if (data.label === '林区') this.$store.dispatch('lqfb/changeActiveMenu', '林区')
-      if ((data.id + '')[0] === '4' || (data.id + '')[0] === '6' || (data.id + '')[0] === '7') {
-        this.$store.dispatch('lqfb/changezlOffsetRight', -25)
-      }
+      // if (data.label === this.yadqPannel) {
+      //   this.$store.dispatch('lqfb/changeyadqPannel', '')
+      // } else if (data.label !== this.yadqPannel) {
+      //   this.$store.dispatch('lqfb/changeyadqPannel', data.label)
+      // }
+      // if (data.label === '林区') this.$store.dispatch('lqfb/changeActiveMenu', '林区')
+      // if ((data.id + '')[0] === '4' || (data.id + '')[0] === '6' || (data.id + '')[0] === '7') {
+      //   this.$store.dispatch('lqfb/changezlOffsetRight', -25)
+      // }
     },
     clearTreeChecked() {
       this.treeData.map(v => {

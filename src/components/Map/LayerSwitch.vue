@@ -209,6 +209,7 @@ export default {
       const map = window.g.map;
       //影像切矢量
       //img_w
+      const that = this;
       if(this.mapType == "img_c"){
         let temp = null;
         const layerList = map.getLayers().array_;

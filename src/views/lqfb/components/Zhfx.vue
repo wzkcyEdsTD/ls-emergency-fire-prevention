@@ -448,7 +448,8 @@ export default {
     netWorkData(val){
       // console.log("办事网点",val)
       const that = this;
-      const data = this.featuresData
+      // let data = this.featuresData
+      let data = this.$store.getters.featuresData;
       // data.ZBZY.netWork.arr = val
       // const tempdata = data
       // debugger
@@ -461,9 +462,11 @@ export default {
         list.push(json)
       })
       // debugger
-      data.ZBZY.netWork.arr = list
+      // debugger
+
       this.$nextTick(()=>{
           // debugger
+        data.ZBZY.netWork.arr = list
         if (val && val.length>0) {
 
           that.aroundDetail = ""
