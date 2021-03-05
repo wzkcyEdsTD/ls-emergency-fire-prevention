@@ -1201,7 +1201,9 @@ function wind(windData) {
         }
       }]
     }
-
+    // const node = document.getElementById('test');
+    // var myCharts = echarts.init(node);
+    // myCharts.setOption(option)
     //只有在地图渲染的时候才渲染
     oe = new ADLayer(option, window.g.map, echarts)
     oe.render()

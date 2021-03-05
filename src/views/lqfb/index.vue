@@ -195,6 +195,12 @@ export default {
     //火灾点自动弹框
     async showPopupItem(item) {
       const that = this;
+
+      let node = $(`.ol-overlaycontainer-stopevent`)
+      if (node) {
+        node.css("z-index","9999")
+      }
+
       this.clearPopup()
 
 
@@ -294,6 +300,12 @@ export default {
     //除了火灾点其他点位的自动弹框
     async showPopupSearchItem(feature){
       const that = this;
+
+      let node = $(`.ol-overlaycontainer-stopevent`)
+      if (node) {
+        node.css("z-index","9999")
+      }
+
       this.clearPopup()
 
       const keyName = document.getElementById('key-name')
@@ -310,7 +322,6 @@ export default {
       const popInfoDetail = document.getElementById('pop-info-deatil')
 
       const value = feature.values_
-
       const coordinate = [value.geometry.flatCoordinates[0],value.geometry.flatCoordinates[1]]
       if (value['VIDEO_URL']) {
         // 查询监控视频
@@ -466,6 +477,12 @@ export default {
     //手动点击时弹框
     async showPopup(evt) {
       const that = this;
+
+      let node = $(`.ol-overlaycontainer-stopevent`)
+      if (node) {
+        node.css("z-index","9999")
+      }
+
       this.clearPopup()
       let feature = this.$map
         .getMap()

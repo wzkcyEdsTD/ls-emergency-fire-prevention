@@ -82,6 +82,7 @@
       <pick-fire-point v-show="isShowPickFirePoint" />
     </div>
     <!-- <yzhxdj /> -->
+    <div id="test"></div>
   </div>
 </template>
 
