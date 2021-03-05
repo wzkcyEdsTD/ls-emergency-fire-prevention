@@ -191,7 +191,8 @@ export default {
         return false
       }
     },
-
+    
+    //火灾点自动弹框
     async showPopupItem(item) {
       const that = this;
       this.clearPopup()
@@ -217,10 +218,7 @@ export default {
         this.$bus.$emit("videoData",value);
         return
       }
-      //办事网点
-      if (value['BSWD_TYPE']) {
-        return
-      }
+
       // 是否为火灾点
       // debugger
       if ((value['systemcode'])) {
@@ -231,35 +229,15 @@ export default {
         this.$bus.$emit("streetInfo",null);
       }else{
       }
+
       // debugger
-      if (!value['systemcode']) {
+      if (!value['systemcode'] && !value['BSWD_TYPE']) {
         if ((!value['NAME'] && !value['label'])) return
       }
 
-      // 判断是不是防火人员
-      if (value.smid && value.smid.match(/^1[3|4|5|6|7|8|9][0-9]\d{8}$/)) {
-        // this.$refs.rydwPannel.handleItemClick(value)
-        return
-      }
-
-
       // 显示属性框
       if (!(value['systemcode'])) {
-        switch (value.type) {
-          case '人员定位':
-            this.rydwPopyp.setPosition(coordinate)
-            break
-          default:
-            this.infoPopup.setPosition(coordinate)
-            break
-        }
-      }
-      // 判断是不是阻隔带
-      if (value['label']) {
-        keyName.innerHTML = `类型：`
-        keyValue.innerHTML = `${value['label']}`
-        this.$store.dispatch('map/changeIsShowDetail', false)
-        return
+        this.infoPopup.setPosition(coordinate)
       }
 
       this.$store.dispatch('map/changeIsShowDetail', true)
@@ -313,6 +291,7 @@ export default {
       }
     },
 
+    //除了火灾点其他点位的自动弹框
     async showPopupSearchItem(feature){
       const that = this;
       this.clearPopup()
@@ -338,10 +317,10 @@ export default {
         this.$bus.$emit("videoData",value);
         return
       }
-      //办事网点
-      if (value['BSWD_TYPE']) {
-        return
-      }
+      // //办事网点
+      // if (value['BSWD_TYPE']) {
+      //   return
+      // }
       // 是否为火灾点
       // debugger
       if ((value['systemcode'])) {
@@ -405,12 +384,37 @@ export default {
       // console.log(value)
       if (!(value['systemcode'])) {
         // console.log("不是火灾点")
-        for (const key in attrData[value['TABLE_NAME']]) {
-          if (value[key] != undefined) {
-            infoTmpl += `<div  class="item">
-                            <span class="key">${attrData[value['TABLE_NAME']][key]}：</span>
-                            <span class="value">${value[key]}</span>
-                        </div>`
+        if(value['BSWD_TYPE']){
+
+          infoTmpl += `<div  class="item">
+                  <span class="key">名称：</span>
+                  <span class="value" title="${value["NAME"]}">${value["NAME"]}</span>
+              </div>`
+          infoTmpl += `<div  class="item">
+              <span class="key">类型：</span>
+              <span class="value" title="${value["BSWD_TYPE"]}">${value["BSWD_TYPE"]}</span>
+          </div>`
+          infoTmpl += `<div  class="item">
+              <span class="key">地址：</span>
+              <span class="value" title="${value["DZ"]}">${value["DZ"]}</span>
+          </div>`
+          infoTmpl += `<div  class="item">
+              <span class="key">联系电话：</span>
+              <span class="value" title="${value["LXDH"]}">${value["LXDH"]}</span>
+          </div>`
+          infoTmpl += `<div  class="item">
+              <span class="key">工作时间：</span>
+              <span class="value" title="${value["GZSJ"]}">${value["GZSJ"]}</span>
+          </div>`
+
+        }else{
+          for (const key in attrData[value['TABLE_NAME']]) {
+            if (value[key] != undefined) {
+              infoTmpl += `<div  class="item">
+                              <span class="key">${attrData[value['TABLE_NAME']][key]}：</span>
+                              <span class="value">${value[key]}</span>
+                          </div>`
+            }
           }
         }
       }
@@ -449,12 +453,17 @@ export default {
       time.innerHTML = `${value['time']}`
 
       }else{
-        // console.log(11111111)
-        keyName.innerHTML = `${attrData[value['TABLE_NAME']]['NAME']}：`
-        keyValue.innerHTML = `${value['NAME']}`
+        if (value['BSWD_TYPE']) {
+          keyName.innerHTML = `名称：`
+          keyValue.innerHTML = `${value['NAME']}`
+        }else{
+          keyName.innerHTML = `${attrData[value['TABLE_NAME']]['NAME']}：`
+          keyValue.innerHTML = `${value['NAME']}`
+        }
       }
     },
 
+    //手动点击时弹框
     async showPopup(evt) {
       const that = this;
       this.clearPopup()
@@ -493,41 +502,13 @@ export default {
 
       const popInfoDetail = document.getElementById('pop-info-deatil')
 
-      if (!feature) {
-        // const filters = this.layerList.filter(v => v.label === '林区资源')
-        // if (filters.length > 0) {
-        //   getLqzyByCoordinate({ x: coordinate[0], y: coordinate[1] }).then(res => {
-        //     this.$store.dispatch('lqfb/changeIsXFDW', '')
-        //     const table = document.getElementById('table-box')
-        //     if (res.status === 200 && res.data) {
-        //       const data = JSON.parse(res.data.slice(5, -1))
-        //       keyName.innerHTML = `行政县乡村名称：`
-        //       keyValue.innerHTML = `${data['XIANNAME']}-${data['XIANNAME']}-${data['CUNNAME']}`
-        //       this.infoPopup.setPosition([coordinate[0], coordinate[1]])
-        //       let infoTmpl = ``
-        //       for (const key in attrData['LQZY']) {
-        //         infoTmpl += `<div  class="item">
-        //                       <span class="key">${attrData['LQZY'][key]}：</span>
-        //                       <span class="value">${data[key]}</span>
-        //                   </div>`
-        //       }
-        //       table.innerHTML = infoTmpl
-        //     }
-        //   })
-        // }
-        return
-      }
-
       const value = feature.values_
       if (value['VIDEO_URL']) {
         // 查询监控视频
         this.$bus.$emit("videoData",value);
         return
       }
-      //办事网点
-      if (value['BSWD_TYPE']) {
-        return
-      }
+
       // 是否为火灾点
       // debugger
       if ((value['systemcode'])) {
@@ -539,34 +520,14 @@ export default {
       }else{
       }
       // debugger
-      if (!value['systemcode']) {
+
+      if (!value['systemcode'] && !value['BSWD_TYPE']) {
         if ((!value['NAME'] && !value['label'])) return
       }
 
-      // 判断是不是防火人员
-      if (value.smid && value.smid.match(/^1[3|4|5|6|7|8|9][0-9]\d{8}$/)) {
-        // this.$refs.rydwPannel.handleItemClick(value)
-        return
-      }
-
-
       // 显示属性框
       if (!(value['systemcode'])) {
-        switch (value.type) {
-          case '人员定位':
-            this.rydwPopyp.setPosition(coordinate)
-            break
-          default:
-            this.infoPopup.setPosition(coordinate)
-            break
-        }
-      }
-      // 判断是不是阻隔带
-      if (value['label']) {
-        keyName.innerHTML = `类型：`
-        keyValue.innerHTML = `${value['label']}`
-        this.$store.dispatch('map/changeIsShowDetail', false)
-        return
+        this.infoPopup.setPosition(coordinate)
       }
 
       this.$store.dispatch('map/changeIsShowDetail', true)
@@ -612,6 +573,31 @@ export default {
       // console.log(value)
       if (!(value['systemcode'])) {
         // console.log("不是火灾点")
+                    //办事网点
+      if (value['BSWD_TYPE']) {
+
+        infoTmpl += `<div  class="item">
+                <span class="key">名称：</span>
+                <span class="value" title="${value["NAME"]}">${value["NAME"]}</span>
+            </div>`
+        infoTmpl += `<div  class="item">
+            <span class="key">类型：</span>
+            <span class="value" title="${value["BSWD_TYPE"]}">${value["BSWD_TYPE"]}</span>
+        </div>`
+        infoTmpl += `<div  class="item">
+            <span class="key">地址：</span>
+            <span class="value" title="${value["DZ"]}">${value["DZ"]}</span>
+        </div>`
+        infoTmpl += `<div  class="item">
+            <span class="key">联系电话：</span>
+            <span class="value" title="${value["LXDH"]}">${value["LXDH"]}</span>
+        </div>`
+        infoTmpl += `<div  class="item">
+            <span class="key">工作时间：</span>
+            <span class="value" title="${value["GZSJ"]}">${value["GZSJ"]}</span>
+        </div>`
+
+      }else{
         for (const key in attrData[value['TABLE_NAME']]) {
           if (value[key] != undefined) {
             infoTmpl += `<div  class="item">
@@ -620,6 +606,8 @@ export default {
                         </div>`
           }
         }
+      }
+
       }else if ((value['systemcode'])) {
         this.firePopyp.setPosition([value.x,value.y])
         // debugger
@@ -680,9 +668,13 @@ export default {
       time.innerHTML = `${value['time']}`
 
       }else{
-        // console.log(11111111)
-        keyName.innerHTML = `${attrData[value['TABLE_NAME']]['NAME']}：`
-        keyValue.innerHTML = `${value['NAME']}`
+        if (value['BSWD_TYPE']) {
+          keyName.innerHTML = `名称：`
+          keyValue.innerHTML = `${value['NAME']}`
+        }else{
+          keyName.innerHTML = `${attrData[value['TABLE_NAME']]['NAME']}：`
+          keyValue.innerHTML = `${value['NAME']}`
+        }
       }
     },
 
