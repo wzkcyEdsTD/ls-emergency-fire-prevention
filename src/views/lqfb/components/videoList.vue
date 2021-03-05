@@ -1,12 +1,15 @@
 <template>
   <div class="zhfxlb-wrapper" :style="{ right: `${zhfxOffsetRight}rem` }">
-    <div class="close" @click="close" />
+    <!-- <div class="close" @click="close" /> -->
 
     <div class="ljxq-container">
       <div class="zbjksz-container">
-        <div class="title">
-          监控列表
-          <img src="@/common/images/边.png" alt="" class="imgLine" />
+        <div class="flexLine">
+          <div class="title">
+            监控列表
+            <img src="@/common/images/边.png" alt="" class="imgLine" />
+          </div>
+          <div class="closeicon" @click="close"></div>
         </div>
         <div v-if="videoList.length > 0">
           <ul style="height: 25vh">
@@ -84,8 +87,8 @@ export default {
   },
   beforeDestroy() {
     const that = this;
-    that.$bus.$on("showVideoList");
-    that.$bus.$on("sendVideoListData");
+    that.$bus.$off("showVideoList");
+    that.$bus.$off("sendVideoListData");
   },
 };
 </script>
@@ -120,15 +123,27 @@ export default {
     .zbjksz-container {
       height: 300px;
       width: 100%;
-      .title {
-        width: 100%;
-        height: 40px;
-        font-family: youshebiaotihei;
-        font-size: 1.8vh;
-        .imgLine {
+      .flexLine{
+        display: flex;
+        .title {
           width: 100%;
+          height: 40px;
+          font-family: youshebiaotihei;
+          font-size: 2.3vh;
+          .imgLine {
+            width: 100%;
+          }
+        }
+        .closeicon{
+          background-image: url('~@/common/images/关闭icon.png');
+          background-size: 100%;
+          width: 2vh;
+          height: 2vh;
+          cursor: pointer;
+          margin-right: 1vh;
         }
       }
+
       ul {
         padding-left: 0;
         list-style: none;

@@ -57,7 +57,7 @@ export default {
 .header-wrapper {
   position: absolute;
   top: 0vh;
-  z-index: 1999;
+  z-index: 1000;
   width: 100%;
   height: 8vh;
   background-image: linear-gradient(#040d33,rgba(4,13,51,.94) 50%,rgba(4,13,51,0));

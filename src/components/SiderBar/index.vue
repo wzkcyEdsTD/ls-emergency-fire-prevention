@@ -50,7 +50,7 @@ export default {
       width: 100%;
       height: 40px;
       font-family: youshebiaotihei;
-      font-size: 1.8vh;
+      font-size: 2.3vh;
       img {
        width: 100%;
     }

@@ -2,70 +2,32 @@
   <div class="right-wrapper" :style="`right: ${rydwPannelOffsetRight}rem`">
     <div class="close" @click="closeMenu" />
     <div class="lb-wrapper">
-      <div class="titleLine">
-        <div class="titleHistory">
+      <div class="titleLine" style="margin-bottom: 0;">
+        <img src="@/common/images/警告.gif" class="icon"/>
+        <div class="title">
           火灾报警点
         </div>
       </div>
-      <div class="titleLine">
-        <div class="titleHistory">
-          未处理或已处理未办结
-        </div>
-        <div class="search-header">
-          <img src="@/common/images/搜索icon.png" class="searchIcon">
-          <el-input
-            v-model="searchTextUnresolve"
-            class="searchFilterInput"
-            placeholder="查找火灾点"
-            size="small"
-            @keyup.enter.native="searchFilterUnresolve"
-          />
-          <img src="@/common/images/关闭.png" class="clearIcon" @click="searchClearUnresolve">
-        </div>
-        <div id="refreshIcon" class="refreshIcon" @click="refreshEvent"/>
-      </div>
-      <img style="width: 100%;" src="@/common/images/边.png" alt="">
-      <div class="ul-head">
-        <div class="item item-1">地点</div>
-        <!-- <div class="item item-1">举报人</div> -->
-        <div class="item item-1">时间</div>
-        <div class="item item-1">来源</div>
-      </div>
-      <ul style="height:30vh" >
-        <li v-for="(item, index) in unresolveList" 
-            :key="index" 
-            class="list-item" 
-            :class="{active : fireUnresolve == index}"
-            @click="fireUnresolve = index;clickFire(item)">
-          <div @mouseenter="titeEnter" class="item item-1">{{ item.address }}</div>
-          <!-- <div class="item item-1">{{ item.jubaoren }}</div> -->
-          <div class="item item-1">{{ item.time }}</div>
-          <div class="item item-1">{{ systemName[`${item.systemcode}`] }}</div>
-        </li>
-        <!-- <div class="more" @click="viewMore">查看更多</div> -->
-        <div class="allmore" v-show="hasMore && !hasSearch" @click="viewMore">
-          <div class="moreText">查看更多</div>
-          <div class="more" />
-        </div>
-        
-      </ul>
-
-      <div>
+      <div v-show="selectMenu==1" >
         <div class="titleLine">
-          <div class="title">
-            {{`历史数据`}}
+          <div class="titleHistory" v-if="unresolveList && unresolveList.length>0">
+            {{`未处理(${unresolveList.length})`}}
+          </div>
+          <div class="titleHistory" v-else>
+            {{`未处理(0)`}}
           </div>
           <div class="search-header">
             <img src="@/common/images/搜索icon.png" class="searchIcon">
             <el-input
-              v-model="searchText"
+              v-model="searchTextUnresolve"
               class="searchFilterInput"
               placeholder="查找火灾点"
               size="small"
-              @keyup.enter.native="searchFilter"
+              @keyup.enter.native="searchFilterUnresolve"
             />
-            <img src="@/common/images/关闭.png" class="clearIcon" @click="searchClear">
+            <img src="@/common/images/关闭icon.png" class="clearIcon" @click="searchClearUnresolve">
           </div>
+          <div id="refreshIcon" class="refreshIcon" @click="refreshEvent"/>
         </div>
         <img style="width: 100%;" src="@/common/images/边.png" alt="">
         <div class="ul-head">
@@ -75,21 +37,156 @@
           <div class="item item-1">来源</div>
         </div>
         <ul style="height:30vh" >
-          <li v-for="(item, index) in tempList" 
+          <li v-for="(item, index) in unresolveList" 
               :key="index" 
               class="list-item" 
-              :class="{active : fire == index}"
-              @click="fire = index;clickFire(item)">
+              :class="{active : fireUnresolve == index}"
+              @click="fireUnresolve = index;clickFire(item)">
             <div @mouseenter="titeEnter" class="item item-1">{{ item.address }}</div>
             <!-- <div class="item item-1">{{ item.jubaoren }}</div> -->
             <div class="item item-1">{{ item.time }}</div>
             <div class="item item-1">{{ systemName[`${item.systemcode}`] }}</div>
           </li>
-          <div class="allmore" v-show="hasMoreHistory && !hasSearchHistory" @click="viewMoreHistory">
+          <div class="allmore" v-show="hasMore && !hasSearch" @click="viewMore">
             <div class="moreText">查看更多</div>
             <div class="more" />
           </div>
+          
         </ul>
+        <div>
+          <div class="titleLine">
+            <div class="title" v-if="unSettledList.length>0">
+              {{`已处理未办结(${unSettledList.length})`}}
+            </div>
+            <div class="title" v-else>
+              {{`已处理未办结(0)`}}
+            </div>
+            <div class="search-header">
+              <img src="@/common/images/搜索icon.png" class="searchIcon">
+              <el-input
+                v-model="searchTextUnSettled"
+                class="searchFilterInput"
+                placeholder="查找火灾点"
+                size="small"
+                @keyup.enter.native="searchFilterUnSettled"
+              />
+              <img src="@/common/images/关闭icon.png" class="clearIcon" @click="searchClearUnSettled">
+            </div>
+          </div>
+          <img style="width: 100%;" src="@/common/images/边.png" alt="">
+          <div class="ul-head">
+            <div class="item item-1">地点</div>
+            <!-- <div class="item item-1">举报人</div> -->
+            <div class="item item-1">时间</div>
+            <div class="item item-1">来源</div>
+          </div>
+          <ul  style="height:30vh" v-if="unSettledList.length>0">
+            <li v-for="(item, index) in unSettledList" 
+                :key="index" 
+                class="list-item" 
+                :class="{active : fire == index}"
+                @click="fire = index;clickFire(item)">
+              <div @mouseenter="titeEnter" class="item item-1">{{ item.address }}</div>
+              <!-- <div class="item item-1">{{ item.jubaoren }}</div> -->
+              <div class="item item-1">{{ item.time }}</div>
+              <div class="item item-1">{{ systemName[`${item.systemcode}`] }}</div>
+            </li>
+            <div class="allmore" v-show="hasMoreUnSettled && !hasSearchUnSettled" @click="viewMoreUnSettled">
+              <div class="moreText">查看更多</div>
+              <div class="more" />
+            </div>
+          </ul>
+        </div>
+        <div>
+          <div class="titleLine">
+            <div class="title" v-if="tempList && tempList.length>0">
+              {{`历史数据(${tempList.length})`}}
+            </div>
+            <div class="title" v-else>
+              {{`历史数据(0)`}}
+            </div>
+            <div class="search-header">
+              <img src="@/common/images/搜索icon.png" class="searchIcon">
+              <el-input
+                v-model="searchText"
+                class="searchFilterInput"
+                placeholder="查找火灾点"
+                size="small"
+                @keyup.enter.native="searchFilter"
+              />
+              <img src="@/common/images/关闭icon.png" class="clearIcon" @click="searchClear">
+            </div>
+          </div>
+          <img style="width: 100%;" src="@/common/images/边.png" alt="">
+          <div class="ul-head">
+            <div class="item item-1">地点</div>
+            <!-- <div class="item item-1">举报人</div> -->
+            <div class="item item-1">时间</div>
+            <div class="item item-1">来源</div>
+          </div>
+          <ul  >
+            <li v-for="(item, index) in tempList" 
+                :key="index" 
+                class="list-item" 
+                :class="{active : fire == index}"
+                @click="fire = index;clickFire(item)">
+              <div @mouseenter="titeEnter" class="item item-1">{{ item.address }}</div>
+              <!-- <div class="item item-1">{{ item.jubaoren }}</div> -->
+              <div class="item item-1">{{ item.time }}</div>
+              <div class="item item-1">{{ systemName[`${item.systemcode}`] }}</div>
+            </li>
+            <div class="allmore" v-show="hasMoreHistory && !hasSearchHistory" @click="viewMoreHistory">
+              <div class="moreText">查看更多</div>
+              <div class="more" />
+            </div>
+          </ul>
+        </div>
+      </div>
+      <div v-show="selectMenu==2" class="secondMenu">
+        <div class="titleLine">
+          <div class="title" >
+            {{`历史回传截图列表`}}
+          </div>
+        </div>
+        <img style="width: 100%;" src="@/common/images/边.png" alt="">
+        <div class="ul-head">
+          <div class="item item-1">地点</div>
+          <!-- <div class="item item-1">举报人</div> -->
+          <div class="item item-1">时间</div>
+          <div class="item item-2">截图</div>
+        </div>
+        <ul style="height:68vh" v-if="imageList.length>0">
+          <li v-for="(item, index) in imageList" 
+              :key="index" 
+              class="list-item" >
+            <div @mouseenter="titeEnter" class="item item-1">{{ item.address }}</div>
+            <div class="item item-1">{{ item.createTime }}</div>
+            <div class="item item-2">
+                <el-image
+                  style="width: 70px; height: 70px"
+                  :src="item.imgSrc"
+                  :preview-src-list="item.imgList">
+              </el-image>
+            </div>
+          </li>
+          <!-- <div class="allmore" v-show="hasMore && !hasSearch" @click="viewMore">
+            <div class="moreText">查看更多</div>
+            <div class="more" />
+          </div> -->
+          
+        </ul>
+      </div>
+      <div class="changeMenuTool">
+        <img src="@/common/images/左.png" class="leftTool" @click="leftTool">
+        <div class="selectMenu">
+          <div class="one" @click="leftTool" :style="{'background-color': selectMenu==1 ? '#B5F3B5' : '#0C985B'}">
+            <div class="text" :style="{'color': selectMenu==1 ? '#0C110B' : '#B5F3B5'}">1</div>
+          </div>
+          <div class="two" @click="rightTool" :style="{'background-color': selectMenu==2 ? '#B5F3B5' : '#0C985B'}">
+            <div class="text" :style="{'color': selectMenu==2 ? '#0C110B' : '#B5F3B5'}">2</div>
+          </div>
+        </div>
+        <img src="@/common/images/右.png" class="rightTool" @click="rightTool">
       </div>
     </div>
     <!-- <video></video> -->
@@ -119,28 +216,58 @@ export default {
 
   data() {
     return {
-        hasSearch:false,
-        hasSearchHistory:false,
-        hasMore:true,
-        hasMoreHistory:true,
-        rydwPannelOffsetRight:0,
-        fireList,
-        fire:null,
-        fireUnresolve:null,
-        searchText:"",
-        searchTextUnresolve:"",
-        list:null,
-        unresolveList:null,
-        tempList:null,
-        value1:null,
-        systemName:{
-          "ilishui":"I丽水",
-          "tyswxt":"天眼守望"
-        },
-        size:1000,
+      selectMenu:1,
+      imageList:[],
+      unSettledList:[],
+      hasSearch:false,
+      hasSearchUnSettled:false,
+      hasSearchHistory:false,
+      hasMoreUnSettled:true,
+      hasMore:true,
+      hasMoreHistory:true,
+      rydwPannelOffsetRight:0,
+      fireList,
+      fire:null,
+      fireUnresolve:null,
+      searchText:"",
+      searchTextUnresolve:"",
+      searchTextUnSettled:"",
+      list:null,
+      unresolveList:null,
+      tempList:null,
+      value1:null,
+      systemName:{
+        "ilishui":"I丽水",
+        "tyswxt":"天眼守望"
+      },
+      size:1000,
     }
   },
   methods:{
+    leftTool(){
+      const that = this;
+      that.$nextTick(()=>{
+        that.selectMenu = 1;
+      })
+    },
+    rightTool(){
+      const that = this;
+      that.$nextTick(()=>{
+        that.selectMenu = 2;
+      })
+    },
+    viewMoreUnSettled(){
+      const that = this;
+      that.$nextTick(()=>{
+        that.hasMoreUnSettled = false;
+        const templist1 = that.fireList.result.records.sort(that.sortUpDate);
+        that.unSettledList = templist1.filter(v=>{
+          if (v.status && v.status.indexOf('已处理未办结')!=-1) {
+            return v
+          }
+        })
+      })
+    },
     viewMoreHistory(){
       const that = this;
       that.$nextTick(()=>{
@@ -220,6 +347,7 @@ export default {
       // console.log(item);
       this.$map.getMap().getView().setCenter([item.x,item.y]);
       this.$map.getMap().getView().setZoom(16);
+      this.$bus.$emit("showPoup",item);
     },
     searchStreet(point){
       let geometryParam = new SuperMap.GetFeaturesByGeometryParameters({
@@ -327,16 +455,16 @@ export default {
       if (that.searchTextUnresolve) {
         that.hasSearch = true;
         let list = that.fireList.result.records.sort(that.sortUpDate)
+
+        list = list.filter((v) =>{
+          if (v.status && v.status.indexOf(`未处理`) != -1) {
+            return v
+          }
+        })
         if (that.hasMore) {
           list = list.slice(0,10);
         }
-        that.unresolveList = list.filter((v) =>{
-          if (v.status && v.status.indexOf(`已办结`) == -1) {
-            return v
-          }else if (!v.status) {
-            return v            
-          }
-        })
+        that.unresolveList = list 
       // debugger
         const key = that.findKey(that.searchTextUnresolve);
         // that.tempList = [];
@@ -357,16 +485,66 @@ export default {
       }else{
         that.hasSearch = false;
         let tempList = that.fireList.result.records.sort(that.sortUpDate)
+
+        tempList.filter((v) =>{
+          if (v.status && v.status.indexOf(`未处理`) != -1) {
+            return v
+          }
+        })
         if (that.hasMore) {
           tempList = tempList.slice(0,10);
         }
-        that.unresolveList = tempList.filter((v) =>{
-          if (v.status && v.status.indexOf(`已办结`) == -1) {
+        that.unresolveList = tempList;
+
+      }
+      
+    },
+    searchFilterUnSettled(){
+      const that = this
+      if (that.searchTextUnSettled) {
+        that.hasSearchUnSettled = true;
+        let list = that.fireList.result.records.sort(that.sortUpDate)
+
+        list = list.filter((v) =>{
+          if (v.status && v.status.indexOf(`已处理未办结`) != -1) {
             return v
-          }else if (!v.status) {
-            return v            
           }
         })
+        if (that.hasMoreUnSettled) {
+          list = list.slice(0,10);
+        }
+        that.unSettledList = list 
+      // debugger
+        const key = that.findKey(that.searchTextUnSettled);
+        // that.tempList = [];
+        // console.log(key)
+        that.$nextTick(()=>{
+          // debugger
+          that.unSettledList = that.unSettledList.filter((item)=>{
+            if (item.systemcode.indexOf(key) != -1) {
+              return item;
+            }else if (item.time.indexOf(that.searchTextUnSettled) != -1) {
+              return item;
+            }else if (item.address.indexOf(that.searchTextUnSettled) != -1) {
+              return item;
+            }
+          })
+
+        })
+      }else{
+        that.hasSearchUnSettled = false;
+        let tempList = that.fireList.result.records.sort(that.sortUpDate)
+
+        tempList.filter((v) =>{
+          if (v.status && v.status.indexOf(`已处理未办结`) != -1) {
+            return v
+          }
+        })
+        if (that.hasMoreUnSettled) {
+          tempList = tempList.slice(0,10);
+        }
+        that.unSettledList = tempList;
+
       }
       
     },
@@ -389,18 +567,35 @@ export default {
       // debugger
       const that = this
       let tempList = this.fireList.result.records.sort(that.sortUpDate);
+
+      tempList.filter((v) =>{
+        if (v.status && v.status.indexOf(`未处理`) == -1) {
+          return v
+        }
+      })
       if (that.hasMore) {
         tempList = tempList.slice(0,10);
       }
-      that.unresolveList = tempList.filter((v) =>{
-        if (v.status && v.status.indexOf(`已办结`) == -1) {
-          return v
-        }else if (!v.status) {
-          return v            
-        }
-      })
+      that.unresolveList = tempList;
       this.searchTextUnresolve = "";
       that.hasSearch = false;
+    },
+    searchClearUnSettled(){
+      // debugger
+      const that = this
+      let tempList = this.fireList.result.records.sort(that.sortUpDate);
+
+      tempList.filter((v) =>{
+        if (v.status && v.status.indexOf(`已处理未办结`) == -1) {
+          return v
+        }
+      })
+      if (that.hasMoreUnSettled) {
+        tempList = tempList.slice(0,10);
+      }
+      that.unSettledList = tempList;
+      this.searchTextUnSettled = "";
+      that.hasSearchUnSettled = false;
     },
     //正序
     sortDownDate(a, b) {
@@ -421,38 +616,65 @@ export default {
         //that.tempList =that.fireList.result.records.sort(that.sortUpDate)
         // debugger
         const templist1 = that.fireList.result.records.sort(that.sortUpDate);
+        let imageList = templist1.filter(v=>{
+          if (v.imgSts=='1') {
+            return v
+          }
+        })
+        imageList = imageList.map(v=>{
+          if (v.imgSts=="1") {
+            v.imgSrc = `http://10.53.137.235/forestfire/sys/common/static/${v.imgSrc}`
+            v.imgList = []
+            v.imgList.push(v.imgSrc)
+            v.createTime = v.createTime.substr(5)
+            return v
+          }
+        })
+        that.imageList = imageList;
+        console.log("imageList",that.imageList);
         that.tempList = templist1.filter(v=>{
           if (v.status && v.status.indexOf('已办结')!=-1) {
             return v
           }
         })
         that.unresolveList = templist1.filter((v) =>{
-          if (v.status && v.status.indexOf(`已办结`) == -1) {
+          if (v.status && v.status.indexOf(`未处理`) != -1) {
             return v
-          }else if (!v.status) {
-            return v            
           }
-        } )
-        that.unresolveList.forEach(element => {
+        })
+        that.unSettledList = templist1.filter((v) =>{
+          if (v.status && v.status.indexOf(`已办结未处理`) != -1) {
+            return v
+          }
+        })
+       that.unresolveList.forEach(element => {
           if (element.systemcode.indexOf('ilishui')!=-1) {
             // debugger
             // console.log(element)
             that.searchStreet(new Point([Number(element.x),Number(element.y)]))
           }
         });
+        
         if (that.unresolveList.length>10) {
           that.unresolveList = that.unresolveList.slice(0,10);
           that.hasMore = true;
         }else{
           that.hasMore = false;
         }
+        
         if (that.tempList.length>10) {
           that.tempList = that.tempList.slice(0,10);
           that.hasMoreHistory = true;
         }else{
           that.hasMoreHistory = false;
         }
-        
+
+        if (that.unSettledList.length>10) {
+          that.unSettledList = that.unSettledList.slice(0,10);
+          that.hasMoreUnSettled = true;
+        }else{
+          that.hasMoreUnSettled = false;
+        }
       })
     })
     this.$bus.$on("hzjbd",(value)=>{
@@ -486,6 +708,7 @@ export default {
   background-color: rgb(16, 21, 24);
   background-size: 100% 100%;
   transition: right 0.9s;
+  overflow-y: auto;
   .close {
     position: absolute;
     left: -34px;
@@ -496,55 +719,7 @@ export default {
     background-size: contain;
     cursor: pointer;
   }
-  // .title {
-  //   display: flex;
-  //   justify-content: space-between;
-  //   align-items: center;
-  //   margin-top: 6px;
-  //   margin-bottom: 6px;
-  //   font-size: 16px;
-  //   height: 22px;
-  //   font-weight: bold;
-  //   line-height: 22px;
-  //   position: relative;
-  //   .back {
-  //     cursor: pointer;
-  //     position: absolute;
-  //     right: 0;
-  //     top: 0;
-  //     color: rgb(10, 204, 233);
-  //   }
-  //   .search {
-  //     width: 180px;
-  //     height: 22px;
-  //     position: relative;
-  //     .el-input__inner {
-  //       height: 22px;
-  //       border-radius: 20px;
-  //       outline: none;
-  //       padding-left: 15px;
-  //       background: url(../../../assets/images/搜索底框.png) no-repeat;
-  //       background-size: 100%;
-  //       border: 0;
-  //       color: hsla(196, 79%, 43%, 1);
-  //     }
-  //     .el-input__inner::-webkit-input-placeholder {
-  //       color: hsla(196, 79%, 43%, 1);
-  //     }
-  //     .el-input__icon::before {
-  //       content: " ";
-  //       width: 25px;
-  //       height: 22px;
-  //       position: absolute;
-  //       top: 0;
-  //       right: -4px;
-  //       margin-left: 2px;
-  //       cursor: pointer;
-  //       background: url(../../../assets/images/搜索.png) no-repeat;
-  //       background-size: 100%;
-  //     }
-  //   }
-  // }
+
   .lb-wrapper {
       width: 100%;
       height: 49%;
@@ -553,6 +728,12 @@ export default {
         display: flex;
         padding-right: 1vh;
         width: 100%;
+        .icon{
+          width: 2vh;
+          height: 2vh;
+          margin-right: 1vh;
+          margin-top: 1vh;
+        }
         .refreshIcon{
           // display        : flex;
           background-image: url('~@/common/images/刷新.png');
@@ -577,20 +758,20 @@ export default {
         }
 
         .titleHistory {
-          width: 30%;
+          width: 40%;
           display: flex;
           justify-content: space-between;
           align-items: center;
           margin-top: 6px;
           margin-bottom: 6px;
           height: 22px;
-          font-weight: bold;
+          // font-weight: bold;
           line-height: 22px;
           position: relative;
 
           height: 2rem;
           font-family: youshebiaotihei;
-          font-size: 1.8vh;
+          font-size: 2.3vh;
           // padding-top: 4vh;
           // padding-bottom: 4vh;
             .search {
@@ -631,13 +812,13 @@ export default {
           margin-top: 6px;
           margin-bottom: 6px;
           height: 22px;
-          font-weight: bold;
+          // font-weight: bold;
           line-height: 22px;
           position: relative;
 
           height: 2rem;
           font-family: youshebiaotihei;
-          font-size: 1.8vh;
+          font-size: 2.3vh;
           // padding-top: 4vh;
           // padding-bottom: 4vh;
             .search {
@@ -758,7 +939,7 @@ export default {
       ul {
       list-style: none;
       padding-left: 0;
-      height: 340px;
+      // height: 340px;
       overflow-x: hidden; overflow-y: auto;
       li {
           display: flex;
@@ -808,15 +989,15 @@ export default {
         cursor: pointer;
         display:flex;
         justify-content:center;
-        flex-flow: column;
-        padding-left: 15vh;
+        // flex-flow: column;
+        padding-left: 1vh;
         .more{
-          background: url('~@/assets/images/查看更多.png');
+          background: url('~@/common/images/14和12.png');
           background-size: 100% 100%;
-          width: 5vh;
-          height: 4vh;
+          width: 1.5vh;
+          height: 1.3vh;
           position: relative;
-          top: -1vh;
+          top: 0.1vh;
           left: 0.5vh;
         }
         .moreText{
@@ -825,14 +1006,303 @@ export default {
       }
 
   }
+
+  .secondMenu{
+    .titleLine{
+      display: flex;
+      padding-right: 1vh;
+      width: 100%;
+      .icon{
+        width: 2vh;
+        height: 2vh;
+        margin-right: 1vh;
+        margin-top: 1vh;
+      }
+      .refreshIcon{
+        // display        : flex;
+        background-image: url('~@/common/images/刷新.png');
+        background-size: 100% 100%;
+        align-items    : center;
+        justify-content: space-between;
+        margin-top     : 1.5vh;
+        width: 2.5vh;
+        height: 2.5vh;
+        position: relative;
+        right: -2.5vh;
+        cursor: pointer;
+      }
+      @-webkit-keyframes gira {
+        from{-webkit-transform: rotate(0deg);}
+        to{-webkit-transform: rotate(360deg);}
+      }
+
+      @keyframes gira {
+        from{-webkit-transform: rotate(0deg); transform: rotate(0deg)}
+        to{-webkit-transform: rotate(360deg); transform: rotate(360deg)}
+      }
+
+      .titleHistory {
+        width: 40%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 6px;
+        margin-bottom: 6px;
+        height: 22px;
+        // font-weight: bold;
+        line-height: 22px;
+        position: relative;
+
+        height: 2rem;
+        font-family: youshebiaotihei;
+        font-size: 2.3vh;
+        // padding-top: 4vh;
+        // padding-bottom: 4vh;
+          .search {
+            width: 180px;
+            height: 22px;
+            position: relative;
+          .el-input__inner {
+              height: 22px;
+              border-radius: 20px;
+              outline: none;
+              padding-left: 15px;
+              background: url(../../../assets/images/搜索底框.png) no-repeat;
+              background-size: 100%;
+              border: 0;
+              color: hsla(196, 79%, 43%, 1);
+          }
+          .el-input__inner::-webkit-input-placeholder {color: hsla(196, 79%, 43%, 1);}
+          .el-input__icon::before {
+              content: ' ';
+              width: 25px;
+              height: 22px;
+              position: absolute;
+              top: 0;
+              right: -4px;
+              margin-left: 2px;
+              cursor: pointer;
+              background: url(../../../assets/images/搜索.png) no-repeat;
+              background-size: 100%;
+          }
+          }
+        }
+
+        .title {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 6px;
+        margin-bottom: 6px;
+        height: 22px;
+        // font-weight: bold;
+        line-height: 22px;
+        position: relative;
+
+        height: 2rem;
+        font-family: youshebiaotihei;
+        font-size: 2.3vh;
+        // padding-top: 4vh;
+        // padding-bottom: 4vh;
+          .search {
+          width: 180px;
+          height: 22px;
+          position: relative;
+          .el-input__inner {
+              height: 22px;
+              border-radius: 20px;
+              outline: none;
+              padding-left: 15px;
+              background: url(../../../assets/images/搜索底框.png) no-repeat;
+              background-size: 100%;
+              border: 0;
+              color: hsla(196, 79%, 43%, 1);
+          }
+          .el-input__inner::-webkit-input-placeholder {color: hsla(196, 79%, 43%, 1);}
+          .el-input__icon::before {
+              content: ' ';
+              width: 25px;
+              height: 22px;
+              position: absolute;
+              top: 0;
+              right: -4px;
+              margin-left: 2px;
+              cursor: pointer;
+              background: url(../../../assets/images/搜索.png) no-repeat;
+              background-size: 100%;
+          }
+          }
+        }
+        .titleInput{
+        background-color: rgba(82, 254, 179, .5);
+        color: #fff;
+        border-radius: 5px;
+        }
+
+
+
+    }
+      .ul-head {
+      height: 26px;
+      width: 380px;
+      // background-color: rgb(10, 40, 68);
+      margin-top: 10px;
+      display: flex;
+      }
+      /*滚动条样式*/
+      ul::-webkit-scrollbar {
+          width: 4px;
+          height: 4px;
+      }
+      ul::-webkit-scrollbar-thumb {
+          border-radius: 10px;
+          background:#118251;
+          width: 8px;
+          height: 30px;
+      }
+      ul::-webkit-scrollbar-track {
+          border-radius: 0;
+          background:#103E29;
+      }
+      ul {
+      list-style: none;
+      padding-left: 0;
+      // height: 340px;
+      overflow-x: hidden; overflow-y: auto;
+      li {
+          display: flex;
+          align-items: center;
+          position: relative;
+          width: 380px;
+          height: 70px;
+          margin-bottom: 12px;
+          font-family: PingFang SC;
+          font-size: 16px;
+          // background: url(../../../assets/images/框.png) no-repeat;
+          background-size: 100% 100%;
+          &.active {
+          background: #103E29;
+          border: 1px solid #0F7247;
+          color: #52FEB3;
+          }
+          .number {
+          width: 30px;
+          margin-left: 8px;
+          height: 30px;
+          border-radius: 15px;
+          text-align: center;
+          line-height: 30px;
+          color: rgba(0, 240, 242, 1);
+          font-weight: bolder;
+          font-size: 18px;
+          margin-right: 40px;
+          }
+      }
+      }
+      .item {
+      text-align: center;
+      line-height: 26px;
+      font-size: 16px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      }
+      .item-1 {
+      flex: 1;
+      }
+      .item-2 {
+      flex: 1
+      }
+
+  }
+
+  .changeMenuTool{
+    width: 100%;
+    height: 6vh;
+    display: flex;
+    position: relative;
+    bottom: 0vh;
+    .leftTool{
+      width: 10vh;
+      height: 2vh;
+      position: relative;
+      left: 1vh;
+      top:50%;
+      transform:translateY(-50%);
+      cursor: pointer;
+    }
+    .selectMenu{
+      display: flex;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform:translate(-50%,-50%);
+      .one{
+        margin-right: 2vh;
+        border-radius: 50%;
+        width: 2.8vh;
+        height: 2.8vh;
+        cursor: pointer;
+        background-color: #B5F3B5;
+        .text{
+          position: relative;
+          top: 50%;
+          left: 50%;
+          transform:translate(-50%,-50%);
+          text-align: center;
+          color: #0C110B;
+        }
+      }
+      .two{
+        border-radius: 50%;
+        width: 2.8vh;
+        height: 2.8vh;
+        background-color: #B5F3B5;
+        cursor: pointer;
+        .text{
+          position: relative;
+          top: 50%;
+          left: 50%;
+          text-align: center;
+          transform:translate(-50%,-50%);
+          color: #0C110B;
+        }
+      }
+    }
+    .rightTool{
+      width: 10vh;
+      height: 2vh;
+      position: relative;
+      right: -17vh;
+      top:50%;
+      transform:translateY(-50%);
+      cursor: pointer;
+    }
+    
+  }
 }
 
+::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+}
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background:#118251;
+    width: 8px;
+    height: 30px;
+}
+::-webkit-scrollbar-track {
+    border-radius: 0;
+    background:#103E29;
+}
 
 .search-header {
   display        : flex;
   align-items    : center;
   justify-content: space-between;
-  width          : 20vh;
+  // width          : 20vh;
   margin-top     : 1vh;
   background-image: url('~@/common/images/底.png');
   background-size: 100% 100%;

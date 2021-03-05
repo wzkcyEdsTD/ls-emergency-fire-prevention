@@ -286,7 +286,9 @@
                 <li
                   v-for="(v, i) in selectedItem.arr"
                   :key="i"
+                  v-show="v.name"
                   @click="ZoomToFeature(v.feature)"
+                  @mouseenter="titeEnter"
                 >
                   {{ v.name }}
                 </li>
@@ -883,6 +885,9 @@ export default {
     background-color: transparent;
     // background-color: #000;
   }
+  /deep/.el-collapse{
+    overflow: hidden;
+  }
   .zgfx-container {
     height: 120px;
     width: 360px;
@@ -930,7 +935,7 @@ export default {
   }
   .ljxq-container {
     // height: 450px;
-    height: calc(100% - 120px);
+    height: calc(100% - 60px);
     width: 100%;
     padding-top: 1vh;
 
@@ -953,7 +958,7 @@ export default {
 
         height: 2rem;
         font-family: youshebiaotihei;
-        font-size: 1.8vh;
+        font-size: 2.3vh;
 
         }
 
@@ -971,7 +976,7 @@ export default {
 
         height: 2rem;
         font-family: youshebiaotihei;
-        font-size: 1.8vh;
+        font-size: 2.3vh;
         // padding-top: 4vh;
         // padding-bottom: 4vh;
           .search {
@@ -1399,7 +1404,7 @@ export default {
       .ljxq-detail {
         width: 100%;
         div {
-          height: 28px;
+          height: 4vh;
           display: flex;
           justify-content: space-between;
           margin-top: 10px;
@@ -1411,24 +1416,39 @@ export default {
           span:first-of-type {
             span {
               display: inline-block;
-              margin-left: 4px;
+              // margin-left: 4px;
               color: #eff95f;
               font-size: 20px;
             }
           }
         }
+        ul{
+          height: 30vh;
+          overflow-y: auto;
+          li{
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            height: 4vh;
+          }
+        }
       }
     }
     .go-back {
-      width: 47px;
-      height: 19px;
-      font-size: 12px;
+      width: 6vh;
+      height: 3vh;
+      font-size: 1.2vh;
+      line-height: 3vh;
+      
+      // margin-right: 0.5vh;
       display: inline-block;
       // background-image: linear-gradient(#0d73c1, #38cbee);
       background-image: url('~@/assets/images/2.png');
-      border-radius: 2px;
+      border-radius: 0.4vh;
       cursor: pointer;
       span {
+        position: relative;
+        left: 0.5vh;
         background: url("../../../assets/images/返回icon(1).png") no-repeat;
         background-size: 9px 9px;
         background-position: 5px 2px;
@@ -1440,7 +1460,7 @@ export default {
     }
 
     .el-collapse {
-      height: calc(100% - 285px);
+      height: calc(100% - 100px);
     }
   }
   .zbjksz-container {
@@ -1456,6 +1476,8 @@ export default {
       overflow: auto;
       font-family: PingFang SC;
       font-size: 16px;
+      height: 50vh;
+      overflow-y: auto;
       li {
         height: 32px;
         font-size: 16px;

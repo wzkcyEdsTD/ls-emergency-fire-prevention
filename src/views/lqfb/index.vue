@@ -127,6 +127,7 @@ export default {
   beforeDestroy() {
     this.$map.getMap().un('click', this.showPopup)
     this.infoPopup.setPosition(undefined)
+    this.$bus.$off("showPoup")
     this.jkLayer && this.$store.dispatch('map/changeJkLayer', {
       layer: this.jkLayer,
       ope: 'REMOVELAYER'
@@ -140,7 +141,9 @@ export default {
     this.$map.getMap().on('click', this.showPopup)
 
     this.$store.dispatch('lqfb/changezlOffsetRight', 0)
-
+    this.$bus.$on("showPoup",item=>{
+      that.showPopupItem(item);
+    });
   },
   methods: {
     initPopup() {
@@ -185,7 +188,126 @@ export default {
       }
     },
 
+    async showPopupItem(item) {
+      const that = this;
+      this.clearPopup()
 
+
+      const keyName = document.getElementById('key-name')
+      const keyValue = document.getElementById('key-value')
+      // const keyNameFire = document.getElementById('key-name-fire')
+      const keyValueFire = document.getElementById('key-value-fire')
+      const jbr = document.getElementById("key-value-fire-jbr")
+      const jbrtel = document.getElementById('key-value-fire-jbrtel')
+      const firetype = document.getElementById("key-value-fire-type")
+      const fireIntensity = document.getElementById('key-value-fire-intensity')
+      const contents = document.getElementById('key-value-fire-cont')
+      const time = document.getElementById('key-value-fire-time')
+
+      const popInfoDetail = document.getElementById('pop-info-deatil')
+
+
+      const value = item
+      if (value['VIDEO_URL']) {
+        // 查询监控视频
+        this.$bus.$emit("videoData",value);
+        return
+      }
+      //办事网点
+      if (value['BSWD_TYPE']) {
+        return
+      }
+      // 是否为火灾点
+      // debugger
+      if ((value['systemcode'])) {
+        // debugger
+        // that.searchGrid(new Point([value.x,value.y]));
+        this.$bus.$emit("fire",value);
+        this.$bus.$emit("gridInfo",null);
+        this.$bus.$emit("streetInfo",null);
+      }else{
+      }
+      // debugger
+      if (!value['systemcode']) {
+        if ((!value['NAME'] && !value['label'])) return
+      }
+
+      // 判断是不是防火人员
+      if (value.smid && value.smid.match(/^1[3|4|5|6|7|8|9][0-9]\d{8}$/)) {
+        // this.$refs.rydwPannel.handleItemClick(value)
+        return
+      }
+
+
+      // 显示属性框
+      if (!(value['systemcode'])) {
+        switch (value.type) {
+          case '人员定位':
+            this.rydwPopyp.setPosition(coordinate)
+            break
+          default:
+            this.infoPopup.setPosition(coordinate)
+            break
+        }
+      }
+      // 判断是不是阻隔带
+      if (value['label']) {
+        keyName.innerHTML = `类型：`
+        keyValue.innerHTML = `${value['label']}`
+        this.$store.dispatch('map/changeIsShowDetail', false)
+        return
+      }
+
+      this.$store.dispatch('map/changeIsShowDetail', true)
+      let table; let infoTmpl = ``
+      // debugger
+
+      this.$store.dispatch('lqfb/changeIsXFDW', '')
+      table = document.getElementById('table-box')
+      
+      if ((value['systemcode'])) {
+        this.firePopyp.setPosition([value.x,value.y])
+      }
+
+      table.innerHTML = infoTmpl
+      if ((value['systemcode'])) {
+        // keyNameFire.innerHTML = '地点：'
+        if ("null".indexOf(`${value['jubaoren']}`) != -1) {
+          jbr.innerHTML = ``
+        }else{
+          jbr.innerHTML = `${value['jubaoren']}`
+        }
+        if ("null".indexOf(`${value['jubaoren']}`) != -1) {
+          jbrtel.innerHTML = ``
+        }else{
+          jbrtel.innerHTML = `${value['jubaorentel']}`
+        }
+      keyValueFire.innerHTML = `${value['address']}`
+
+
+      const text = `${value['infocontent']}`
+      // debugger
+      if (text.indexOf(",")>-1) {
+        const arr =text.split(',')
+        // console.log(arr)
+
+        contents.innerHTML = arr[0]
+        
+        fireIntensity.innerHTML = that.fireStrong[arr[1].split(":")[1]]
+        firetype.innerHTML = arr[2].split(":")[1]
+        // debugger
+      }else{
+        contents.innerHTML = `${value['infocontent']}`
+      }
+
+      time.innerHTML = `${value['time']}`
+
+      }else{
+        // console.log(11111111)
+        keyName.innerHTML = `${attrData[value['TABLE_NAME']]['NAME']}：`
+        keyValue.innerHTML = `${value['NAME']}`
+      }
+    },
 
     async showPopup(evt) {
       const that = this;
