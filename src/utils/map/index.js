@@ -678,7 +678,14 @@ const getFeaturesByGeometry = ({ url, dataSourceName, label, layerName, attribut
         }else{
           const resultLayer = new VectorLayer({
             source: vectorSource,
-            style: styleFunction
+            style: new Style({
+              image: new Icon({
+                anchor: [0.5, 26],
+                anchorXUnits: 'fraction',
+                anchorYUnits: 'pixels',
+                src: require(`@/assets/images/icon/${label}.png`)
+              })
+            })
           })
           resolve(resultLayer)
         }

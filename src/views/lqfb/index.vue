@@ -128,6 +128,7 @@ export default {
     this.$map.getMap().un('click', this.showPopup)
     this.infoPopup.setPosition(undefined)
     this.$bus.$off("showPoup")
+    this.$bus.$off("showPoupItem")
     this.jkLayer && this.$store.dispatch('map/changeJkLayer', {
       layer: this.jkLayer,
       ope: 'REMOVELAYER'
@@ -144,6 +145,9 @@ export default {
     this.$bus.$on("showPoup",item=>{
       that.showPopupItem(item);
     });
+    this.$bus.$on("showPoupItem",item=>{
+      that.showPopupSearchItem(item);
+    })
   },
   methods: {
     initPopup() {
@@ -267,6 +271,148 @@ export default {
       
       if ((value['systemcode'])) {
         this.firePopyp.setPosition([value.x,value.y])
+      }
+
+      table.innerHTML = infoTmpl
+      if ((value['systemcode'])) {
+        // keyNameFire.innerHTML = '地点：'
+        if ("null".indexOf(`${value['jubaoren']}`) != -1) {
+          jbr.innerHTML = ``
+        }else{
+          jbr.innerHTML = `${value['jubaoren']}`
+        }
+        if ("null".indexOf(`${value['jubaoren']}`) != -1) {
+          jbrtel.innerHTML = ``
+        }else{
+          jbrtel.innerHTML = `${value['jubaorentel']}`
+        }
+      keyValueFire.innerHTML = `${value['address']}`
+
+
+      const text = `${value['infocontent']}`
+      // debugger
+      if (text.indexOf(",")>-1) {
+        const arr =text.split(',')
+        // console.log(arr)
+
+        contents.innerHTML = arr[0]
+        
+        fireIntensity.innerHTML = that.fireStrong[arr[1].split(":")[1]]
+        firetype.innerHTML = arr[2].split(":")[1]
+        // debugger
+      }else{
+        contents.innerHTML = `${value['infocontent']}`
+      }
+
+      time.innerHTML = `${value['time']}`
+
+      }else{
+        // console.log(11111111)
+        keyName.innerHTML = `${attrData[value['TABLE_NAME']]['NAME']}：`
+        keyValue.innerHTML = `${value['NAME']}`
+      }
+    },
+
+    async showPopupSearchItem(feature){
+      const that = this;
+      this.clearPopup()
+
+      const keyName = document.getElementById('key-name')
+      const keyValue = document.getElementById('key-value')
+      // const keyNameFire = document.getElementById('key-name-fire')
+      const keyValueFire = document.getElementById('key-value-fire')
+      const jbr = document.getElementById("key-value-fire-jbr")
+      const jbrtel = document.getElementById('key-value-fire-jbrtel')
+      const firetype = document.getElementById("key-value-fire-type")
+      const fireIntensity = document.getElementById('key-value-fire-intensity')
+      const contents = document.getElementById('key-value-fire-cont')
+      const time = document.getElementById('key-value-fire-time')
+
+      const popInfoDetail = document.getElementById('pop-info-deatil')
+
+      const value = feature.values_
+
+      const coordinate = [value.geometry.flatCoordinates[0],value.geometry.flatCoordinates[1]]
+      if (value['VIDEO_URL']) {
+        // 查询监控视频
+        this.$bus.$emit("videoData",value);
+        return
+      }
+      //办事网点
+      if (value['BSWD_TYPE']) {
+        return
+      }
+      // 是否为火灾点
+      // debugger
+      if ((value['systemcode'])) {
+        // debugger
+        // that.searchGrid(new Point([value.x,value.y]));
+        this.$bus.$emit("fire",value);
+        this.$bus.$emit("gridInfo",null);
+        this.$bus.$emit("streetInfo",null);
+      }else{
+      }
+      // debugger
+      if (!value['systemcode']) {
+        if (!value['NAME']) return
+      }
+
+      // 显示属性框
+      if (!(value['systemcode'])) {
+        this.infoPopup.setPosition(coordinate)
+      }
+
+      this.$store.dispatch('map/changeIsShowDetail', true)
+      let table; let infoTmpl = ``
+
+      if (feature.values_.DATATYPE === '骨干救援队伍' && feature.values_.TYPE2 === '森林消防救援队伍') {
+        table = document.getElementById('table-box1')
+        const infoPannelDwry = document.getElementById('info-pannel-dwry')
+        const infoPannelWzzb = document.getElementById('info-pannel-wzzb')
+        let dwry = ``; let wzzb = ``
+        getFiremanByTeamName(feature.values_.NAME).then(res => {
+          if (res.code === 20000) {
+            res.data.forEach(item => {
+              dwry += `<li>
+                        <div class="item item-1">${item.name}</div>
+                        <div class="item item-1"></div>
+                        <div class="item item-1">${item.age}</div>
+                        <div class="item item-2">${item.phone}</div>
+                      </li>`
+            })
+            infoPannelDwry.innerHTML = dwry
+          }
+        })
+        getEquipment(feature.values_.BID).then(res => {
+          if (res.code === 20000) {
+            res.data.forEach(item => {
+              wzzb += `<li>
+                        <div class="item item-2">${item.name}</div>
+                        <div class="item item-2">${item.type}</div>
+                        <div class="item item-1">${item.user_number}</div>
+                        <div class="item item-1">${item.unit}</div>
+                      </li>`
+            })
+            infoPannelWzzb.innerHTML = wzzb
+          }
+        })
+        this.$store.dispatch('lqfb/changeIsXFDW', '基本信息')
+      } else {
+        this.$store.dispatch('lqfb/changeIsXFDW', '')
+        table = document.getElementById('table-box')
+      }
+      // debugger
+      // console.log(value)
+      if (!(value['systemcode'])) {
+        // console.log("不是火灾点")
+        for (const key in attrData[value['TABLE_NAME']]) {
+          if (value[key] != undefined) {
+            infoTmpl += `<div  class="item">
+                            <span class="key">${attrData[value['TABLE_NAME']][key]}：</span>
+                            <span class="value">${value[key]}</span>
+                        </div>`
+          }
+        }
       }
 
       table.innerHTML = infoTmpl
@@ -539,11 +685,13 @@ export default {
         keyValue.innerHTML = `${value['NAME']}`
       }
     },
+
     clearPopup() {
       this.rydwPopyp.setPosition(undefined)
       this.infoPopup.setPosition(undefined)
       this.firePopyp.setPosition(undefined)
     },
+
     collapse() {
       this.$store.dispatch(
         'lqfb/changeInfoPanelOffsetRight',

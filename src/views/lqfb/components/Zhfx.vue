@@ -290,7 +290,7 @@
                   @click="ZoomToFeature(v.feature)"
                   @mouseenter="titeEnter"
                 >
-                  {{ v.name }}
+                  {{ `${i+1}、${v.name}` }}
                 </li>
               </ul>
             </div>
@@ -556,6 +556,7 @@ export default {
     ZoomToFeature(feature) {
       this.$map.getMap().getView().setCenter(feature.getGeometry().getCoordinates());
       this.$map.getMap().getView().setZoom(18);
+      this.$bus.$emit("showPoupItem",feature);
     },
     handleLabelClick(item) {
       // debugger

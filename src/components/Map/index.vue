@@ -565,7 +565,7 @@ export default {
   background-color: rgba(1, 51, 78, 0.8);
   position: absolute;
   left: -140px;
-  bottom: 22px;
+  bottom: 33px;
   .popup-header {
     width: 100%;
     height: 41px;
