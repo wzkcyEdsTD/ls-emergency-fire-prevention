@@ -82,6 +82,7 @@ import windPr1h from './预测1小时风向.json'
 import axios from 'axios'
 import { getForRain_3H } from '@/api/lqfb'
 import { log } from 'video.js'
+import utils from "@/libs/windAPI.js";
 export default {
   data() {
     const mask = this.$map.createMaskByGeoJson(ruianGeoJson)
@@ -203,6 +204,7 @@ export default {
     }
   },
   methods: {
+
     handleRainChange(val) {
       this.$map.removeLayer(this.rainLayer)
       if (!val) return
@@ -274,30 +276,75 @@ export default {
     addWindCur() {
       const url = `https://datacenter.istrongcloud.com`
       const that = this;
-      axios.get(`${url}/data/gfs/fcdata/202103/04/02/006.json?v=1614821921256`).then(res => {
-         const temp = res.data["2021030408"]
-        //  console.log(temp)
-         that.oe = that.$map.wind(temp);
-          // console.log("7777777777",window.g.map.getLayers())
-        //  that.$nextTick(()=>{
-        //   console.log("2222222222");
-        //   document.onreadystatechange = function () {
-        //     if(document.readyState=="complete") {
-        //       if (fireEvent["id"]) {
-        //         let node = $(`#finish`)
-        //         if (node) {
-        //           node.remove();
-        //           $(`#temp`).after(`<div id = 'finish'></div>`)
-        //         }else{
-        //           $(`#temp`).after(`<div id = 'finish'></div>`)
-        //         }
-        //         console.log("已添加finish节点11111111111"); 
-        //       }
-        //     }
-        //   }
-        //  })
+      var temp = {}
+      var timeList = [];//日期
+      var dataList = [];//日期对应的时间戳
+      utils.getWindDataList().then(res=>{
+        console.log(res)
+        const list = Object.keys(res.data).map((item, index) => ({value:res.data[item]}))
+        // debugger
+        list.map(element => {
+          const time = element.value.time;
+          //"2021-03-09T08:00:00+08:00"
+          const splitStr = time.split("T")[0] + ' ' +time.split("T")[1].split("+")[0]
+          temp[splitStr] = element.value.url;
+          timeList.push(splitStr)
+          const t = new Date(splitStr).getTime();
+          const j ={};
+          j['日期']=splitStr
+          j['时间戳']=t
+          dataList.push(j)
+        });
+        const dataTime = new Date().getTime();
+        //过滤掉预报的数据
+        dataList = dataList.filter(v=>{
+          if (dataTime-v["时间戳"]>0) {
+            return v
+          }
+        })
+        dataList.map(item=>{
+          item.time = Math.abs(item["时间戳"] - dataTime)
+        })
+        dataList.sort(function (a,b) {
+          return a.time-b.time
+        })
+        if (dataList.length>0) {
+          const min = dataList[0]['日期']
+          const resoult = temp[min]
+          // const repace(new RegExp(reallyDo,'g'),replaceWith)
+          utils.getWindDataDetail(resoult).then(r=>{
+            const key = Object.keys(r)
+            const resoultData = r[key[0]]
+            console.log("最新的台风网数据",resoultData)
+            that.oe = that.$map.wind(resoultData)
+          })
+        }
 
       })
+      // axios.get(`${url}/data/gfs/fcdata/202103/04/02/006.json?v=1614821921256`).then(res => {
+      //    const temp = res.data["2021030408"]
+      //   //  console.log(temp)
+      //    that.oe = ;
+      //     // console.log("7777777777",window.g.map.getLayers())
+      //   //  that.$nextTick(()=>{
+      //   //   console.log("2222222222");
+      //   //   document.onreadystatechange = function () {
+      //   //     if(document.readyState=="complete") {
+      //   //       if (fireEvent["id"]) {
+      //   //         let node = $(`#finish`)
+      //   //         if (node) {
+      //   //           node.remove();
+      //   //           $(`#temp`).after(`<div id = 'finish'></div>`)
+      //   //         }else{
+      //   //           $(`#temp`).after(`<div id = 'finish'></div>`)
+      //   //         }
+      //   //         console.log("已添加finish节点11111111111"); 
+      //   //       }
+      //   //     }
+      //   //   }
+      //   //  })
+
+      // })
 
       // this.$map.removeWindLayer()
       // this.$map.getWindLayer(require('@/components/Map/实时风向.json'))
@@ -381,7 +428,7 @@ export default {
       // console.log(this.fireId);
       if (fireEvent["id"]) {
         that.showPrintMap=false;
-        that.addWindCur()
+        // that.addWindCur()
       }
     })
 

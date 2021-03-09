@@ -155,12 +155,12 @@
           <div class="item item-1">时间</div>
           <div class="item item-2">截图</div>
         </div>
-        <ul style="height:68vh" v-if="imageList.length>0">
+        <ul style="height:71.5vh" v-if="imageList.length>0">
           <li v-for="(item, index) in imageList" 
               :key="index" 
               class="list-item" >
             <div @mouseenter="titeEnter" class="item item-1">{{ item.address }}</div>
-            <div class="item item-1">{{ item.createTime }}</div>
+            <div class="item item-1">{{ item.time }}</div>
             <div class="item item-2">
                 <el-image
                   style="width: 70px; height: 70px"

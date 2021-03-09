@@ -94,6 +94,7 @@ import ToolBar from "./ToolBar";
 import PickFirePoint from "./PickFirePoint";
 import Yzhxdj from "./Yzhxdj";
 import Util from "@/libs/cimAPI.js";
+
 import app from "@/store/modules/app";
 import axios from "axios";
 
@@ -113,6 +114,7 @@ import { Circle as CircleStyle, Fill, Stroke, Style, Icon, Text } from 'ol/style
 export default {
   name: "MapBox",
   components: {
+    utils,
     Util,
     LayerSwitch,
     ToolBar,
@@ -121,6 +123,7 @@ export default {
   },
   data() {
     return {
+      version:undefined,
       map: null,
       isShowPickFirePoint: false,
       detailShow: false,
@@ -182,10 +185,6 @@ export default {
     }
     await this.initMap();
     this.getData();
-
-
-
-
   },
   // beforeDestroy() {
   //   // if (that.timer) {
@@ -194,6 +193,7 @@ export default {
   //   this.$bus.$off("refreshIcon");
   // },
   methods: {
+
     searchGrid(point){
       const that = this;
       let geometryParam = new SuperMap.GetFeaturesByGeometryParameters({
