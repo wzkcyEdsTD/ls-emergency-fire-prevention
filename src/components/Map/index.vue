@@ -114,7 +114,6 @@ import { Circle as CircleStyle, Fill, Stroke, Style, Icon, Text } from 'ol/style
 export default {
   name: "MapBox",
   components: {
-    utils,
     Util,
     LayerSwitch,
     ToolBar,
