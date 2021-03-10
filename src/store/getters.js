@@ -49,5 +49,6 @@ const getters = {
   lqzyLayer: state => state.map.lqzyLayer,
   videoData:state => state.map.videoData,
   netWorkData:state => state.map.netWorkData,
+  qiXiangData:state => state.map.qiXiangData,
 }
 export default getters

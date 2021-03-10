@@ -198,7 +198,11 @@ export default {
 
       let node = $(`.ol-overlaycontainer-stopevent`)
       if (node) {
-        node.css("z-index","9999")
+        node.css("z-index","1999")
+      }
+      let node1 = $(`.toobar`)
+      if (node1) {
+        node1.css("z-index","2999")
       }
 
       this.clearPopup()
@@ -303,9 +307,12 @@ export default {
 
       let node = $(`.ol-overlaycontainer-stopevent`)
       if (node) {
-        node.css("z-index","9999")
+        node.css("z-index","1999")
       }
-
+      let node1 = $(`.toobar`)
+      if (node1) {
+        node1.css("z-index","2999")
+      }
       this.clearPopup()
 
       const keyName = document.getElementById('key-name')
@@ -480,9 +487,12 @@ export default {
 
       let node = $(`.ol-overlaycontainer-stopevent`)
       if (node) {
-        node.css("z-index","9999")
+        node.css("z-index","1999")
       }
-
+      let node1 = $(`.toobar`)
+      if (node1) {
+        node1.css("z-index","2999")
+      }
       this.clearPopup()
       let feature = this.$map
         .getMap()
@@ -534,11 +544,10 @@ export default {
         this.$bus.$emit("fire",value);
         this.$bus.$emit("gridInfo",null);
         this.$bus.$emit("streetInfo",null);
-      }else{
       }
       // debugger
 
-      if (!value['systemcode'] && !value['BSWD_TYPE']) {
+      if (!value['systemcode'] && !value['BSWD_TYPE'] && !value['CZBH']) {
         if ((!value['NAME'] && !value['label'])) return
       }
 
@@ -614,6 +623,11 @@ export default {
             <span class="value" title="${value["GZSJ"]}">${value["GZSJ"]}</span>
         </div>`
 
+      }else if(value['CZBH']){
+            // infoTmpl += `<div  class="item">
+            //     <span class="key">名称：</span>
+            //     <span class="value" title="${value["NAME"]}">${value["NAME"]}</span>
+            // </div>`
       }else{
         for (const key in attrData[value['TABLE_NAME']]) {
           if (value[key] != undefined) {
@@ -688,6 +702,9 @@ export default {
         if (value['BSWD_TYPE']) {
           keyName.innerHTML = `名称：`
           keyValue.innerHTML = `${value['NAME']}`
+        }else if(value['CZBH']){
+          keyName.innerHTML = `名称：`
+          keyValue.innerHTML = `${value['ADDRESS']}`
         }else{
           keyName.innerHTML = `${attrData[value['TABLE_NAME']]['NAME']}：`
           keyValue.innerHTML = `${value['NAME']}`
@@ -706,7 +723,30 @@ export default {
         'lqfb/changeInfoPanelOffsetRight',
         this.offsetRight === 0 ? -50 : 0
       )
+    },
+
+    qiXiangBySQL(id){
+      var sqlParam = new SuperMap.GetFeaturesBySQLParameters({
+        toIndex: 999999,
+        queryParameter: {
+          // name: layerName,
+          attributeFilter: `STATIONNUM='${id}'`,
+          maxFeatures: 99999999
+        },
+        datasetNames: [`lishui_forestfire_v2:szls_dw_sjjh_sfxpt_biz_067_qx_qyqxzgc`]
+      })
+      const url = "http://10.53.137.59:8090/iserver/services/data-lishui_forestfire_v2/rest/data";
+          debugger
+
+      new FeatureService(url).getFeaturesBySQL(sqlParam, serviceResult => {
+            const list = serviceResult.result.features.features;
+            debugger
+
+        })
+
     }
+
+
   }
 }
 </script>

@@ -63,6 +63,7 @@ export default {
       inputLat: null,
       code:"",
       systemcode:"",
+      pointList:[],
     }
   },
   computed: {
@@ -256,7 +257,6 @@ export default {
       // this.$store.dispatch('siderbar/changeCheckedLeafNodesWithBuffer', [])
     },
 
-
     handleClearClick() {
       this.clearFire()
       this.$store.dispatch('map/changeClearFlag', null)
@@ -269,6 +269,9 @@ export default {
              // 周边资源
             netWork:{
               name:"办事网点"
+            },
+            qiXiang:{
+              name:"气象测站"
             },
             d_emergency_team: {
               name: '应急队伍'
@@ -400,11 +403,77 @@ export default {
       this.$store.dispatch('siderbar/changeCheckedLeafNodesWithBuffer', hzdfxNodes)
       // this.$store.dispatch('jjya/getSsxyPersonList', null)
       // this.$store.dispatch('jjya/getMonitorList', null)
+    },
+    testData(){
+      const that = this;
+      var sqlParam = new SuperMap.GetFeaturesBySQLParameters({
+        toIndex: 999999,
+        queryParameter: {
+          // name: layerName,
+          attributeFilter: "",
+          maxFeatures: 99999999
+        },
+        datasetNames: [`lishui_forestfire_v2:qixiangcezhan`]
+      })
+      const url = "http://10.53.137.59:8090/iserver/services/data-lishui_forestfire_v2/rest/data";
+      // debugger
+
+      new FeatureService(url).getFeaturesBySQL(sqlParam, serviceResult => {
+        const list = serviceResult.result.features.features;
+        const tempList = []
+        list.forEach(element => {
+          const properties = element.properties;
+          const point = new Point([properties.LONGITUDE,properties.LATITUDE]);
+          tempList.push(point)
+        });
+        that.searchQXpoint(tempList);
+    })
+      
+    },
+    searchQXpoint(tempList){
+      //创建最近设施分析参数实例
+      console.log(tempList)
+      var resultSetting = new SuperMap.TransportationAnalystResultSetting({
+          returnEdgeFeatures: true,
+          returnEdgeGeometry: true,
+          returnEdgeIDs: true,
+          returnNodeFeatures: true,
+          returnNodeGeometry: true,
+          returnNodeIDs: true,
+          returnPathGuides: true,
+          returnRoutes: true
+      });
+      var analystParameter = new SuperMap.TransportationAnalystParameter({
+          resultSetting: resultSetting,
+          // turnWeightField: "TurnCost",
+          weightFieldName: "length"  //length,time
+      });
+
+      var findClosetFacilitiesParameter = new SuperMap.FindClosestFacilitiesParameters({
+          //事件点,必设参数
+          event: new Point([120.3,28.04]),
+          //要查找的设施点数量。默认值为1
+          expectFacilityCount: 1,
+          //气象站点集合
+          facilities: tempList,
+          isAnalyzeById: false,
+          // parameter: analystParameter
+      });
+      const serviceUrl = "https://iserver.supermap.io/iserver/services/transportationanalyst-sample/rest/networkanalyst/RoadNet@Changchun"
+      //进行查找
+      new ol.supermap.NetworkAnalystService(serviceUrl).findClosestFacilities(findClosetFacilitiesParameter, function (serviceResult) {
+          debugger
+          console.log(serviceResult)
+          serviceResult.result.facilityPathList.map(function (result) {
+          });
+  
+      });
+
     }
   },
   mounted(){
     const that = this;
-
+    that.testData();
     this.$bus.$on('fire',(value)=>{
       // console.log("传过来了",value)
       // that.handleClearClick();

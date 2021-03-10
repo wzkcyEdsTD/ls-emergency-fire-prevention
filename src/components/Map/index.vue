@@ -97,7 +97,7 @@ import Util from "@/libs/cimAPI.js";
 
 import app from "@/store/modules/app";
 import axios from "axios";
-
+import { Image as ImageLayer, Tile as TileLayer } from 'ol/layer'
 import VectorLayer from 'ol/layer/Vector'
 import VectorSource from 'ol/source/Vector'
 
@@ -105,7 +105,7 @@ import Feature from 'ol/Feature'
 import GeoJSON from 'ol/format/GeoJSON'
 import { Point } from 'ol/geom'
 import {
-  TileSuperMapRest,
+  ImageSuperMapRest,
   FeatureService,
   SuperMap
 } from '@supermap/iclient-ol'
@@ -465,9 +465,6 @@ export default {
       this.map.addLayer(villageLayer);
       this.map.addLayer(streetLayer);
       this.map.addLayer(gridLayer);
-
-      // getkey();
-      // window.map = this.map;
     },
 
     searchStreet(point){

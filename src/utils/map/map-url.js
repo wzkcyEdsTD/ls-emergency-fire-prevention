@@ -268,6 +268,14 @@ const mapUrl = {
     icon: '办事网点.png',
     url: dataUrl
   },
+  QIXIANG:{
+    type: 'data', // 数据服务
+    layerName: 'qixiangcezhan',
+    label: '气象测站',
+    dataSourceName,
+    icon: '气象测站.png',
+    url: dataUrl
+  },
   // 水系
   WATER: {
     type: 'map',

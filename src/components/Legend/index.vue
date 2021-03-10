@@ -80,6 +80,7 @@ export default {
     return {
       allLayerList:[],
       fireLayerTemp:true,
+      qxczLayerTemp:false,
     }
   },
   methods: {
@@ -101,7 +102,6 @@ export default {
     const that = this;
     this.$bus.$on('hzjbd',temp=>{
       console.log(temp)
-      // debugger
       that.$nextTick(()=>{
         that.fireLayerTemp = temp;
         that.allLayerList = that.allLayerList.filter(v=>{
@@ -111,10 +111,55 @@ export default {
         })
         console.log(that.allLayerList)
       })
+    
     });
+    this.$bus.$on("qxcz",temp=>{
+      // debugger
+      that.$nextTick(()=>{
+        that.qxczLayerTemp = temp;
+        // that.allLayerList = that.allLayerList.filter(v=>{
+        //   if (!(v.name.indexOf('气象')!=-1)) {
+        //     return v
+        //   }
+        // })
+        console.log('气象测站',temp)
+        if (temp) {
+          const list = []
+          const legend = {
+            icon:"气象测站.png",
+            label:"气象测站",
+            name:"气象测站",
+          }
+          list.push(legend)
+          if (this.allLayerList.length == 0) {
+            this.allLayerList = [...this.allLayerList, ...list]
+          } else {
+            const obj = {};
+            const arr = [...this.allLayerList, ...list];
+            arr.map(v => {
+              if (!obj[v.name]) { obj[v.name] = v }
+            })
+
+            const setNameArr = [...new Set(arr.map(v => v.name))];
+            this.allLayerList = setNameArr.map(v => obj[v])
+          }
+        }else{
+          console.log('气象测站',temp)
+          that.allLayerList = that.allLayerList.filter(v=>{
+            if (!(v.name.indexOf('气象测站')!=-1)) {
+              return v
+            }
+          })
+        }
+
+        console.log(that.allLayerList)
+      })
+    
+    })
   },
   beforeDestroy(){
     this.$bus.$off('hzjbd');
+    this.$bus.$off('qxcz');
   }
 }
 </script>

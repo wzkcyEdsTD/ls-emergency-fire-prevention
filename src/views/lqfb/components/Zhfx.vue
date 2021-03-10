@@ -1,96 +1,7 @@
 <template>
   <div class="zhfxlb-wrapper" :style="{ right: `${zhfxOffsetRight}rem` }" >
     <div class="close" @click="close" v-show="!hasID"/>
-    <!-- <div class="zgfx-container">
-      <div class="title">阻隔分析</div>
-      <img src="../../../assets/images/边.png" alt />
-      <div class="zgfx-box">
-        <div class="item active">
-          <svg-icon icon-class="河流icon" />
-          <span class="river">河流</span>
-        </div>
-        <div class="item">
-          <svg-icon icon-class="道路icon" />
-          <span class="road">道路</span>
-        </div>
-        <div class="item" style="color: rgb(201, 169, 99)">
-          <svg-icon icon-class="地表覆盖icon" />
-          <span class="cover">地表覆盖</span>
-        </div>
-      </div>
-    </div> -->
     <div class="ljxq-container">
-      <!-- <div class="title">
-        路径详情
-        <el-button type="primary" class="btn-yadq" @click="doPoint">选点</el-button>
-        <el-button type="primary" class="btn-yadq" @click="clearPoint">清点</el-button>
-        <el-button type="primary" class="btn-yadq" @click="changeYADQOffsetRight"
-          >预案调取</el-button
-        >
-      </div>
-      <img src="../../../assets/images/边.png" alt /> -->
-      <!-- <div class="ljxq-box">
-        <div v-show="RouteDetails == true && pathList.length === 0" class="route-box">
-          暂无救援路径
-        </div>
-        <div v-show="RouteDetails == true && pathList.length > 0" class="route-box">
-          <div class="title">
-            <div class="check-box">
-              <el-checkbox
-                v-model="checkAll"
-                :indeterminate="isIndeterminate"
-                @change="handleCheckAllChange"
-                @click.stop.native
-              />
-            </div>
-            <span> <img src="../../../assets/images/救援icon.png" alt />救援队名称 </span>
-            <span>
-              <img src="../../../assets/images/距离icon.png" alt />距离火灾的距离
-            </span>
-          </div>
-          <el-checkbox-group v-model="lineLayerList" @change="handleCheckedLineChange">
-            <ul>
-              <li
-                v-for="(item, index) in pathList"
-                :key="index"
-                @click="detailsBtn(item)"
-              >
-                <span class="check-box"
-                  ><el-checkbox :label="item" @click.stop.native>null </el-checkbox></span
-                >
-                <span>
-                  <img src="../../../assets/images/救援icon.png" alt />
-                  {{ item.name }}
-                </span>
-                <span>
-                  <img src="../../../assets/images/距离icon.png" alt />
-                  {{ item.sum }}米
-                </span>
-              </li>
-            </ul>
-          </el-checkbox-group>
-        </div>
-        <div v-show="RouteDetails === false" class="routeDetail-box">
-          <div class="title">
-            <span>
-              <img src="../../../assets/images/救援icon.png" alt />
-              {{ title }}
-            </span>
-            <span @click="nodetaisBtn()">
-              <span>返回</span>
-            </span>
-          </div>
-          <div class="rD-con">
-            <div class="StepBar">
-              <el-steps direction="vertical">
-                <el-step v-for="(item, index) in details" :key="index" :title="item" />
-              </el-steps>
-            </div>
-            <div class="road"><span />车行道 <span />人行道</div>
-          </div>
-        </div>
-      </div> -->
-
       <div v-show="hasID">
         <div class="titleLine">
           <div class="titleHistory">
@@ -165,57 +76,83 @@
       <div>
         <div class="titleLine">
           <div class="titleHistory">
+            气象测站
+          </div>
+        </div>
+        <img style="width: 100%;" src="@/common/images/边.png" alt="">
+                <div 
+
+        class="result-wrapper">
+          <ul class="result-list-around" id="table">
+            <li 
+            style="margin-bottom: 0.3vh;"
+            class="result-data">
+              <span class="indexList">气象测站</span>
+                <p
+                  @mouseenter="titeEnter"
+                  class="contentList" >{{aroundQiXiangDetail}}</p
+                >
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <div class="titleLine">
+          <div class="titleHistory">
             责任人
           </div>
         </div>
         <img style="width: 100%;" src="@/common/images/边.png" alt="">
         <div 
-        :style="{height:syscode=='tyswxt'?'15vh':'8vh'}"
-        style="height:15vh"
-        class="result-wrapper">
+        style="height:auto"
+        class="result-wrapper-other">
           <ul class="result-list" id="table">
             <li
-             class="result-data">
+            class="result-data">
 
               <span class="indexList">乡镇业务负责人</span>
-              <div class="line"></div> 
-              <!-- <div class = "iconAndName">
-                <img src="@/assets/images/乡镇人员.png" alt="" class="icon"> -->
-                <span
+              <!-- <div class="line"></div>  -->
+              <div class = "iconAndName">
+                <p
                   @mouseenter="titeEnter"
-                  class="contentList">{{streetPerson}}</span
+                  class="contentList">{{streetPerson}}</p
                 >
-              <!-- </div> -->
+              </div>
 
             </li>
             <li class="result-data">
               <span class="indexList">联系方式</span>
-              <div class="line"></div> 
-              <span
-                @mouseenter="titeEnter"
-                class="contentList">{{streetPersonPhone}}</span
-              >
+              <!-- <div class="line"></div>  -->
+              <div class = "iconAndName">
+                <p
+                  @mouseenter="titeEnter"
+                  class="contentList">{{streetPersonPhone}}</p
+                >
+              </div>
             </li>
             <li 
             v-show="syscode=='tyswxt'"
             class="result-data">
               <span class="indexList">网格负责人</span>
-              <div class="line"></div> 
+              <!-- <div class="line"></div>  -->
               <!-- <img src="@/assets/images/乡镇人员.png" alt="" class="icon"> -->
-              <span
-                @mouseenter="titeEnter"
-                class="contentList">{{gridPerson}}</span
-              >
+              <div class = "iconAndName">
+                <p
+                  @mouseenter="titeEnter"
+                  class="contentList">{{gridPerson}}</p
+                >
+              </div>
             </li>
             <li 
             v-show="syscode=='tyswxt'"
             class="result-data">
               <span class="indexList">联系方式</span>
-              <div class="line"></div> 
-              <span
-                @mouseenter="titeEnter"
-                class="contentList">{{gridPersonPhone}}</span
-              >
+              <div class = "iconAndName">
+                <p
+                  @mouseenter="titeEnter"
+                  class="contentList">{{gridPersonPhone}}</p
+                >
+              </div>
             </li>
           </ul>
         </div>
@@ -228,31 +165,41 @@
         </div>
         <img style="width: 100%;" src="@/common/images/边.png" alt="">
         <div 
-        style="height:15vh"
+        style="height:25vh"
         class="result-wrapper">
           <ul class="result-list-around" id="table">
             <li
              class="result-data">
               <span  class="indexList">办事网点</span>
-              <div class="line"></div> 
-              <span
-                @mouseenter="titeEnter"
-                class="contentList" >{{aroundDetail}}</span
-              >
+              <!-- <div class="line"></div>  -->
+              <!-- <div class = "iconAndName"> -->
+                <p
+                  @mouseenter="titeEnter"
+                  class="contentList" >{{aroundDetail}}</p
+                >
+              <!-- </div> -->
             </li>
             <li class="result-data">
               <span class="indexList">监控</span>
-              <div class="line"></div> 
-              <span
-                class="contentList" v-if="videoList.length > 0">{{aroundVideo}}</span
-              >
-              <span
-                class="contentList" v-else>{{`周边无监控设施`}}</span
-              >
+             <!-- <div class = "iconAndName"> -->
+                <p
+                  class="contentList" v-if="videoList.length > 0">{{aroundVideo}}</span
+                >
+                <p
+                  class="contentList" v-else>{{`周边无监控设施`}}</p
+                >
+              <!-- </div> -->
             </li>
-
+            <!-- <li class="result-data">
+              <span class="indexList">气象测站</span>
+                <p
+                  @mouseenter="titeEnter"
+                  class="contentList" >{{aroundQiXiangDetail}}</p
+                >
+            </li> -->
           </ul>
         </div>
+
       </div>
       <el-collapse v-model="activeNames" accordion  v-show="!hasID">
         <el-collapse-item title="周边资源搜索成果" name="1">
@@ -380,6 +327,7 @@ export default {
       aroundVideo:'',
       aroundDetail:"",
 
+      aroundQiXiangDetail:"",
       tempdata:{
         ZBZY:undefined
       }
@@ -394,6 +342,9 @@ export default {
     },
     netWorkData() {
       return this.$store.getters.netWorkData;
+    },
+    qiXiangData() {
+      return this.$store.getters.qiXiangData;
     },
     zhfxOffsetRight() {
       return this.$store.getters.zhfxOffsetRight;
@@ -448,13 +399,8 @@ export default {
 
     },
     netWorkData(val){
-      // console.log("办事网点",val)
       const that = this;
-      // let data = this.featuresData
       let data = this.$store.getters.featuresData;
-      // data.ZBZY.netWork.arr = val
-      // const tempdata = data
-      // debugger
       let list = []
       val.forEach(item => {
         const json = {
@@ -463,14 +409,9 @@ export default {
         }
         list.push(json)
       })
-      // debugger
-      // debugger
-
       this.$nextTick(()=>{
-          // debugger
         data.ZBZY.netWork.arr = list
         if (val && val.length>0) {
-
           that.aroundDetail = ""
           val.forEach(element => {
             that.aroundDetail += element.values_.NAME
@@ -498,7 +439,35 @@ export default {
           }
         }
       })
-      // this.$store.dispatch('map/changeFeaturesData', data)
+
+    },
+    qiXiangData(val){
+      console.log("气象测站",val)
+      const that = this;
+      let data = this.$store.getters.featuresData;
+      let list = []
+      val.forEach(item => {
+        const json = {
+          name:item.values_.ADDRESS,
+          feature:item,
+        }
+        list.push(json)
+      })
+      this.$nextTick(()=>{
+        data.ZBZY.qiXiang.arr = list
+        if (val && val.length>0) {
+          that.aroundQiXiangDetail = ""
+          val.forEach(element => {
+            that.aroundQiXiangDetail += element.values_.ADDRESS
+            that.aroundQiXiangDetail += "   "
+          });
+          // debugger
+        }else{
+          that.aroundQiXiangDetail = "周边无气象站点"
+        }
+        that.tempdata = data
+      })
+
     },
     ssxyPersonList(val) {
       this.ssxyPersonLayer && this.$map.removeLayer(this.ssxyPersonLayer);
@@ -953,7 +922,7 @@ export default {
         // margin-top: 6px;
         // margin-bottom: 6px;
         height: 22px;
-        font-weight: bold;
+        // font-weight: bold;
         line-height: 22px;
         position: relative;
 
@@ -963,7 +932,7 @@ export default {
 
         }
 
-        .title {
+      .title {
         width: 100%;
         display: flex;
         justify-content: space-between;
@@ -971,7 +940,7 @@ export default {
         margin-top: 6px;
         margin-bottom: 6px;
         height: 22px;
-        font-weight: bold;
+        // font-weight: bold;
         line-height: 22px;
         position: relative;
 
@@ -1020,18 +989,22 @@ export default {
     }
 
     .result-wrapper {
-      margin-top: 1vh;
+      // margin-top: 1vh;
       width: 100%;
 
       font-family: PingFang;
       color: #fff;
+
+
+
       .result-list {
         height: 100%;
         overflow-y: auto;
         padding-left: 0.5vh;
         padding-right: 0.1vh;
         // background-image: url("~@/assets/images/火灾框.png");
-
+        margin-block-start: 0.5vh;
+        margin-block-end: 0;
         .result-data {
           display: flex;
           justify-content: space-between;
@@ -1096,32 +1069,36 @@ export default {
 
       .result-list-around {
         height: 100%;
+        width: 100%;
         overflow-y: auto;
         padding-left: 0.5vh;
         padding-right: 0.1vh;
         // background-image: url("~@/assets/images/火灾框.png");
-
+        margin-block-start: 0.5vh;
+        margin-block-end: 0;
         .result-data {
           display: flex;
           justify-content: space-between;
           align-items: center;
           padding: 0.1vh 0 0.1vh 0vh;
-          line-height: 5.8vh;
+          line-height: 3vh;
           font-size: 1.4vh;
-          height: 5.5vh;
+          min-height: 4vh;
+          height: auto;
           font-family: "PingFang SC";
           color: #ffffff;
           margin-bottom: 1.3vh;
-          
+
           .iconAndName{
-            width: 20vh;
+            flex: 1;
+            padding-top: 0.1vh;
+            padding-bottom:0.1vh
           }
 
           .indexList {
             text-align: center;
             width: 11vh;
-            background-image: url("~@/assets/images/2.png");
-            background-size: 100% 100%;
+
           }
           .line{
             position: relative;
@@ -1140,33 +1117,116 @@ export default {
           }
           .contentList {
             flex: 1;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            overflow: hidden;
+            // width: 100%;
+            border-left: 1px solid #fff;
             padding-left: 0.5vh;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+            overflow: hidden;
+            word-wrap: break-word;
+            // word-wrap:  break-all;
+            margin-block-start: 0;
+            margin-block-end: 0;
+            padding-right: 0.5vh;
+
+          }
+        }
+        .result-data:nth-child(even) {
+            // background:rgba(5, 88, 63, 0.29);
             background-image: url("~@/assets/images/1.png");
             background-size: 100% 100%;
-            // &.active {
-            //   background: rgba(9, 226, 241, 0.6);
-            // }
+        }
+        .result-data:nth-child(odd) {
+            //background: linear-gradient(rgba(76, 227, 212, 0.7), rgba(23, 145, 120, 0.7), rgba(5, 88, 63, 0.29)); 
+            background-image: url("~@/assets/images/2.png");
+            background-size: 100% 100%;
+        }
+      }
+
+
+    }
+    .result-wrapper-other {
+      margin-top: 1vh;
+      width: 100%;
+
+      font-family: PingFang;
+      color: #fff;
+      .result-list {
+        height: 100%;
+        overflow-y: auto;
+        padding-left: 0.5vh;
+        padding-right: 0.1vh;
+        // background-image: url("~@/assets/images/火灾框.png");
+        margin-block-start: 0.5vh;
+        margin-block-end: 0.5vh;
+        .result-data {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 0.1vh 0 0.1vh 0vh;
+          line-height: 2.5vh;
+          font-size: 1.4vh;
+          min-height: 4vh;
+          height: auto;
+          font-family: "PingFang SC";
+          color: #ffffff;
+
+          .iconAndName{
+            flex: 1;
+            padding-top: 0.1vh;
+            padding-bottom:0.1vh
+          }
+
+          .indexList {
+            text-align: center;
+            width: 11vh;
+
+          }
+          .line{
+            position: relative;
+            left: -0.5vh;
+            float:left;
+            width: 0.15vh;
+            height: 2.5vh;
+            background: #fff;
+          }
+          .gridIcon{
+            padding-left: 1vh;
+
+          }
+          .icon{
+            padding-left: 0.5vh;
+            padding-right: 0.7vh;
+          }
+          .contentList {
+            border-left: 1px solid #fff;
+            width: 100%;
+            padding-left: 0.5vh;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+            overflow: hidden;
+            word-wrap: break-word;
+            // word-wrap:  break-all;
+            margin-block-start: 0;
+            margin-block-end: 0;
+            padding-right: 0.5vh;
           }
         }
 
-        // li:nth-child(even) {
-        //   // background:rgba(5, 88, 63, 0.29);
-        //   background-image: url("~@/assets/images/1.png");
-        //   background-size: 100% 100%;
-        // }
-        // li:nth-child(odd) {
-        //   //background: linear-gradient(rgba(76, 227, 212, 0.7), rgba(23, 145, 120, 0.7), rgba(5, 88, 63, 0.29)); 
-        //   background-image: url("~@/assets/images/2.png");
-        //   background-size: 100% 100%;
-        // }
+        li:nth-child(even) {
+          // background:rgba(5, 88, 63, 0.29);
+          background-image: url("~@/assets/images/1.png");
+          background-size: 100% 100%;
+        }
+        li:nth-child(odd) {
+          //background: linear-gradient(rgba(76, 227, 212, 0.7), rgba(23, 145, 120, 0.7), rgba(5, 88, 63, 0.29)); 
+          background-image: url("~@/assets/images/2.png");
+          background-size: 100% 100%;
+        }
       }
-
     }
-
 
     .ljxq-box {
       height: 260px;

@@ -15,6 +15,7 @@ const state = {
   lqzyLayer: false, // 林区资源图层
   videoData:[],
   netWorkData:[],
+  qiXiangData:[]
 }
 
 const mutations = {
@@ -23,6 +24,9 @@ const mutations = {
   },
   SET_NETWORK(state, list){
     state.netWorkData = list
+  },
+  SET_QIXIANG(state, list){
+    state.qiXiangData = list
   },
   SET_LQZY_LAYER(state, payload) {
     state.lqzyLayer = payload
@@ -103,6 +107,9 @@ const actions = {
   },
   changeNetWork({ commit },list){
     commit('SET_NETWORK',list)
+  },
+  changeQiXiang({ commit },list){
+    commit('SET_QIXIANG',list)
   },
   addLayerList({ commit },list){
     commit('APPEND_LAYER_LIST', list)

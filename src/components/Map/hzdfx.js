@@ -444,6 +444,11 @@ const hzdfxNodes = [
     id:374,
     label:'办事网点',
     value:MAP_URL.NETWORK
+  },
+  {
+    id:375,
+    label:'气象测站',
+    value:MAP_URL.QIXIANG
   }
 ]
 

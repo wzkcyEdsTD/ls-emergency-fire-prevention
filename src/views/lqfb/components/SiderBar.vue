@@ -83,6 +83,8 @@ export default {
       videoTemp:false,
       networkLayer:null,
       networkTemp:false,
+      qxczLayer:null,
+      qxczTemp:false,
     }
   },
   computed: {
@@ -284,6 +286,73 @@ export default {
 
         return
       }
+      if(data.label === '气象测站'){
+        if (!this.qxczLayer) {
+          var sqlParam = new SuperMap.GetFeaturesBySQLParameters({
+            toIndex: 999999,
+            queryParameter: {
+              // name: layerName,
+              attributeFilter: "",
+              maxFeatures: 99999999
+            },
+            datasetNames: [`lishui_forestfire_v2:qixiangcezhan`]
+          })
+          const url = "http://10.53.137.59:8090/iserver/services/data-lishui_forestfire_v2/rest/data";
+          // debugger
+
+          new FeatureService(url).getFeaturesBySQL(sqlParam, serviceResult => {
+            const list = serviceResult.result.features.features;
+            // debugger
+            const features = [];
+            list.forEach(element => {
+              const properties = element.properties;
+
+              const feature =  new Feature({
+                    geometry: new Point([properties.LONGITUDE,properties.LATITUDE]),
+                    ...properties
+                })
+                // debugger
+              const style = new Style({
+                image: new Icon({
+                  anchor: [0.5, 26],
+                  anchorXUnits: 'fraction',
+                  anchorYUnits: 'pixels',
+                  src: require(`@/assets/images/icon/${'气象测站.png'}`)
+                }),
+                // stroke: new Stroke({ color: 'red', width: 2 })
+              })
+              feature.setStyle(style)
+              features.push(feature);
+            });
+ 
+            var vectorSource = new VectorSource({
+              features,
+              wrapX: false
+            });
+            this.qxczLayer = new VectorLayer({
+              source: vectorSource,
+              })
+            
+            //4: "119.35790729284101"
+            //5: "27.541516789796798"
+            this.$map.addLayer(this.qxczLayer)
+        })
+          this.qxczTemp = true;
+          this.$bus.$emit('qxcz',this.qxczTemp);
+          // this.$store.dispatch('lqfb/changeVideoListOffsetRight', 0)
+        }else{
+          if (this.qxczTemp) {
+            this.qxczTemp = false
+            this.$bus.$emit('qxcz',this.qxczTemp);
+          }else if (!this.qxczTemp) {
+            this.qxczTemp = true
+            this.$bus.$emit('qxcz',this.qxczTemp);
+          }
+          this.qxczLayer.setVisible(this.qxczTemp);
+        }
+
+        return
+      }
       if(data.label === '火灾报警点'){
         if(this.temp){
           this.temp = false;
@@ -324,13 +393,13 @@ export default {
                 // debugger
               const style = new Style({
                 image: new Icon({
-                  anchor: [0.5, 0.5],
+                  anchor: [0.5, 26],
                   anchorXUnits: 'fraction',
-                  anchorYUnits: 'fraction',
+                  anchorYUnits: 'pixels',
                   scale: 0.8,
                   src: require(`@/assets/images/icon/${'办事网点.png'}`)
                 }),
-                stroke: new Stroke({ color: 'red', width: 2 })
+                // stroke: new Stroke({ color: 'red', width: 2 })
               })
               feature.setStyle(style)
               features.push(feature);
