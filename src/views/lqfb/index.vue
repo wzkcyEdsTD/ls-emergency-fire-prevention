@@ -334,7 +334,7 @@ export default {
       // debugger
       const value = feature.values_
       let coordinate = []
-      if (value['CZBH']) {
+      if (value['IIIII']) {
         coordinate = [value.LONGITUDE,value.LATITUDE]
       }else{
         coordinate = [value.geometry.flatCoordinates[0],value.geometry.flatCoordinates[1]]
@@ -362,7 +362,7 @@ export default {
       }else{
       }
       // debugger
-      if (!value['systemcode'] && !value['CZBH'] && !value['CZBH']) {
+      if (!value['systemcode'] && !value['IIIII']) {
         if (!value['NAME']) return
       }
 
@@ -437,8 +437,8 @@ export default {
               <span class="value" title="${value["GZSJ"]}">${value["GZSJ"]}</span>
           </div>`
 
-        }else if(value['CZBH']){
-        util.getQXDetail(value['CZBH']).then(r=>{
+        }else if(value['IIIII']){
+        util.getQXDetail(value['IIIII']).then(r=>{
           const detailInfo = r['[]'][0]['SzlsDwSjjhSfxptBiz067QxQyqxzgc']
           detailInfo['风向'] = that.getWindDirect(Number(detailInfo.winddirect))
           detailInfo['摄氏度'] = that.changeTemperatureType(Number(detailInfo.drybultemp))
@@ -553,7 +553,7 @@ export default {
         if (value['BSWD_TYPE']) {
           keyName.innerHTML = `名称：`
           keyValue.innerHTML = `${value['NAME']}`
-        }else if(value['CZBH']){
+        }else if(value['IIIII']){
           keyName.innerHTML = `名称：`
           keyValue.innerHTML = `${value['ADDRESS']}`
         }else{
@@ -631,7 +631,7 @@ export default {
       }
       // debugger
 
-      if (!value['systemcode'] && !value['BSWD_TYPE'] && !value['CZBH'] && !value['HLX'] && !value['OBJECTID'] && !value['TYPE']) {
+      if (!value['systemcode'] && !value['BSWD_TYPE'] && !value['IIIII'] && !value['HLX'] && !value['OBJECTID'] && !value['TYPE']) {
         if ((!value['NAME'] && !value['label'])) return
       }
 
@@ -707,8 +707,8 @@ export default {
             <span class="value" title="${value["GZSJ"]}">${value["GZSJ"]}</span>
         </div>`
 
-      }else if(value['CZBH']){
-        util.getQXDetail(value['CZBH']).then(r=>{
+      }else if(value['IIIII']){
+        util.getQXDetail(value['IIIII']).then(r=>{
           const detailInfo = r['[]'][0]['SzlsDwSjjhSfxptBiz067QxQyqxzgc']
           detailInfo['风向'] = that.getWindDirect(Number(detailInfo.winddirect))
           detailInfo['摄氏度'] = that.changeTemperatureType(Number(detailInfo.drybultemp))
@@ -894,7 +894,7 @@ export default {
         if (value['BSWD_TYPE']) {
           keyName.innerHTML = `名称：`
           keyValue.innerHTML = `${value['NAME']}`
-        }else if(value['CZBH']){
+        }else if(value['IIIII']){
           keyName.innerHTML = `名称：`
           keyValue.innerHTML = `${value['ADDRESS']}`
         }else if(value['HLX']){

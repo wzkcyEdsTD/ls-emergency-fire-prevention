@@ -270,7 +270,7 @@ const mapUrl = {
   },
   QIXIANG:{
     type: 'data', // 数据服务
-    layerName: 'qixiangcezhan',
+    layerName: 'v_forest_qixiangcezhandian',
     label: '气象测站',
     dataSourceName,
     icon: '气象测站.png',

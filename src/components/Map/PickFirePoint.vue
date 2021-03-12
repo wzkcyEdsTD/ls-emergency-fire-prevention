@@ -448,7 +448,7 @@ export default {
       })
       const minDistancePoint = this.pointList[0]
       console.log(minDistancePoint)
-      util.getQXDetail(minDistancePoint.properties.CZBH).then(r=>{
+      util.getQXDetail(minDistancePoint.properties.IIIII).then(r=>{
         const detailInfo = r['[]'][0]['SzlsDwSjjhSfxptBiz067QxQyqxzgc']
         detailInfo['风向'] = that.getWindDirect(Number(detailInfo.winddirect))
         detailInfo['摄氏度'] = that.changeTemperatureType(Number(detailInfo.drybultemp))
@@ -524,7 +524,7 @@ export default {
           attributeFilter: "",
           maxFeatures: 99999999
         },
-        datasetNames: [`lishui_forestfire_v2:qixiangcezhan`]
+        datasetNames: [`lishui_forestfire_v2:v_forest_qixiangcezhandian`]
       })
       const url = "http://10.53.137.59:8090/iserver/services/data-lishui_forestfire_v2/rest/data";
       new FeatureService(url).getFeaturesBySQL(sqlParam, serviceResult => {

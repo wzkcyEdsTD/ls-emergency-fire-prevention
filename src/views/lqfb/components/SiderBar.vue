@@ -306,12 +306,12 @@ export default {
         if (!this.qxczLayer) {
           var sqlParam = new SuperMap.GetFeaturesBySQLParameters({
             toIndex: 999999,
+            maxFeatures: 99999999,
             queryParameter: {
               // name: layerName,
               attributeFilter: "",
-              maxFeatures: 99999999
             },
-            datasetNames: [`lishui_forestfire_v2:qixiangcezhan`]
+            datasetNames: [`lishui_forestfire_v2:v_forest_qixiangcezhandian`]
           })
           const url = "http://10.53.137.59:8090/iserver/services/data-lishui_forestfire_v2/rest/data";
           // debugger
