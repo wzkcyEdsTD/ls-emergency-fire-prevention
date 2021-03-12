@@ -7,6 +7,11 @@
         <div class="title">
           火灾报警点
         </div>
+        <!-- <div class="changeMenuButton">
+          <div class="text">
+             截图列表
+          </div>
+        </div> -->
       </div>
       <div v-show="selectMenu==1" >
         <div class="titleLine">
@@ -804,59 +809,75 @@ export default {
             }
           }
 
-          .title {
-          width: 100%;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          margin-top: 6px;
-          margin-bottom: 6px;
+        .title {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 6px;
+        margin-bottom: 6px;
+        height: 22px;
+        // font-weight: bold;
+        line-height: 22px;
+        position: relative;
+
+        height: 2rem;
+        font-family: youshebiaotihei;
+        font-size: 2.3vh;
+        // padding-top: 4vh;
+        // padding-bottom: 4vh;
+          .search {
+          width: 180px;
           height: 22px;
-          // font-weight: bold;
-          line-height: 22px;
           position: relative;
+          .el-input__inner {
+              height: 22px;
+              border-radius: 20px;
+              outline: none;
+              padding-left: 15px;
+              background: url(../../../assets/images/搜索底框.png) no-repeat;
+              background-size: 100%;
+              border: 0;
+              color: hsla(196, 79%, 43%, 1);
+          }
+          .el-input__inner::-webkit-input-placeholder {color: hsla(196, 79%, 43%, 1);}
+          .el-input__icon::before {
+              content: ' ';
+              width: 25px;
+              height: 22px;
+              position: absolute;
+              top: 0;
+              right: -4px;
+              margin-left: 2px;
+              cursor: pointer;
+              background: url(../../../assets/images/搜索.png) no-repeat;
+              background-size: 100%;
+          }
+          }
+        }
+        .titleInput{
+        background-color: rgba(82, 254, 179, .5);
+        color: #fff;
+        border-radius: 5px;
+        }
 
-          height: 2rem;
+        .changeMenuButton{
+          width: 20vh;
+          height: 4vh;
+          position: relative;
+          right: 0vh;
+          background: url('~@/assets/images/绿框.png');
+          background-size: 100% 100%;
+          // border-radius: 1vh;
           font-family: youshebiaotihei;
-          font-size: 2.3vh;
-          // padding-top: 4vh;
-          // padding-bottom: 4vh;
-            .search {
-            width: 180px;
-            height: 22px;
+          .text{
             position: relative;
-            .el-input__inner {
-                height: 22px;
-                border-radius: 20px;
-                outline: none;
-                padding-left: 15px;
-                background: url(../../../assets/images/搜索底框.png) no-repeat;
-                background-size: 100%;
-                border: 0;
-                color: hsla(196, 79%, 43%, 1);
-            }
-            .el-input__inner::-webkit-input-placeholder {color: hsla(196, 79%, 43%, 1);}
-            .el-input__icon::before {
-                content: ' ';
-                width: 25px;
-                height: 22px;
-                position: absolute;
-                top: 0;
-                right: -4px;
-                margin-left: 2px;
-                cursor: pointer;
-                background: url(../../../assets/images/搜索.png) no-repeat;
-                background-size: 100%;
-            }
-            }
+            top: 50%;
+            left: 50%;
+            transform:translate(-50%,-50%);
+            text-align: center;
           }
-          .titleInput{
-          background-color: rgba(82, 254, 179, .5);
-          color: #fff;
-          border-radius: 5px;
-          }
-
-
+        }
 
       }
       .imgLine{

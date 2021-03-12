@@ -564,20 +564,22 @@ const getFeaturesByGeometry = ({ url, dataSourceName, label, layerName, attribut
           });
           // store.dispatch('map/changeFeatures', features1)
           store.dispatch('map/changeNetWork', features1)
-        }else if(label == '气象测站'){
-          const list = serviceResult.result.features.features;
-          list.forEach(element => {
-            const properties = element.properties;
-            const feature =  new Feature({
-                  geometry: new Point([properties.LONGITUDE,properties.LATITUDE]),
-                  ...properties
-              })
-              // debugger
-              features1.push(feature);
-          });
-          // store.dispatch('map/changeFeatures', features1)
-          store.dispatch('map/changeQiXiang', features1)
-        }else{
+        }
+        // else if(label == '气象测站'){
+        //   const list = serviceResult.result.features.features;
+        //   list.forEach(element => {
+        //     const properties = element.properties;
+        //     const feature =  new Feature({
+        //           geometry: new Point([properties.LONGITUDE,properties.LATITUDE]),
+        //           ...properties
+        //       })
+        //       // debugger
+        //       features1.push(feature);
+        //   });
+        //   // store.dispatch('map/changeFeatures', features1)
+        //   store.dispatch('map/changeQiXiang', features1)
+        // }
+        else{
           features1 = new GeoJSON().readFeatures(serviceResult.result.features || [])
         }
         
@@ -690,20 +692,22 @@ const getFeaturesByGeometry = ({ url, dataSourceName, label, layerName, attribut
             })
           })
           resolve(resultLayer)
-        }else if(label == '气象测站'){
-          const resultLayer = new VectorLayer({
-            source: vectorSource,
-            style: new Style({
-              image: new Icon({
-                anchor: [0.5, 26],
-                anchorXUnits: 'fraction',
-                anchorYUnits: 'pixels',
-                src: require(`@/assets/images/icon/${'气象测站.png'}`)
-              })
-            })
-          })
-          resolve(resultLayer)
-        }else{
+        }
+        // else if(label == '气象测站'){
+        //   const resultLayer = new VectorLayer({
+        //     source: vectorSource,
+        //     style: new Style({
+        //       image: new Icon({
+        //         anchor: [0.5, 26],
+        //         anchorXUnits: 'fraction',
+        //         anchorYUnits: 'pixels',
+        //         src: require(`@/assets/images/icon/${'气象测站.png'}`)
+        //       })
+        //     })
+        //   })
+        //   resolve(resultLayer)
+        // }
+        else{
           const resultLayer = new VectorLayer({
             source: vectorSource,
             style: new Style({

@@ -242,6 +242,9 @@ export default {
       if (value['BSWD_TYPE']) {
         return
       }
+      if (value['OBJECTID']) {
+        return
+      }
       // 是否为火灾点
       // debugger
       if ((value['systemcode'])) {

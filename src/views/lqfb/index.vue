@@ -57,6 +57,7 @@ import {
   FeatureService,
   SuperMap
 } from '@supermap/iclient-ol'
+import util from "@/libs/qxinfoAPI"
 import Video from '@/components/video/video.vue'
 export default {
   name: 'Lqfb',
@@ -77,7 +78,8 @@ export default {
     RydwToolBar,
     VideoBox,
     zllbTab,
-    videoListPannel
+    videoListPannel,
+    qxname:""
   },
   data() {
     return {
@@ -228,7 +230,9 @@ export default {
         this.$bus.$emit("videoData",value);
         return
       }
-
+      if (value['OBJECTID']) {
+        return
+      }
       // 是否为火灾点
       // debugger
       if ((value['systemcode'])) {
@@ -327,9 +331,14 @@ export default {
       const time = document.getElementById('key-value-fire-time')
 
       const popInfoDetail = document.getElementById('pop-info-deatil')
-
+      // debugger
       const value = feature.values_
-      const coordinate = [value.geometry.flatCoordinates[0],value.geometry.flatCoordinates[1]]
+      let coordinate = []
+      if (value['CZBH']) {
+        coordinate = [value.LONGITUDE,value.LATITUDE]
+      }else{
+        coordinate = [value.geometry.flatCoordinates[0],value.geometry.flatCoordinates[1]]
+      }
       if (value['VIDEO_URL']) {
         // 查询监控视频
         this.$bus.$emit("videoData",value);
@@ -337,6 +346,9 @@ export default {
       }
       // //办事网点
       // if (value['BSWD_TYPE']) {
+      //   return
+      // }
+      // if (value['OBJECTID']) {
       //   return
       // }
       // 是否为火灾点
@@ -350,7 +362,7 @@ export default {
       }else{
       }
       // debugger
-      if (!value['systemcode']) {
+      if (!value['systemcode'] && !value['CZBH']) {
         if (!value['NAME']) return
       }
 
@@ -425,6 +437,51 @@ export default {
               <span class="value" title="${value["GZSJ"]}">${value["GZSJ"]}</span>
           </div>`
 
+        }else if(value['CZBH']){
+        util.getQXDetail(value['CZBH']).then(r=>{
+          const detailInfo = r['[]'][0]['SzlsDwSjjhSfxptBiz067QxQyqxzgc']
+          detailInfo['风向'] = that.getWindDirect(Number(detailInfo.winddirect))
+          detailInfo['摄氏度'] = that.changeTemperatureType(Number(detailInfo.drybultemp))
+          console.log("气象站指标",detailInfo)
+          infoTmpl += `<div  class="item">
+              <span class="key">名称：</span>
+              <span class="value" title="${value['ADDRESS']}">${value['ADDRESS']}</span>
+          </div>`
+          infoTmpl += `<div  class="item">
+              <span class="key">温度：</span>
+              <span class="value" title="${detailInfo["摄氏度"]}">${detailInfo["摄氏度"]} ℃</span>
+          </div>`
+          infoTmpl += `<div  class="item">
+              <span class="key">风向：</span>
+              <span class="value" title="${detailInfo["风向"]}">${detailInfo["风向"]}</span>
+          </div>`
+          infoTmpl += `<div  class="item">
+              <span class="key">风速：</span>
+              <span class="value" title="${detailInfo["windvelocity"]}">${detailInfo["windvelocity"]} m/s</span>
+          </div>`
+          infoTmpl += `<div  class="item">
+              <span class="key">降雨量：</span>
+              <span class="value" title="${detailInfo["precipition"]}">${detailInfo["precipition"]} mm</span>
+          </div>`
+          // infoTmpl += `<div  class="item">
+          //     <span class="key">时间：</span>
+          //     <span class="value" title="${detailInfo["biz_time"]}">${detailInfo["biz_time"]}</span>
+          // </div>`
+          infoTmpl += `<div  class="item">
+              <span class="key">气压：</span>
+              <span class="value" title="${detailInfo["stationpress"]}">${detailInfo["stationpress"]}</span>
+          </div>`
+          infoTmpl += `<div  class="item">
+              <span class="key">湿度：</span>
+              <span class="value" title="${detailInfo["relhumidity"]}">${detailInfo["relhumidity"]}</span>
+          </div>`
+          infoTmpl += `<div  class="item">
+              <span class="key">水汽压：</span>
+              <span class="value" title="${detailInfo["vapourpress"]}">${detailInfo["vapourpress"]}</span>
+          </div>`
+          // debugger
+          table.innerHTML = infoTmpl
+        })
         }else{
           for (const key in attrData[value['TABLE_NAME']]) {
             if (value[key] != undefined) {
@@ -474,6 +531,9 @@ export default {
         if (value['BSWD_TYPE']) {
           keyName.innerHTML = `名称：`
           keyValue.innerHTML = `${value['NAME']}`
+        }else if(value['CZBH']){
+          keyName.innerHTML = `名称：`
+          keyValue.innerHTML = `${value['ADDRESS']}`
         }else{
           keyName.innerHTML = `${attrData[value['TABLE_NAME']]['NAME']}：`
           keyValue.innerHTML = `${value['NAME']}`
@@ -535,7 +595,9 @@ export default {
         this.$bus.$emit("videoData",value);
         return
       }
-
+      // if (value['OBJECTID']) {
+      //   return
+      // }
       // 是否为火灾点
       // debugger
       if ((value['systemcode'])) {
@@ -596,7 +658,7 @@ export default {
         table = document.getElementById('table-box')
       }
       // debugger
-      // console.log(value)
+      console.log(123)
       if (!(value['systemcode'])) {
         // console.log("不是火灾点")
                     //办事网点
@@ -624,10 +686,50 @@ export default {
         </div>`
 
       }else if(value['CZBH']){
-            // infoTmpl += `<div  class="item">
-            //     <span class="key">名称：</span>
-            //     <span class="value" title="${value["NAME"]}">${value["NAME"]}</span>
-            // </div>`
+        util.getQXDetail(value['CZBH']).then(r=>{
+          const detailInfo = r['[]'][0]['SzlsDwSjjhSfxptBiz067QxQyqxzgc']
+          detailInfo['风向'] = that.getWindDirect(Number(detailInfo.winddirect))
+          detailInfo['摄氏度'] = that.changeTemperatureType(Number(detailInfo.drybultemp))
+          console.log("气象站指标",detailInfo)
+          infoTmpl += `<div  class="item">
+              <span class="key">名称：</span>
+              <span class="value" title="${value['ADDRESS']}">${value['ADDRESS']}</span>
+          </div>`
+          infoTmpl += `<div  class="item">
+              <span class="key">温度：</span>
+              <span class="value" title="${detailInfo["摄氏度"]}">${detailInfo["摄氏度"]} ℃</span>
+          </div>`
+          infoTmpl += `<div  class="item">
+              <span class="key">风向：</span>
+              <span class="value" title="${detailInfo["风向"]}">${detailInfo["风向"]}</span>
+          </div>`
+          infoTmpl += `<div  class="item">
+              <span class="key">风速：</span>
+              <span class="value" title="${detailInfo["windvelocity"]}">${detailInfo["windvelocity"]} m/s</span>
+          </div>`
+          infoTmpl += `<div  class="item">
+              <span class="key">降雨量：</span>
+              <span class="value" title="${detailInfo["precipition"]}">${detailInfo["precipition"]} mm</span>
+          </div>`
+          // infoTmpl += `<div  class="item">
+          //     <span class="key">时间：</span>
+          //     <span class="value" title="${detailInfo["biz_time"]}">${detailInfo["biz_time"]}</span>
+          // </div>`
+          infoTmpl += `<div  class="item">
+              <span class="key">气压：</span>
+              <span class="value" title="${detailInfo["stationpress"]}">${detailInfo["stationpress"]}</span>
+          </div>`
+          infoTmpl += `<div  class="item">
+              <span class="key">湿度：</span>
+              <span class="value" title="${detailInfo["relhumidity"]}">${detailInfo["relhumidity"]}</span>
+          </div>`
+          infoTmpl += `<div  class="item">
+              <span class="key">水汽压：</span>
+              <span class="value" title="${detailInfo["vapourpress"]}">${detailInfo["vapourpress"]}</span>
+          </div>`
+          // debugger
+          table.innerHTML = infoTmpl
+        })
       }else{
         for (const key in attrData[value['TABLE_NAME']]) {
           if (value[key] != undefined) {
@@ -710,6 +812,51 @@ export default {
           keyValue.innerHTML = `${value['NAME']}`
         }
       }
+    },
+
+    getWindDirect(angles){
+      var direct = ''
+      if(angles<0)
+      {
+          angles=angles+360;
+      }
+      if(angles>=15&&angles<75)
+      {
+          direct="东北风";
+      }
+      else if(angles>=75&&angles<105)
+      {
+          direct="东风";
+      }
+      else if(angles>=105&&angles<165)
+      {
+          direct="东南风";
+      }
+      else if(angles>=165&&angles<195)
+      {
+          direct="南风";
+      }
+      else if(angles>=195&&angles<255)
+      {
+          direct="西南风";
+      }
+      else if(angles>=255&&angles<285)
+      {
+          direct="西风";
+      }
+      else if(angles>=285&&angles<345)
+      {
+          direct="西北风";
+      }
+      else
+      {
+          direct="北风";
+      }
+      return direct
+    },
+    changeTemperatureType(number){
+      const res = (number - 32) * 5 / 9
+      return res.toFixed(2)
     },
 
     clearPopup() {

@@ -30,9 +30,10 @@
           <input
             v-model="inputSearchRadius"
             placeholder="输入分析半径"
-            @keyup="inputSearchRadius = inputSearchRadius.replace(/[^\d.]/g, '')"
-          >
-
+            @keyup="
+              inputSearchRadius = inputSearchRadius.replace(/[^\d.]/g, '')
+            "
+          />
         </div>
       </div>
       <div class="footer">
@@ -49,11 +50,15 @@ import GeoJSON from 'ol/format/GeoJSON'
 // import MAP_URL from '@/utils/map/map-url'
 import hzdfxNodes from './hzdfx'
 import { Point } from 'ol/geom'
+import VectorLayer from 'ol/layer/Vector'
+import VectorSource from 'ol/source/Vector'
+import Feature from 'ol/Feature'
 import {
   TileSuperMapRest,
   FeatureService,
   SuperMap
 } from '@supermap/iclient-ol'
+import util from "@/libs/qxinfoAPI"
 import { Circle as CircleStyle, Fill, Stroke, Style, Icon, Text } from 'ol/style'
 export default {
   data() {
@@ -64,6 +69,7 @@ export default {
       code:"",
       systemcode:"",
       pointList:[],
+      qxczLayer:null,
     }
   },
   computed: {
@@ -161,6 +167,7 @@ export default {
 
       })
     },
+
     handlePickClick() {
       if (this.inputSearchRadius === 0 || !this.inputSearchRadius) {
         this.$message.info('请设置分析范围！')
@@ -260,6 +267,10 @@ export default {
     handleClearClick() {
       this.clearFire()
       this.$store.dispatch('map/changeClearFlag', null)
+
+      this.$map.removeLayer(this.qxczLayer);
+      this.$bus.$emit("hasQxcz",false);
+
       // this.handlePickClick()
     },
     initData() {
@@ -270,9 +281,9 @@ export default {
             netWork:{
               name:"办事网点"
             },
-            qiXiang:{
-              name:"气象测站"
-            },
+            // qiXiang:{
+            //   name:"气象测站"
+            // },
             d_emergency_team: {
               name: '应急队伍'
             },
@@ -378,8 +389,107 @@ export default {
       this.handleClearClick();
 
     },
+    getWindDirect(angles){
+      var direct = ''
+      if(angles<0)
+      {
+          angles=angles+360;
+      }
+      if(angles>=15&&angles<75)
+      {
+          direct="东北风";
+      }
+      else if(angles>=75&&angles<105)
+      {
+          direct="东风";
+      }
+      else if(angles>=105&&angles<165)
+      {
+          direct="东南风";
+      }
+      else if(angles>=165&&angles<195)
+      {
+          direct="南风";
+      }
+      else if(angles>=195&&angles<255)
+      {
+          direct="西南风";
+      }
+      else if(angles>=255&&angles<285)
+      {
+          direct="西风";
+      }
+      else if(angles>=285&&angles<345)
+      {
+          direct="西北风";
+      }
+      else
+      {
+          direct="北风";
+      }
+      return direct
+    },
+    changeTemperatureType(number){
+      const res = (number - 32) * 5 / 9
+      return res.toFixed(2)
+    },
+    createMinDistanceQXCZ(){
+      const that = this;
+      if (this.qxczLayer) {
+        this.qxczLayer=null;
+      }
+      this.pointList.map(v=>{
+        const lon = Number(v.properties.LONGITUDE)
+        const lat = Number(v.properties.LATITUDE)
+        v.juli = that.distance(this.inputLon,this.inputLat,lon,lat)
+      })
+      this.pointList.sort(function(a,b) {
+        return a.juli-b.juli
+      })
+      const minDistancePoint = this.pointList[0]
+      console.log(minDistancePoint)
+      util.getQXDetail(minDistancePoint.properties.CZBH).then(r=>{
+        const detailInfo = r['[]'][0]['SzlsDwSjjhSfxptBiz067QxQyqxzgc']
+        detailInfo['风向'] = that.getWindDirect(Number(detailInfo.winddirect))
+        detailInfo['摄氏度'] = that.changeTemperatureType(Number(detailInfo.drybultemp))
+        console.log("气象站指标",detailInfo)
+        that.$bus.$emit("detailInfo",detailInfo)
+      })
+      const features = [];
+      const properties = minDistancePoint.properties;
+      const feature =  new Feature({
+            geometry: new Point([properties.LONGITUDE,properties.LATITUDE]),
+            ...properties
+      })
+        // debugger
+      const style = new Style({
+        image: new Icon({
+          anchor: [0.5, 26],
+          anchorXUnits: 'fraction',
+          anchorYUnits: 'pixels',
+          src: require(`@/assets/images/icon/${'气象测站.png'}`)
+        }),
+        // stroke: new Stroke({ color: 'red', width: 2 })
+      })
+      feature.setStyle(style)
+      features.push(feature);
+      var vectorSource = new VectorSource({
+        features,
+        wrapX: false
+      });
+      this.qxczLayer = new VectorLayer({
+        source: vectorSource,
+      })
+      this.$map.addLayer(this.qxczLayer)
+      // debugger
+      that.$bus.$emit("minDistance",minDistancePoint);
+
+    },
     handleComfirmClick() {
-      // const that = this;
+      const that = this;
+      // debugger
+      that.$bus.$emit("hasQxcz",true);
+      // debugger
       this.searchGrid(new Point([this.inputLon,this.inputLat]))
       this.streetDetail(new Point([this.inputLon,this.inputLat]))
       this.clearFire();
@@ -396,6 +506,7 @@ export default {
       this.$map.getMap().getView().setCenter([this.inputLon,this.inputLat]);
       this.$map.getMap().getView().setZoom(16);
       // debugger
+      that.createMinDistanceQXCZ();
       this.$store.dispatch('map/changeVideo', [])//清空视频数据
       this.$store.dispatch('map/changeLqzyLayer', true)
       this.$store.dispatch('map/changeIsAddFeatures', true) // 只在选中火灾点的时候获取才重新数据
@@ -416,8 +527,6 @@ export default {
         datasetNames: [`lishui_forestfire_v2:qixiangcezhan`]
       })
       const url = "http://10.53.137.59:8090/iserver/services/data-lishui_forestfire_v2/rest/data";
-      // debugger
-
       new FeatureService(url).getFeaturesBySQL(sqlParam, serviceResult => {
         const list = serviceResult.result.features.features;
         const tempList = []
@@ -425,14 +534,15 @@ export default {
           const properties = element.properties;
           const point = new Point([properties.LONGITUDE,properties.LATITUDE]);
           tempList.push(point)
+          that.pointList.push(element)
         });
-        that.searchQXpoint(tempList);
+        console.log(that.pointList.length)
     })
       
     },
     searchQXpoint(tempList){
       //创建最近设施分析参数实例
-      console.log(tempList)
+      debugger
       var resultSetting = new SuperMap.TransportationAnalystResultSetting({
           returnEdgeFeatures: true,
           returnEdgeGeometry: true,
@@ -445,7 +555,7 @@ export default {
       });
       var analystParameter = new SuperMap.TransportationAnalystParameter({
           resultSetting: resultSetting,
-          // turnWeightField: "TurnCost",
+          turnWeightField: "TurnCost",
           weightFieldName: "length"  //length,time
       });
 
@@ -457,9 +567,10 @@ export default {
           //气象站点集合
           facilities: tempList,
           isAnalyzeById: false,
-          // parameter: analystParameter
+          parameter: analystParameter
       });
       const serviceUrl = "https://iserver.supermap.io/iserver/services/transportationanalyst-sample/rest/networkanalyst/RoadNet@Changchun"
+      debugger
       //进行查找
       new ol.supermap.NetworkAnalystService(serviceUrl).findClosestFacilities(findClosetFacilitiesParameter, function (serviceResult) {
           debugger
@@ -469,11 +580,27 @@ export default {
   
       });
 
+    },
+
+    distance(la1, lo1, la2, lo2) {
+      var lon1 = (Math.PI / 180) * la1;//开始经度
+      var lon2 = (Math.PI / 180) * la2;//结束经度
+      var lat1 = (Math.PI / 180) * lo1;//开始纬度
+      var lat2 = (Math.PI / 180) * lo2;//结束纬度
+      // 地球半径
+      var R = 6371;
+      // 两点间距离 km，如果想要米的话，结果*1000就可以了
+      var s = Math.acos(Math.sin(lat1) * Math.sin(lat2) + Math.cos(lat1) * Math.cos(lat2) * Math.cos(lon2 - lon1)) * R;
+
+      return s;
     }
+
   },
   mounted(){
     const that = this;
-    that.testData();
+    that.$nextTick(()=>{
+      that.testData();
+    })
     this.$bus.$on('fire',(value)=>{
       // console.log("传过来了",value)
       // that.handleClearClick();
@@ -536,7 +663,7 @@ export default {
   z-index: 999;
   padding: 10px;
   transition: right 0.9s;
-  background: url('~@/common/images/弹框.png') no-repeat;
+  background: url("~@/common/images/弹框.png") no-repeat;
   background-size: 100% 100%;
   width: 271px;
   height: 150px;
@@ -560,24 +687,24 @@ export default {
     position: absolute;
     top: 1px;
     left: 3px;
-    content: ' ';
+    content: " ";
     width: 2px;
     height: 16px;
-    background-color: #52FEB3;
+    background-color: #52feb3;
   }
- .content {
+  .content {
     width: 100%;
     margin-top: 5px;
     padding: 0 10px;
     .input-container {
-      &>span{
+      & > span {
         font-size: 13px;
         display: inline-block;
         width: 40px;
       }
-      .input-radius{
-        &::after{
-          content: '米';
+      .input-radius {
+        &::after {
+          content: "米";
           position: relative;
           left: -30px;
         }
@@ -589,32 +716,33 @@ export default {
           padding-left: 8px;
           margin-top: 10px;
           font-size: 16px;
-          color:rgba(41, 181, 121, 1);
-          border:1px #52FEB3 solid;
+          color: rgba(41, 181, 121, 1);
+          border: 1px #52feb3 solid;
         }
       }
-      input::-webkit-input-placeholder,textarea::-webkit-input-placeholder{
-        color:rgba(23, 148, 194, 1);
+      input::-webkit-input-placeholder,
+      textarea::-webkit-input-placeholder {
+        color: rgba(23, 148, 194, 1);
         font-size: 16px;
       }
-      .draw-wrapper{
+      .draw-wrapper {
         width: 190px;
-        color:rgba(23, 148, 194, 1);
-        border:1px #29AEEA solid;
+        color: rgba(23, 148, 194, 1);
+        border: 1px #29aeea solid;
         background-color: rgba(9, 46, 79, 1);
-        .item:nth-child(1){
-          border-bottom:1px #29AEEA solid;
+        .item:nth-child(1) {
+          border-bottom: 1px #29aeea solid;
         }
-        .item{
+        .item {
           margin: 0 5px;
           padding: 1px;
         }
-        input{
-          color:rgba(23, 148, 194, 1);
+        input {
+          color: rgba(23, 148, 194, 1);
           width: 110px;
           border: 0;
           outline: none;
-          background-color: transparent!important;
+          background-color: transparent !important;
         }
         .input-btn {
           position: absolute;
@@ -627,9 +755,8 @@ export default {
           cursor: pointer;
         }
       }
-
     }
-    .footer{
+    .footer {
       display: flex;
       justify-content: space-between;
       width: 205px;
@@ -644,10 +771,9 @@ export default {
         justify-content: center;
         align-items: center;
         cursor: pointer;
-        color:#000;
+        color: #000;
       }
     }
-
- }
+  }
 }
 </style>

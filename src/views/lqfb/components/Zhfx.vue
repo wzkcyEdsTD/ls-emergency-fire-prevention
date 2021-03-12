@@ -76,21 +76,48 @@
       <div>
         <div class="titleLine">
           <div class="titleHistory">
-            气象测站
+            气象信息
           </div>
         </div>
         <img style="width: 100%;" src="@/common/images/边.png" alt="">
-                <div 
-
-        class="result-wrapper">
-          <ul class="result-list-around" id="table">
-            <li 
-            style="margin-bottom: 0.3vh;"
-            class="result-data">
-              <span class="indexList">气象测站</span>
+        <div class="result-wrapper">
+          <ul 
+          class="result-list-around-qx" id="table">
+            <li class="result-data">
+              <span class="indexList">站点名称</span>
+                <p
+                  style="cursor: pointer;"
+                  @click="flyTo(aroundQiXiangDetail)"
+                  @mouseenter="titeEnter"
+                  class="contentList" >{{aroundQiXiangDetail.properties.ADDRESS}}</p
+                >
+            </li>
+            <li class="result-data">
+              <span class="indexList">温度</span>
                 <p
                   @mouseenter="titeEnter"
-                  class="contentList" >{{aroundQiXiangDetail}}</p
+                  class="contentList" >{{`${detailInfo['摄氏度']} °C`}}</p
+                >
+            </li>
+            <li class="result-data">
+              <span class="indexList">风向</span>
+                <p
+                  @mouseenter="titeEnter"
+                  class="contentList" >{{detailInfo['风向']}}</p
+                >
+            </li>
+            <li class="result-data">
+              <span class="indexList">风速</span>
+                <p
+                  @mouseenter="titeEnter"
+                  class="contentList" >{{`${detailInfo['windvelocity']} m/s`}}</p
+                >
+            </li>
+            <li class="result-data">
+              <span class="indexList">降雨量</span>
+                <p
+                  @mouseenter="titeEnter"
+                  class="contentList" >{{`${detailInfo['precipition']} mm`}}</p
                 >
             </li>
           </ul>
@@ -201,7 +228,7 @@
         </div>
 
       </div>
-      <el-collapse v-model="activeNames" accordion  v-show="!hasID">
+      <el-collapse v-model="activeNames"   v-show="!hasID">
         <el-collapse-item title="周边资源搜索成果" name="1">
           <div class="ljxq-content">
             <div
@@ -246,7 +273,7 @@
         <el-collapse-item title="周边监控设置" name="4">
           <div class="zbjksz-container">
             <div v-if="videoList.length > 0">
-              <ul style="height:25vh">
+              <ul style="height:15vh">
                 <li v-for="(v, i) in videoList" 
                 :key="i" 
                 :class="{active : videotemp == i}"
@@ -268,24 +295,24 @@ import spUtils from "./shortpath";
 import { getVideoByCode } from "@/api/lqfb";
 import { TurnType } from "@supermap/iclient-ol";
 import * as turf from "@turf/turf";
-import { log } from 'video.js';
+import { log } from "video.js";
 
 export default {
   data() {
     return {
-      fireStrong:{
-        "1":"一级",
-        "2":"二级",
-        "3":"三级",
-        "4":"四级",
-        "5":"五级",
-        "6":"六级",
-        "7":"七级",
-        "8":"八级",
-        "9":"九级",
+      fireStrong: {
+        1: "一级",
+        2: "二级",
+        3: "三级",
+        4: "四级",
+        5: "五级",
+        6: "六级",
+        7: "七级",
+        8: "八级",
+        9: "九级",
       },
-      hasID:false,
-      activeNames: ["1","4"],
+      hasID: false,
+      activeNames: ["1"],
       pathList: [],
       ssxyPersonLayer: null, // 实时响应人员图层
       monitorLayer: null, // 监控图层
@@ -296,7 +323,7 @@ export default {
         arr: [],
         name: "",
       },
-      syscode:'ilishui',
+      syscode: "ilishui",
       ljxqDetailVisible: false,
       lineLayerList: [],
       lastLineLayerList: [],
@@ -307,35 +334,36 @@ export default {
       //  自选点
       diyPtLayer: null,
       diyPathLayer: null,
-      videoList:[],
-      videotemp:undefined,
+      videoList: [],
+      videotemp: undefined,
 
-      jubaoren:undefined,
-      jubaorentel:undefined,
-      address:undefined,
-      time:undefined,
-      contents:undefined,
-      fireIntensity:undefined,
-      firetype:undefined,
+      jubaoren: undefined,
+      jubaorentel: undefined,
+      address: undefined,
+      time: undefined,
+      contents: undefined,
+      fireIntensity: undefined,
+      firetype: undefined,
 
-      gridList:undefined,
-      gridPerson:'',
-      gridPersonPhone:'',
-      streetPerson:'',
-      streetPersonPhone:'',
+      gridList: undefined,
+      gridPerson: "",
+      gridPersonPhone: "",
+      streetPerson: "",
+      streetPersonPhone: "",
 
-      aroundVideo:'',
-      aroundDetail:"",
+      aroundVideo: "",
+      aroundDetail: "",
 
-      aroundQiXiangDetail:"",
-      tempdata:{
-        ZBZY:undefined
-      }
+      aroundQiXiangDetail: "",
+      tempdata: {
+        ZBZY: undefined,
+      },
+      detailInfo:{},
     };
   },
   computed: {
     featuresData() {
-      return this.$store.getters.featuresData
+      return this.$store.getters.featuresData;
     },
     videoData() {
       return this.$store.getters.videoData;
@@ -379,95 +407,93 @@ export default {
     },
     videoData(val) {
       const that = this;
-      that.$nextTick(()=>{
+      that.$nextTick(() => {
         that.videoList = [];
 
-        val.forEach(element => {
-          that.videoList.push(element.values_)
+        val.forEach((element) => {
+          that.videoList.push(element.values_);
         });
-        if (val.length>0) {
-          that.aroundVideo = '';
-          val.forEach(element => {
-            that.aroundVideo += element.values_.MC
-            that.aroundVideo += "   "
-          })
+        if (val.length > 0) {
+          that.aroundVideo = "";
+          val.forEach((element) => {
+            that.aroundVideo += element.values_.MC;
+            that.aroundVideo += "   ";
+          });
         }
         // var node = document.createElement();
         // node.setid
-      })
+      });
       // this.$store.dispatch("lqfb/changezhfxOffsetRight", 0);
 
     },
-    netWorkData(val){
+    netWorkData(val) {
       const that = this;
       let data = this.$store.getters.featuresData;
-      let list = []
-      val.forEach(item => {
+      let list = [];
+      val.forEach((item) => {
         const json = {
-          name:item.values_.NAME,
-          feature:item,
-        }
-        list.push(json)
-      })
-      this.$nextTick(()=>{
-        data.ZBZY.netWork.arr = list
-        if (val && val.length>0) {
-          that.aroundDetail = ""
-          val.forEach(element => {
-            that.aroundDetail += element.values_.NAME
-            that.aroundDetail += "   "
+          name: item.values_.NAME,
+          feature: item,
+        };
+        list.push(json);
+      });
+      this.$nextTick(() => {
+        data.ZBZY.netWork.arr = list;
+        if (val && val.length > 0) {
+          that.aroundDetail = "";
+          val.forEach((element) => {
+            that.aroundDetail += element.values_.NAME;
+            that.aroundDetail += "   ";
           });
           // debugger
-        }else{
-          that.aroundDetail = "周边无办事网点"
+        } else {
+          that.aroundDetail = "周边无办事网点";
         }
-        that.tempdata = data
-        const fireEvent = this.$route.query
+        that.tempdata = data;
+        const fireEvent = this.$route.query;
         // console.log(this.fireId);
         document.onreadystatechange = function () {
-          if(document.readyState=="complete") {
+          if (document.readyState == "complete") {
             if (fireEvent["id"]) {
-              let node = $(`#finish`)
+              let node = $(`#finish`);
               if (node) {
                 node.remove();
-                $(`#temp`).after(`<div id = 'finish'></div>`)
-              }else{
-                $(`#temp`).after(`<div id = 'finish'></div>`)
+                $(`#temp`).after(`<div id = 'finish'></div>`);
+              } else {
+                $(`#temp`).after(`<div id = 'finish'></div>`);
               }
-              console.log("已添加finish节点"); 
+              console.log("已添加finish节点");
             }
           }
-        }
-      })
-
+        };
+      });
     },
-    qiXiangData(val){
-      console.log("气象测站",val)
-      const that = this;
-      let data = this.$store.getters.featuresData;
-      let list = []
-      val.forEach(item => {
-        const json = {
-          name:item.values_.ADDRESS,
-          feature:item,
-        }
-        list.push(json)
-      })
-      this.$nextTick(()=>{
-        data.ZBZY.qiXiang.arr = list
-        if (val && val.length>0) {
-          that.aroundQiXiangDetail = ""
-          val.forEach(element => {
-            that.aroundQiXiangDetail += element.values_.ADDRESS
-            that.aroundQiXiangDetail += "   "
-          });
-          // debugger
-        }else{
-          that.aroundQiXiangDetail = "周边无气象站点"
-        }
-        that.tempdata = data
-      })
-
+    qiXiangData(val) {
+      // console.log("气象测站",val)
+      // const that = this;
+      // let data = this.$store.getters.featuresData;
+      // let list = []
+      // val.forEach(item => {
+      //   const json = {
+      //     name:item.values_.ADDRESS,
+      //     feature:item,
+      //   }
+      //   list.push(json)
+      // })
+      // this.$nextTick(()=>{
+      //   data.ZBZY.qiXiang.arr = list
+      //   if (val && val.length>0) {
+      //     that.aroundQiXiangDetail = ""
+      //     val.forEach(element => {
+      //       that.aroundQiXiangDetail += element.values_.ADDRESS
+      //       that.aroundQiXiangDetail += "   "
+      //     });
+      //     // debugger
+      //   }else{
+      //     that.aroundQiXiangDetail = "周边无气象站点"
+      //   }
+      //   that.tempdata = data
+      // })
     },
     ssxyPersonList(val) {
       this.ssxyPersonLayer && this.$map.removeLayer(this.ssxyPersonLayer);
@@ -489,7 +515,7 @@ export default {
       this.close();
       this.clearSsxyPersonLayer();
       this.clearMonitorLayer();
-      this.clearPoint()
+      this.clearPoint();
       this.$store.commit("jjya/SET_MONITOR_LIST", []);
       this.terminalLayer && this.$map.removeLayer(this.terminalLayer);
     },
@@ -506,6 +532,13 @@ export default {
     },
   },
   methods: {
+    flyTo(feature){
+      this.$map.getMap().getView().setCenter([feature.properties.LONGITUDE,feature.properties.LATITUDE]);
+      // this.$map.getMap().getView().setZoom(16);
+      feature.values_ = feature.properties
+      this.$bus.$emit("showPoupItem",feature);
+    },
+
     titeEnter(e) {
       const target = e.target;
       const { clientWidth, scrollWidth, title } = target;
@@ -514,7 +547,8 @@ export default {
     handleCheckedLineChange(val) {
       const checkedCount = val.length;
       this.checkAll = checkedCount === this.pathList.length;
-      this.isIndeterminate = checkedCount > 0 && checkedCount < this.pathList.length;
+      this.isIndeterminate =
+        checkedCount > 0 && checkedCount < this.pathList.length;
     },
 
     handleCheckAllChange(val) {
@@ -523,9 +557,12 @@ export default {
     },
 
     ZoomToFeature(feature) {
-      this.$map.getMap().getView().setCenter(feature.getGeometry().getCoordinates());
+      this.$map
+        .getMap()
+        .getView()
+        .setCenter(feature.getGeometry().getCoordinates());
       this.$map.getMap().getView().setZoom(18);
-      this.$bus.$emit("showPoupItem",feature);
+      this.$bus.$emit("showPoupItem", feature);
     },
     handleLabelClick(item) {
       // debugger
@@ -535,10 +572,10 @@ export default {
     },
     handleVideoClick(item) {
       //样式待修改
-      this.$map.getMap().getView().setCenter([item.X,item.Y]);
+      this.$map.getMap().getView().setCenter([item.X, item.Y]);
       this.$map.getMap().getView().setZoom(16);
 
-      this.$bus.$emit("videoData",item);
+      this.$bus.$emit("videoData", item);
 
       // this.ZoomToFeature(item);
       // getVideoByCode(item.values_["indexCode"]).then((res) => {
@@ -700,7 +737,8 @@ export default {
     clearPoint() {
       this.diyPtLayer && this.$map.removeLayer(this.diyPtLayer);
       this.diyPtLayer = null;
-      this.diyPathLayer && this.$map.removeLayer(this.diyPathLayer.path.lineLayers);
+      this.diyPathLayer &&
+        this.$map.removeLayer(this.diyPathLayer.path.lineLayers);
       this.diyPathLayer = null;
     },
     //  画线
@@ -733,100 +771,113 @@ export default {
     nodetaisBtn() {
       this.RouteDetails = true;
     },
-
   },
-  mounted(){
+  mounted() {
     const that = this;
-    this.$bus.$on('clearAll',()=>{
-      that.close()
-    })
-
-    that.$bus.$on("fireAndId",value=>{
-      console.log(value)
+    this.$bus.$on("clearAll", () => {
+      that.close();
+    });
+    that.$bus.$on("minDistance", (minDistancePoint) => {
       // debugger
-      that.$nextTick(()=>{
+      that.$nextTick(() => {
+        that.aroundQiXiangDetail = minDistancePoint;
+      });
+    });
+    that.$bus.$on("fireAndId", (value) => {
+      console.log(value);
+      // debugger
+      that.$nextTick(() => {
         that.hasID = true;
         that.address = value.address;
         that.jubaoren = value.jubaoren;
         that.jubaorentel = value.jubaorentel;
         that.time = value.time;
-        const text =value['infocontent']
-        that.syscode = value.systemcode
-        if (text.indexOf(",")>-1) {
-          const arr =text.split(',')
-          that.contents = arr[0]
-          that.fireIntensity = that.fireStrong[arr[1].split(":")[1]]
-          that.firetype = arr[2].split(":")[1]
-        }else{
-          that.contents = value['infocontent']
+        const text = value["infocontent"];
+        that.syscode = value.systemcode;
+        if (text.indexOf(",") > -1) {
+          const arr = text.split(",");
+          that.contents = arr[0];
+          that.fireIntensity = that.fireStrong[arr[1].split(":")[1]];
+          that.firetype = arr[2].split(":")[1];
+        } else {
+          that.contents = value["infocontent"];
         }
         // that.address = value.address;
         // that.address = value.address;
         // that.address = value.address;
-      })
-    })
+      });
+    });
 
-    that.$bus.$on("gridInfo",gridInfo=>{
-      console.log("网格信息",gridInfo)
+    that.$bus.$on("gridInfo", (gridInfo) => {
+      console.log("网格信息", gridInfo);
       // debugger
-      if (gridInfo && gridInfo.features.length>0) {
-        that.gridPerson = '';
-        that.gridPersonPhone = '';
-        that.$nextTick(()=>{
-          that.gridList = gridInfo.features
-          that.gridList.forEach(element => {
+      if (gridInfo && gridInfo.features.length > 0) {
+        that.gridPerson = "";
+        that.gridPersonPhone = "";
+        that.$nextTick(() => {
+          that.gridList = gridInfo.features;
+          that.gridList.forEach((element) => {
             // debugger
-            that.gridPerson += element.properties.NAME
-            that.gridPerson += ' '
+            that.gridPerson += element.properties.NAME;
+            that.gridPerson += " ";
 
-            that.gridPersonPhone += element.properties.TELEPHONE
-            that.gridPersonPhone += ' '
+            that.gridPersonPhone += element.properties.TELEPHONE;
+            that.gridPersonPhone += " ";
           });
-        }) 
-      }else{
-        that.$nextTick(()=>{
-          that.gridPerson = '暂无数据'
-          that.gridPersonPhone = '暂无数据'
+        });
+      } else {
+        that.$nextTick(() => {
+          that.gridPerson = "暂无数据";
+          that.gridPersonPhone = "暂无数据";
         });
       }
-    })
-    that.$bus.$on("streetInfo",streetInfo=>{
+    });
+    that.$bus.$on("streetInfo", (streetInfo) => {
       // console.log(streetInfo)
-      if (streetInfo && streetInfo.features.length>0) {
-        that.streetPerson = '';
-        that.streetPersonPhone = '';
-        that.$nextTick(()=>{
-          const list = streetInfo.features
-          list.forEach(element => {
+      if (streetInfo && streetInfo.features.length > 0) {
+        that.streetPerson = "";
+        that.streetPersonPhone = "";
+        that.$nextTick(() => {
+          const list = streetInfo.features;
+          list.forEach((element) => {
             // debugger
-            that.streetPerson += element.properties.NAME
-            that.streetPerson += ' '
+            that.streetPerson += element.properties.NAME;
+            that.streetPerson += " ";
 
-            that.streetPersonPhone += element.properties.TEL
-            that.streetPersonPhone += ' '
+            that.streetPersonPhone += element.properties.TEL;
+            that.streetPersonPhone += " ";
           });
-        }) 
-      }else{
-        that.$nextTick(()=>{
-          that.streetPerson = '暂无数据'
-          that.streetPersonPhone = '暂无数据'
+        });
+      } else {
+        that.$nextTick(() => {
+          that.streetPerson = "暂无数据";
+          that.streetPersonPhone = "暂无数据";
         });
       }
-    })
-    that.$bus.$on("sysCode",value=>{
+    });
+    that.$bus.$on("sysCode", (value) => {
       // debugger
+      that.$nextTick(() => {
+        that.syscode = value;
+      });
+    });
+
+    that.$bus.$on("detailInfo", (detailInfo) => {
+      console.log("气象信息", detailInfo);
       that.$nextTick(()=>{
-        that.syscode = value
+        that.detailInfo = detailInfo;
       })
-    })
+    });
   },
-  beforeDestroy(){
-    this.$bus.$off('clearAll')
-    this.$bus.$off('fireAndId')
-    this.$bus.$off('gridInfo')
-    this.$bus.$off('streetInfo')
-    this.$bus.$off('sysCode')
-  }
+  beforeDestroy() {
+    this.$bus.$off("clearAll");
+    this.$bus.$off("fireAndId");
+    this.$bus.$off("gridInfo");
+    this.$bus.$off("streetInfo");
+    this.$bus.$off("sysCode");
+    this.$bus.$off("minDistance");
+    this.$bus.$off("detailInfo");
+  },
 };
 </script>
 <style lang="scss" scoped>
@@ -855,7 +906,7 @@ export default {
     background-color: transparent;
     // background-color: #000;
   }
-  /deep/.el-collapse{
+  /deep/.el-collapse {
     overflow: hidden;
   }
   .zgfx-container {
@@ -909,7 +960,7 @@ export default {
     width: 100%;
     padding-top: 1vh;
 
-    .titleLine{
+    .titleLine {
       display: flex;
       padding-right: 1vh;
       width: 100%;
@@ -929,8 +980,7 @@ export default {
         height: 2rem;
         font-family: youshebiaotihei;
         font-size: 2.3vh;
-
-        }
+      }
 
       .title {
         width: 100%;
@@ -949,43 +999,42 @@ export default {
         font-size: 2.3vh;
         // padding-top: 4vh;
         // padding-bottom: 4vh;
-          .search {
+        .search {
           width: 180px;
           height: 22px;
           position: relative;
           .el-input__inner {
-              height: 22px;
-              border-radius: 20px;
-              outline: none;
-              padding-left: 15px;
-              background: url(../../../assets/images/搜索底框.png) no-repeat;
-              background-size: 100%;
-              border: 0;
-              color: hsla(196, 79%, 43%, 1);
+            height: 22px;
+            border-radius: 20px;
+            outline: none;
+            padding-left: 15px;
+            background: url(../../../assets/images/搜索底框.png) no-repeat;
+            background-size: 100%;
+            border: 0;
+            color: hsla(196, 79%, 43%, 1);
           }
-          .el-input__inner::-webkit-input-placeholder {color: hsla(196, 79%, 43%, 1);}
+          .el-input__inner::-webkit-input-placeholder {
+            color: hsla(196, 79%, 43%, 1);
+          }
           .el-input__icon::before {
-              content: ' ';
-              width: 25px;
-              height: 22px;
-              position: absolute;
-              top: 0;
-              right: -4px;
-              margin-left: 2px;
-              cursor: pointer;
-              background: url(../../../assets/images/搜索.png) no-repeat;
-              background-size: 100%;
-          }
+            content: " ";
+            width: 25px;
+            height: 22px;
+            position: absolute;
+            top: 0;
+            right: -4px;
+            margin-left: 2px;
+            cursor: pointer;
+            background: url(../../../assets/images/搜索.png) no-repeat;
+            background-size: 100%;
           }
         }
-        .titleInput{
-        background-color: rgba(82, 254, 179, .5);
+      }
+      .titleInput {
+        background-color: rgba(82, 254, 179, 0.5);
         color: #fff;
         border-radius: 5px;
-        }
-
-
-
+      }
     }
 
     .result-wrapper {
@@ -994,8 +1043,6 @@ export default {
 
       font-family: PingFang;
       color: #fff;
-
-
 
       .result-list {
         height: 100%;
@@ -1016,28 +1063,26 @@ export default {
           font-family: "PingFang SC";
           color: #ffffff;
 
-          .iconAndName{
+          .iconAndName {
             width: 20vh;
           }
 
           .indexList {
             text-align: center;
             width: 11vh;
-
           }
-          .line{
+          .line {
             position: relative;
             left: -0.5vh;
-            float:left;
+            float: left;
             width: 0.15vh;
             height: 2.5vh;
             background: #fff;
           }
-          .gridIcon{
+          .gridIcon {
             padding-left: 1vh;
-
           }
-          .icon{
+          .icon {
             padding-left: 0.5vh;
             padding-right: 0.7vh;
           }
@@ -1061,7 +1106,7 @@ export default {
           background-size: 100% 100%;
         }
         li:nth-child(odd) {
-          //background: linear-gradient(rgba(76, 227, 212, 0.7), rgba(23, 145, 120, 0.7), rgba(5, 88, 63, 0.29)); 
+          //background: linear-gradient(rgba(76, 227, 212, 0.7), rgba(23, 145, 120, 0.7), rgba(5, 88, 63, 0.29));
           background-image: url("~@/assets/images/2.png");
           background-size: 100% 100%;
         }
@@ -1089,29 +1134,27 @@ export default {
           color: #ffffff;
           margin-bottom: 1.3vh;
 
-          .iconAndName{
+          .iconAndName {
             flex: 1;
             padding-top: 0.1vh;
-            padding-bottom:0.1vh
+            padding-bottom: 0.1vh;
           }
 
           .indexList {
             text-align: center;
             width: 11vh;
-
           }
-          .line{
+          .line {
             position: relative;
             float: left;
             width: 0.1vh;
             height: 5.8vh;
             background: #fff;
           }
-          .gridIcon{
+          .gridIcon {
             padding-left: 1vh;
-
           }
-          .icon{
+          .icon {
             padding-left: 0.5vh;
             padding-right: 0.7vh;
           }
@@ -1129,22 +1172,90 @@ export default {
             margin-block-start: 0;
             margin-block-end: 0;
             padding-right: 0.5vh;
-
           }
         }
         .result-data:nth-child(even) {
-            // background:rgba(5, 88, 63, 0.29);
-            background-image: url("~@/assets/images/1.png");
-            background-size: 100% 100%;
+          // background:rgba(5, 88, 63, 0.29);
+          background-image: url("~@/assets/images/1.png");
+          background-size: 100% 100%;
         }
         .result-data:nth-child(odd) {
-            //background: linear-gradient(rgba(76, 227, 212, 0.7), rgba(23, 145, 120, 0.7), rgba(5, 88, 63, 0.29)); 
-            background-image: url("~@/assets/images/2.png");
-            background-size: 100% 100%;
+          //background: linear-gradient(rgba(76, 227, 212, 0.7), rgba(23, 145, 120, 0.7), rgba(5, 88, 63, 0.29));
+          background-image: url("~@/assets/images/2.png");
+          background-size: 100% 100%;
         }
       }
+      .result-list-around-qx {
+        height: 100%;
+        width: 100%;
+        overflow-y: auto;
+        padding-left: 0.5vh;
+        padding-right: 0.1vh;
+        // background-image: url("~@/assets/images/火灾框.png");
+        margin-block-start: 0.5vh;
+        margin-block-end: 0;
+        .result-data {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 0.1vh 0 0.1vh 0vh;
+          line-height: 3vh;
+          font-size: 1.4vh;
+          min-height: 3.5vh;
+          height: auto;
+          font-family: "PingFang SC";
+          color: #ffffff;
+          .iconAndName {
+            flex: 1;
+            padding-top: 0.1vh;
+            padding-bottom: 0.1vh;
+          }
 
-
+          .indexList {
+            text-align: center;
+            width: 11vh;
+          }
+          .line {
+            position: relative;
+            float: left;
+            width: 0.1vh;
+            height: 5.8vh;
+            background: #fff;
+          }
+          .gridIcon {
+            padding-left: 1vh;
+          }
+          .icon {
+            padding-left: 0.5vh;
+            padding-right: 0.7vh;
+          }
+          .contentList {
+            flex: 1;
+            // width: 100%;
+            border-left: 1px solid #fff;
+            padding-left: 0.5vh;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+            overflow: hidden;
+            word-wrap: break-word;
+            // word-wrap:  break-all;
+            margin-block-start: 0;
+            margin-block-end: 0;
+            padding-right: 0.5vh;
+          }
+        }
+        .result-data:nth-child(even) {
+          // background:rgba(5, 88, 63, 0.29);
+          background-image: url("~@/assets/images/1.png");
+          background-size: 100% 100%;
+        }
+        .result-data:nth-child(odd) {
+          //background: linear-gradient(rgba(76, 227, 212, 0.7), rgba(23, 145, 120, 0.7), rgba(5, 88, 63, 0.29));
+          background-image: url("~@/assets/images/2.png");
+          background-size: 100% 100%;
+        }
+      }
     }
     .result-wrapper-other {
       margin-top: 1vh;
@@ -1172,30 +1283,28 @@ export default {
           font-family: "PingFang SC";
           color: #ffffff;
 
-          .iconAndName{
+          .iconAndName {
             flex: 1;
             padding-top: 0.1vh;
-            padding-bottom:0.1vh
+            padding-bottom: 0.1vh;
           }
 
           .indexList {
             text-align: center;
             width: 11vh;
-
           }
-          .line{
+          .line {
             position: relative;
             left: -0.5vh;
-            float:left;
+            float: left;
             width: 0.15vh;
             height: 2.5vh;
             background: #fff;
           }
-          .gridIcon{
+          .gridIcon {
             padding-left: 1vh;
-
           }
-          .icon{
+          .icon {
             padding-left: 0.5vh;
             padding-right: 0.7vh;
           }
@@ -1221,7 +1330,7 @@ export default {
           background-size: 100% 100%;
         }
         li:nth-child(odd) {
-          //background: linear-gradient(rgba(76, 227, 212, 0.7), rgba(23, 145, 120, 0.7), rgba(5, 88, 63, 0.29)); 
+          //background: linear-gradient(rgba(76, 227, 212, 0.7), rgba(23, 145, 120, 0.7), rgba(5, 88, 63, 0.29));
           background-image: url("~@/assets/images/2.png");
           background-size: 100% 100%;
         }
@@ -1361,7 +1470,8 @@ export default {
             border-radius: 2px;
             cursor: pointer;
             span {
-              background: url("../../../assets/images/返回icon(1).png") no-repeat;
+              background: url("../../../assets/images/返回icon(1).png")
+                no-repeat;
               background-size: 9px 9px;
               background-position: 5px 6px;
               padding-left: 18px;
@@ -1426,7 +1536,7 @@ export default {
       overflow-y: scroll;
       .item {
         // background-color: rgb(11, 35, 57);
-        background-image: url('~@/assets/images/1.png');
+        background-image: url("~@/assets/images/1.png");
         background-size: 100% 100%;
         flex: 1;
         width: 185px;
@@ -1458,7 +1568,7 @@ export default {
           cursor: pointer;
           list-style: none;
           // background: url("../../../assets/images/框(2).png") no-repeat;
-          background-image: url('~@/assets/images/1.png');
+          background-image: url("~@/assets/images/1.png");
           background-size: 100% 100%;
         }
       }
@@ -1471,7 +1581,7 @@ export default {
           margin-top: 10px;
           padding: 3px 0 3px 22px;
           // background: #092e4f;
-          background-image: url('~@/assets/images/1.png');
+          background-image: url("~@/assets/images/1.png");
           background-size: 100% 100%;
           align-items: center;
           span:first-of-type {
@@ -1483,10 +1593,10 @@ export default {
             }
           }
         }
-        ul{
+        ul {
           height: 30vh;
           overflow-y: auto;
-          li{
+          li {
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
@@ -1500,11 +1610,11 @@ export default {
       height: 3vh;
       font-size: 1.2vh;
       line-height: 3vh;
-      
+
       // margin-right: 0.5vh;
       display: inline-block;
       // background-image: linear-gradient(#0d73c1, #38cbee);
-      background-image: url('~@/assets/images/2.png');
+      background-image: url("~@/assets/images/2.png");
       border-radius: 0.4vh;
       cursor: pointer;
       span {
@@ -1633,16 +1743,18 @@ export default {
   .el-icon-arrow-right:before {
     content: "\E723";
   }
-  .el-collapse .is-active .el-collapse-item__header .el-icon-arrow-right::before {
+  .el-collapse
+    .is-active
+    .el-collapse-item__header
+    .el-icon-arrow-right::before {
     content: "\E722";
     // background-image: url('~@/assets/images/1.png');
     // background-size: 100% 100%;
   }
 
-  /deep/ .el-collapse-item__header{
-    background-image: url('~@/assets/images/2.png');
+  /deep/ .el-collapse-item__header {
+    background-image: url("~@/assets/images/2.png");
     background-size: 100% 100%;
   }
-
 }
 </style>

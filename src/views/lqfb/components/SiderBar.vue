@@ -85,6 +85,22 @@ export default {
       networkTemp:false,
       qxczLayer:null,
       qxczTemp:false,
+
+      //教育资源
+      //小学
+      primartSchoolLayer:null,
+      primartSchoolTemp:false,
+      primarySchoolDistrictLayer:null,
+      primarySchoolDistrictTemp:false,
+      primarySchoolChildrenLayer:null,
+      primarySchoolChildrenTemp:false,
+      //中学
+      middleSchoolDistrictLayer:null,
+      middleSchoolDistrictTemp:false,
+      middleschoolPointLayer:null,
+      middleschoolPointTemp:false,
+      middleSchoolChildrenLayer:null,
+      middleSchoolChildrenTemp:false
     }
   },
   computed: {
@@ -333,8 +349,6 @@ export default {
               source: vectorSource,
               })
             
-            //4: "119.35790729284101"
-            //5: "27.541516789796798"
             this.$map.addLayer(this.qxczLayer)
         })
           this.qxczTemp = true;
@@ -349,6 +363,291 @@ export default {
             this.$bus.$emit('qxcz',this.qxczTemp);
           }
           this.qxczLayer.setVisible(this.qxczTemp);
+        }
+
+        return
+      }
+      if(data.label === '小学'){
+        if (!this.primartSchoolLayer) {
+          var sqlParam = new SuperMap.GetFeaturesBySQLParameters({
+            toIndex: -1,
+            maxFeatures: 99999999,
+            queryParameter: {
+              // name: layerName,
+              attributeFilter: "",
+
+            },
+            datasetNames: [`lishui_forestfire_v2:jy_primaryschool`]
+          })
+          const url = "http://10.53.137.59:8090/iserver/services/data-lishui_forestfire_v2/rest/data";
+          // debugger
+
+          new FeatureService(url).getFeaturesBySQL(sqlParam, serviceResult => {
+            const list = serviceResult.result.features;
+            // debugger
+            const features = new GeoJSON().readFeatures(list)
+            var vectorSource = new VectorSource({
+              features,
+              wrapX: false
+            });
+            const style = new Style({
+                image: new Icon({
+                  anchor: [0.5, 26],
+                  anchorXUnits: 'fraction',
+                  anchorYUnits: 'pixels',
+                  scale:0.7,
+                  src: require(`@/assets/images/icon/${'小学icon.png'}`)
+                }),
+                // stroke: new Stroke({ color: 'red', width: 2 })
+            })
+            this.primartSchoolLayer = new VectorLayer({
+              source: vectorSource,
+              style
+            })
+            this.$map.addLayer(this.primartSchoolLayer)
+        })
+          this.primartSchoolTemp = true;
+          this.$bus.$emit('primartSchool',this.primartSchoolTemp);
+          // this.$store.dispatch('lqfb/changeVideoListOffsetRight', 0)
+        }else{
+          if (this.primartSchoolTemp) {
+            this.primartSchoolTemp = false
+            this.$bus.$emit('primartSchool',this.primartSchoolTemp);
+          }else if (!this.qxczTemp) {
+            this.primartSchoolTemp = true
+            this.$bus.$emit('primartSchool',this.primartSchoolTemp);
+          }
+          this.primartSchoolLayer.setVisible(this.primartSchoolTemp);
+        }
+
+        return
+      }
+      if(data.label === '小学学区'){
+        if (!this.primarySchoolDistrictLayer) {
+          const url = "http://10.53.137.59:8090/iserver/services/map-lishui_forestfire_v2/rest/maps/jy_primaryschool_district@lishui_forestfire_v2"
+          this.primarySchoolDistrictLayer = this.$map.createTileSuperMapRestLayer(url, {
+            className: "primarySchoolDistrictLayer",
+          });
+          this.$map.addLayer(this.primarySchoolDistrictLayer);
+          this.primarySchoolDistrictTemp = true;
+        }else{
+          if (this.primarySchoolDistrictTemp) {
+            this.primarySchoolDistrictTemp = false
+            // this.$bus.$emit('primarySchoolDistrict',this.primarySchoolDistrictTemp);
+          }else if (!this.primarySchoolDistrictTemp) {
+            this.primarySchoolDistrictTemp = true
+            // this.$bus.$emit('primarySchoolDistrict',this.primarySchoolDistrictTemp);
+          }
+          this.primarySchoolDistrictLayer.setVisible(this.primarySchoolDistrictTemp);
+        }
+        return
+      }
+      if(data.label === '小学适龄儿童'){
+        if (!this.primarySchoolChildrenLayer) {
+          var sqlParam = new SuperMap.GetFeaturesBySQLParameters({
+            toIndex:-1,
+            maxFeatures: 99999999,
+            queryParameter: {
+              // name: layerName,
+              attributeFilter: "",
+              // maxFeatures: 99999999999
+            },
+            datasetNames: [`lishui_forestfire_v2:jy_primaryschool_children`]
+          })
+          const url = "http://10.53.137.59:8090/iserver/services/data-lishui_forestfire_v2/rest/data";
+          // debugger
+
+          new FeatureService(url).getFeaturesBySQL(sqlParam, serviceResult => {
+            const list = serviceResult.result.features.features;
+            // debugger
+            const features = [];
+            list.forEach(element => {
+              const properties = element.properties;
+
+              const feature =  new Feature({
+                    geometry: new Point([properties.XX,properties.YY]),
+                    ...properties
+                })
+                // debugger
+              const style = new Style({
+                image: new Icon({
+                  anchor: [0.5, 26],
+                  anchorXUnits: 'fraction',
+                  anchorYUnits: 'pixels',
+                  scale:0.6,
+                  src: require(`@/assets/images/icon/${'小学适龄户籍儿童icon.png'}`)
+                }),
+                // stroke: new Stroke({ color: 'red', width: 2 })
+              })
+              feature.setStyle(style)
+              features.push(feature);
+            });
+ 
+            var vectorSource = new VectorSource({
+              features,
+              wrapX: false
+            });
+            this.primarySchoolChildrenLayer = new VectorLayer({
+              source: vectorSource,
+            })
+            
+            this.$map.addLayer(this.primarySchoolChildrenLayer)
+        })
+          this.primarySchoolChildrenTemp = true;
+          this.$bus.$emit('primarySchoolChildrenTemp',this.primarySchoolChildrenTemp);
+          // this.$store.dispatch('lqfb/changeVideoListOffsetRight', 0)
+        }else{
+          if (this.primarySchoolChildrenTemp) {
+            this.primarySchoolChildrenTemp = false
+            this.$bus.$emit('primarySchoolChildrenTemp',this.primarySchoolChildrenTemp);
+          }else if (!this.primarySchoolChildrenTemp) {
+            this.primarySchoolChildrenTemp = true
+            this.$bus.$emit('primarySchoolChildrenTemp',this.primarySchoolChildrenTemp);
+          }
+          this.primarySchoolChildrenLayer.setVisible(this.primarySchoolChildrenTemp);
+        }
+
+        return
+      }
+      if(data.label === '中学'){
+        if (!this.middleschoolPointLayer) {
+          var sqlParam = new SuperMap.GetFeaturesBySQLParameters({
+            toIndex: -1,
+            maxFeatures: 99999999,
+            queryParameter: {
+              // name: layerName,
+              attributeFilter: "",
+            },
+            datasetNames: [`lishui_forestfire_v2:jy_middleschool`]
+          })
+          const url = "http://10.53.137.59:8090/iserver/services/data-lishui_forestfire_v2/rest/data";
+          // debugger
+
+          new FeatureService(url).getFeaturesBySQL(sqlParam, serviceResult => {
+            const list = serviceResult.result.features;
+
+            const features = new GeoJSON().readFeatures(list)
+            var vectorSource = new VectorSource({
+              features,
+              wrapX: false
+            });
+            const style = new Style({
+                image: new Icon({
+                  anchor: [0.5, 26],
+                  anchorXUnits: 'fraction',
+                  anchorYUnits: 'pixels',
+                  scale:0.7,
+                  src: require(`@/assets/images/icon/${'初中icon.png'}`)
+                }),
+                // stroke: new Stroke({ color: 'red', width: 2 })
+            })
+            this.middleschoolPointLayer = new VectorLayer({
+              source: vectorSource,
+              style
+            })
+            
+            this.$map.addLayer(this.middleschoolPointLayer)
+        })
+          this.middleschoolPointTemp = true;
+          this.$bus.$emit('middleschoolPoint',this.middleschoolPointTemp);
+          // this.$store.dispatch('lqfb/changeVideoListOffsetRight', 0)
+        }else{
+          if (this.middleschoolPointTemp) {
+            this.middleschoolPointTemp = false
+            this.$bus.$emit('middleschoolPoint',this.middleschoolPointTemp);
+          }else if (!this.middleschoolPointTemp) {
+            this.middleschoolPointTemp = true
+            this.$bus.$emit('middleschoolPoint',this.middleschoolPointTemp);
+          }
+          this.middleschoolPointLayer.setVisible(this.middleschoolPointTemp);
+        }
+
+        return
+      }
+      if(data.label === '中学学区'){
+        if (!this.middleSchoolDistrictLayer) {
+          const url = "http://10.53.137.59:8090/iserver/services/map-lishui_forestfire_v2/rest/maps/jy_middleschool_district@lishui_forestfire_v2"
+          this.middleSchoolDistrictLayer = this.$map.createTileSuperMapRestLayer(url, {
+            className: "middleSchoolDistrictLayer",
+          });
+          this.$map.addLayer(this.middleSchoolDistrictLayer);
+          this.middleSchoolDistrictTemp = true;
+          // this.$store.dispatch('lqfb/changeVideoListOffsetRight', 0)
+        }else{
+          if (this.middleSchoolDistrictTemp) {
+            this.middleSchoolDistrictTemp = false
+            this.$bus.$emit('middleSchoolDistrict',this.middleSchoolDistrictTemp);
+          }else if (!this.middleSchoolDistrictTemp) {
+            this.middleSchoolDistrictTemp = true
+            this.$bus.$emit('middleSchoolDistrict',this.middleSchoolDistrictTemp);
+          }
+          this.middleSchoolDistrictLayer.setVisible(this.middleSchoolDistrictTemp);
+        }
+
+        return
+      }
+      if(data.label === '中学适龄儿童'){
+        if (!this.middleSchoolChildrenLayer) {
+          var sqlParam = new SuperMap.GetFeaturesBySQLParameters({
+            toIndex: -1,
+            maxFeatures: 99999999,
+            queryParameter: {
+              // name: layerName,
+              attributeFilter: "",
+            },
+            datasetNames: [`lishui_forestfire_v2:jy_middleschool_children`]
+          })
+          const url = "http://10.53.137.59:8090/iserver/services/data-lishui_forestfire_v2/rest/data";
+          // debugger
+
+          new FeatureService(url).getFeaturesBySQL(sqlParam, serviceResult => {
+            const list = serviceResult.result.features.features;
+
+            const features = [];
+            list.forEach(element => {
+              const properties = element.properties;
+
+              const feature =  new Feature({
+                    geometry: new Point([properties.XX,properties.YY]),
+                    ...properties
+                })
+                // debugger
+              const style = new Style({
+                image: new Icon({
+                  anchor: [0.5, 26],
+                  anchorXUnits: 'fraction',
+                  anchorYUnits: 'pixels',
+                  scale:0.7,
+                  src: require(`@/assets/images/icon/${'初中适龄户籍儿童icon.png'}`)
+                }),
+                // stroke: new Stroke({ color: 'red', width: 2 })
+              })
+              feature.setStyle(style)
+              features.push(feature);
+            });
+ 
+            var vectorSource = new VectorSource({
+              features,
+              wrapX: false
+            });
+            this.middleSchoolChildrenLayer = new VectorLayer({
+              source: vectorSource,
+              })
+            
+            this.$map.addLayer(this.middleSchoolChildrenLayer)
+        })
+          this.middleSchoolChildrenTemp = true;
+          this.$bus.$emit('middleSchoolChildren',this.middleSchoolChildrenTemp);
+          // this.$store.dispatch('lqfb/changeVideoListOffsetRight', 0)
+        }else{
+          if (this.middleSchoolChildrenTemp) {
+            this.middleSchoolChildrenTemp = false
+            this.$bus.$emit('middleSchoolChildren',this.middleSchoolChildrenTemp);
+          }else if (!this.middleSchoolChildrenTemp) {
+            this.middleSchoolChildrenTemp = true
+            this.$bus.$emit('middleSchoolChildren',this.middleSchoolChildrenTemp);
+          }
+          this.middleSchoolChildrenLayer.setVisible(this.middleSchoolChildrenTemp);
         }
 
         return

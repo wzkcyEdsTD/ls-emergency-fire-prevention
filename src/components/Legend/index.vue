@@ -42,7 +42,6 @@ export default {
   watch:{
     layerList(val) {
       const that = this;
-      console.log(val);
       this.allLayerList = val;
       if (that.fireLayerTemp) {
         const legend = {
@@ -55,7 +54,9 @@ export default {
           label:"火灾点（I丽水）",
           name:"火灾点（I丽水）",
         }
+
         const list = []
+
         list.push(legend)
         list.push(legend1)
         //过滤重复item
@@ -71,9 +72,34 @@ export default {
           const setNameArr = [...new Set(arr.map(v => v.name))];
           this.allLayerList = setNameArr.map(v => obj[v])
         }
+        if (that.hasQxcz) {
+          const legend2 = {
+            icon:"气象测站.png",
+            label:"气象测站",
+            name:"气象测站",
+          }
+          list.push(legend2)
+          if (this.allLayerList.length == 0) {
+            this.allLayerList = [...this.allLayerList, ...list]
+          } else {
+            const obj = {};
+            const arr = [...this.allLayerList, ...list];
+            arr.map(v => {
+              if (!obj[v.name]) { obj[v.name] = v }
+            })
+
+            const setNameArr = [...new Set(arr.map(v => v.name))];
+            this.allLayerList = setNameArr.map(v => obj[v])
+          }
+        }else{
+          that.allLayerList = that.allLayerList.filter(v=>{
+            if (!(v.name.indexOf('气象测站')!=-1)) {
+              return v
+            }
+          })
+        }
       }
-      // debugger
-      console.log('过滤后的list',this.allLayerList)
+      console.log('list',this.allLayerList)
     }
   },
   data() {
@@ -81,6 +107,7 @@ export default {
       allLayerList:[],
       fireLayerTemp:true,
       qxczLayerTemp:false,
+      hasQxcz:false,
     }
   },
   methods: {
@@ -96,7 +123,7 @@ export default {
     getLabel(label) {
       if (['道路'].indexOf(label) > -1) return ''
       return label
-    }
+    },
   },
   mounted(){
     const that = this;
@@ -117,12 +144,6 @@ export default {
       // debugger
       that.$nextTick(()=>{
         that.qxczLayerTemp = temp;
-        // that.allLayerList = that.allLayerList.filter(v=>{
-        //   if (!(v.name.indexOf('气象')!=-1)) {
-        //     return v
-        //   }
-        // })
-        console.log('气象测站',temp)
         if (temp) {
           const list = []
           const legend = {
@@ -144,15 +165,185 @@ export default {
             this.allLayerList = setNameArr.map(v => obj[v])
           }
         }else{
-          console.log('气象测站',temp)
+          if (!that.hasQxcz) {
+            that.allLayerList = that.allLayerList.filter(v=>{
+              if (!(v.name.indexOf('气象测站')!=-1)) {
+                return v
+              }
+            })
+          }
+        }
+      })
+    })
+    this.$bus.$on("hasQxcz", val=>{
+      that.$nextTick(()=>{
+        that.hasQxcz = val
+        if (val) {
+          const list = []
+          const legend = {
+            icon:"气象测站.png",
+            label:"气象测站",
+            name:"气象测站",
+          }
+          list.push(legend)
+          if (this.allLayerList.length == 0) {
+            this.allLayerList = [...this.allLayerList, ...list]
+          } else {
+            const obj = {};
+            const arr = [...this.allLayerList, ...list];
+            arr.map(v => {
+              if (!obj[v.name]) { obj[v.name] = v }
+            })
+
+            const setNameArr = [...new Set(arr.map(v => v.name))];
+            this.allLayerList = setNameArr.map(v => obj[v])
+          }
+        }else{
+          if (!that.qxczLayerTemp) {
+            that.allLayerList = that.allLayerList.filter(v=>{
+              if (!(v.name.indexOf('气象测站')!=-1)) {
+                return v
+              }
+            })
+          }
+        }
+      })
+    })
+    this.$bus.$on("primartSchool",temp=>{
+      // debugger
+      that.$nextTick(()=>{
+
+        if (temp) {
+          const list = []
+          const legend = {
+            icon:"小学icon.png",
+            label:"小学",
+            name:"小学",
+          }
+          list.push(legend)
+          if (this.allLayerList.length == 0) {
+            this.allLayerList = [...this.allLayerList, ...list]
+          } else {
+            const obj = {};
+            const arr = [...this.allLayerList, ...list];
+            arr.map(v => {
+              if (!obj[v.name]) { obj[v.name] = v }
+            })
+
+            const setNameArr = [...new Set(arr.map(v => v.name))];
+            this.allLayerList = setNameArr.map(v => obj[v])
+          }
+        }else{
           that.allLayerList = that.allLayerList.filter(v=>{
-            if (!(v.name.indexOf('气象测站')!=-1)) {
+            if (v.name!=='小学') {
               return v
             }
           })
         }
+      })
+    
+    })
+    this.$bus.$on("primarySchoolChildrenTemp",temp=>{
+      // debugger
+      that.$nextTick(()=>{
+        that.qxczLayerTemp = temp;
+        if (temp) {
+          const list = []
+          const legend = {
+            icon:"小学适龄户籍儿童icon.png",
+            label:"小学适龄儿童",
+            name:"小学适龄儿童",
+          }
+          list.push(legend)
+          if (this.allLayerList.length == 0) {
+            this.allLayerList = [...this.allLayerList, ...list]
+          } else {
+            const obj = {};
+            const arr = [...this.allLayerList, ...list];
+            arr.map(v => {
+              if (!obj[v.name]) { obj[v.name] = v }
+            })
 
-        console.log(that.allLayerList)
+            const setNameArr = [...new Set(arr.map(v => v.name))];
+            this.allLayerList = setNameArr.map(v => obj[v])
+          }
+        }else{
+
+            that.allLayerList = that.allLayerList.filter(v=>{
+              if (!(v.name.indexOf('小学适龄儿童')!=-1)) {
+                return v
+              }
+            })
+          
+        }
+      })
+    
+    })
+    this.$bus.$on("middleschoolPoint",temp=>{
+      // debugger
+      that.$nextTick(()=>{
+        that.qxczLayerTemp = temp;
+        if (temp) {
+          const list = []
+          const legend = {
+            icon:"初中icon.png",
+            label:"中学",
+            name:"中学",
+          }
+          list.push(legend)
+          if (this.allLayerList.length == 0) {
+            this.allLayerList = [...this.allLayerList, ...list]
+          } else {
+            const obj = {};
+            const arr = [...this.allLayerList, ...list];
+            arr.map(v => {
+              if (!obj[v.name]) { obj[v.name] = v }
+            })
+
+            const setNameArr = [...new Set(arr.map(v => v.name))];
+            this.allLayerList = setNameArr.map(v => obj[v])
+          }
+        }else{
+          that.allLayerList = that.allLayerList.filter(v=>{
+            if (v.name!=='中学') {
+              return v
+            }
+          })
+        }
+      })
+    
+    })
+    this.$bus.$on("middleSchoolChildren",temp=>{
+      // debugger
+      that.$nextTick(()=>{
+        that.qxczLayerTemp = temp;
+        if (temp) {
+          const list = []
+          const legend = {
+            icon:"初中适龄户籍儿童icon.png",
+            label:"中学适龄儿童",
+            name:"中学适龄儿童",
+          }
+          list.push(legend)
+          if (this.allLayerList.length == 0) {
+            this.allLayerList = [...this.allLayerList, ...list]
+          } else {
+            const obj = {};
+            const arr = [...this.allLayerList, ...list];
+            arr.map(v => {
+              if (!obj[v.name]) { obj[v.name] = v }
+            })
+
+            const setNameArr = [...new Set(arr.map(v => v.name))];
+            this.allLayerList = setNameArr.map(v => obj[v])
+          }
+        }else{
+          that.allLayerList = that.allLayerList.filter(v=>{
+            if (!(v.name.indexOf('中学适龄儿童')!=-1)) {
+              return v
+            }
+          })
+        }
       })
     
     })
@@ -160,6 +351,11 @@ export default {
   beforeDestroy(){
     this.$bus.$off('hzjbd');
     this.$bus.$off('qxcz');
+    this.$bus.$off("hasQxcz")
+    this.$bus.$off("primartSchool")
+    this.$bus.$off("primarySchoolChildrenTemp")
+    this.$bus.$off("middleschoolPoint")
+    this.$bus.$off("middleSchoolChildren")
   }
 }
 </script>

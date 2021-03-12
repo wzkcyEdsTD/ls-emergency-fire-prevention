@@ -438,18 +438,18 @@ const treeData = [
       },
     ]
   },
-  {
-    id: 4,
-    label: '巡逻范围',
-    showCheck: true,
-    children: [
-      {
-        id: 41,
-        label: '巡逻范围',
-        value: MAP_URL.SLFH_FHRY
-      }
-    ]
-  },
+  // {
+  //   id: 4,
+  //   label: '巡逻范围',
+  //   showCheck: true,
+  //   children: [
+  //     {
+  //       id: 41,
+  //       label: '巡逻范围',
+  //       value: MAP_URL.SLFH_FHRY
+  //     }
+  //   ]
+  // },
 
   {
     id: 7,
@@ -484,7 +484,37 @@ const treeData = [
       }
     ]
   },
-
+  {
+    id: 9,
+    label: '教育学区资源',
+    showCheck: true,
+    children: [
+      {
+        id: 91,
+        label: '小学'
+      },
+      {
+        id: 92,
+        label: '小学学区'
+      },
+      {
+        id: 93,
+        label: '小学适龄儿童'
+      },
+      {
+        id: 94,
+        label: '中学'
+      },
+      {
+        id: 95,
+        label: '中学学区'
+      },
+      {
+        id: 96,
+        label: '中学适龄儿童'
+      },
+    ]
+  },
 
 
 ]
