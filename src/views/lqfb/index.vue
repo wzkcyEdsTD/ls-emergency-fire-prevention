@@ -362,7 +362,7 @@ export default {
       }else{
       }
       // debugger
-      if (!value['systemcode'] && !value['CZBH']) {
+      if (!value['systemcode'] && !value['CZBH'] && !value['CZBH']) {
         if (!value['NAME']) return
       }
 
@@ -442,6 +442,28 @@ export default {
           const detailInfo = r['[]'][0]['SzlsDwSjjhSfxptBiz067QxQyqxzgc']
           detailInfo['风向'] = that.getWindDirect(Number(detailInfo.winddirect))
           detailInfo['摄氏度'] = that.changeTemperatureType(Number(detailInfo.drybultemp))
+
+          //气压
+          if (detailInfo['stationpress'].indexOf('32768')!= -1 ) {
+            detailInfo['stationpress'] = '-'
+          }else{
+            detailInfo['stationpress'] = Number(detailInfo['stationpress']) / 10
+            detailInfo['stationpress'] += " hPa"
+          }
+          //水汽压
+          if (!(detailInfo['vapourpress'].indexOf('32768')!=-1)) {
+            detailInfo['vapourpress'] = Number(detailInfo['vapourpress']) / 10
+            detailInfo['vapourpress'] += " hPa"
+          }else{
+            detailInfo['vapourpress'] = '-'
+          }
+          //湿度
+          if (!(detailInfo['relhumidity'].indexOf('32768')!=-1)) {
+            detailInfo['relhumidity'] += " %"
+          }else{
+            detailInfo['relhumidity'] = '-'
+          }
+
           console.log("气象站指标",detailInfo)
           infoTmpl += `<div  class="item">
               <span class="key">名称：</span>
@@ -609,7 +631,7 @@ export default {
       }
       // debugger
 
-      if (!value['systemcode'] && !value['BSWD_TYPE'] && !value['CZBH']) {
+      if (!value['systemcode'] && !value['BSWD_TYPE'] && !value['CZBH'] && !value['HLX'] && !value['OBJECTID'] && !value['TYPE']) {
         if ((!value['NAME'] && !value['label'])) return
       }
 
@@ -690,6 +712,26 @@ export default {
           const detailInfo = r['[]'][0]['SzlsDwSjjhSfxptBiz067QxQyqxzgc']
           detailInfo['风向'] = that.getWindDirect(Number(detailInfo.winddirect))
           detailInfo['摄氏度'] = that.changeTemperatureType(Number(detailInfo.drybultemp))
+          //气压
+          if (detailInfo['stationpress'].indexOf('32768')!= -1 ) {
+            detailInfo['stationpress'] = '-'
+          }else{
+            detailInfo['stationpress'] = Number(detailInfo['stationpress']) / 10
+            detailInfo['stationpress'] += " hPa"
+          }
+          //水汽压
+          if (!(detailInfo['vapourpress'].indexOf('32768')!=-1)) {
+            detailInfo['vapourpress'] = Number(detailInfo['vapourpress']) / 10
+            detailInfo['vapourpress'] += " hPa"
+          }else{
+            detailInfo['vapourpress'] = '-'
+          }
+          //湿度
+          if (!(detailInfo['relhumidity'].indexOf('32768')!=-1)) {
+            detailInfo['relhumidity'] += " %"
+          }else{
+            detailInfo['relhumidity'] = '-'
+          }
           console.log("气象站指标",detailInfo)
           infoTmpl += `<div  class="item">
               <span class="key">名称：</span>
@@ -730,6 +772,54 @@ export default {
           // debugger
           table.innerHTML = infoTmpl
         })
+      }else if(value['HLX']){
+        // debugger
+          infoTmpl += `<div  class="item">
+              <span class="key">姓名：</span>
+              <span class="value" title="${value["XM"]}">${value["XM"]}</span>
+          </div>`
+          infoTmpl += `<div  class="item">
+              <span class="key">地址：</span>
+              <span class="value" title="${value['JZDZ']}">${value['JZDZ']}</span>
+          </div>`
+          infoTmpl += `<div  class="item">
+              <span class="key">户类型：</span>
+              <span class="value" title="${value["HLX"]}">${value["HLX"]}</span>
+          </div>`
+          // infoTmpl += `<div  class="item">
+          //     <span class="key">出生日期：</span>
+          //     <span class="value" title="${value["CSRQ"]}">${value["CSRQ"]}</span>
+          // </div>`
+          // infoTmpl += `<div  class="item">
+          //     <span class="key">户号：</span>
+          //     <span class="value" title="${value["HH"]}">${value["HH"]}</span>
+          // </div>`
+          infoTmpl += `<div  class="item">
+              <span class="key">街道名称：</span>
+              <span class="value" title="${value["JDMC"]}">${value["JDMC"]}</span>
+          </div>`
+      }else if(value['OBJECTID'] && value['TYPE']){
+        // debugger
+          infoTmpl += `<div  class="item">
+              <span class="key">名称：</span>
+              <span class="value" title="${value["NAME"]}">${value["NAME"]}</span>
+          </div>`
+          infoTmpl += `<div  class="item">
+              <span class="key">地址：</span>
+              <span class="value" title="${value['ADDRESS']}">${value['ADDRESS']}</span>
+          </div>`
+          infoTmpl += `<div  class="item">
+              <span class="key">类型：</span>
+              <span class="value" title="${value["TYPE"]}">${value["TYPE"]}</span>
+          </div>`
+          // infoTmpl += `<div  class="item">
+          //     <span class="key">出生日期：</span>
+          //     <span class="value" title="${value["CSRQ"]}">${value["CSRQ"]}</span>
+          // </div>`
+          // infoTmpl += `<div  class="item">
+          //     <span class="key">户号：</span>
+          //     <span class="value" title="${value["HH"]}">${value["HH"]}</span>
+          // </div>`
       }else{
         for (const key in attrData[value['TABLE_NAME']]) {
           if (value[key] != undefined) {
@@ -807,6 +897,12 @@ export default {
         }else if(value['CZBH']){
           keyName.innerHTML = `名称：`
           keyValue.innerHTML = `${value['ADDRESS']}`
+        }else if(value['HLX']){
+          keyName.innerHTML = `姓名：`
+          keyValue.innerHTML = `${value['XM']}`
+        }else if(value['OBJECTID'] && value['TYPE']){
+          keyName.innerHTML = `名称：`
+          keyValue.innerHTML = `${value['NAME']}`
         }else{
           keyName.innerHTML = `${attrData[value['TABLE_NAME']]['NAME']}：`
           keyValue.innerHTML = `${value['NAME']}`
@@ -856,7 +952,7 @@ export default {
     },
     changeTemperatureType(number){
       const res = (number - 32) * 5 / 9
-      return res.toFixed(2)
+      return res.toFixed(1)
     },
 
     clearPopup() {

@@ -43,22 +43,69 @@ export default {
     layerList(val) {
       const that = this;
       this.allLayerList = val;
-      if (that.fireLayerTemp) {
-        const legend = {
+      const legend = {
           icon:"火灾点.png",
           label:"火灾点（天眼守望）",
           name:"火灾点（天眼守望）",
-        }
-        const legend1 = {
-          icon:"举报人icon.png",
-          label:"火灾点（I丽水）",
-          name:"火灾点（I丽水）",
-        }
+      }
+      const legend1 = {
+        icon:"举报人icon.png",
+        label:"火灾点（I丽水）",
+        name:"火灾点（I丽水）",
+      }
+      //气象站
+      const legend2 = {
+        icon:"气象测站.png",
+        label:"气象测站",
+        name:"气象测站",
+      }
+      //小学
+      const legend3 = {
+        icon:"小学icon.png",
+        label:"小学",
+        name:"小学",
+      }
+      //小学适龄儿童
+      const legend4 = {
+        icon:"小学适龄户籍儿童icon.png",
+        label:"小学适龄儿童",
+        name:"小学适龄儿童",
+      }    
+      //初中
+      const legend5 = {
+        icon:"初中icon.png",
+        label:"初中",
+        name:"初中",
+      }
+      //初中适龄儿童
+      const legend6 = {
+        icon:"初中适龄户籍儿童icon.png",
+        label:"初中适龄儿童",
+        name:"初中适龄儿童",
+      }    
+      if (that.fireLayerTemp) {
 
         const list = []
-
         list.push(legend)
         list.push(legend1)
+
+        if (that.hasQxcz || that.qxczLayerTemp) {
+          list.push(legend2)
+        }
+        if (that.primartSchool) {
+          list.push(legend3)
+        }
+        if (that.primarySchoolChildrenTemp) {
+          list.push(legend4)
+        }
+        if (that.middleschoolPoint) {
+          list.push(legend5)
+        }
+        if (that.middleSchoolChildren) {
+          list.push(legend6)
+        }
+
+
         //过滤重复item
         if (this.allLayerList.length == 0) {
           this.allLayerList = [...this.allLayerList, ...list]
@@ -72,13 +119,45 @@ export default {
           const setNameArr = [...new Set(arr.map(v => v.name))];
           this.allLayerList = setNameArr.map(v => obj[v])
         }
-        if (that.hasQxcz) {
-          const legend2 = {
-            icon:"气象测站.png",
-            label:"气象测站",
-            name:"气象测站",
-          }
+        // if (that.hasQxcz) {
+        //   list.push(legend2)
+        //   if (this.allLayerList.length == 0) {
+        //     this.allLayerList = [...this.allLayerList, ...list]
+        //   } else {
+        //     const obj = {};
+        //     const arr = [...this.allLayerList, ...list];
+        //     arr.map(v => {
+        //       if (!obj[v.name]) { obj[v.name] = v }
+        //     })
+
+        //     const setNameArr = [...new Set(arr.map(v => v.name))];
+        //     this.allLayerList = setNameArr.map(v => obj[v])
+        //   }
+        // }else{
+        //   that.allLayerList = that.allLayerList.filter(v=>{
+        //     if (!(v.name.indexOf('气象测站')!=-1)) {
+        //       return v
+        //     }
+        //   })
+        // }
+      }else{
+        const list = []
+        if (that.hasQxcz || that.qxczLayerTemp) {
           list.push(legend2)
+        }
+        if (that.primartSchool) {
+          list.push(legend3)
+        }
+        if (that.primarySchoolChildrenTemp) {
+          list.push(legend4)
+        }
+        if (that.middleschoolPoint) {
+          list.push(legend5)
+        }
+        if (that.middleSchoolChildren) {
+          list.push(legend6)
+        }
+        if (list.length>0) {
           if (this.allLayerList.length == 0) {
             this.allLayerList = [...this.allLayerList, ...list]
           } else {
@@ -91,13 +170,9 @@ export default {
             const setNameArr = [...new Set(arr.map(v => v.name))];
             this.allLayerList = setNameArr.map(v => obj[v])
           }
-        }else{
-          that.allLayerList = that.allLayerList.filter(v=>{
-            if (!(v.name.indexOf('气象测站')!=-1)) {
-              return v
-            }
-          })
         }
+
+
       }
       console.log('list',this.allLayerList)
     }
@@ -108,6 +183,10 @@ export default {
       fireLayerTemp:true,
       qxczLayerTemp:false,
       hasQxcz:false,
+      primartSchool:false,
+      primarySchoolChildrenTemp:false,
+      middleschoolPoint:false,
+      middleSchoolChildren:false,
     }
   },
   methods: {
@@ -136,7 +215,7 @@ export default {
             return v
           }
         })
-        console.log(that.allLayerList)
+        console.log('allList',that.allLayerList)
       })
     
     });
@@ -211,8 +290,9 @@ export default {
     })
     this.$bus.$on("primartSchool",temp=>{
       // debugger
+      const that = this;
       that.$nextTick(()=>{
-
+        that.primartSchool = temp
         if (temp) {
           const list = []
           const legend = {
@@ -246,7 +326,7 @@ export default {
     this.$bus.$on("primarySchoolChildrenTemp",temp=>{
       // debugger
       that.$nextTick(()=>{
-        that.qxczLayerTemp = temp;
+        that.primarySchoolChildrenTemp = temp;
         if (temp) {
           const list = []
           const legend = {
@@ -282,13 +362,13 @@ export default {
     this.$bus.$on("middleschoolPoint",temp=>{
       // debugger
       that.$nextTick(()=>{
-        that.qxczLayerTemp = temp;
+        that.middleschoolPoint = temp;
         if (temp) {
           const list = []
           const legend = {
             icon:"初中icon.png",
-            label:"中学",
-            name:"中学",
+            label:"初中",
+            name:"初中",
           }
           list.push(legend)
           if (this.allLayerList.length == 0) {
@@ -305,7 +385,7 @@ export default {
           }
         }else{
           that.allLayerList = that.allLayerList.filter(v=>{
-            if (v.name!=='中学') {
+            if (v.name!=='初中') {
               return v
             }
           })
@@ -316,13 +396,13 @@ export default {
     this.$bus.$on("middleSchoolChildren",temp=>{
       // debugger
       that.$nextTick(()=>{
-        that.qxczLayerTemp = temp;
+        that.middleSchoolChildren = temp;
         if (temp) {
           const list = []
           const legend = {
             icon:"初中适龄户籍儿童icon.png",
-            label:"中学适龄儿童",
-            name:"中学适龄儿童",
+            label:"初中适龄儿童",
+            name:"初中适龄儿童",
           }
           list.push(legend)
           if (this.allLayerList.length == 0) {
@@ -339,7 +419,7 @@ export default {
           }
         }else{
           that.allLayerList = that.allLayerList.filter(v=>{
-            if (!(v.name.indexOf('中学适龄儿童')!=-1)) {
+            if (!(v.name.indexOf('初中适龄儿童')!=-1)) {
               return v
             }
           })

@@ -431,7 +431,7 @@ export default {
     },
     changeTemperatureType(number){
       const res = (number - 32) * 5 / 9
-      return res.toFixed(2)
+      return res.toFixed(1)
     },
     createMinDistanceQXCZ(){
       const that = this;

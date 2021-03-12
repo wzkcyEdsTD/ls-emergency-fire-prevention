@@ -503,15 +503,15 @@ const treeData = [
       },
       {
         id: 94,
-        label: '中学'
+        label: '初中'
       },
       {
         id: 95,
-        label: '中学学区'
+        label: '初中学区'
       },
       {
         id: 96,
-        label: '中学适龄儿童'
+        label: '初中适龄儿童'
       },
     ]
   },

@@ -40,7 +40,7 @@ export default {
   padding-top: 2vh;
   top: 0;
   transition: left 0.9s;
-  overflow-y: scroll;
+  // overflow-y: scroll;
   .top-bar {
     width: 100%;
     height: 40px;

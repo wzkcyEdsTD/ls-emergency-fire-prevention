@@ -509,7 +509,7 @@ export default {
 
         return
       }
-      if(data.label === '中学'){
+      if(data.label === '初中'){
         if (!this.middleschoolPointLayer) {
           var sqlParam = new SuperMap.GetFeaturesBySQLParameters({
             toIndex: -1,
@@ -564,7 +564,7 @@ export default {
 
         return
       }
-      if(data.label === '中学学区'){
+      if(data.label === '初中学区'){
         if (!this.middleSchoolDistrictLayer) {
           const url = "http://10.53.137.59:8090/iserver/services/map-lishui_forestfire_v2/rest/maps/jy_middleschool_district@lishui_forestfire_v2"
           this.middleSchoolDistrictLayer = this.$map.createTileSuperMapRestLayer(url, {
@@ -586,7 +586,7 @@ export default {
 
         return
       }
-      if(data.label === '中学适龄儿童'){
+      if(data.label === '初中适龄儿童'){
         if (!this.middleSchoolChildrenLayer) {
           var sqlParam = new SuperMap.GetFeaturesBySQLParameters({
             toIndex: -1,
@@ -788,7 +788,13 @@ export default {
               ...this.$refs[`tree_${v.id}`][0].getCheckedNodes(true, false)
             )
       })
+      // debugger
       this.$store.dispatch('siderbar/changeCheckedLeafNodes', nodes)
+      this.$bus.$emit('primartSchool',this.primartSchoolTemp);
+      this.$bus.$emit('primarySchoolChildrenTemp',this.primarySchoolChildrenTemp);
+      this.$bus.$emit('middleschoolPoint',this.middleschoolPointTemp);
+      this.$bus.$emit('middleSchoolChildren',this.middleSchoolChildrenTemp);
+
     },
     nodeClick(data, node, obj) {
       console.log('nodeClick', data, node)
@@ -827,5 +833,8 @@ export default {
   }
 }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
+.lqfb-wrapper{
+  overflow-y: auto;
+}
 </style>

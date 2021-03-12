@@ -354,7 +354,11 @@ export default {
       aroundVideo: "",
       aroundDetail: "",
 
-      aroundQiXiangDetail: "",
+      aroundQiXiangDetail: {
+        properties:{
+          ADDRESS:""
+          }
+      },
       tempdata: {
         ZBZY: undefined,
       },

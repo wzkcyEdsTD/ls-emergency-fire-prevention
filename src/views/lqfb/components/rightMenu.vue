@@ -7,13 +7,13 @@
         <div class="title">
           火灾报警点
         </div>
-        <!-- <div class="changeMenuButton">
+        <div class="changeMenuButton" @click="changeMenu">
           <div class="text">
-             截图列表
+             {{textName}}
           </div>
-        </div> -->
+        </div>
       </div>
-      <div v-show="selectMenu==1" >
+      <div v-show="!selectMenu" >
         <div class="titleLine">
           <div class="titleHistory" v-if="unresolveList && unresolveList.length>0">
             {{`未处理(${unresolveList.length})`}}
@@ -147,7 +147,34 @@
           </ul>
         </div>
       </div>
-      <div v-show="selectMenu==2" class="secondMenu">
+      <!-- <div v-show="!selectMenu">
+        <img style="width: 100%;" src="@/common/images/边.png" alt="">
+        <div class="ul-head">
+          <div class="item item-1">地点</div>
+          <div class="item item-1">时间</div>
+          <div class="item item-1">来源</div>
+        </div>
+        <el-collapse v-model="activeNames" @change="handleChange">
+          <el-collapse-item title="" name="1">
+            <div>与现实生活一致：与现实生活的流程、逻辑保持一致，遵循用户习惯的语言和概念；</div>
+            <div>在界面中一致：所有的元素和结构需保持一致，比如：设计样式、图标和文本、元素的位置等。</div>
+          </el-collapse-item>
+          <el-collapse-item title="反馈 Feedback" name="2">
+            <div>控制反馈：通过界面样式和交互动效让用户可以清晰的感知自己的操作；</div>
+            <div>页面反馈：操作后，通过页面元素的变化清晰地展现当前状态。</div>
+          </el-collapse-item>
+          <el-collapse-item title="效率 Efficiency" name="3">
+            <div>简化流程：设计简洁直观的操作流程；</div>
+            <div>清晰明确：语言表达清晰且表意明确，让用户快速理解进而作出决策；</div>
+            <div>帮助用户识别：界面简单直白，让用户快速识别而非回忆，减少用户记忆负担。</div>
+          </el-collapse-item>
+          <el-collapse-item title="可控 Controllability" name="4">
+            <div>用户决策：根据场景可给予用户操作建议或安全提示，但不能代替用户进行决策；</div>
+            <div>结果可控：用户可以自由的进行操作，包括撤销、回退和终止当前操作等。</div>
+          </el-collapse-item>
+        </el-collapse>
+      </div> -->
+      <div v-show="selectMenu" class="secondMenu">
         <div class="titleLine">
           <div class="title" >
             {{`历史回传截图列表`}}
@@ -181,7 +208,7 @@
           
         </ul>
       </div>
-      <div class="changeMenuTool">
+      <!-- <div class="changeMenuTool">
         <img src="@/common/images/左.png" class="leftTool" @click="leftTool">
         <div class="selectMenu">
           <div class="one" @click="leftTool" :style="{'background-color': selectMenu==1 ? '#B5F3B5' : '#0C985B'}">
@@ -192,7 +219,7 @@
           </div>
         </div>
         <img src="@/common/images/右.png" class="rightTool" @click="rightTool">
-      </div>
+      </div> -->
     </div>
     <!-- <video></video> -->
   </div>
@@ -221,7 +248,8 @@ export default {
 
   data() {
     return {
-      selectMenu:1,
+      selectMenu:false,
+      textName:"截图列表",
       imageList:[],
       unSettledList:[],
       hasSearch:false,
@@ -246,9 +274,21 @@ export default {
         "tyswxt":"天眼守望"
       },
       size:1000,
+      layerList:[],
     }
   },
   methods:{
+    changeMenu(){
+      const that = this;
+      that.$nextTick(()=>{
+        that.selectMenu = !that.selectMenu;
+        if (!that.selectMenu) {
+          that.textName = "截图列表"
+        }else{
+          that.textName = "火灾点列表"
+        }
+      })
+    },
     leftTool(){
       const that = this;
       that.$nextTick(()=>{
@@ -355,6 +395,7 @@ export default {
       this.$bus.$emit("showPoup",item);
     },
     searchStreet(point){
+      const that = this;
       let geometryParam = new SuperMap.GetFeaturesByGeometryParameters({
         toIndex: 999999,
         attributeFilter:'',
@@ -388,6 +429,10 @@ export default {
         let testLayer = new VectorLayer({
           source: vectorSource,
         })
+        that.$nextTick(()=>{
+          that.layerList.push(testLayer);
+        })
+
         window.g.map.getLayers().insertAt(4, testLayer)
       })
     },
@@ -688,8 +733,14 @@ export default {
         // debugger
         if (value) {
             this.rydwPannelOffsetRight=0
+
         }else{
             this.rydwPannelOffsetRight=-25
+        }
+        if (that.layerList && that.layerList.length>0) {
+          that.layerList.map(v=>{
+            v.setVisible(value)
+          })
         }
       })
     })
@@ -733,6 +784,7 @@ export default {
         display: flex;
         padding-right: 1vh;
         width: 100%;
+        align-items:center;
         .icon{
           width: 2vh;
           height: 2vh;
@@ -862,20 +914,23 @@ export default {
         }
 
         .changeMenuButton{
-          width: 20vh;
-          height: 4vh;
-          position: relative;
-          right: 0vh;
-          background: url('~@/assets/images/绿框.png');
+          width: 18vh;
+          height: 3vh;
+          // position: relative;
+          // right: 0vh;
+          background: url('~@/assets/images/changeButton.png');
           background-size: 100% 100%;
           // border-radius: 1vh;
-          font-family: youshebiaotihei;
+          font-family: pingfang;
+          cursor: pointer;
           .text{
             position: relative;
             top: 50%;
             left: 50%;
             transform:translate(-50%,-50%);
             text-align: center;
+            color: #000;
+            font-size: 2vh;
           }
         }
 

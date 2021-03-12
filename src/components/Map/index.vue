@@ -119,6 +119,7 @@ export default {
     ToolBar,
     PickFirePoint,
     Yzhxdj,
+    hightStreatList:[],
   },
   data() {
     return {
@@ -184,13 +185,21 @@ export default {
     }
     await this.initMap();
     this.getData();
+
+
+    this.$bus.$on('hzjbd',temp=>{
+      if (that.hightStreatList && that.hightStreatList.length>0) {
+        that.hightStreatList.map(v=>{
+          v.setVisible(temp)
+        })
+      }
+
+    });
+
   },
-  // beforeDestroy() {
-  //   // if (that.timer) {
-  //   //   clearTimeout(that.timer)
-  //   // }
-  //   this.$bus.$off("refreshIcon");
-  // },
+  beforeDestroy() {
+    this.$bus.$off("hzjbd");
+  },
   methods: {
 
     searchGrid(point){
@@ -468,6 +477,7 @@ export default {
     },
 
     searchStreet(point){
+      const that = this;
       var geometryParam = new SuperMap.GetFeaturesByGeometryParameters({
         toIndex: 999999,
         attributeFilter:'',
@@ -513,6 +523,10 @@ export default {
         const testLayer = new VectorLayer({
           source: vectorSource,
         })
+        that.$nextTick(()=>{
+          that.hightStreatList.push(testLayer)
+        })
+
         this.map.getLayers().insertAt(4, testLayer)
 
       })
