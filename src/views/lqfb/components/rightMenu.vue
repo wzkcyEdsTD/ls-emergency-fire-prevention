@@ -39,7 +39,7 @@
                 <div class="item item-1">时间</div>
                 <div class="item item-1">来源</div>
               </div>
-              <ul style="max-height: 30vh;">
+              <ul style="max-height: 40vh;">
                 <li v-for="(item, index) in unresolveList" 
                     :key="index" 
                     class="list-item" 
@@ -66,7 +66,7 @@
                 <div class="item item-1">时间</div>
                 <div class="item item-1">来源</div>
               </div>
-              <ul style="max-height: 30vh;"  v-if="unSettledList.length>0">
+              <ul style="max-height: 40vh;">
                 <li v-for="(item, index) in unSettledList" 
                     :key="index" 
                     class="list-item" 
@@ -92,7 +92,7 @@
                 <div class="item item-1">时间</div>
                 <div class="item item-1">来源</div>
               </div>
-              <ul style="max-height: 30vh;" >
+              <ul style="max-height: 40vh;" >
                 <li v-for="(item, index) in tempList" 
                     :key="index" 
                     class="list-item" 
@@ -1424,7 +1424,7 @@ export default {
     padding-left: 1.5vh;
 }
 /deep/.el-collapse-item__header:focus {
-    background: url('~@/assets/images/矩形1.png');
+    background: url('~@/assets/images/框new.png');
     background-size: 100%;
     color: #fafafa;
   }
