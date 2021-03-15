@@ -83,9 +83,9 @@ export default {
     padding: 10px;
     transition: right 0.9s;
     .title {
-      font-size: 1.8vh;
-      margin-top: 10px;
-      margin-bottom: 10px;
+      font-size: 2.3vh;
+      // margin-top: 10px;
+      // margin-bottom: 10px;
       padding-right: 10px;
       height: 20px;
       display: flex;

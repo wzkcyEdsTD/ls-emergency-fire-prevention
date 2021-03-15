@@ -10,7 +10,7 @@
         </div>
         <img style="width: 100%;" src="@/common/images/边.png" alt="">
         <div 
-        style="height:25vh"
+        style="height:23vh"
         class="result-wrapper">
           <ul class="result-list" id="table">
             <li class="result-data">
@@ -123,9 +123,9 @@
           </ul>
         </div>
       </div>
-      <div>
+      <div style="padding-top:0.5vh">
         <div class="titleLine">
-          <div class="titleHistory">
+          <div class="titleHistory" >
             责任人
           </div>
         </div>
@@ -226,7 +226,6 @@
             </li> -->
           </ul>
         </div>
-
       </div>
       <el-collapse v-model="activeNames"   v-show="!hasID">
         <el-collapse-item title="周边资源搜索成果" name="1">
@@ -473,31 +472,32 @@ export default {
       });
     },
     qiXiangData(val) {
-      // console.log("气象测站",val)
-      // const that = this;
-      // let data = this.$store.getters.featuresData;
-      // let list = []
-      // val.forEach(item => {
-      //   const json = {
-      //     name:item.values_.ADDRESS,
-      //     feature:item,
-      //   }
-      //   list.push(json)
-      // })
-      // this.$nextTick(()=>{
-      //   data.ZBZY.qiXiang.arr = list
-      //   if (val && val.length>0) {
-      //     that.aroundQiXiangDetail = ""
-      //     val.forEach(element => {
-      //       that.aroundQiXiangDetail += element.values_.ADDRESS
-      //       that.aroundQiXiangDetail += "   "
-      //     });
-      //     // debugger
-      //   }else{
-      //     that.aroundQiXiangDetail = "周边无气象站点"
-      //   }
-      //   that.tempdata = data
-      // })
+      console.log("气象测站",val)
+      const that = this;
+      let data = this.$store.getters.featuresData;
+      let list = []
+      val.forEach(item => {
+        const json = {
+          name:item.values_.ADDRESS,
+          feature:item,
+        }
+        list.push(json)
+      })
+      this.$nextTick(()=>{
+        data.ZBZY.qiXiang.arr = list
+        
+        // if (val && val.length>0) {
+        //   that.aroundQiXiangDetail = ""
+        //   val.forEach(element => {
+        //     that.aroundQiXiangDetail += element.values_.ADDRESS
+        //     that.aroundQiXiangDetail += "   "
+        //   });
+        // }else{
+        //   that.aroundQiXiangDetail = "周边无气象站点"
+        // }
+        that.tempdata = data
+        // debugger
+      })
     },
     ssxyPersonList(val) {
       this.ssxyPersonLayer && this.$map.removeLayer(this.ssxyPersonLayer);
@@ -981,7 +981,7 @@ export default {
         line-height: 22px;
         position: relative;
 
-        height: 2rem;
+        // height: 1.5rem;
         font-family: youshebiaotihei;
         font-size: 2.3vh;
       }
@@ -1063,7 +1063,7 @@ export default {
           padding: 0.1vh 0 0.1vh 0vh;
           line-height: 3.8vh;
           font-size: 1.4vh;
-          height: 3.5vh;
+          height: 3.2vh;
           font-family: "PingFang SC";
           color: #ffffff;
 
@@ -1129,14 +1129,14 @@ export default {
           display: flex;
           justify-content: space-between;
           align-items: center;
-          padding: 0.1vh 0 0.1vh 0vh;
+          // padding: 0.1vh 0 0.1vh 0vh;
           line-height: 3vh;
           font-size: 1.4vh;
           min-height: 4vh;
           height: auto;
           font-family: "PingFang SC";
           color: #ffffff;
-          margin-bottom: 1.3vh;
+          margin-bottom: 0.5vh;
 
           .iconAndName {
             flex: 1;
@@ -1280,9 +1280,9 @@ export default {
           justify-content: space-between;
           align-items: center;
           padding: 0.1vh 0 0.1vh 0vh;
-          line-height: 2.5vh;
+          line-height: 2vh;
           font-size: 1.4vh;
-          min-height: 4vh;
+          min-height: 3.2vh;
           height: auto;
           font-family: "PingFang SC";
           color: #ffffff;
@@ -1598,7 +1598,7 @@ export default {
           }
         }
         ul {
-          height: 30vh;
+          max-height: 30vh;
           overflow-y: auto;
           li {
             overflow: hidden;
@@ -1606,6 +1606,21 @@ export default {
             white-space: nowrap;
             height: 4vh;
           }
+        }
+
+        ul::-webkit-scrollbar {
+            width: 4px;
+            height: 4px;
+        }
+        ul::-webkit-scrollbar-thumb {
+            border-radius: 10px;
+            background:#118251;
+            width: 8px;
+            height: 30px;
+        }
+        ul::-webkit-scrollbar-track {
+            border-radius: 0;
+            background:#103E29;
         }
       }
     }

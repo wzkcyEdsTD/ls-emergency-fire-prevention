@@ -61,8 +61,10 @@ export default {
       //   this.$store.dispatch("lqfb/changezhfxOffsetRight", -30);
     },
     handleVideoClick(v){
-        this.$map.getMap().getView().setCenter([v.properties.X,v.properties.Y]);
-        this.$map.getMap().getView().setZoom(16);
+        // this.$map.getMap().getView().setCenter([v.properties.X,v.properties.Y]);
+        // this.$map.getMap().getView().setZoom(16);
+        this.$bus.$emit("videoData",v.properties);
+        // debugger
     }
   },
   mounted() {

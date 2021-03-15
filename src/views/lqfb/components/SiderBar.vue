@@ -288,6 +288,7 @@ export default {
             that.$bus.$emit("sendVideoListData",videoPointList);
         })
           this.videoTemp = true;
+          that.$bus.$emit("showVideoList",true);
           // this.$store.dispatch('lqfb/changeVideoListOffsetRight', 0)
         }else{
           if (this.videoTemp) {
@@ -695,7 +696,7 @@ export default {
                   anchor: [0.5, 26],
                   anchorXUnits: 'fraction',
                   anchorYUnits: 'pixels',
-                  scale: 0.8,
+                  scale: 1,
                   src: require(`@/assets/images/icon/${'办事网点.png'}`)
                 }),
                 // stroke: new Stroke({ color: 'red', width: 2 })
@@ -719,11 +720,14 @@ export default {
         })
           this.networkTemp = true;
           // this.$store.dispatch('lqfb/changeVideoListOffsetRight', 0)
+          that.$bus.$emit('bswd',true)
         }else{
           if (this.networkTemp) {
             this.networkTemp = false
+            that.$bus.$emit('bswd',false)
           }else if (!this.networkTemp) {
             this.networkTemp = true
+            that.$bus.$emit('bswd',true)
           }
           this.networkLayer.setVisible(this.networkTemp);
         }
@@ -836,5 +840,6 @@ export default {
 <style lang="scss" scoped>
 .lqfb-wrapper{
   overflow-y: auto;
+  height: 100%;
 }
 </style>

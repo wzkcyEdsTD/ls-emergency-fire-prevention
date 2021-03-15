@@ -13,167 +13,105 @@
           </div>
         </div>
       </div>
-      <div v-show="!selectMenu" >
+
+      <div v-show="!selectMenu">
+        <img style="width: 100%;" src="@/common/images/边.png" alt="">
         <div class="titleLine">
-          <div class="titleHistory" v-if="unresolveList && unresolveList.length>0">
-            {{`未处理(${unresolveList.length})`}}
-          </div>
-          <div class="titleHistory" v-else>
-            {{`未处理(0)`}}
-          </div>
           <div class="search-header">
             <img src="@/common/images/搜索icon.png" class="searchIcon">
             <el-input
-              v-model="searchTextUnresolve"
+              v-model="searchTextAll"
               class="searchFilterInput"
               placeholder="查找火灾点"
               size="small"
-              @keyup.enter.native="searchFilterUnresolve"
+              @keyup.enter.native="searchFilterAll"
             />
-            <img src="@/common/images/关闭icon.png" class="clearIcon" @click="searchClearUnresolve">
+            <img src="@/common/images/关闭icon.png" class="clearIcon" @click="searchClearAll">
           </div>
           <div id="refreshIcon" class="refreshIcon" @click="refreshEvent"/>
         </div>
-        <img style="width: 100%;" src="@/common/images/边.png" alt="">
-        <div class="ul-head">
-          <div class="item item-1">地点</div>
-          <!-- <div class="item item-1">举报人</div> -->
-          <div class="item item-1">时间</div>
-          <div class="item item-1">来源</div>
-        </div>
-        <ul style="height:30vh" >
-          <li v-for="(item, index) in unresolveList" 
-              :key="index" 
-              class="list-item" 
-              :class="{active : fireUnresolve == index}"
-              @click="fireUnresolve = index;clickFire(item)">
-            <div @mouseenter="titeEnter" class="item item-1">{{ item.address }}</div>
-            <!-- <div class="item item-1">{{ item.jubaoren }}</div> -->
-            <div class="item item-1">{{ item.time }}</div>
-            <div class="item item-1">{{ systemName[`${item.systemcode}`] }}</div>
-          </li>
-          <div class="allmore" v-show="hasMore && !hasSearch" @click="viewMore">
-            <div class="moreText">查看更多</div>
-            <div class="more" />
-          </div>
-          
-        </ul>
-        <div>
-          <div class="titleLine">
-            <div class="title" v-if="unSettledList.length>0">
-              {{`已处理未办结(${unSettledList.length})`}}
+        <el-collapse v-model="activeNames" accordion>
+          <el-collapse-item :title='wcl' name="1">
+            <div>
+              <div class="ul-head">
+                <div class="item item-1">地点</div>
+                <!-- <div class="item item-1">举报人</div> -->
+                <div class="item item-1">时间</div>
+                <div class="item item-1">来源</div>
+              </div>
+              <ul style="max-height: 30vh;">
+                <li v-for="(item, index) in unresolveList" 
+                    :key="index" 
+                    class="list-item" 
+                    :class="{active : fireUnresolve == index}"
+                    @click="fireUnresolve = index;clickFire(item)">
+                  <div @mouseenter="titeEnter" class="item item-1">{{ item.address }}</div>
+                  <!-- <div class="item item-1">{{ item.jubaoren }}</div> -->
+                  <div class="item item-1">{{ item.time }}</div>
+                  <div class="item item-1">{{ systemName[`${item.systemcode}`] }}</div>
+                </li>
+                <div class="allmore" v-show="hasMore && !hasSearch" @click="viewMore">
+                  <div class="moreText">查看更多</div>
+                  <div class="more" />
+                </div>
+                
+              </ul>
             </div>
-            <div class="title" v-else>
-              {{`已处理未办结(0)`}}
-            </div>
-            <div class="search-header">
-              <img src="@/common/images/搜索icon.png" class="searchIcon">
-              <el-input
-                v-model="searchTextUnSettled"
-                class="searchFilterInput"
-                placeholder="查找火灾点"
-                size="small"
-                @keyup.enter.native="searchFilterUnSettled"
-              />
-              <img src="@/common/images/关闭icon.png" class="clearIcon" @click="searchClearUnSettled">
-            </div>
-          </div>
-          <img style="width: 100%;" src="@/common/images/边.png" alt="">
-          <div class="ul-head">
-            <div class="item item-1">地点</div>
-            <!-- <div class="item item-1">举报人</div> -->
-            <div class="item item-1">时间</div>
-            <div class="item item-1">来源</div>
-          </div>
-          <ul  style="height:30vh" v-if="unSettledList.length>0">
-            <li v-for="(item, index) in unSettledList" 
-                :key="index" 
-                class="list-item" 
-                :class="{active : fire == index}"
-                @click="fire = index;clickFire(item)">
-              <div @mouseenter="titeEnter" class="item item-1">{{ item.address }}</div>
-              <!-- <div class="item item-1">{{ item.jubaoren }}</div> -->
-              <div class="item item-1">{{ item.time }}</div>
-              <div class="item item-1">{{ systemName[`${item.systemcode}`] }}</div>
-            </li>
-            <div class="allmore" v-show="hasMoreUnSettled && !hasSearchUnSettled" @click="viewMoreUnSettled">
-              <div class="moreText">查看更多</div>
-              <div class="more" />
-            </div>
-          </ul>
-        </div>
-        <div>
-          <div class="titleLine">
-            <div class="title" v-if="tempList && tempList.length>0">
-              {{`历史数据(${tempList.length})`}}
-            </div>
-            <div class="title" v-else>
-              {{`历史数据(0)`}}
-            </div>
-            <div class="search-header">
-              <img src="@/common/images/搜索icon.png" class="searchIcon">
-              <el-input
-                v-model="searchText"
-                class="searchFilterInput"
-                placeholder="查找火灾点"
-                size="small"
-                @keyup.enter.native="searchFilter"
-              />
-              <img src="@/common/images/关闭icon.png" class="clearIcon" @click="searchClear">
-            </div>
-          </div>
-          <img style="width: 100%;" src="@/common/images/边.png" alt="">
-          <div class="ul-head">
-            <div class="item item-1">地点</div>
-            <!-- <div class="item item-1">举报人</div> -->
-            <div class="item item-1">时间</div>
-            <div class="item item-1">来源</div>
-          </div>
-          <ul  >
-            <li v-for="(item, index) in tempList" 
-                :key="index" 
-                class="list-item" 
-                :class="{active : fire == index}"
-                @click="fire = index;clickFire(item)">
-              <div @mouseenter="titeEnter" class="item item-1">{{ item.address }}</div>
-              <!-- <div class="item item-1">{{ item.jubaoren }}</div> -->
-              <div class="item item-1">{{ item.time }}</div>
-              <div class="item item-1">{{ systemName[`${item.systemcode}`] }}</div>
-            </li>
-            <div class="allmore" v-show="hasMoreHistory && !hasSearchHistory" @click="viewMoreHistory">
-              <div class="moreText">查看更多</div>
-              <div class="more" />
-            </div>
-          </ul>
-        </div>
-      </div>
-      <!-- <div v-show="!selectMenu">
-        <img style="width: 100%;" src="@/common/images/边.png" alt="">
-        <div class="ul-head">
-          <div class="item item-1">地点</div>
-          <div class="item item-1">时间</div>
-          <div class="item item-1">来源</div>
-        </div>
-        <el-collapse v-model="activeNames" @change="handleChange">
-          <el-collapse-item title="" name="1">
-            <div>与现实生活一致：与现实生活的流程、逻辑保持一致，遵循用户习惯的语言和概念；</div>
-            <div>在界面中一致：所有的元素和结构需保持一致，比如：设计样式、图标和文本、元素的位置等。</div>
           </el-collapse-item>
-          <el-collapse-item title="反馈 Feedback" name="2">
-            <div>控制反馈：通过界面样式和交互动效让用户可以清晰的感知自己的操作；</div>
-            <div>页面反馈：操作后，通过页面元素的变化清晰地展现当前状态。</div>
+          <el-collapse-item :title="yclwbj" name="2">
+            <div>
+              <div class="ul-head">
+                <div class="item item-1">地点</div>
+                <!-- <div class="item item-1">举报人</div> -->
+                <div class="item item-1">时间</div>
+                <div class="item item-1">来源</div>
+              </div>
+              <ul style="max-height: 30vh;"  v-if="unSettledList.length>0">
+                <li v-for="(item, index) in unSettledList" 
+                    :key="index" 
+                    class="list-item" 
+                    :class="{active : fire == index}"
+                    @click="fire = index;clickFire(item)">
+                  <div @mouseenter="titeEnter" class="item item-1">{{ item.address }}</div>
+                  <!-- <div class="item item-1">{{ item.jubaoren }}</div> -->
+                  <div class="item item-1">{{ item.time }}</div>
+                  <div class="item item-1">{{ systemName[`${item.systemcode}`] }}</div>
+                </li>
+                <div class="allmore" v-show="hasMoreUnSettled && !hasSearchUnSettled" @click="viewMoreUnSettled">
+                  <div class="moreText">查看更多</div>
+                  <div class="more" />
+                </div>
+              </ul>
+            </div>
           </el-collapse-item>
-          <el-collapse-item title="效率 Efficiency" name="3">
-            <div>简化流程：设计简洁直观的操作流程；</div>
-            <div>清晰明确：语言表达清晰且表意明确，让用户快速理解进而作出决策；</div>
-            <div>帮助用户识别：界面简单直白，让用户快速识别而非回忆，减少用户记忆负担。</div>
-          </el-collapse-item>
-          <el-collapse-item title="可控 Controllability" name="4">
-            <div>用户决策：根据场景可给予用户操作建议或安全提示，但不能代替用户进行决策；</div>
-            <div>结果可控：用户可以自由的进行操作，包括撤销、回退和终止当前操作等。</div>
+          <el-collapse-item :title="ybj" name="3">
+            <div>
+              <div class="ul-head">
+                <div class="item item-1">地点</div>
+                <!-- <div class="item item-1">举报人</div> -->
+                <div class="item item-1">时间</div>
+                <div class="item item-1">来源</div>
+              </div>
+              <ul style="max-height: 30vh;" >
+                <li v-for="(item, index) in tempList" 
+                    :key="index" 
+                    class="list-item" 
+                    :class="{active : fire == index}"
+                    @click="fire = index;clickFire(item)">
+                  <div @mouseenter="titeEnter" class="item item-1">{{ item.address }}</div>
+                  <!-- <div class="item item-1">{{ item.jubaoren }}</div> -->
+                  <div class="item item-1">{{ item.time }}</div>
+                  <div class="item item-1">{{ systemName[`${item.systemcode}`] }}</div>
+                </li>
+                <div class="allmore" v-show="hasMoreHistory && !hasSearchHistory" @click="viewMoreHistory">
+                  <div class="moreText">查看更多</div>
+                  <div class="more" />
+                </div>
+              </ul>
+            </div>
           </el-collapse-item>
         </el-collapse>
-      </div> -->
+      </div>
       <div v-show="selectMenu" class="secondMenu">
         <div class="titleLine">
           <div class="title" >
@@ -187,7 +125,7 @@
           <div class="item item-1">时间</div>
           <div class="item item-2">截图</div>
         </div>
-        <ul style="height:71.5vh" v-if="imageList.length>0">
+        <ul :style="{height:'71.5vh'}" v-if="imageList.length>0">
           <li v-for="(item, index) in imageList" 
               :key="index" 
               class="list-item" >
@@ -221,7 +159,6 @@
         <img src="@/common/images/右.png" class="rightTool" @click="rightTool">
       </div> -->
     </div>
-    <!-- <video></video> -->
   </div>
 </template>
 <script>
@@ -248,6 +185,10 @@ export default {
 
   data() {
     return {
+      wcl:"",
+      yclwbj:"",
+      ybj:"",
+      activeNames:'1',
       selectMenu:false,
       textName:"截图列表",
       imageList:[],
@@ -263,6 +204,7 @@ export default {
       fire:null,
       fireUnresolve:null,
       searchText:"",
+      searchTextAll:"",
       searchTextUnresolve:"",
       searchTextUnSettled:"",
       list:null,
@@ -275,6 +217,7 @@ export default {
       },
       size:1000,
       layerList:[],
+      allFireList:[]
     }
   },
   methods:{
@@ -457,6 +400,28 @@ export default {
         }
       })
     },
+    searchFilterAll(){
+      const that = this;
+      that.searchText = that.searchTextAll;
+      that.searchTextUnresolve = that.searchTextAll;
+      that.searchTextUnSettled = that.searchTextAll;
+      that.searchFilter();
+      that.searchFilterUnresolve();
+      that.searchFilterUnSettled();
+      that.$nextTick(()=>{
+        //未处理
+        if (that.unresolveList.length>0) {
+          that.activeNames='1'  
+        }else if (that.unSettledList.length>0) {
+          //已办结未处理
+          that.activeNames='2'  
+        }else if (that.tempList.length>0) {
+          //已办结
+          that.activeNames='3'  
+        }
+      })
+
+    },
     searchFilter(){
       const that = this
       if (that.searchText) {
@@ -500,6 +465,7 @@ export default {
       }
       
     },
+
     searchFilterUnresolve(){
       const that = this
       if (that.searchTextUnresolve) {
@@ -534,17 +500,17 @@ export default {
         })
       }else{
         that.hasSearch = false;
-        let tempList = that.fireList.result.records.sort(that.sortUpDate)
+        let tempList12 = that.fireList.result.records.sort(that.sortUpDate)
 
-        tempList.filter((v) =>{
+        tempList12 = tempList12.filter((v) =>{
           if (v.status && v.status.indexOf(`未处理`) != -1) {
             return v
           }
         })
         if (that.hasMore) {
-          tempList = tempList.slice(0,10);
+          tempList12 = tempList12.slice(0,10);
         }
-        that.unresolveList = tempList;
+        that.unresolveList = tempList12;
 
       }
       
@@ -583,29 +549,46 @@ export default {
         })
       }else{
         that.hasSearchUnSettled = false;
-        let tempList = that.fireList.result.records.sort(that.sortUpDate)
+        let tempList333 = that.fireList.result.records.sort(that.sortUpDate)
 
-        tempList.filter((v) =>{
+        tempList333 = tempList333.filter((v) =>{
           if (v.status && v.status.indexOf(`已处理未办结`) != -1) {
             return v
           }
         })
+        console.log("tempList333",tempList333.length);
         if (that.hasMoreUnSettled) {
-          tempList = tempList.slice(0,10);
+          tempList333 = tempList333.slice(0,10);
         }
-        that.unSettledList = tempList;
+        that.unSettledList = tempList333;
 
       }
       
     },
+    searchClearAll(){
+      const that = this;
+      that.searchTextAll = '';
+      that.searchText = that.searchTextAll;
+      that.searchTextUnresolve = that.searchTextAll;
+      that.searchTextUnSettled = that.searchTextAll;
+      that.searchFilter();
+      that.searchFilterUnresolve();
+      that.searchFilterUnSettled();
+      // that.searchClear();
+      // that.searchClearUnresolve();
+      // that.searchClearUnSettled();
+      that.$nextTick(()=>{
+        that.activeNames='1'  
+      })
+    },
     searchClear(){
       // debugger
       const that = this
-      let templist = this.fireList.result.records.sort(that.sortUpDate);
+      var templist4 = this.fireList.result.records.sort(that.sortUpDate);
       if (that.hasMoreHistory) {
-          templist = templist.slice(0,10);
+          templist4 = templist4.slice(0,10);
       }
-      this.tempList = templist.filter(v=>{
+      this.tempList = templist4.filter(v=>{
         if (v.status && v.status.indexOf('已办结')!=-1) {
           return v
         }
@@ -616,34 +599,34 @@ export default {
     searchClearUnresolve(){
       // debugger
       const that = this
-      let tempList = this.fireList.result.records.sort(that.sortUpDate);
+      var tempList5 = this.fireList.result.records.sort(that.sortUpDate);
 
-      tempList.filter((v) =>{
+      tempList5 = tempList5.filter((v) =>{
         if (v.status && v.status.indexOf(`未处理`) == -1) {
           return v
         }
       })
       if (that.hasMore) {
-        tempList = tempList.slice(0,10);
+        tempList5 = tempList5.slice(0,10);
       }
-      that.unresolveList = tempList;
+      that.unresolveList = tempList5;
       this.searchTextUnresolve = "";
       that.hasSearch = false;
     },
     searchClearUnSettled(){
       // debugger
       const that = this
-      let tempList = this.fireList.result.records.sort(that.sortUpDate);
+      var tempList6 = this.fireList.result.records.sort(that.sortUpDate);
 
-      tempList.filter((v) =>{
+      tempList6 = tempList6.filter((v) =>{
         if (v.status && v.status.indexOf(`已处理未办结`) == -1) {
           return v
         }
       })
       if (that.hasMoreUnSettled) {
-        tempList = tempList.slice(0,10);
+        tempList6 = tempList6.slice(0,10);
       }
-      that.unSettledList = tempList;
+      that.unSettledList = tempList6;
       this.searchTextUnSettled = "";
       that.hasSearchUnSettled = false;
     },
@@ -697,6 +680,12 @@ export default {
             return v
           }
         })
+        that.allFireList = templist1;
+
+        that.wcl = `未处理（${that.unresolveList.length}）`
+        that.yclwbj = `已处理未办结（${that.unSettledList.length}）`
+        that.ybj = `已办结（${that.tempList.length}）`
+
        that.unresolveList.forEach(element => {
           if (element.systemcode.indexOf('ilishui')!=-1) {
             // debugger
@@ -752,7 +741,7 @@ export default {
 
 }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .right-wrapper {
   position: absolute;
   z-index: 1001;
@@ -778,7 +767,7 @@ export default {
 
   .lb-wrapper {
       width: 100%;
-      height: 49%;
+      // height: 49%;
       // padding-bottom: 2vh;
       .titleLine{
         display: flex;
@@ -789,7 +778,7 @@ export default {
           width: 2vh;
           height: 2vh;
           margin-right: 1vh;
-          margin-top: 1vh;
+          // margin-top: 1vh;
         }
         .refreshIcon{
           // display        : flex;
@@ -1016,6 +1005,7 @@ export default {
       list-style: none;
       padding-left: 0;
       // height: 340px;
+
       overflow-x: hidden; overflow-y: auto;
       li {
           display: flex;
@@ -1065,21 +1055,24 @@ export default {
         cursor: pointer;
         display:flex;
         justify-content:center;
-        // flex-flow: column;
+        align-items: center;
         padding-left: 1vh;
         .more{
           background: url('~@/common/images/14和12.png');
           background-size: 100% 100%;
           width: 1.5vh;
-          height: 1.3vh;
+          height: 1.5vh;
           position: relative;
-          top: 0.1vh;
+          top: 0vh;
           left: 0.5vh;
+          
         }
         .moreText{
           font-size: 16px;
         }
       }
+
+
 
   }
 
@@ -1092,7 +1085,7 @@ export default {
         width: 2vh;
         height: 2vh;
         margin-right: 1vh;
-        margin-top: 1vh;
+        // margin-top: 1vh;
       }
       .refreshIcon{
         // display        : flex;
@@ -1244,7 +1237,6 @@ export default {
       ul {
       list-style: none;
       padding-left: 0;
-      // height: 340px;
       overflow-x: hidden; overflow-y: auto;
       li {
           display: flex;
@@ -1382,9 +1374,10 @@ export default {
   margin-top     : 1vh;
   background-image: url('~@/common/images/底.png');
   background-size: 100% 100%;
-
+  width: 90%;
+  
   .searchFilterInput {
-    width: 15vh;
+    width: 28vh;
   }
   .searchIcon{
     width: 1.5vh;
@@ -1408,6 +1401,33 @@ export default {
   color: #fff;
 }
 
+/deep/.el-collapse{
+  width: 100%;
+  margin-top: 1vh;
+  
+}
+/deep/.el-collapse-item__content{
+  color: #fff;
+}
+/deep/.el-collapse-item__wrap{
+  background-color: transparent;
+}
+
+/deep/.el-collapse .el-collapse-item__header {
+    background-color: #101518;
+    color: #FAFAFA;
+    border: none;
+    height: 4vh;
+    font-size: 2vh;
+    line-height: 4vh;
+    font-family: youshebiaotihei;
+    padding-left: 1.5vh;
+}
+/deep/.el-collapse-item__header:focus {
+    background: url('~@/assets/images/矩形1.png');
+    background-size: 100%;
+    color: #fafafa;
+  }
 </style>
 <style>
 .el-input__inner {
@@ -1440,4 +1460,8 @@ export default {
 .el-picker-panel, .el-time-panel{
   background: linear-gradient(to bottom, #103224, #103224);
 }
+
+
+
+
 </style>

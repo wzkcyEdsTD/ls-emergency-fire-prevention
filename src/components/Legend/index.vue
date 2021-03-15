@@ -82,30 +82,45 @@ export default {
         icon:"初中适龄户籍儿童icon.png",
         label:"初中适龄儿童",
         name:"初中适龄儿童",
-      }    
+      } 
+      //监控
+      const legend7 = {
+        icon:"监控.png",
+        label:"监控",
+        name:"监控",
+      }
+      //办事网点
+      const legend8 = {
+        icon:"办事网点.png",
+        label:"办事网点",
+        name:"办事网点",
+      }
+      const list = []
       if (that.fireLayerTemp) {
-
-        const list = []
         list.push(legend)
         list.push(legend1)
-
-        if (that.hasQxcz || that.qxczLayerTemp) {
-          list.push(legend2)
-        }
-        if (that.primartSchool) {
-          list.push(legend3)
-        }
-        if (that.primarySchoolChildrenTemp) {
-          list.push(legend4)
-        }
-        if (that.middleschoolPoint) {
-          list.push(legend5)
-        }
-        if (that.middleSchoolChildren) {
-          list.push(legend6)
-        }
-
-
+      }
+      if (that.hasQxcz || that.qxczLayerTemp) {
+        list.push(legend2)
+      }
+      if (that.primartSchool) {
+        list.push(legend3)
+      }
+      if (that.primarySchoolChildrenTemp) {
+        list.push(legend4)
+      }
+      if (that.middleschoolPoint) {
+        list.push(legend5)
+      }
+      if (that.middleSchoolChildren) {
+        list.push(legend6)
+      }
+      if (that.showVideoList) {
+        list.push(legend7)
+      }
+      if (that.bswd) {
+        list.push(legend8)
+      }
         //过滤重复item
         if (this.allLayerList.length == 0) {
           this.allLayerList = [...this.allLayerList, ...list]
@@ -119,61 +134,7 @@ export default {
           const setNameArr = [...new Set(arr.map(v => v.name))];
           this.allLayerList = setNameArr.map(v => obj[v])
         }
-        // if (that.hasQxcz) {
-        //   list.push(legend2)
-        //   if (this.allLayerList.length == 0) {
-        //     this.allLayerList = [...this.allLayerList, ...list]
-        //   } else {
-        //     const obj = {};
-        //     const arr = [...this.allLayerList, ...list];
-        //     arr.map(v => {
-        //       if (!obj[v.name]) { obj[v.name] = v }
-        //     })
-
-        //     const setNameArr = [...new Set(arr.map(v => v.name))];
-        //     this.allLayerList = setNameArr.map(v => obj[v])
-        //   }
-        // }else{
-        //   that.allLayerList = that.allLayerList.filter(v=>{
-        //     if (!(v.name.indexOf('气象测站')!=-1)) {
-        //       return v
-        //     }
-        //   })
-        // }
-      }else{
-        const list = []
-        if (that.hasQxcz || that.qxczLayerTemp) {
-          list.push(legend2)
-        }
-        if (that.primartSchool) {
-          list.push(legend3)
-        }
-        if (that.primarySchoolChildrenTemp) {
-          list.push(legend4)
-        }
-        if (that.middleschoolPoint) {
-          list.push(legend5)
-        }
-        if (that.middleSchoolChildren) {
-          list.push(legend6)
-        }
-        if (list.length>0) {
-          if (this.allLayerList.length == 0) {
-            this.allLayerList = [...this.allLayerList, ...list]
-          } else {
-            const obj = {};
-            const arr = [...this.allLayerList, ...list];
-            arr.map(v => {
-              if (!obj[v.name]) { obj[v.name] = v }
-            })
-
-            const setNameArr = [...new Set(arr.map(v => v.name))];
-            this.allLayerList = setNameArr.map(v => obj[v])
-          }
-        }
-
-
-      }
+      
       console.log('list',this.allLayerList)
     }
   },
@@ -187,6 +148,8 @@ export default {
       primarySchoolChildrenTemp:false,
       middleschoolPoint:false,
       middleSchoolChildren:false,
+      showVideoList:false,
+      bwsd:false,
     }
   },
   methods: {
@@ -427,6 +390,72 @@ export default {
       })
     
     })
+    this.$bus.$on('showVideoList',temp=>{
+      // debugger
+      that.$nextTick(()=>{
+        that.showVideoList = temp;
+        if (temp) {
+          const list = []
+          const legend = {
+            icon:"监控.png",
+            label:"监控",
+            name:"监控",
+          }
+          list.push(legend)
+          if (this.allLayerList.length == 0) {
+            this.allLayerList = [...this.allLayerList, ...list]
+          } else {
+            const obj = {};
+            const arr = [...this.allLayerList, ...list];
+            arr.map(v => {
+              if (!obj[v.name]) { obj[v.name] = v }
+            })
+
+            const setNameArr = [...new Set(arr.map(v => v.name))];
+            this.allLayerList = setNameArr.map(v => obj[v])
+          }
+        }else{
+          that.allLayerList = that.allLayerList.filter(v=>{
+            if (!(v.name.indexOf('监控')!=-1)) {
+              return v
+            }
+          })
+        }
+      })
+    })
+    this.$bus.$on('bswd',temp=>{
+      // debugger
+      that.$nextTick(()=>{
+        that.bswd = temp;
+        if (temp) {
+          const list = []
+          const legend = {
+            icon:"办事网点.png",
+            label:"办事网点",
+            name:"办事网点",
+          }
+          list.push(legend)
+          if (this.allLayerList.length == 0) {
+            this.allLayerList = [...this.allLayerList, ...list]
+          } else {
+            const obj = {};
+            const arr = [...this.allLayerList, ...list];
+            arr.map(v => {
+              if (!obj[v.name]) { obj[v.name] = v }
+            })
+
+            const setNameArr = [...new Set(arr.map(v => v.name))];
+            this.allLayerList = setNameArr.map(v => obj[v])
+          }
+        }else{
+          that.allLayerList = that.allLayerList.filter(v=>{
+            if (!(v.name.indexOf('办事网点')!=-1)) {
+              return v
+            }
+          })
+        }
+      })
+    })
   },
   beforeDestroy(){
     this.$bus.$off('hzjbd');
@@ -447,7 +476,9 @@ export default {
   bottom: 20px;
   padding: 10px;
   right: 420px;
-  background-color: rgba($color: $color-theme, $alpha: 0.8);
+  // background-color: rgba($color: $color-theme, $alpha: 0.8);
+  background-image: url("~@/common/images/详情框.png");
+  background-size: 100% 100%;
   transition: right 0.9s;
   .title {
     text-align: center;

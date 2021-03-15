@@ -47,7 +47,7 @@ function  measure(map, measureType) {
           color: 'rgba(255, 255, 255, 0.2)'
         }),
         stroke: new Stroke({
-          color: 'red',
+          color: 'rgba(255,255,0,0.5)',
           width: 2
         }),
         image: new CircleStyle({
@@ -200,7 +200,7 @@ function  measure(map, measureType) {
             color: 'rgba(255, 255, 255, 0.2)'
           }),
           stroke: new Stroke({
-            color: 'rgba(0, 0, 0, 0.5)',
+            color: 'rgba(255, 255, 0, 0.5)',
             lineDash: [10, 10],
             width: 2
           }),

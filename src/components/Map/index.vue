@@ -8,14 +8,15 @@
         <div class="popup-title">详情</div>
         <i id="popup-info-closer" class="el-icon-close" />
       </div>
+      <img src="@/common/images/边.png" class="line-img">
       <div id="popup-info-content" class="popup-content">
         <div class="pop-item">
           <div id="key-name" class="pop-key" />
           <div id="key-value" class="pop-value" />
         </div>
         <div v-show="isShowDetail" id="pop-info-deatil" class="pop-item">
-          <a href="javascript:;" class="pop-info-detail" @click="collapse"
-            >信息详情 >></a
+          <div class="button" @click="collapse"
+            >信息详情 >></div
           >
 
           <!-- <a href="javascript:;" v-show="detailShow" class="pop-info-detail" :style="{'padding-left':'4vh'}" @click="zbfx">周边分析 >></a> -->
@@ -571,22 +572,26 @@ export default {
 }
 
 .ol-popup {
-  width: 280px;
+  width: 260px;
   /* height: 150px; */
-  background-color: rgba(1, 51, 78, 0.8);
+  // background-color: rgba(1, 51, 78, 0.8);
+  background-image: url("~@/common/images/详情框.png");
+  background-size: 100% 100%;
   position: absolute;
   left: -140px;
   bottom: 33px;
   .popup-header {
     width: 100%;
-    height: 41px;
-    background: rgba(0, 0, 0, 0.25);
+    height: 31px;
+    // background: rgba(0, 0, 0, 0.25);
     display: flex;
     justify-content: space-between;
     align-items: center;
     .popup-title {
-      color: rgba(41, 181, 232, 1);
-      font-size: 20px;
+      // color: rgba(41, 181, 232, 1);
+      font-family: youshebiaotihei;
+      color: #fff;
+      font-size: 18px;
       margin-left: 10px;
       position: relative;
     }
@@ -597,16 +602,39 @@ export default {
       cursor: pointer;
     }
   }
+  .line-img{
+    width: 100%;
+    position: relative;
+    padding-left: 1vh;
+    top:-0.5vh
+  }
   .popup-content {
-    padding: 5px 20px 6px 20px;
+    padding: 0 20px 6px 20px;
     .pop-item {
-      margin-top: 18px;
+      margin-top: 10px;
       margin-bottom: 18px;
       font-size: 16px;
       .pop-key,
       .pop-value {
         display: inline-block;
       }
+
+
+    }
+    .button{
+      width: 100px;
+      height: 30px;
+      line-height: 30px;
+      // position: relative;
+      text-align: center;
+      background-image: url("~@/common/images/按钮.png");
+      background-size: 100% 100%;
+      color: #0C110B;
+      font-family: PingFang SC;
+      font-size: 15px;
+      cursor: pointer;
+      border-radius: 5px;
+      // font-weight:bold
     }
   }
   .popup-lssg-footer {
@@ -622,18 +650,18 @@ export default {
     }
   }
 }
-.ol-popup::before {
-  position: absolute;
-  top: 100%;
-  left: calc(50% -10px);
-  border-top: 20px solid transparent;
-  content: " ";
-  width: 0px;
-  height: 0px;
-  border-right: 10px solid transparent;
-  border-top: 10px solid rgba(1, 51, 78, 0.8);
-  border-left: 10px solid transparent;
-}
+// .ol-popup::before {
+//   position: absolute;
+//   top: 100%;
+//   left: calc(50% -10px);
+//   border-top: 20px solid transparent;
+//   content: " ";
+//   width: 0px;
+//   height: 0px;
+//   border-right: 10px solid transparent;
+//   border-top: 10px solid rgba(1, 51, 78, 0.8);
+//   border-left: 10px solid transparent;
+// }
 
 .fire-popup {
   width: 350px;

@@ -281,9 +281,9 @@ export default {
             netWork:{
               name:"办事网点"
             },
-            // qiXiang:{
-            //   name:"气象测站"
-            // },
+            qiXiang:{
+              name:"气象测站"
+            },
             d_emergency_team: {
               name: '应急队伍'
             },
