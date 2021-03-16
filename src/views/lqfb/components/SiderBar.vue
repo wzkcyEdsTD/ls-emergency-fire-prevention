@@ -839,7 +839,22 @@ export default {
 </script>
 <style lang="scss" scoped>
 .lqfb-wrapper{
-  overflow-y: auto;
-  height: 100%;
+  overflow-y: scroll;
+  height: 90%;
+}
+/*滚动条样式*/
+.lqfb-wrapper::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+}
+.lqfb-wrapper::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background:#118251;
+    width: 8px;
+    height: 30px;
+}
+.lqfb-wrapper::-webkit-scrollbar-track {
+    border-radius: 0;
+    background:#103E29;
 }
 </style>

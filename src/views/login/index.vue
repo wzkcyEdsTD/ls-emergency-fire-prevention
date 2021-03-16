@@ -1,11 +1,6 @@
 <template>
   <div class="login-container">
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
-
-      <!-- <div class="title-container">
-        <h3 class="title">森林防火子系统</h3>
-      </div> -->
-
       <el-form-item prop="username">
         <span class="svg-container">
           <svg-icon icon-class="user" />
@@ -43,10 +38,10 @@
 
       <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">登录</el-button>
 
-      <div class="tips">
+      <!-- <div class="tips">
         <span style="margin-right:20px;">username: admin</span>
         <span> password: any</span>
-      </div>
+      </div> -->
 
     </el-form>
   </div>
@@ -106,15 +101,16 @@ export default {
       })
     },
     handleLogin() {
+      const that = this;
       this.$refs.loginForm.validate(valid => {
         if (valid) {
+          // debugger
           this.loading = true
-          this.$store.dispatch('user/login', this.loginForm).then(() => {
-            this.$router.push({ path: this.redirect || '/' })
+          if (this.loginForm.username==="admin"&&this.loginForm.password==="111111") {
+            console.log('redirect',this.redirect)
+            this.$router.push({ path: "/lqfb" })
             this.loading = false
-          }).catch(() => {
-            this.loading = false
-          })
+          }
         } else {
           console.log('error submit!!')
           return false

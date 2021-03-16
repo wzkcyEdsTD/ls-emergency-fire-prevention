@@ -78,7 +78,7 @@
       </div>
     </div>
     <layer-switch />
-    <div class="toobar" :style="{ right: `${getOffsetRight()}rem` }">
+    <div class="toobar" :style="{ right: `${rightMenu}rem` }">
       <tool-bar ref="tool-bar" />
       <pick-fire-point v-show="isShowPickFirePoint" />
     </div>
@@ -133,6 +133,7 @@ export default {
       timer:undefined,
       hasID:false,
       size:1000,
+      rightMenu:30,
     };
   },
   computed: {
@@ -166,6 +167,7 @@ export default {
     const that = this;
     const fireEvent = this.$route.query
     // console.log(this.fireId);
+
     if (fireEvent["id"]) {
       console.log(fireEvent["id"])
       that.hasID = true;
@@ -196,10 +198,15 @@ export default {
       }
 
     });
-
+    this.$bus.$on('changeMenuLocaltion',temp =>{
+      that.$nextTick(()=>{
+        that.getOffsetRight(temp);
+      })
+    })
   },
   beforeDestroy() {
     this.$bus.$off("hzjbd");
+    this.$bus.$off("changeMenuLocaltion");
   },
   methods: {
 
@@ -361,19 +368,23 @@ export default {
       this.$bus.$emit("fireShow", this.tempData);
       console.log(this.detailShow)
     },
-    getOffsetRight() {
-      if (
-        this.zlOffsetRight === 0 ||
-        this.zhfxOffsetRight === 0 ||
-        this.infoPanelOffsetRight === 0 ||
-        this.yadqOffsetRight === 0 ||
-        this.yzhxdjOffsetRight === 0 ||
-        this.rydwPannelOffsetRight === 0 ||
-        this.videoListOffsetRight === 0
-      ) {
-        return 27;
-      }
-      return 2;
+    getOffsetRight(val) {
+      const that = this;
+      that.$nextTick(()=>{
+        that.rightMenu = val
+      })
+      // if (
+      //   this.zlOffsetRight === 0 ||
+      //   this.zhfxOffsetRight === 0 ||
+      //   this.infoPanelOffsetRight === 0 ||
+      //   this.yadqOffsetRight === 0 ||
+      //   this.yzhxdjOffsetRight === 0 ||
+      //   this.rydwPannelOffsetRight === 0 ||
+      //   this.videoListOffsetRight === 0
+      // ) {
+      //   return 27;
+      // }
+      // return 2;
     },
     getTime(times){
       const now = new Date().getTime();
@@ -536,7 +547,7 @@ export default {
     collapse() {
       this.$store.dispatch(
         "lqfb/changeInfoPanelOffsetRight",
-        this.infoPanelOffsetRight === 0 ? -25 : 0
+        this.infoPanelOffsetRight === 0 ? -30 : 0
       );
     },
   },

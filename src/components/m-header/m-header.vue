@@ -87,7 +87,7 @@ export default {
 
   .info {
     position: absolute;
-    top: 5.7vh;
+    top: 40px;
     left: 50%;
     transform: translateX(-50%);
     color: #fff;

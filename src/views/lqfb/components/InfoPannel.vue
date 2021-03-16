@@ -1,5 +1,6 @@
 <template>
   <div id="info-pannel-wrapper" class="info-pannel-wrapper" :style="{right:`${offsetRight}rem`}">
+    <div class="close" @click="closeMenu" />
     <div style="padding-top:3vh" v-show="isXFDW === ''">
       <div class="title">
         信息详情
@@ -61,8 +62,11 @@ export default {
     }
   },
   methods: {
+    closeMenu(){
+      this.collapse();
+    },
     collapse() {
-      this.$store.dispatch('lqfb/changeInfoPanelOffsetRight', this.offsetRight === 0 ? -25 : 0)
+      this.$store.dispatch('lqfb/changeInfoPanelOffsetRight', this.offsetRight === 0 ? -30 : 0)
     },
 
     changeIsXFDW(type) {
@@ -82,6 +86,16 @@ export default {
     right: 0;
     padding: 10px;
     transition: right 0.9s;
+    .close {
+        position: absolute;
+        left: -34px;
+        top: 80px;
+        width: 34px;
+        height: 104px;
+        background: url('~@/assets/images/收回底.png') no-repeat;
+        background-size: contain;
+        cursor: pointer;
+    }
     .title {
       font-size: 2.3vh;
       // margin-top: 10px;

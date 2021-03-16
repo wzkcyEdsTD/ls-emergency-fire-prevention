@@ -1,7 +1,7 @@
 const state = {
   mode: 'map-mode',
   activeMenu: '基础要素',
-  infoPanelOffsetRight: -25, // 详情表右偏移
+  infoPanelOffsetRight: -30, // 详情表右偏移
   yadqPannel: false,
   rydwPannelOffsetRight: -30,
   zhfxOffsetRight: -30, // 智慧分析列表右偏移

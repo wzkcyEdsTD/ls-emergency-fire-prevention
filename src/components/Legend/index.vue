@@ -1,5 +1,5 @@
 <template>
-  <div v-show="allLayerList.length > 0" class="legend-wrapper" :style="{right: `${getOffsetRight()}rem`}">
+  <div v-show="allLayerList.length > 0" class="legend-wrapper" :style="{right: `${rightMenu}rem`}">
     <div class="title">图例</div>
     <div class="item-list">
       <div v-for="(v, i) in allLayerList" v-show="v.icon" :key="i" class="item">
@@ -150,17 +150,22 @@ export default {
       middleSchoolChildren:false,
       showVideoList:false,
       bwsd:false,
+      rightMenu:30,
     }
   },
   methods: {
-    getOffsetRight() {
-      if (this.zlOffsetRight === 0 || this.zhfxOffsetRight === 0 ||
-      this.infoPanelOffsetRight === 0 || this.yadqOffsetRight === 0 ||
-      this.yzhxdjOffsetRight === 0 || this.rydwPannelOffsetRight === 0 ||
-      this.videoListOffsetRight === 0) {
-        return 27
-      }
-      return 2
+    getOffsetRight(val) {
+      const that = this;
+      that.$nextTick(()=>{
+        that.rightMenu = val
+      })
+      // if (this.zlOffsetRight === 0 || this.zhfxOffsetRight === 0 ||
+      // this.infoPanelOffsetRight === 0 || this.yadqOffsetRight === 0 ||
+      // this.yzhxdjOffsetRight === 0 || this.rydwPannelOffsetRight === 0 ||
+      // this.videoListOffsetRight === 0) {
+      //   return 27
+      // }
+      // return 2
     },
     getLabel(label) {
       if (['道路'].indexOf(label) > -1) return ''
@@ -456,6 +461,11 @@ export default {
         }
       })
     })
+    this.$bus.$on('changeMenuLocaltion',temp =>{
+      that.$nextTick(()=>{
+        that.getOffsetRight(temp);
+      })
+    })
   },
   beforeDestroy(){
     this.$bus.$off('hzjbd');
@@ -465,6 +475,7 @@ export default {
     this.$bus.$off("primarySchoolChildrenTemp")
     this.$bus.$off("middleschoolPoint")
     this.$bus.$off("middleSchoolChildren")
+    this.$bus.$off("changeMenuLocaltion")
   }
 }
 </script>

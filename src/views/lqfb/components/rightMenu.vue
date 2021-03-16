@@ -28,7 +28,7 @@
             />
             <img src="@/common/images/关闭icon.png" class="clearIcon" @click="searchClearAll">
           </div>
-          <div id="refreshIcon" class="refreshIcon" @click="refreshEvent"/>
+          <div id="refreshIcon1" class="refreshIcon" @click="refreshEvent"/>
         </div>
         <el-collapse v-model="activeNames" accordion>
           <el-collapse-item :title='wcl' name="1">
@@ -39,7 +39,7 @@
                 <div class="item item-1">时间</div>
                 <div class="item item-1">来源</div>
               </div>
-              <ul style="max-height: 40vh;">
+              <ul style="max-height: 47vh;">
                 <li v-for="(item, index) in unresolveList" 
                     :key="index" 
                     class="list-item" 
@@ -66,7 +66,7 @@
                 <div class="item item-1">时间</div>
                 <div class="item item-1">来源</div>
               </div>
-              <ul style="max-height: 40vh;">
+              <ul style="max-height: 47vh;">
                 <li v-for="(item, index) in unSettledList" 
                     :key="index" 
                     class="list-item" 
@@ -92,7 +92,7 @@
                 <div class="item item-1">时间</div>
                 <div class="item item-1">来源</div>
               </div>
-              <ul style="max-height: 40vh;" >
+              <ul style="max-height: 47vh;" >
                 <li v-for="(item, index) in tempList" 
                     :key="index" 
                     class="list-item" 
@@ -290,20 +290,21 @@ export default {
     },
     refreshEvent(){
       const that = this;
-      let node = $("#refreshIcon");
-      node.css("-webkit-animation", "gira 0.5s ease-out 1");
-      node.css("-ms-animation", "gira 0.5s ease-out 1");
-      node.css("animation", "gira 0.5s ease-out 1");
-      setTimeout(()=>{
-        node.css("animation", "")
-        that.$message({
-          message: '刷新成功',
-          type: 'success'
-        });
-        that.getData();
-      },500);
+      let node = $("#refreshIcon1");
+      that.$nextTick(()=>{
+        node.css("-webkit-animation", "gira 0.5s ease-out 1");
+        node.css("-ms-animation", "gira 0.5s ease-out 1");
+        node.css("animation", "gira 0.5s ease-out 1");
+        setTimeout(()=>{
+          node.css("animation", "")
+          that.$message({
+            message: '刷新成功',
+            type: 'success'
+          });
+          that.getData();
+        },500);
+      })
 
-      // this.$bus.$emit("refreshIcon")
 
     },
     getData() {
@@ -384,10 +385,12 @@ export default {
       if (that.rydwPannelOffsetRight==-25) {
         that.$nextTick(() => {
           that.rydwPannelOffsetRight=0
+          that.$bus.$emit("changeMenuLocaltion",30)
         })
       }else{
         that.$nextTick(() => {
           that.rydwPannelOffsetRight=-25
+          that.$bus.$emit("changeMenuLocaltion",2)
         })
       }
     },
@@ -753,7 +756,7 @@ export default {
   background-color: rgb(16, 21, 24);
   background-size: 100% 100%;
   transition: right 0.9s;
-  overflow-y: auto;
+  // overflow-y: auto;
   .close {
     position: absolute;
     left: -34px;
@@ -794,8 +797,10 @@ export default {
           cursor: pointer;
         }
         @-webkit-keyframes gira {
-          from{-webkit-transform: rotate(0deg);}
-          to{-webkit-transform: rotate(360deg);}
+          // from{-webkit-transform: rotate(0deg);}
+          // to{-webkit-transform: rotate(360deg);}
+          from{-webkit-transform: rotate(0deg); transform: rotate(0deg)}
+          to{-webkit-transform: rotate(360deg); transform: rotate(360deg)}
         }
 
         @keyframes gira {
@@ -1086,28 +1091,6 @@ export default {
         height: 2vh;
         margin-right: 1vh;
         // margin-top: 1vh;
-      }
-      .refreshIcon{
-        // display        : flex;
-        background-image: url('~@/common/images/刷新.png');
-        background-size: 100% 100%;
-        align-items    : center;
-        justify-content: space-between;
-        margin-top     : 1.5vh;
-        width: 2.5vh;
-        height: 2.5vh;
-        position: relative;
-        right: -2.5vh;
-        cursor: pointer;
-      }
-      @-webkit-keyframes gira {
-        from{-webkit-transform: rotate(0deg);}
-        to{-webkit-transform: rotate(360deg);}
-      }
-
-      @keyframes gira {
-        from{-webkit-transform: rotate(0deg); transform: rotate(0deg)}
-        to{-webkit-transform: rotate(360deg); transform: rotate(360deg)}
       }
 
       .titleHistory {

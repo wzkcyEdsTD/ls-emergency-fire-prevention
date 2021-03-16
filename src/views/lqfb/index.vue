@@ -1,5 +1,6 @@
 <template>
   <div class="lqfb-container">
+    <!-- <m-header></m-header> -->
     <sider-bar />
     <info-pannel ref="infoPannel" />
     <rydw-pannel ref="rydwPannel" />
@@ -28,6 +29,7 @@
 </template>
 
 <script>
+import MHeader from "@/components/m-header/m-header";
 import videoList from './components/videoList'
 import SiderBar from './components/SiderBar'
 import RydwPopup from './components/RydwPopup'
@@ -62,6 +64,7 @@ import Video from '@/components/video/video.vue'
 export default {
   name: 'Lqfb',
   components: {
+    MHeader,
     videoList,
     rightMenu,
     SiderBar,
@@ -695,6 +698,18 @@ export default {
             <span class="value" title="${value["BSWD_TYPE"]}">${value["BSWD_TYPE"]}</span>
         </div>`
         infoTmpl += `<div  class="item">
+            <span class="key">区县：</span>
+            <span class="value" title="${value["SZQX"]}">${value["SZQX"]}</span>
+        </div>`
+        infoTmpl += `<div  class="item">
+            <span class="key">街道：</span>
+            <span class="value" title="${value["SZZ"]}">${value["SZZ"]}</span>
+        </div>`
+        infoTmpl += `<div  class="item">
+            <span class="key">级别：</span>
+            <span class="value" title="${value["XZJB"]}">${value["XZJB"]}</span>
+        </div>`
+        infoTmpl += `<div  class="item">
             <span class="key">地址：</span>
             <span class="value" title="${value["DZ"]}">${value["DZ"]}</span>
         </div>`
@@ -951,7 +966,8 @@ export default {
       return direct
     },
     changeTemperatureType(number){
-      const res = (number - 32) * 5 / 9
+      // const res = (number - 32) * 5 / 9
+      const res = number / 10
       return res.toFixed(1)
     },
 

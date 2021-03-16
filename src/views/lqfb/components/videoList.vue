@@ -1,6 +1,6 @@
 <template>
   <div class="zhfxlb-wrapper" :style="{ right: `${zhfxOffsetRight}rem` }">
-    <!-- <div class="close" @click="close" /> -->
+    <div class="close" @click="close" />
 
     <div class="ljxq-container">
       <div class="zbjksz-container">
