@@ -57,14 +57,18 @@ export default {
       const that = this;
       that.$nextTick(() => {
         that.zhfxOffsetRight = -30;
+        const nodes = {name:"监控列表"}
+        this.$store.dispatch('map/removeRightMenuListItem', nodes)
       });
       //   this.$store.dispatch("lqfb/changezhfxOffsetRight", -30);
     },
     handleVideoClick(v){
-        // this.$map.getMap().getView().setCenter([v.properties.X,v.properties.Y]);
-        // this.$map.getMap().getView().setZoom(16);
-        this.$bus.$emit("videoData",v.properties);
-        // debugger
+        const that = this;
+        this.$map.getMap().getView().setCenter([v.properties.X,v.properties.Y]);
+        this.$map.getMap().getView().setZoom(16);
+        setTimeout(()=>{
+          that.$bus.$emit("videoData",v.properties);
+        },1000)
     }
   },
   mounted() {
@@ -73,11 +77,17 @@ export default {
       if (value) {
         that.$nextTick(() => {
           that.zhfxOffsetRight = 0;
+
         });
+        const nodes = {name:"监控列表"}
+        that.$store.dispatch('map/appendRightMenuList', nodes)
       } else {
         that.$nextTick(() => {
           that.zhfxOffsetRight = -30;
+
         });
+        const nodes = {name:"监控列表"}
+        that.$store.dispatch('map/removeRightMenuListItem', nodes)
       }
     });
     that.$bus.$on("sendVideoListData", (videoPointList) => {

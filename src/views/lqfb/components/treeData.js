@@ -24,13 +24,13 @@ const treeData = [
             id: 111,
             label: '森林公园',
             isZLZY: true,
-            value: MAP_URL.SECRET_FORESTPARK_M
+            // value: MAP_URL.SECRET_FORESTPARK_M
           },
           {
             id: 112,
             label: '国有林场',
             isZLZY: true,
-            value: MAP_URL.SECRET_NATIONAL_FOREST
+            // value: MAP_URL.SECRET_NATIONAL_FOREST
           }
         ]
       },

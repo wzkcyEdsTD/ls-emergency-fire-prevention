@@ -20,7 +20,7 @@ const actions = {
     const removeNodes = oldeNodes.filter(v => newNodesIds.indexOf(v.id) === -1)
     const appendLayerUrlList = appendNodes.filter(v => v.value).map(v => v.value)
     const removeLayerUrlList = removeNodes.filter(v => v.value).map(v => v.value)
-
+    
     // commit('SET_CHECKED_LEAF_NODES', nodes)
     dispatch('map/changeLayerListByUrl', { appendLayerUrlList, removeLayerUrlList }, { root: true })
   },

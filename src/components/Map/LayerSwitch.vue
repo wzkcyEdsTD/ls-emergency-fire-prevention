@@ -79,6 +79,21 @@
           </div>
         </div>
       </li>
+      <li
+        :title="'清空'"
+        @click="clearAllLayer()"
+      >
+        <img
+          src="../../assets/images/清除.png"
+          class="clearClass"
+          alt=""
+        >
+        <!-- <img
+          v-show="!layerType"
+          src="../../assets/images/清除选中.png"
+          alt=""
+        > -->
+      </li>
     </ul>
   </div>
 </template>
@@ -90,6 +105,7 @@ import html2canvas from 'html2canvas';
 export default {
   data() {
     return {
+      layerType:true,
       showPrintMap:true,
       activeType: '',
       radio: '标准地图',
@@ -127,10 +143,13 @@ export default {
     }
   },
   methods: {
-    changeMapType(){
-
+    clearAllLayer(){
+      const that = this;
+      that.$nextTick(()=>{
+        // that.layerType = !that.layerType
+        that.$bus.$emit('checkBox',false)
+      })
     },
-
     handleActiveType(type) {
       if (this.activeType !== '矢量' && type === '矢量') {
         this.handleDropdownChange(this.vectorList[0])
@@ -181,7 +200,7 @@ export default {
           }
           temp = vec_layer;
           map.getLayers().item(0).setVisible(false)//影像图
-          map.getLayers().item(1).setVisible(false)//影像图注记
+          // map.getLayers().item(1).setVisible(false)//影像图注记
           map.addLayer(vec_layer);
           map.addLayer(cva_layer);
         }else{
@@ -207,6 +226,7 @@ export default {
     change(){
       //影像切矢量
       const map = window.g.map;
+      const imgUrl = 'http://10.53.137.59:8090/iserver/services/map-agscache-Layers/rest/maps/Layers'
       //影像切矢量
       //img_w
       const that = this;
@@ -235,11 +255,11 @@ export default {
           }
           temp = vec_layer;
           map.getLayers().item(0).setVisible(false)//影像图
-          map.getLayers().item(1).setVisible(false)//影像图注记
+          // map.getLayers().item(1).setVisible(false)//影像图注记
 
           // 矢量图层插入顺序
-          map.getLayers().insertAt(2, vec_layer)
-          map.getLayers().insertAt(3, cva_layer)
+          map.getLayers().insertAt(1, vec_layer)
+          map.getLayers().insertAt(2, cva_layer)
         }else{
           // map.getLayers().item(5).setVisible(true)//矢量图
           // map.getLayers().item(6).setVisible(true)//矢量图注记
@@ -255,7 +275,7 @@ export default {
           }
         });
         map.getLayers().item(0).setVisible(true)//影像图
-        map.getLayers().item(1).setVisible(true)//影像图注记
+        // map.getLayers().item(1).setVisible(true)//影像图注记
         // map.getLayers().item(5).setVisible(false)//矢量图
         // map.getLayers().item(6).setVisible(false)//矢量图注记
         this.mapType = "img_c"
@@ -304,63 +324,6 @@ export default {
           })
         this.$bus.$emit("printMap",true);
         })
-
-
-        // map.once("postcompose", function(event) {
-        //   var canvas1,canvas2;
-        //   if(that.mapType == "img_c"){
-        //     canvas1 = $(".img_c").children('canvas')[0];//底图
-        //     canvas2 = $(".cia_c").children('canvas')[0];//注记
-        //   }else if(that.mapType=="vec_c"){
-        //     canvas1 = $(".vec_c").children('canvas')[0];//底图
-        //     canvas2 = $(".cva_c").children('canvas')[0];//注记
-        //   }
-        //   var canvas3 = $(".ol-layer").children('canvas')[0];//各种矢量图
-        //   var canvas4 = $(".districtLayer").children('canvas')[0];//区县
-        //   var canvas5 = $(".villageLayer").children('canvas')[0];//行政村社区
-        //   var canvas6 = $(".streetLayer").children('canvas')[0];//乡镇街道
-        //   var canvas7 = $(".gridLayer").children('canvas')[0];//网格
-        //   canvas1.getContext("2d").drawImage(canvas2,0,0);
-
-        //   if(canvas4){
-        //     const width = canvas4.width;
-        //     if(Number(width)>0){
-        //       canvas1.getContext("2d").drawImage(canvas4,0,0);
-        //     }
-        //   }
-        //   if(canvas5){
-        //     const width = canvas5.width;
-        //     if(Number(width)>0){
-        //       canvas1.getContext("2d").drawImage(canvas5,0,0);
-        //     }
-        //   }
-        //   if(canvas6){
-        //     const width = canvas6.width;
-        //     if(Number(width)>0){
-        //       canvas1.getContext("2d").drawImage(canvas6,0,0);
-        //     }
-        //   }
-        //   if(canvas7){
-        //     const width = canvas7.width;
-        //     if(Number(width)>0){
-        //       canvas1.getContext("2d").drawImage(canvas7,0,0);
-        //     }
-        //   }
-        //   if(canvas3){
-        //     const width = canvas3.width;
-        //     if(Number(width)>0){
-        //       canvas1.getContext("2d").drawImage(canvas3,0,0);
-        //     }
-        //   }
-        //   if (navigator.msSaveBlob) {
-        //     navigator.msSaveBlob(canvas1.msToBlob(), 'map.png');
-        //   } else {
-        //     canvas1.toBlob(function(blob) {
-        //       saveAs(blob, 'map.png');
-        //     });
-        //   }
-        // });
-        // map.renderSync();
 
       }
       if (val === '定位'){

@@ -32,7 +32,7 @@
             :class="`${disabled ? `disabled` : ``}`"
             @click="goLogin"
           >
-            登录
+            登 录
             <div v-if="disabled" class="loader-03"></div>
           </button>
           <!-- <div class="btn_icon" v-if="show == 0" @click="switchTab">
@@ -44,9 +44,19 @@
             <img src="/libs/img/Rectangle.png" />
           </div> -->
         </div>
+        <div class="footer">
+          <p class="p1">
+            <span>
+              建议使用IE10以上、
+              <a class="href" @click="gohref('https://www.google.cn/chrome/')">谷歌</a>、
+              <a class="href" @click="gohref('https://browser.360.cn/')">360的极速模式</a
+              >等浏览器获取更好体验
+            </span>
+          </p>
+        </div>
       </div>
     </div>
-    <div class="footer">
+    <!-- <div class="footer">
       <p class="p1">
         <span>
           建议使用IE10以上、
@@ -55,7 +65,7 @@
           >等浏览器获取更好体验
         </span>
       </p>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -94,18 +104,30 @@ export default {
     async goLogin() {
       let that = this;
       if (this.form.username && this.form.password) {
+        var bol = false;
+        const nameList=["admin","slfh_dsj"]
+        nameList.forEach(v=>{
+          if (v==that.form.username) {
+            bol = true
+          }
+        })
         if (that.form.username =='admin' && that.form.password =='123456') {
           setTimeout(() => {
             window.sessionStorage.setItem('假装有个cook',"cook");
             that.doMessage("登陆成功");
-
               that.$router.push({ path: "/lqfb" })
-
-
           }, 500);
-        }else if(that.form.username !='admin'){
+        }else if (that.form.username =='slfh_dsj' && that.form.password =='lsdsj@123') {
+          setTimeout(() => {
+            window.sessionStorage.setItem('假装有个cook',"cook");
+            that.doMessage("登陆成功");
+              that.$router.push({ path: "/lqfb" })
+          }, 500);
+        }else if(!bol){
           that.doMessage("该账户不存在",false);
-        }else if(that.form.password !='123456'){
+        }else if(that.form.username =='admin'&& that.form.password !='123456'){
+          that.doMessage("密码错误",false);
+        }else if(that.form.username =='slfh_dsj'&& that.form.password !='lsdsj@123'){
           that.doMessage("密码错误",false);
         }
       } else {
@@ -130,7 +152,8 @@ export default {
 .login {
   width: 100%;
   height: 100%;
-  background-image: url("./image/login/nCovbak.jpg");
+  background: url("./image/bg.png");
+  background-size: 100% 100%;
   .noShow {
     opacity: 0;
   }
@@ -152,7 +175,8 @@ export default {
       transform: translate(-50%, 80px);
     }
     .main {
-      background-image: url("./image/login/loginarea.png");
+      background-image: url("./image/框.png");
+      background-size: 100% 100%;
       position: absolute;
       z-index: 100;
       width: 805px;
@@ -193,19 +217,23 @@ export default {
               top: 19px;
               left: 19px;
               background-repeat: no-repeat;
-              width: 23px;
+              width: 30px;
               height: 30px;
             }
             .icon_user {
-              background-image: url("./image/login/user.png");
+              background-image: url("./image/用户.png");
+              background-size: 100% 100%;
             }
             .icon_password {
-              background-image: url("./image/login/password.png");
+              background-image: url("./image/密码.png");
+              background-size: 100% 100%;
             }
             .form_text {
               width: 301px;
               height: 66px;
               background: rgba(255, 255, 255, 0);
+              // background:url('./image/底.png');
+              background-size: 100% 100%;
               border-radius: 3px;
               border: 1px solid rgba(255, 255, 255, 1);
               font-family: PingFangSC-Regular, PingFang SC;
@@ -214,6 +242,24 @@ export default {
               padding-left: 60px;
               font-size: 20px;
             }
+
+
+            // input:-webkit-autofill{/*填充样式效果取消*/
+            //   background:url('./image/底.png') !important;
+            //   -webkit-text-fill-color: #fff !important;
+            //   transition: background-color 99999s ease-in-out 0s;
+            //   -webkit-transition-delay: 99999s;
+            // }
+            .form_text:-webkit-autofill , textarea:-webkit-autofill, select:-webkit-autofill {  
+              -webkit-text-fill-color: #ededed !important;  
+              -webkit-box-shadow: 0 0 0px 1000px transparent  inset !important;  
+              background-color:transparent;
+              background-image: none;
+              // background:url('./image/底.png');  
+              background-size: 100% 100%;
+              transition: background-color 50000s ease-in-out 0s;  
+            } 
+
             .form_text::-webkit-input-placeholder {
               color: #fff;
             }
@@ -222,19 +268,21 @@ export default {
         .button {
           width: 100%;
           height: 66px;
-          background: rgba(0, 142, 255, 1);
+          // background: rgba(0, 142, 255, 1);
+          background:url("./image/矩形.png");
+          background-size: 100% 100%;
           border-radius: 3px;
           font-size: 25px;
           font-family: PingFangSC-Medium, PingFang SC;
           font-weight: 500;
-          color: rgba(255, 255, 255, 1);
+          color: #103E29;
           border: none;
           z-index: 800;
           box-shadow: 0 0 17px #4fd5dc inset;
           margin: 20px 0px;
         }
         .button:focus {
-          background: rgba(0, 142, 255, 0.3);
+          // background: rgba(0, 142, 255, 0.3);
         }
         .btn_icon {
           width: 100%;
@@ -256,16 +304,26 @@ export default {
   }
   .footer {
     position: fixed;
-    bottom: 4%;
+    bottom: 16%;
     padding: 15px;
     left: 50%;
     transform: translate(-50%, 0px);
     color: #fff;
     z-index: 100;
+    width: 100%;
     .p1 {
       font-size: 17px;
       font-family: PingFangSC-Regular, PingFang SC;
       font-weight: bolder;
+      position: absolute;
+      // left: 140px;
+      // bottom:40px;
+      top:50%;
+      left:50%;
+      -webkit-transform: translate(-50%,-50%);
+      -moz-transform: translate(-50%,-50%);
+      transform:translate(-50%,-50%);
+      white-space: nowrap;
       .href {
         cursor: pointer;
         border-bottom: 1px solid #fff;

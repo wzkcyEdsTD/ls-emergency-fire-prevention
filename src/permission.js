@@ -13,23 +13,22 @@ router.beforeEach(async(to, from, next) => {
   document.title = getPageTitle(to.meta.title)
   const token = window.sessionStorage.getItem('假装有个cook');
   if (whiteList.indexOf(to.path) !== -1) {
-    if (to.path ==="/login") {
+    if (to.path =="/login" || to.path == "/404") {
       next()
     }else{
       if (token) {
         next()
       }else{
         //不拦截后端截图的地址
-        if (to.path==="/lqfb/printMap") {
+        if (to.path=="/lqfb/printMap") {
           next()
         }else{
           next(`/login`)
         }
-
       }
     }
   } else {
-    if (to.path ==="/") {
+    if (to.path =="/") {
       next(`/login`)
     }else{
       next('/404')

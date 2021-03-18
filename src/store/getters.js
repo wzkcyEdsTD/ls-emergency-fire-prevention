@@ -50,5 +50,6 @@ const getters = {
   videoData:state => state.map.videoData,
   netWorkData:state => state.map.netWorkData,
   qiXiangData:state => state.map.qiXiangData,
+  rightMenuList:state => state.map.rightMenuList,
 }
 export default getters

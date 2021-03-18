@@ -17,6 +17,9 @@ export default {
       let list = this.$store.getters.layerList
       return list
     },
+    rightMenuList(){
+      return this.$store.getters.rightMenuList
+    },
     zlOffsetRight() {
       return this.$store.getters.zlOffsetRight
     },
@@ -95,6 +98,24 @@ export default {
         label:"办事网点",
         name:"办事网点",
       }
+      //森林公园
+      const legend9 = {
+        icon:"森林公园.png",
+        label:"森林公园",
+        name:"森林公园",
+      }
+      //国有林场
+      const legend10 = {
+        icon:"国有林场.png",
+        label:"国有林场",
+        name:"国有林场",
+      }
+      //湿地
+      const legend11 = {
+        icon:"湿地.png",
+        label:"湿地",
+        name:"湿地",
+      }
       const list = []
       if (that.fireLayerTemp) {
         list.push(legend)
@@ -121,21 +142,38 @@ export default {
       if (that.bswd) {
         list.push(legend8)
       }
-        //过滤重复item
-        if (this.allLayerList.length == 0) {
-          this.allLayerList = [...this.allLayerList, ...list]
-        } else {
-          const obj = {};
-          const arr = [...this.allLayerList, ...list];
-          arr.map(v => {
-            if (!obj[v.name]) { obj[v.name] = v }
-          })
 
-          const setNameArr = [...new Set(arr.map(v => v.name))];
-          this.allLayerList = setNameArr.map(v => obj[v])
-        }
-      
-      console.log('list',this.allLayerList)
+      if (that.gylc) {
+        list.push(legend10)
+      }
+      if (that.slgy) {
+        list.push(legend9)
+      }
+      if (that.sd) {
+        list.push(legend11)
+      }       
+      //过滤重复item
+      if (this.allLayerList.length == 0) {
+        this.allLayerList = [...this.allLayerList, ...list]
+      } else {
+        const obj = {};
+        const arr = [...this.allLayerList, ...list];
+        arr.map(v => {
+          if (!obj[v.name]) { obj[v.name] = v }
+        })
+
+        const setNameArr = [...new Set(arr.map(v => v.name))];
+        this.allLayerList = setNameArr.map(v => obj[v])
+      }
+    },
+    rightMenuList(list){
+      console.log('当前剩余',list.length)
+      const that = this;
+      if (list.length>0) {
+        that.$bus.$emit("changeMenuLocaltion",30)
+      }else{
+        that.$bus.$emit("changeMenuLocaltion",2)
+      }
     }
   },
   data() {
@@ -151,6 +189,9 @@ export default {
       showVideoList:false,
       bwsd:false,
       rightMenu:30,
+      gylc:false,
+      slgy:false,
+      sd:false,
     }
   },
   methods: {
@@ -159,13 +200,6 @@ export default {
       that.$nextTick(()=>{
         that.rightMenu = val
       })
-      // if (this.zlOffsetRight === 0 || this.zhfxOffsetRight === 0 ||
-      // this.infoPanelOffsetRight === 0 || this.yadqOffsetRight === 0 ||
-      // this.yzhxdjOffsetRight === 0 || this.rydwPannelOffsetRight === 0 ||
-      // this.videoListOffsetRight === 0) {
-      //   return 27
-      // }
-      // return 2
     },
     getLabel(label) {
       if (['道路'].indexOf(label) > -1) return ''
@@ -175,7 +209,7 @@ export default {
   mounted(){
     const that = this;
     this.$bus.$on('hzjbd',temp=>{
-      console.log(temp)
+      // console.log(temp)
       that.$nextTick(()=>{
         that.fireLayerTemp = temp;
         that.allLayerList = that.allLayerList.filter(v=>{
@@ -183,7 +217,7 @@ export default {
             return v
           }
         })
-        console.log('allList',that.allLayerList)
+        // console.log('allList',that.allLayerList)
       })
     
     });
@@ -466,6 +500,105 @@ export default {
         that.getOffsetRight(temp);
       })
     })
+    this.$bus.$on('gylcLayer',temp=>{
+      // debugger
+      that.$nextTick(()=>{
+        that.gylc = temp;
+        if (temp) {
+          const list = []
+          const legend = {
+            icon:"国有林场.png",
+            label:"国有林场",
+            name:"国有林场",
+          }
+          list.push(legend)
+          if (this.allLayerList.length == 0) {
+            this.allLayerList = [...this.allLayerList, ...list]
+          } else {
+            const obj = {};
+            const arr = [...this.allLayerList, ...list];
+            arr.map(v => {
+              if (!obj[v.name]) { obj[v.name] = v }
+            })
+
+            const setNameArr = [...new Set(arr.map(v => v.name))];
+            this.allLayerList = setNameArr.map(v => obj[v])
+          }
+        }else{
+          that.allLayerList = that.allLayerList.filter(v=>{
+            if (!(v.name.indexOf('国有林场')!=-1)) {
+              return v
+            }
+          })
+        }
+      })
+    })
+    this.$bus.$on('slgyLayer',temp=>{
+      // debugger
+      that.$nextTick(()=>{
+        that.slgy = temp;
+        if (temp) {
+          const list = []
+          const legend = {
+            icon:"森林公园.png",
+            label:"森林公园",
+            name:"森林公园",
+          }
+          list.push(legend)
+          if (this.allLayerList.length == 0) {
+            this.allLayerList = [...this.allLayerList, ...list]
+          } else {
+            const obj = {};
+            const arr = [...this.allLayerList, ...list];
+            arr.map(v => {
+              if (!obj[v.name]) { obj[v.name] = v }
+            })
+
+            const setNameArr = [...new Set(arr.map(v => v.name))];
+            this.allLayerList = setNameArr.map(v => obj[v])
+          }
+        }else{
+          that.allLayerList = that.allLayerList.filter(v=>{
+            if (!(v.name.indexOf('森林公园')!=-1)) {
+              return v
+            }
+          })
+        }
+      })
+    })
+    this.$bus.$on('sdLayer',temp=>{
+      // debugger
+      that.$nextTick(()=>{
+        that.sd = temp;
+        if (temp) {
+          const list = []
+          const legend = {
+            icon:"湿地.png",
+            label:"湿地",
+            name:"湿地",
+          }
+          list.push(legend)
+          if (this.allLayerList.length == 0) {
+            this.allLayerList = [...this.allLayerList, ...list]
+          } else {
+            const obj = {};
+            const arr = [...this.allLayerList, ...list];
+            arr.map(v => {
+              if (!obj[v.name]) { obj[v.name] = v }
+            })
+
+            const setNameArr = [...new Set(arr.map(v => v.name))];
+            this.allLayerList = setNameArr.map(v => obj[v])
+          }
+        }else{
+          that.allLayerList = that.allLayerList.filter(v=>{
+            if (!(v.name.indexOf('湿地')!=-1)) {
+              return v
+            }
+          })
+        }
+      })
+    })
   },
   beforeDestroy(){
     this.$bus.$off('hzjbd');
@@ -476,6 +609,9 @@ export default {
     this.$bus.$off("middleschoolPoint")
     this.$bus.$off("middleSchoolChildren")
     this.$bus.$off("changeMenuLocaltion")
+    this.$bus.$off("gylcLayer")
+    this.$bus.$off("slgyLayer")
+    this.$bus.$off("sdLayer")
   }
 }
 </script>
@@ -497,9 +633,11 @@ export default {
   }
   .item-list {
     @include scrollBar;
-    max-height: 30vh;
+    max-height: 20vh;
     overflow-y: auto;
     font-size: 14px;
+    overflow-y: auto;
+    margin-bottom: 2vh;
     .item {
       display: flex;
       margin: 8px 0;
@@ -512,6 +650,22 @@ export default {
         height: 26px;
       }
     }
+  }
+
+    /*滚动条样式*/
+  .item-list::-webkit-scrollbar {
+      width: 4px;
+      height: 4px;
+  }
+  .item-list::-webkit-scrollbar-thumb {
+      border-radius: 10px;
+      background:#118251;
+      width: 8px;
+      height: 30px;
+  }
+  .item-list::-webkit-scrollbar-track {
+      border-radius: 0;
+      background:#103E29;
   }
 }
 </style>

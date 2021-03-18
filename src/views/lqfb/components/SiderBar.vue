@@ -63,6 +63,12 @@ export default {
   },
   data() {
     return {
+      sdlayer:undefined,
+      sdTemp:false,
+      gylcLayer:undefined,
+      gylcTemp:false,
+      slgyLayer:undefined,
+      slgyTemp:false,
       videoList:undefined,
       jkList,
       firePointList,
@@ -100,7 +106,9 @@ export default {
       middleschoolPointLayer:null,
       middleschoolPointTemp:false,
       middleSchoolChildrenLayer:null,
-      middleSchoolChildrenTemp:false
+      middleSchoolChildrenTemp:false,
+
+      isRefresh:false,
     }
   },
   computed: {
@@ -138,7 +146,7 @@ export default {
     checkedLeafNodes(val) {
       // console.log(9999999999999, val)
       this.clearTreeChecked()
-      for (let i = 1; i <= 7; i++) {
+      for (let i = 1; i <= 10; i++) {
         if (this.$refs[`tree_${i}`]) {
           const ids = []
           val.forEach(item => {
@@ -161,12 +169,107 @@ export default {
     this.showCheckLayer()
     const that = this;
     this.$bus.$on("fireList",value=>{
-      console.log(33333)
-      that.createFireLayer(value);
+      // console.log(33333)
+      if (that.firelayer) {
+        window.g.map.removeLayer(that.firelayer)
+        that.firelayer = null
+        that.isRefresh = true
+      }
+      that.createFireLayer(value)
+      that.isRefresh = false
+    })
+    this.$bus.$on("checkBox",value=>{
+      if (value) {
+        that.choseUncheckNodeList();
+        that.$bus.$emit("checkAll",true);
+      }else{
+        that.clearAllNode();
+        that.clearTreeChecked();
+        that.$bus.$emit("checkAll",false);
+          
+        that.$store.dispatch('map/changeLayerList', [])
+      }
     })
   },
   methods: {
+    clearAllNode(){
+      const that = this;
+      // debugger
+      for (let index = 1; index < 10; index++) {
+        const tree = this.$refs[`tree_${index}`]
+        if (tree) {
+          var nodeList = tree[0].getCheckedNodes();
+          nodeList = nodeList.filter(v=>{
+            if (!!!v.children) {
+              return v
+            }
+          })
 
+          console.log(nodeList)
+          nodeList.map(v=>{
+            that.handleCheckChange(v)
+          })
+        }
+      }
+    },
+    choseUncheckNodeList(){
+      const that = this;
+
+      for (let index = 1; index < 10; index++) {
+        const tree = that.$refs[`tree_${index}`]
+        if (tree) {
+          //已选中节点
+          const nodeList = tree[0].getCheckedNodes();
+          const list = new Array();
+          const yjjd = tree[0].data
+          yjjd.map(item=>{
+            if (item.children && item.children.length>0) {
+              item.children.map(v=>{
+                list.push(v)
+              })
+            }else{
+              list.push(item)
+            }
+          })
+          if (nodeList.length>0) {
+            const checkNodeId = nodeList.map(v => v.id)
+            var exceptID = list.map(v=>v.id)
+            exceptID = exceptID.filter(v=>{
+              if (checkNodeId.indexOf(v)==-1) {
+                return v
+              }
+            })
+            const allId = list.map(v=>v.id)
+            const resoultList = list.filter(v=>{
+              if (exceptID.indexOf(v.id)!=-1) {
+                return v
+              }
+            })
+            
+            if (resoultList.length>0) {
+              resoultList.map(v=>
+              {
+                that.handleCheckChange(v)
+  
+              })
+              
+            }
+              tree[0].setCheckedKeys(allId)
+            // tree[0].setCheckedKeys(exceptID)
+          }else{
+            const allId = list.map(v=>v.id)
+            list.map(v=>
+            {
+              // debugger
+              that.handleCheckChange(v)
+ 
+            })
+            tree[0].setCheckedKeys(allId)
+          }
+          
+        }
+      }
+    },
     createFireLayer(fireList){
       const list = fireList.result.records
       if (list.length>0) {
@@ -216,21 +319,23 @@ export default {
         })
         // fireLayer.setStyle(this.$map.getFirePointStyle())
         this.firelayer = fireLayer;
-        this.temp = true;
+        if (!this.isRefresh) {
+          this.temp = true;
+        }else{
+          if (!this.temp) {
+            this.firelayer.setVisible(false);
+          }
+        }
+
         this.$map.addLayer(fireLayer)
       }
-
-
-
-
     },
     handleCheckChange(data, checked, id) {
       //console.log('handleCheckChange', data, checked)
       // 勾选目录树控制总览显示资源
-      // debugger
       const that = this;
       let list = window.g.map.getLayers().array_
-
+      // debugger
       if ((data.id + '').substring(0, 2) === '11') {
         this.$store.dispatch('lqfb/changeActiveMenu', '基础要素')
       } else if ((data.id + '')[0] === '2') {
@@ -284,24 +389,24 @@ export default {
             //4: "119.35790729284101"
             //5: "27.541516789796798"
             this.$map.addLayer(this.videoLayer)
-            that.$bus.$emit("showVideoList",true);
             that.$bus.$emit("sendVideoListData",videoPointList);
         })
           this.videoTemp = true;
           that.$bus.$emit("showVideoList",true);
+          // that.$bus.$emit("changeMenuLocaltion",30)
           // this.$store.dispatch('lqfb/changeVideoListOffsetRight', 0)
         }else{
           if (this.videoTemp) {
             this.videoTemp = false
             that.$bus.$emit("showVideoList",false);
+            // that.$bus.$emit("changeMenuLocaltion",2)
           }else if (!this.videoTemp) {
             this.videoTemp = true
             that.$bus.$emit("showVideoList",true);
+            // that.$bus.$emit("changeMenuLocaltion",30)
           }
           this.videoLayer.setVisible(this.videoTemp);
         }
-
-        return
       }
       if(data.label === '气象测站'){
         if (!this.qxczLayer) {
@@ -365,8 +470,6 @@ export default {
           }
           this.qxczLayer.setVisible(this.qxczTemp);
         }
-
-        return
       }
       if(data.label === '小学'){
         if (!this.primartSchoolLayer) {
@@ -420,8 +523,6 @@ export default {
           }
           this.primartSchoolLayer.setVisible(this.primartSchoolTemp);
         }
-
-        return
       }
       if(data.label === '小学学区'){
         if (!this.primarySchoolDistrictLayer) {
@@ -441,7 +542,6 @@ export default {
           }
           this.primarySchoolDistrictLayer.setVisible(this.primarySchoolDistrictTemp);
         }
-        return
       }
       if(data.label === '小学适龄儿童'){
         if (!this.primarySchoolChildrenLayer) {
@@ -459,37 +559,23 @@ export default {
           // debugger
 
           new FeatureService(url).getFeaturesBySQL(sqlParam, serviceResult => {
-            const list = serviceResult.result.features.features;
-            // debugger
-            const features = [];
-            list.forEach(element => {
-              const properties = element.properties;
-
-              const feature =  new Feature({
-                    geometry: new Point([properties.XX,properties.YY]),
-                    ...properties
-                })
-                // debugger
-              const style = new Style({
-                image: new Icon({
-                  anchor: [0.5, 26],
-                  anchorXUnits: 'fraction',
-                  anchorYUnits: 'pixels',
-                  scale:0.6,
-                  src: require(`@/assets/images/icon/${'小学适龄户籍儿童icon.png'}`)
-                }),
-                // stroke: new Stroke({ color: 'red', width: 2 })
-              })
-              feature.setStyle(style)
-              features.push(feature);
-            });
- 
+            const features = new GeoJSON().readFeatures(serviceResult.result.features)
+            const style = new Style({
+              image: new Icon({
+                anchor: [0.5, 26],
+                anchorXUnits: 'fraction',
+                anchorYUnits: 'pixels',
+                scale:0.7,
+                src: require(`@/assets/images/icon/${'小学适龄户籍儿童icon.png'}`)
+              }),
+            })
             var vectorSource = new VectorSource({
               features,
               wrapX: false
             });
             this.primarySchoolChildrenLayer = new VectorLayer({
               source: vectorSource,
+              style
             })
             
             this.$map.addLayer(this.primarySchoolChildrenLayer)
@@ -507,8 +593,6 @@ export default {
           }
           this.primarySchoolChildrenLayer.setVisible(this.primarySchoolChildrenTemp);
         }
-
-        return
       }
       if(data.label === '初中'){
         if (!this.middleschoolPointLayer) {
@@ -562,8 +646,6 @@ export default {
           }
           this.middleschoolPointLayer.setVisible(this.middleschoolPointTemp);
         }
-
-        return
       }
       if(data.label === '初中学区'){
         if (!this.middleSchoolDistrictLayer) {
@@ -584,8 +666,6 @@ export default {
           }
           this.middleSchoolDistrictLayer.setVisible(this.middleSchoolDistrictTemp);
         }
-
-        return
       }
       if(data.label === '初中适龄儿童'){
         if (!this.middleSchoolChildrenLayer) {
@@ -602,37 +682,24 @@ export default {
           // debugger
 
           new FeatureService(url).getFeaturesBySQL(sqlParam, serviceResult => {
-            const list = serviceResult.result.features.features;
-
-            const features = [];
-            list.forEach(element => {
-              const properties = element.properties;
-
-              const feature =  new Feature({
-                    geometry: new Point([properties.XX,properties.YY]),
-                    ...properties
-                })
-                // debugger
-              const style = new Style({
-                image: new Icon({
-                  anchor: [0.5, 26],
-                  anchorXUnits: 'fraction',
-                  anchorYUnits: 'pixels',
-                  scale:0.7,
-                  src: require(`@/assets/images/icon/${'初中适龄户籍儿童icon.png'}`)
-                }),
-                // stroke: new Stroke({ color: 'red', width: 2 })
-              })
-              feature.setStyle(style)
-              features.push(feature);
-            });
- 
+            // const list = serviceResult.result.features.features;
+            const features = new GeoJSON().readFeatures(serviceResult.result.features)
+             const style = new Style({
+              image: new Icon({
+                anchor: [0.5, 26],
+                anchorXUnits: 'fraction',
+                anchorYUnits: 'pixels',
+                scale:0.7,
+                src: require(`@/assets/images/icon/${'初中适龄户籍儿童icon.png'}`)
+              }),
+            })
             var vectorSource = new VectorSource({
               features,
               wrapX: false
             });
             this.middleSchoolChildrenLayer = new VectorLayer({
               source: vectorSource,
+              style,
               })
             
             this.$map.addLayer(this.middleSchoolChildrenLayer)
@@ -650,18 +717,18 @@ export default {
           }
           this.middleSchoolChildrenLayer.setVisible(this.middleSchoolChildrenTemp);
         }
-
-        return
       }
       if(data.label === '火灾报警点'){
         if(this.temp){
           this.temp = false;
           this.firelayer.setVisible(false);
           this.$bus.$emit('hzjbd',this.temp);
+          // that.$bus.$emit("changeMenuLocaltion",2)
         }else if (!this.temp) {
           this.temp = true;
           this.firelayer.setVisible(true);
           this.$bus.$emit('hzjbd',this.temp);
+          // that.$bus.$emit("changeMenuLocaltion",30)
         }
         this.$store.dispatch('lqfb/changezlOffsetRight', 0)
       }
@@ -731,8 +798,6 @@ export default {
           }
           this.networkLayer.setVisible(this.networkTemp);
         }
-
-        return
       }
       if(data.label === '区县'){
         this.district = !this.district
@@ -767,6 +832,252 @@ export default {
           }
         });
       }
+      if (data.label ==='林区') {
+        const temp1 ={label:"国有林场"}
+        const temp2 ={label:"森林公园"}
+        this.handleCheckChange(temp1)
+        this.handleCheckChange(temp2)
+      }
+      if (data.label === '国有林场') {
+        if (!this.gylcLayer) {
+          var sqlParam = new SuperMap.GetFeaturesBySQLParameters({
+            toIndex: 999999,
+            queryParameter: {
+              // name: layerName,
+              attributeFilter: "",
+              maxFeatures: 99999999
+            },
+            datasetNames: [`lishui_forestfire_v2:d_national_forest`]
+          })
+          const url = "http://10.53.137.59:8090/iserver/services/data-lishui_forestfire_v2/rest/data";
+
+          new FeatureService(url).getFeaturesBySQL(sqlParam, serviceResult => {
+            const features = new GeoJSON().readFeatures(serviceResult.result.features)
+            
+            features.map(f => {
+              f.setStyle(new Style({
+                stroke: new Stroke({
+                  color: 'rgba(249,219,49, 0.8)',
+                  // lineDash: [4],
+                  width: 1
+                }),
+                fill: new Fill({
+                  color: 'rgba(249,219,49, 0.8)'
+                }),
+                text: new Text({
+                  textAlign: 'center', // 位置
+                  textBaseline: 'middle', // 基准线
+                  offsetY: 20,
+                  font: 'normal 16px bold 微软雅黑', // 文字样式
+                  text: f.get('NAME') + '', // 文本内容
+                  fill: new Fill({ // 文本填充样式（即文字颜色)
+                    color: '#FC9309'
+                  }),
+                  stroke: new Stroke({
+                    color: '#101518',
+                    width: 2
+                  })
+                })
+              }))
+            })
+           
+            var vectorSource = new VectorSource({
+              features,
+              wrapX: false
+            });
+
+            const style = new Style({
+              image: new Icon({
+                anchor: [0.5, 26],
+                anchorXUnits: 'fraction',
+                anchorYUnits: 'pixels',
+                src: require(`@/assets/images/icon/${'国有林场.png'}`)
+              }),
+            })
+            this.gylcLayer = new VectorLayer({
+              source: vectorSource,
+              style:style
+            })
+            window.g.map.getLayers().insertAt(4, this.gylcLayer)
+            // this.$map.addLayer(this.gylcLayer)
+            that.$bus.$emit("gylcLayer",true);
+        })
+          this.gylcTemp = true;
+          that.$bus.$emit("gylcLayer",true);
+          // this.$store.dispatch('lqfb/changeVideoListOffsetRight', 0)
+        }else{
+          if (this.gylcTemp) {
+            this.gylcTemp = false
+            that.$bus.$emit("gylcLayer",false);
+          }else if (!this.gylcTemp) {
+            this.gylcTemp = true
+            that.$bus.$emit("gylcLayer",true);
+          }
+          this.gylcLayer.setVisible(this.gylcTemp);
+        }
+      }
+      if (data.label === '森林公园') {
+        if (!this.slgyLayer) {
+          var sqlParam = new SuperMap.GetFeaturesBySQLParameters({
+            toIndex: 999999,
+            queryParameter: {
+              // name: layerName,
+              attributeFilter: "",
+              maxFeatures: 99999999
+            },
+            datasetNames: [`lishui_forestfire_v2:d_forest_park`]
+          })
+          const url = "http://10.53.137.59:8090/iserver/services/data-lishui_forestfire_v2/rest/data";
+
+          new FeatureService(url).getFeaturesBySQL(sqlParam, serviceResult => {
+            const features = new GeoJSON().readFeatures(serviceResult.result.features)
+            
+             features.map(f => {
+              f.setStyle(new Style({
+                stroke: new Stroke({
+                  color: 'rgba(17, 243, 142, 0.8)',
+                  // lineDash: [4],
+                  width: 1
+                }),
+                fill: new Fill({
+                  color: 'rgba(17, 243, 142, 0.8)'
+                }),
+                text: new Text({
+                  textAlign: 'center', // 位置
+                  textBaseline: 'middle', // 基准线
+                  offsetY: 20,
+                  font: 'normal 16px bold 微软雅黑', // 文字样式
+                  text: f.get('NAME') + '', // 文本内容
+                  fill: new Fill({ // 文本填充样式（即文字颜色)
+                    color: '#6CF54B'
+                  }),
+                  stroke: new Stroke({
+                    color: '#101518',
+                    width: 2
+                  })
+                })
+              }))
+            })
+
+            var vectorSource = new VectorSource({
+              features,
+              wrapX: false
+            });
+
+            const style = new Style({
+              image: new Icon({
+                anchor: [0.5, 26],
+                anchorXUnits: 'fraction',
+                anchorYUnits: 'pixels',
+                src: require(`@/assets/images/icon/${'森林公园.png'}`)
+              }),
+            })
+            this.slgyLayer = new VectorLayer({
+              source: vectorSource,
+              style:style
+              })
+            window.g.map.getLayers().insertAt(4, this.slgyLayer)
+            // this.$map.addLayer(this.slgyLayer)
+            that.$bus.$emit("slgyLayer",true);
+        })
+          this.slgyTemp = true;
+          that.$bus.$emit("slgyLayer",true);
+          // this.$store.dispatch('lqfb/changeVideoListOffsetRight', 0)
+        }else{
+          if (this.slgyTemp) {
+            this.slgyTemp = false
+            that.$bus.$emit("slgyLayer",false);
+          }else if (!this.slgyTemp) {
+            this.slgyTemp = true
+            that.$bus.$emit("slgyLayer",true);
+          }
+          this.slgyLayer.setVisible(this.slgyTemp);
+        }
+      }
+      if (data.label === '湿地') {
+        if (!this.sdLayer) {
+          var sqlParam = new SuperMap.GetFeaturesBySQLParameters({
+            toIndex: 999999,
+            queryParameter: {
+              // name: layerName,
+              attributeFilter: "",
+              maxFeatures: 99999999
+            },
+            datasetNames: [`lishui_forestfire_v2:d_wetland`]
+          })
+          const url = "http://10.53.137.59:8090/iserver/services/data-lishui_forestfire_v2/rest/data";
+
+          new FeatureService(url).getFeaturesBySQL(sqlParam, serviceResult => {
+            const features = new GeoJSON().readFeatures(serviceResult.result.features)
+            features.map(f => {
+              f.setStyle(new Style({
+                stroke: new Stroke({
+                  color: 'rgba(59, 97, 249, 0.8)',
+                  // lineDash: [4],
+                  width: 1
+                }),
+                fill: new Fill({
+                  color: 'rgba(59, 97, 249, 0.8)'
+                }),
+                text: new Text({
+                  textAlign: 'center', // 位置
+                  textBaseline: 'middle', // 基准线
+                  offsetY: 20,
+                  font: 'normal 16px bold 微软雅黑', // 文字样式
+                  text: f.get('NAME') + '', // 文本内容
+                  fill: new Fill({ // 文本填充样式（即文字颜色)
+                    color: '#418CFD'
+                  }),
+                  stroke: new Stroke({
+                    color: '#101518',
+                    width: 2
+                  })
+                })
+              }))
+            })
+            var vectorSource = new VectorSource({
+              features,
+              wrapX: false
+            });
+
+            const style = new Style({
+              image: new Icon({
+                anchor: [0.5, 26],
+                anchorXUnits: 'fraction',
+                anchorYUnits: 'pixels',
+                src: require(`@/assets/images/icon/${'湿地.png'}`)
+              }),
+            })
+            this.sdLayer = new VectorLayer({
+              source: vectorSource,
+              style:style
+              })
+            window.g.map.getLayers().insertAt(4, this.sdLayer)
+            // this.$map.addLayer(this.sdLayer)
+            that.$bus.$emit("sdLayer",true);
+        })
+          this.sdTemp = true;
+          that.$bus.$emit("sdLayer",true);
+          // this.$store.dispatch('lqfb/changeVideoListOffsetRight', 0)
+        }else{
+          if (this.sdTemp) {
+            this.sdTemp = false
+            that.$bus.$emit("sdLayer",false);
+          }else if (!this.sdTemp) {
+            this.sdTemp = true
+            that.$bus.$emit("sdLayer",true);
+          }
+          this.sdLayer.setVisible(this.sdTemp);
+        }
+      }
+      if (data.label ==='地表覆盖') {
+        const temp1 ={label:"湿地"}
+        this.handleCheckChange(temp1)
+
+      }
+
+
+
       // 显示选中图层
       this.showCheckLayer()
     },
@@ -785,6 +1096,7 @@ export default {
       // }
     },
     showCheckLayer() {
+      const that = this;
       const nodes = [] // 所有大类下的tree选中的叶子节点
       this.treeData.map(v => {
         v.children &&
@@ -792,6 +1104,11 @@ export default {
               ...this.$refs[`tree_${v.id}`][0].getCheckedNodes(true, false)
             )
       })
+      if (nodes.length>0) {
+        that.$bus.$emit("checkAll",true);
+      }else{
+        that.$bus.$emit("checkAll",false);
+      }
       // debugger
       this.$store.dispatch('siderbar/changeCheckedLeafNodes', nodes)
       this.$bus.$emit('primartSchool',this.primartSchoolTemp);
@@ -808,7 +1125,7 @@ export default {
       // }
       if (data.label == "火灾报警点") {
         //123123123
-        this.$bus.$emit("hzjbd",true);
+        // this.$bus.$emit("hzjbd",true);
       }
       // debugger
       if (data.label == "监控") {
@@ -834,6 +1151,7 @@ export default {
   },
   beforeDestroy(){
     this.$bus.$off("fireList");
+    this.$bus.$off("checkBox");
   }
 }
 </script>

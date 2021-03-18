@@ -61,6 +61,17 @@ export default {
       return this.$store.getters.isXFDW
     }
   },
+  watch:{
+    offsetRight(val){
+      if (val===0) {
+        const nodes = {name:"详情列表"}
+        this.$store.dispatch('map/appendRightMenuList', nodes)
+      }else{
+        const nodes = {name:"详情列表"}
+        this.$store.dispatch('map/removeRightMenuListItem', nodes)
+      }
+    }
+  },
   methods: {
     closeMenu(){
       this.collapse();

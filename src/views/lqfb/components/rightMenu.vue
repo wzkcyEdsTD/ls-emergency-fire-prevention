@@ -28,7 +28,7 @@
             />
             <img src="@/common/images/关闭icon.png" class="clearIcon" @click="searchClearAll">
           </div>
-          <div id="refreshIcon1" class="refreshIcon" @click="refreshEvent"/>
+          <div id="refreshIcon1" class="refreshIcon" :class="{active: isRefresh}" @click="refreshEvent"/>
         </div>
         <el-collapse v-model="activeNames" accordion>
           <el-collapse-item :title='wcl' name="1">
@@ -217,7 +217,9 @@ export default {
       },
       size:1000,
       layerList:[],
-      allFireList:[]
+      allFireList:[],
+      isRefresh: false,
+      isRefreshStreet:false
     }
   },
   methods:{
@@ -290,18 +292,17 @@ export default {
     },
     refreshEvent(){
       const that = this;
-      let node = $("#refreshIcon1");
       that.$nextTick(()=>{
-        node.css("-webkit-animation", "gira 0.5s ease-out 1");
-        node.css("-ms-animation", "gira 0.5s ease-out 1");
-        node.css("animation", "gira 0.5s ease-out 1");
+        this.isRefresh = true
+        that.isRefreshStreet = true;
         setTimeout(()=>{
-          node.css("animation", "")
+          this.isRefresh = false
           that.$message({
             message: '刷新成功',
             type: 'success'
           });
           that.getData();
+          that.isRefreshStreet = false;
         },500);
       })
 
@@ -316,6 +317,12 @@ export default {
       Util.testAxios(Number(that.size)).then(res=>{
         if(res.message.indexOf('成功')!=-1){
           // debugger
+
+          if(that.layerList.length>0){
+            that.layerList.map(v=>window.g.map.removeLayer(v));
+            that.layerList = [];
+          }
+
           if (that.size < Number(res.result.total)) {
             that.size = (res.result.total + 100);
             console.log(that.size);
@@ -376,8 +383,11 @@ export default {
         that.$nextTick(()=>{
           that.layerList.push(testLayer);
         })
-
+        if (that.isRefreshStreet) {
+          testLayer.setVisible(false)
+        }
         window.g.map.getLayers().insertAt(4, testLayer)
+        that.isRefreshStreet = false;
       })
     },
     closeMenu(){
@@ -385,12 +395,19 @@ export default {
       if (that.rydwPannelOffsetRight==-25) {
         that.$nextTick(() => {
           that.rydwPannelOffsetRight=0
-          that.$bus.$emit("changeMenuLocaltion",30)
+          
+          const nodes = {name:"火灾点列表"}
+          this.$store.dispatch('map/appendRightMenuList', nodes)
+          // console.log(this.$store.getters.rightMenuList)
+          // that.$bus.$emit("changeMenuLocaltion",30)
         })
       }else{
         that.$nextTick(() => {
           that.rydwPannelOffsetRight=-25
-          that.$bus.$emit("changeMenuLocaltion",2)
+          const nodes = {name:"火灾点列表"}
+          this.$store.dispatch('map/removeRightMenuListItem', nodes)
+          // console.log(this.$store.getters.rightMenuList)
+          // that.$bus.$emit("changeMenuLocaltion",2)
         })
       }
     },
@@ -667,7 +684,7 @@ export default {
           }
         })
         that.imageList = imageList;
-        console.log("imageList",that.imageList);
+        // console.log("imageList",that.imageList);
         that.tempList = templist1.filter(v=>{
           if (v.status && v.status.indexOf('已办结')!=-1) {
             return v
@@ -693,6 +710,7 @@ export default {
           if (element.systemcode.indexOf('ilishui')!=-1) {
             // debugger
             // console.log(element)
+ 
             that.searchStreet(new Point([Number(element.x),Number(element.y)]))
           }
         });
@@ -725,9 +743,12 @@ export default {
         // debugger
         if (value) {
             this.rydwPannelOffsetRight=0
-
+            const nodes = {name:"火灾点列表"}
+            this.$store.dispatch('map/appendRightMenuList', nodes)
         }else{
             this.rydwPannelOffsetRight=-25
+            const nodes = {name:"火灾点列表"}
+            this.$store.dispatch('map/removeRightMenuListItem', nodes)
         }
         if (that.layerList && that.layerList.length>0) {
           that.layerList.map(v=>{
@@ -787,27 +808,28 @@ export default {
           // display        : flex;
           background-image: url('~@/common/images/刷新.png');
           background-size: 100% 100%;
-          align-items    : center;
-          justify-content: space-between;
           margin-top     : 1.5vh;
           width: 2.5vh;
           height: 2.5vh;
           position: relative;
-          right: -2.5vh;
+          right: -1.5vh;
           cursor: pointer;
+          // animation: 0.5s ease-out 0s 1 normal none running gira;
+          &.active {
+            animation: gira 0.5s 1;
+          }
         }
         @-webkit-keyframes gira {
           // from{-webkit-transform: rotate(0deg);}
           // to{-webkit-transform: rotate(360deg);}
-          from{-webkit-transform: rotate(0deg); transform: rotate(0deg)}
-          to{-webkit-transform: rotate(360deg); transform: rotate(360deg)}
+          from{-webkit-transform: rotate(0deg);}
+          to{-webkit-transform: rotate(360deg);}
         }
 
         @keyframes gira {
           from{-webkit-transform: rotate(0deg); transform: rotate(0deg)}
           to{-webkit-transform: rotate(360deg); transform: rotate(360deg)}
         }
-
         .titleHistory {
           width: 40%;
           display: flex;
@@ -1332,7 +1354,15 @@ export default {
     }
     
   }
+
+
+
+
+
 }
+
+
+
 
 ::-webkit-scrollbar {
     width: 4px;

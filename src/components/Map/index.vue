@@ -435,28 +435,31 @@ export default {
     initMap() {
       this.map = this.$map.createMap("map-container");
       const that = this;
-
+      const imgUrl = 'http://10.53.137.59:8090/iserver/services/map-agscache-Layers/rest/maps/Layers'
       let wenzhouLayer = ''
       let zjLayer = ''
-      if (that.hasID) {
-        wenzhouLayer = this.$map.crtLayerWMTSAndID('img_c')
-        this.$store.dispatch("map/changeBaseLayer", wenzhouLayer);
+      // if (that.hasID) {
+      //   wenzhouLayer = this.$map.crtLayerWMTSAndID('img_c')
+      //   this.$store.dispatch("map/changeBaseLayer", wenzhouLayer);
 
-        // const zjLayer = this.$map.createTianDiTuLayer("cia_w");
-        zjLayer = this.$map.crtLayerWMTSAndID("cia_c");
+      //   // const zjLayer = this.$map.createTianDiTuLayer("cia_w");
+      //   zjLayer = this.$map.crtLayerWMTSAndID("cia_c");
 
-        // // zjLayer.addFilter(mask)
-        this.$store.dispatch("map/changeZjLayer", zjLayer);
-      }else{
-        wenzhouLayer = this.$map.crtLayerWMTS('img_c')
-        this.$store.dispatch("map/changeBaseLayer", wenzhouLayer);
+      //   // // zjLayer.addFilter(mask)
+      //   this.$store.dispatch("map/changeZjLayer", zjLayer);
+      // }else{
+      //   wenzhouLayer = this.$map.createTileSuperMapRestLayer(imgUrl, {
+      //     className: "img_c",
+      //   });
 
-        // const zjLayer = this.$map.createTianDiTuLayer("cia_w");
-        zjLayer = this.$map.crtLayerWMTS("cia_c");
+      //   this.$store.dispatch("map/changeBaseLayer", wenzhouLayer);
+      // }
 
-        // // zjLayer.addFilter(mask)
-        this.$store.dispatch("map/changeZjLayer", zjLayer);
-      }
+      wenzhouLayer = this.$map.createTileSuperMapRestLayer(imgUrl, {
+        className: "img_c",
+      });
+
+      this.$store.dispatch("map/changeBaseLayer", wenzhouLayer);
 
       //行政区划
       const baseUrl = `http://10.53.137.59:8090/iserver/services/map-lishui_region/rest/maps/`;

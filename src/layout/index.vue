@@ -3,7 +3,7 @@
     <div class="main-container">
       <div :class="{'fixed-header':fixedHeader}">
         <navbar />
-        <m-header></m-header>
+        <!-- <m-header></m-header> -->
       </div>
       <app-main />
     </div>

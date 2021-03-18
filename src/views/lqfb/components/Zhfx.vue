@@ -403,6 +403,15 @@ export default {
     },
   },
   watch: {
+    zhfxOffsetRight(val){
+      if (val===0) {
+        const nodes = {name:"周边分析"}
+        this.$store.dispatch('map/appendRightMenuList', nodes)
+      }else{
+        const nodes = {name:"周边分析"}
+        this.$store.dispatch('map/removeRightMenuListItem', nodes)
+      }
+    },
     featuresData(val) {
       // console.log(this.$store.getters.featuresData.ZBZY[1]);
       const that = this;
@@ -870,6 +879,7 @@ export default {
       console.log("气象信息", detailInfo);
       that.$nextTick(()=>{
         that.detailInfo = detailInfo;
+        // that.$bus.$emit("changeMenuLocaltion",30)
       })
     });
   },

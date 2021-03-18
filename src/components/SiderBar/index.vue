@@ -1,13 +1,16 @@
 <template>
   <div class="sider-bar-wrapper" :style="{left:`${offsetLeft}rem`}">
-    <div class="top-bar">
-      <div class="title">
-        资源目录
-        <img src="@/common/images/边.png" alt="">
+    <div class="flexClass">
+      <!-- <el-checkbox class="checkBox" v-model="checked" @change="checkedAll">
+      </el-checkbox> -->
+      <div class="top-bar">
+        <div class="title">
+          资源目录
+          <img src="@/common/images/边.png" alt="">
+        </div>
       </div>
-
-      <!-- <div class="icon-search"><img src="../../assets/images/icon-search.png"></div> -->
     </div>
+
     <!-- <i class="right-collapse" @click="collapse"> ||</i> -->
     <slot />
   </div>
@@ -16,13 +19,26 @@
 export default {
   data() {
     return {
-      offsetLeft: 0
+      offsetLeft: 0,
+      checked:true
     }
   },
   methods: {
+    checkedAll(){
+      const that = this;
+      that.$bus.$emit('checkBox',that.checked)
+    },
     collapse() {
       this.offsetLeft = this.offsetLeft === 0 ? -18.75 : 0
     }
+  },
+  mounted(){
+    const that = this;
+    that.$bus.$on("checkAll",val=>{
+      that.$nextTick(()=>{
+        that.checked = val;
+      })
+    })
   }
 }
 </script>
@@ -41,22 +57,32 @@ export default {
   top: 0;
   transition: left 0.9s;
   // overflow-y: scroll;
-  .top-bar {
-    width: 100%;
-    height: 40px;
-    margin-bottom: 10px;
-    padding-bottom: 4vh;
-    .title {
+  .flexClass{
+    display: flex;
+    .checkBox{
+      padding-top: 3px;
+    }
+    .top-bar {
       width: 100%;
       height: 40px;
-      font-family: youshebiaotihei;
-      font-size: 2.3vh;
-      img {
-       width: 100%;
-    }
-    }
+      margin-bottom: 10px;
+      padding-left: 5px;
+      padding-bottom: 4vh;
+      .title {
+        width: 100%;
+        height: 40px;
+        font-family: youshebiaotihei;
+        font-size: 2.3vh;
+        img {
+          width: 100%;
+          // position: relative;
+          // left: -20px;
+        }
+      }
 
+    }
   }
+
   .right-collapse {
     position: absolute;
     right: 0;

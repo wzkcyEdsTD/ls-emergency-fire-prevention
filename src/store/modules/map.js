@@ -15,10 +15,39 @@ const state = {
   lqzyLayer: false, // 林区资源图层
   videoData:[],
   netWorkData:[],
-  qiXiangData:[]
+  qiXiangData:[],
+  rightMenuList:[{name:"火灾点列表"}]
 }
 
 const mutations = {
+  APPEND_RIGHTMENULIST(state, rightMenu){
+    
+    if (state.rightMenuList.length == 0) {
+      state.rightMenuList.push(rightMenu)
+    } else {
+      const obj = {};
+      const list = state.rightMenuList
+      list.push(rightMenu)
+      list.map(v => {
+        if (!obj[v.name]) { obj[v.name] = v }
+      })
+
+      const setNameArr = [...new Set(list.map(v => v.name))];
+      state.rightMenuList = setNameArr.map(v => obj[v])
+    }
+  },
+  REMOVE_RIGHTMENULIST(state, rightMenu){
+
+    if (state.rightMenuList.length > 0) {
+      const list = state.rightMenuList
+      const resoult = list.filter(v=>{
+        if (v.name!=rightMenu.name) {
+          return v
+        }
+      })
+      state.rightMenuList = resoult;
+    }
+  },
   SET_VIDEO(state, video){
     state.videoData = video
   },
@@ -102,6 +131,12 @@ const mutations = {
 }
 
 const actions = {
+  appendRightMenuList({ commit },list){
+    commit('APPEND_RIGHTMENULIST', list)
+  },
+  removeRightMenuListItem({ commit },list){
+    commit('REMOVE_RIGHTMENULIST', list)
+  },
   changeVideo({ commit },video){
     commit('SET_VIDEO', video)
   },

@@ -225,32 +225,32 @@ const mapUrl = {
 
   // 林业资源
   // --森林公园
-  SECRET_FORESTPARK_M: {
-    type: 'data', // 数据服务
-    layerName: 'd_forest_park',
-    label: '森林公园',
-    dataSourceName,
-    icon: '森林公园.png',
-    url: dataUrl
-  },
-  // --国有林场
-  SECRET_NATIONAL_FOREST: {
-    type: 'data', // 数据服务
-    layerName: 'd_national_forest',
-    label: '国有林场',
-    dataSourceName,
-    icon: '国有林场.png',
-    url: dataUrl
-  },
-  // --湿地
-  SECRET_WETLAND: {
-    type: 'data', // 数据服务
-    layerName: 'd_wetland',
-    label: '湿地',
-    dataSourceName,
-    icon: '湿地.png',
-    url: dataUrl
-  },
+  // SECRET_FORESTPARK_M: {
+  //   type: 'data', // 数据服务
+  //   layerName: 'd_forest_park',
+  //   label: '森林公园',
+  //   dataSourceName,
+  //   icon: '森林公园.png',
+  //   url: dataUrl
+  // },
+  // // --国有林场
+  // SECRET_NATIONAL_FOREST: {
+  //   type: 'data', // 数据服务
+  //   layerName: 'd_national_forest',
+  //   label: '国有林场',
+  //   dataSourceName,
+  //   icon: '国有林场.png',
+  //   url: dataUrl
+  // },
+  // // --湿地
+  // SECRET_WETLAND: {
+  //   type: 'data', // 数据服务
+  //   layerName: 'd_wetland',
+  //   label: '湿地',
+  //   dataSourceName,
+  //   icon: '湿地.png',
+  //   url: dataUrl
+  // },
 
   VIDEO:{
     type: 'data', // 数据服务

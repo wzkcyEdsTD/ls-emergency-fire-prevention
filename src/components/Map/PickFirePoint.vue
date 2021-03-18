@@ -536,7 +536,7 @@ export default {
           tempList.push(point)
           that.pointList.push(element)
         });
-        console.log(that.pointList.length)
+        // console.log(that.pointList.length)
     })
       
     },
