@@ -45,7 +45,9 @@ const createMap = (divId, options = {}) => {
     view: new View({
       center: [119.563179, 28.193992],
       zoom: 10,
-      projection: 'EPSG:4326'
+      projection: 'EPSG:4326',
+      // minZoom:10,
+      maxZoom:20
     }),
     ...options
   })
@@ -1168,7 +1170,6 @@ var buildGrid = function (data, callback) {
 };
 
 function wind(windData) {
-  console.log('111')
   let oe = null
   buildGrid(windData, function (header, grid) {
     var data = [];
@@ -1207,7 +1208,8 @@ function wind(windData) {
         show: false,
         inRange: {
           // color: ['green', 'yellow', 'red']
-          color: ['#ff1a00', '#fc7004', '#ffee3f', '#0000ff', '#06f990', '#09ecfb']
+          color: ['#09ecfb','#06f990','#fc7004', '#ffee3f', '#0000ff',  ]
+
         },
         realtime: false,
         calculable: true,
@@ -1218,25 +1220,24 @@ function wind(windData) {
       legend: {
         show: false
       },
+
       series: [{
         type: 'flowGL',
         coordinateSystem: 'GLMap',
         data: data,
         supersampling: 4,
         particleType: 'line',
-        particleDensity: 128,
-        particleSpeed: 1,
-        // gridWidth: windData.nx,
-        // gridHeight: windData.ny,
+        particleDensity: 100,//粒子密度
+        particleSpeed: 1,//例子速度
+        particleSize:3,
         itemStyle: {
-          opacity: 0.7
-        }
+          opacity: 1,
+
+        },
       }]
     }
-    // const node = document.getElementById('test');
-    // var myCharts = echarts.init(node);
-    // myCharts.setOption(option)
-    //只有在地图渲染的时候才渲染
+
+	  // 地图渲染完成才执行专题图渲染，且只执行一次
     oe = new ADLayer(option, window.g.map, echarts)
     oe.render()
   });

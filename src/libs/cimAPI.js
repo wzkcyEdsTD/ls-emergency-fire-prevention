@@ -10,6 +10,12 @@ serverInstanec.defaults.baseURL = BASEURL;
  * @param {*} url
  * @param {*} data
  */
+
+ serverInstanec.interceptors.request.use(config => {
+    config.headers['X-Access-Token'] = window.localStorage.getItem("access_token");
+    return config;
+});
+
 function getAxios(url = "", params = {}, method){
     const option = { url, method };
     method == 'get' ? option.params = params : option.data = params;

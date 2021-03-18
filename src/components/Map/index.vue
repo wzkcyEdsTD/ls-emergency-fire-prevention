@@ -434,6 +434,7 @@ export default {
 
     initMap() {
       this.map = this.$map.createMap("map-container");
+
       const that = this;
       const imgUrl = 'http://10.53.137.59:8090/iserver/services/map-agscache-Layers/rest/maps/Layers'
       let wenzhouLayer = ''

@@ -116,6 +116,18 @@ export default {
         label:"湿地",
         name:"湿地",
       }
+      //小学学区
+      const legend12 = {
+        icon:"小学学区.jpg",
+        label:"小学学区",
+        name:"小学学区",
+      }
+      //初中学区
+      const legend13 = {
+        icon:"初中学区.jpg",
+        label:"初中学区",
+        name:"初中学区",
+      }
       const list = []
       if (that.fireLayerTemp) {
         list.push(legend)
@@ -151,7 +163,14 @@ export default {
       }
       if (that.sd) {
         list.push(legend11)
-      }       
+      }     
+      if (that.primarySchoolDistrictTemp) {
+        list.push(legend12)
+      }
+      if (that.middleSchoolDistrictTemp) {
+        list.push(legend13)
+      }
+      
       //过滤重复item
       if (this.allLayerList.length == 0) {
         this.allLayerList = [...this.allLayerList, ...list]
@@ -186,6 +205,8 @@ export default {
       primarySchoolChildrenTemp:false,
       middleschoolPoint:false,
       middleSchoolChildren:false,
+      primarySchoolDistrictTemp:false,
+      middleSchoolDistrictTemp:false,
       showVideoList:false,
       bwsd:false,
       rightMenu:30,
@@ -599,7 +620,73 @@ export default {
         }
       })
     })
-  },
+    this.$bus.$on("primarySchoolDistrictTemp",temp=>{
+      that.$nextTick(()=>{
+        that.primarySchoolDistrictTemp = temp;
+        if (temp) {
+          const list = []
+          const legend = {
+            icon:"小学学区.jpg",
+            label:"小学学区",
+            name:"小学学区",
+          }
+          list.push(legend)
+          if (this.allLayerList.length == 0) {
+            this.allLayerList = [...this.allLayerList, ...list]
+          } else {
+            const obj = {};
+            const arr = [...this.allLayerList, ...list];
+            arr.map(v => {
+              if (!obj[v.name]) { obj[v.name] = v }
+            })
+
+            const setNameArr = [...new Set(arr.map(v => v.name))];
+            this.allLayerList = setNameArr.map(v => obj[v])
+          }
+        }else{
+            that.allLayerList = that.allLayerList.filter(v=>{
+              if (!(v.name.indexOf('小学学区')!=-1)) {
+                return v
+              }
+            })
+          
+        }
+      })
+    })
+    this.$bus.$on("middleSchoolDistrictTemp",temp=>{
+      that.$nextTick(()=>{
+        that.middleSchoolDistrictTemp = temp;
+        if (temp) {
+          const list = []
+          const legend = {
+            icon:"初中学区.jpg",
+            label:"初中学区",
+            name:"初中学区",
+          }
+          list.push(legend)
+          if (this.allLayerList.length == 0) {
+            this.allLayerList = [...this.allLayerList, ...list]
+          } else {
+            const obj = {};
+            const arr = [...this.allLayerList, ...list];
+            arr.map(v => {
+              if (!obj[v.name]) { obj[v.name] = v }
+            })
+
+            const setNameArr = [...new Set(arr.map(v => v.name))];
+            this.allLayerList = setNameArr.map(v => obj[v])
+          }
+        }else{
+            that.allLayerList = that.allLayerList.filter(v=>{
+              if (!(v.name.indexOf('初中学区')!=-1)) {
+                return v
+              }
+            })
+          
+        }
+      })
+    })
+    },
   beforeDestroy(){
     this.$bus.$off('hzjbd');
     this.$bus.$off('qxcz');
@@ -612,6 +699,8 @@ export default {
     this.$bus.$off("gylcLayer")
     this.$bus.$off("slgyLayer")
     this.$bus.$off("sdLayer")
+    this.$bus.$off("primarySchoolDistrictTemp")
+    this.$bus.$off("middleSchoolDistrictTemp")
   }
 }
 </script>
@@ -624,7 +713,7 @@ export default {
   padding: 10px;
   right: 420px;
   // background-color: rgba($color: $color-theme, $alpha: 0.8);
-  background-image: url("~@/common/images/详情框.png");
+  background-image: url("~@/common/images/弹框.png");
   background-size: 100% 100%;
   transition: right 0.9s;
   .title {

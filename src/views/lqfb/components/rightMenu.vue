@@ -1441,6 +1441,11 @@ export default {
     background-size: 100%;
     color: #fafafa;
   }
+
+// /deep/.el-image-viewer__canvas{
+//   z-index:5000 !important;
+// }
+
 </style>
 <style>
 .el-input__inner {

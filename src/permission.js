@@ -11,7 +11,7 @@ const whiteList = ['/lqfb','/login','/404',"/lqfb/printMap"] // no redirect whit
 
 router.beforeEach(async(to, from, next) => {
   document.title = getPageTitle(to.meta.title)
-  const token = window.sessionStorage.getItem('假装有个cook');
+  const token = window.localStorage.getItem('access_token');
   if (whiteList.indexOf(to.path) !== -1) {
     if (to.path =="/login" || to.path == "/404") {
       next()

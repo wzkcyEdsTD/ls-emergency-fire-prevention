@@ -165,6 +165,7 @@ export default {
       rainPrValue: '',
       windPrValue: '',
       oe:null,
+      resoultData:"",
     }
   },
   computed: {
@@ -273,14 +274,13 @@ export default {
       this.radarLayer = null
     },
 
-    addWindCur() {
-      const url = `https://datacenter.istrongcloud.com`
+    windData(){
       const that = this;
       var temp = {}
       var timeList = [];//日期
       var dataList = [];//日期对应的时间戳
-      utils.getWindDataList().then(res=>{
-        console.log(res)
+      return new Promise((resolve) => {
+        utils.getWindDataList().then(res=>{
         const list = Object.keys(res.data).map((item, index) => ({value:res.data[item]}))
         // debugger
         list.map(element => {
@@ -315,13 +315,69 @@ export default {
           utils.getWindDataDetail(resoult).then(r=>{
             const key = Object.keys(r)
             const resoultData = r[key[0]]
-            console.log("最新的台风网数据",resoultData)
-            that.oe = that.$map.wind(resoultData)
+            that.resoultData = resoultData;
+            resolve(true)
           })
         }
 
       })
-      // axios.get(`${url}/data/gfs/fcdata/202103/04/02/006.json?v=1614821921256`).then(res => {
+      })
+
+    },
+
+    addWindCur() {
+      const url = `https://datacenter.istrongcloud.com`
+      const that = this;
+      var temp = {}
+      var timeList = [];//日期
+      var dataList = [];//日期对应的时间戳
+      // utils.getWindDataList().then(res=>{
+      //   console.log(res)
+      //   const list = Object.keys(res.data).map((item, index) => ({value:res.data[item]}))
+      //   // debugger
+      //   list.map(element => {
+      //     const time = element.value.time;
+      //     //"2021-03-09T08:00:00+08:00"
+      //     const splitStr = time.split("T")[0] + ' ' +time.split("T")[1].split("+")[0]
+      //     temp[splitStr] = element.value.url;
+      //     timeList.push(splitStr)
+      //     const t = new Date(splitStr).getTime();
+      //     const j ={};
+      //     j['日期']=splitStr
+      //     j['时间戳']=t
+      //     dataList.push(j)
+      //   });
+      //   const dataTime = new Date().getTime();
+      //   //过滤掉预报的数据
+      //   dataList = dataList.filter(v=>{
+      //     if (dataTime-v["时间戳"]>0) {
+      //       return v
+      //     }
+      //   })
+      //   dataList.map(item=>{
+      //     item.time = Math.abs(item["时间戳"] - dataTime)
+      //   })
+      //   dataList.sort(function (a,b) {
+      //     return a.time-b.time
+      //   })
+      //   if (dataList.length>0) {
+      //     const min = dataList[0]['日期']
+      //     const resoult = temp[min]
+      //     // const repace(new RegExp(reallyDo,'g'),replaceWith)
+      //     utils.getWindDataDetail(resoult).then(r=>{
+      //       const key = Object.keys(r)
+      //       const resoultData = r[key[0]]
+      //       that.resoultData = resoultData;
+      //     })
+      //   }
+
+      // })
+     
+     
+        console.log("最新的台风网数据",that.resoultData)
+
+      that.oe = that.$map.wind(that.resoultData)
+     // axios.get(`${url}/data/gfs/fcdata/202103/04/02/006.json?v=1614821921256`).then(res => {
       //    const temp = res.data["2021030408"]
       //   //  console.log(temp)
       //    that.oe = ;
@@ -420,8 +476,10 @@ export default {
       }
     }
   },
-  mounted(){
+  async mounted(){
     const that = this;
+    await that.windData();
+
     that.$nextTick(()=>{
       that.showPrintMap=true
       const fireEvent = this.$route.query

@@ -72,7 +72,7 @@
 <script>
 /* eslint-disable */
 // import { WRT_config } from "@/components/common/Tmap";
-// import { doLogin } from "@/api/loginAPI";
+import { doLogin } from "@/libs/loginApi";
 export default {
   data() {
     return {
@@ -104,31 +104,16 @@ export default {
     async goLogin() {
       let that = this;
       if (this.form.username && this.form.password) {
-        var bol = false;
-        const nameList=["admin","slfh_dsj"]
-        nameList.forEach(v=>{
-          if (v==that.form.username) {
-            bol = true
-          }
-        })
-        if (that.form.username =='admin' && that.form.password =='123456') {
+
+        try {
+          const res = await doLogin(this.form);
           setTimeout(() => {
-            window.sessionStorage.setItem('假装有个cook',"cook");
+            window.localStorage.setItem('access_token',res.token);
             that.doMessage("登陆成功");
-              that.$router.push({ path: "/lqfb" })
+            that.$router.push({ path: "/lqfb" })
           }, 500);
-        }else if (that.form.username =='slfh_dsj' && that.form.password =='lsdsj@123') {
-          setTimeout(() => {
-            window.sessionStorage.setItem('假装有个cook',"cook");
-            that.doMessage("登陆成功");
-              that.$router.push({ path: "/lqfb" })
-          }, 500);
-        }else if(!bol){
-          that.doMessage("该账户不存在",false);
-        }else if(that.form.username =='admin'&& that.form.password !='123456'){
-          that.doMessage("密码错误",false);
-        }else if(that.form.username =='slfh_dsj'&& that.form.password !='lsdsj@123'){
-          that.doMessage("密码错误",false);
+        } catch (message) {
+          this.doMessage(message, false);
         }
       } else {
         that.doMessage("请填写完整的用户名或密码", false);

@@ -201,13 +201,13 @@ export default {
     async showPopupItem(item) {
       const that = this;
 
-      let node = $(`.ol-overlaycontainer-stopevent`)
+      let node = $(`#e_container`)
       if (node) {
-        node.css("z-index","1999")
+        node.css("z-index","2")
       }
-      let node1 = $(`.toobar`)
+      let node1 = $(`.ol-overlaycontainer-stopevent`)
       if (node1) {
-        node1.css("z-index","2999")
+        node1.css("z-index","5")
       }
 
       this.clearPopup()
@@ -312,13 +312,13 @@ export default {
     async showPopupSearchItem(feature){
       const that = this;
 
-      let node = $(`.ol-overlaycontainer-stopevent`)
+      let node = $(`#e_container`)
       if (node) {
-        node.css("z-index","1999")
+        node.css("z-index","2")
       }
-      let node1 = $(`.toobar`)
+      let node1 = $(`.ol-overlaycontainer-stopevent`)
       if (node1) {
-        node1.css("z-index","2999")
+        node1.css("z-index","5")
       }
       this.clearPopup()
 
@@ -570,13 +570,13 @@ export default {
     async showPopup(evt) {
       const that = this;
 
-      let node = $(`.ol-overlaycontainer-stopevent`)
+      let node = $(`#e_container`)
       if (node) {
-        node.css("z-index","1999")
+        node.css("z-index","2")
       }
-      let node1 = $(`.toobar`)
+      let node1 = $(`.ol-overlaycontainer-stopevent`)
       if (node1) {
-        node1.css("z-index","2999")
+        node1.css("z-index","5")
       }
       this.clearPopup()
       let feature = this.$map
@@ -814,7 +814,6 @@ export default {
               <span class="value" title="${value["JDMC"]}">${value["JDMC"]}</span>
           </div>`
       }else if(value['OBJECTID'] && value['TYPE']){
-        // debugger
           infoTmpl += `<div  class="item">
               <span class="key">名称：</span>
               <span class="value" title="${value["NAME"]}">${value["NAME"]}</span>
@@ -827,10 +826,10 @@ export default {
               <span class="key">类型：</span>
               <span class="value" title="${value["TYPE"]}">${value["TYPE"]}</span>
           </div>`
-          // infoTmpl += `<div  class="item">
-          //     <span class="key">出生日期：</span>
-          //     <span class="value" title="${value["CSRQ"]}">${value["CSRQ"]}</span>
-          // </div>`
+          infoTmpl += `<div  class="item">
+              <span class="key">范围：</span>
+              <span class="value" title="${value["AREA"]}">${value["AREA"]}</span>
+          </div>`
           // infoTmpl += `<div  class="item">
           //     <span class="key">户号：</span>
           //     <span class="value" title="${value["HH"]}">${value["HH"]}</span>

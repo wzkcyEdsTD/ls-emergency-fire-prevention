@@ -430,62 +430,66 @@ export default {
       return direct
     },
     changeTemperatureType(number){
-      const res = (number - 32) * 5 / 9
+      const res = number / 10
       return res.toFixed(1)
     },
     createMinDistanceQXCZ(){
       const that = this;
-      if (this.qxczLayer) {
-        this.qxczLayer=null;
-      }
-      this.pointList.map(v=>{
-        const lon = Number(v.properties.LONGITUDE)
-        const lat = Number(v.properties.LATITUDE)
-        v.juli = that.distance(this.inputLon,this.inputLat,lon,lat)
-      })
-      this.pointList.sort(function(a,b) {
-        return a.juli-b.juli
-      })
-      const minDistancePoint = this.pointList[0]
-      console.log(minDistancePoint)
-      util.getQXDetail(minDistancePoint.properties.IIIII).then(r=>{
-        const detailInfo = r['[]'][0]['SzlsDwSjjhSfxptBiz067QxQyqxzgc']
-        detailInfo['风向'] = that.getWindDirect(Number(detailInfo.winddirect))
-        detailInfo['摄氏度'] = that.changeTemperatureType(Number(detailInfo.drybultemp))
-        console.log("气象站指标",detailInfo)
-        that.$bus.$emit("detailInfo",detailInfo)
-      })
-      const features = [];
-      const properties = minDistancePoint.properties;
-      const feature =  new Feature({
-            geometry: new Point([properties.LONGITUDE,properties.LATITUDE]),
-            ...properties
-      })
+      return new Promise((resolve) => {
+
+        if (this.qxczLayer) {
+          this.qxczLayer=null;
+        }
+        this.pointList.map(v=>{
+          const lon = Number(v.properties.LONGITUDE)
+          const lat = Number(v.properties.LATITUDE)
+          v.juli = that.distance(this.inputLon,this.inputLat,lon,lat)
+        })
+        this.pointList.sort(function(a,b) {
+          return a.juli-b.juli
+        })
+        const minDistancePoint = this.pointList[0]
+        console.log(minDistancePoint)
+        util.getQXDetail(minDistancePoint.properties.IIIII).then(r=>{
+          const detailInfo = r['[]'][0]['SzlsDwSjjhSfxptBiz067QxQyqxzgc']
+          detailInfo['风向'] = that.getWindDirect(Number(detailInfo.winddirect))
+          detailInfo['摄氏度'] = that.changeTemperatureType(Number(detailInfo.drybultemp))
+          console.log("气象站指标",detailInfo)
+          that.$bus.$emit("detailInfo",detailInfo)
+          resolve(true)
+        })
+        const features = [];
+        const properties = minDistancePoint.properties;
+        const feature =  new Feature({
+              geometry: new Point([properties.LONGITUDE,properties.LATITUDE]),
+              ...properties
+        })
+          // debugger
+        const style = new Style({
+          image: new Icon({
+            anchor: [0.5, 26],
+            anchorXUnits: 'fraction',
+            anchorYUnits: 'pixels',
+            src: require(`@/assets/images/icon/${'气象测站.png'}`)
+          }),
+          // stroke: new Stroke({ color: 'red', width: 2 })
+        })
+        feature.setStyle(style)
+        features.push(feature);
+        var vectorSource = new VectorSource({
+          features,
+          wrapX: false
+        });
+        this.qxczLayer = new VectorLayer({
+          source: vectorSource,
+        })
+        this.$map.addLayer(this.qxczLayer)
         // debugger
-      const style = new Style({
-        image: new Icon({
-          anchor: [0.5, 26],
-          anchorXUnits: 'fraction',
-          anchorYUnits: 'pixels',
-          src: require(`@/assets/images/icon/${'气象测站.png'}`)
-        }),
-        // stroke: new Stroke({ color: 'red', width: 2 })
+        that.$bus.$emit("minDistance",minDistancePoint);
       })
-      feature.setStyle(style)
-      features.push(feature);
-      var vectorSource = new VectorSource({
-        features,
-        wrapX: false
-      });
-      this.qxczLayer = new VectorLayer({
-        source: vectorSource,
-      })
-      this.$map.addLayer(this.qxczLayer)
-      // debugger
-      that.$bus.$emit("minDistance",minDistancePoint);
 
     },
-    handleComfirmClick() {
+    async handleComfirmClick() {
       const that = this;
       // debugger
       that.$bus.$emit("hasQxcz",true);
@@ -506,7 +510,7 @@ export default {
       this.$map.getMap().getView().setCenter([this.inputLon,this.inputLat]);
       this.$map.getMap().getView().setZoom(16);
       // debugger
-      that.createMinDistanceQXCZ();
+      await that.createMinDistanceQXCZ();
       this.$store.dispatch('map/changeVideo', [])//清空视频数据
       this.$store.dispatch('map/changeLqzyLayer', true)
       this.$store.dispatch('map/changeIsAddFeatures', true) // 只在选中火灾点的时候获取才重新数据
@@ -515,71 +519,35 @@ export default {
       // this.$store.dispatch('jjya/getSsxyPersonList', null)
       // this.$store.dispatch('jjya/getMonitorList', null)
     },
-    testData(){
+    async testData(){
       const that = this;
-      var sqlParam = new SuperMap.GetFeaturesBySQLParameters({
-        toIndex: 999999,
-        queryParameter: {
-          // name: layerName,
-          attributeFilter: "",
-          maxFeatures: 99999999
-        },
-        datasetNames: [`lishui_forestfire_v2:v_forest_qixiangcezhandian`]
-      })
-      const url = "http://10.53.137.59:8090/iserver/services/data-lishui_forestfire_v2/rest/data";
-      new FeatureService(url).getFeaturesBySQL(sqlParam, serviceResult => {
-        const list = serviceResult.result.features.features;
-        const tempList = []
-        list.forEach(element => {
-          const properties = element.properties;
-          const point = new Point([properties.LONGITUDE,properties.LATITUDE]);
-          tempList.push(point)
-          that.pointList.push(element)
-        });
-        // console.log(that.pointList.length)
-    })
+      return new Promise((resolve) => {
+        var sqlParam = new SuperMap.GetFeaturesBySQLParameters({
+          toIndex: 999999,
+          queryParameter: {
+            // name: layerName,
+            attributeFilter: "",
+            maxFeatures: 99999999
+          },
+          datasetNames: [`lishui_forestfire_v2:v_forest_qixiangcezhandian`]
+        })
+        const url = "http://10.53.137.59:8090/iserver/services/data-lishui_forestfire_v2/rest/data";
       
-    },
-    searchQXpoint(tempList){
-      //创建最近设施分析参数实例
-      debugger
-      var resultSetting = new SuperMap.TransportationAnalystResultSetting({
-          returnEdgeFeatures: true,
-          returnEdgeGeometry: true,
-          returnEdgeIDs: true,
-          returnNodeFeatures: true,
-          returnNodeGeometry: true,
-          returnNodeIDs: true,
-          returnPathGuides: true,
-          returnRoutes: true
-      });
-      var analystParameter = new SuperMap.TransportationAnalystParameter({
-          resultSetting: resultSetting,
-          turnWeightField: "TurnCost",
-          weightFieldName: "length"  //length,time
-      });
+        new FeatureService(url).getFeaturesBySQL(sqlParam, serviceResult => {
+          const list = serviceResult.result.features.features;
+          const tempList = []
+          list.forEach(element => {
+            const properties = element.properties;
+            const point = new Point([properties.LONGITUDE,properties.LATITUDE]);
+            tempList.push(point)
+            that.pointList.push(element)
 
-      var findClosetFacilitiesParameter = new SuperMap.FindClosestFacilitiesParameters({
-          //事件点,必设参数
-          event: new Point([120.3,28.04]),
-          //要查找的设施点数量。默认值为1
-          expectFacilityCount: 1,
-          //气象站点集合
-          facilities: tempList,
-          isAnalyzeById: false,
-          parameter: analystParameter
-      });
-      const serviceUrl = "https://iserver.supermap.io/iserver/services/transportationanalyst-sample/rest/networkanalyst/RoadNet@Changchun"
-      debugger
-      //进行查找
-      new ol.supermap.NetworkAnalystService(serviceUrl).findClosestFacilities(findClosetFacilitiesParameter, function (serviceResult) {
-          debugger
-          console.log(serviceResult)
-          serviceResult.result.facilityPathList.map(function (result) {
           });
-  
-      });
+          console.log(2)
+          resolve(true);
+        })
 
+     });
     },
 
     distance(la1, lo1, la2, lo2) {
@@ -596,11 +564,9 @@ export default {
     }
 
   },
-  mounted(){
+  async mounted(){
     const that = this;
-    that.$nextTick(()=>{
-      that.testData();
-    })
+    that.testData();
     this.$bus.$on('fire',(value)=>{
       // console.log("传过来了",value)
       // that.handleClearClick();
@@ -625,26 +591,28 @@ export default {
 
     that.$bus.$on('fireAndId',(value)=>{
       // that.inputSearchRadius = 1000;//半径
-      if (that.firePtLayer) {
-        that.$store.dispatch('map/changeClearFlag', null)
-        that.$store.dispatch('map/changeIsAddFeatures', false)
-        that.firePtLayer && that.$map.removeLayer(that.firePtLayer)
-        that.$store.dispatch('jjya/changeFirePtLayer', null)
-        that.$store.dispatch('jjya/changeBuffer', null)
-        that.$store.dispatch('jjya/changeFirePt', null)
-      }
-      that.inputLon = value.x;
-      that.inputLat = value.y;
-      // debugger
-      // that.$store.dispatch("map/clearLayerList",[]);
-      // that.initData()
-      that.systemcode = value.systemcode
-      that.$bus.$emit("sysCode",value.systemcode)
-      //等待资源加载完
-      setTimeout(()=>{
-        that.handleComfirmClick();
-      },600);
-
+      that.testData().then(()=>{
+        if (that.firePtLayer) {
+          that.$store.dispatch('map/changeClearFlag', null)
+          that.$store.dispatch('map/changeIsAddFeatures', false)
+          that.firePtLayer && that.$map.removeLayer(that.firePtLayer)
+          that.$store.dispatch('jjya/changeFirePtLayer', null)
+          that.$store.dispatch('jjya/changeBuffer', null)
+          that.$store.dispatch('jjya/changeFirePt', null)
+        }
+        that.inputLon = value.x;
+        that.inputLat = value.y;
+        // debugger
+        // that.$store.dispatch("map/clearLayerList",[]);
+        // that.initData()
+        that.systemcode = value.systemcode
+        that.$bus.$emit("sysCode",value.systemcode)
+        //等待资源加载完
+            console.log(3)
+        setTimeout(()=>{
+          that.handleComfirmClick();
+        },600);
+      })
     })
   },
   beforeDestroy(){

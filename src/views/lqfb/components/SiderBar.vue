@@ -532,13 +532,15 @@ export default {
           });
           this.$map.addLayer(this.primarySchoolDistrictLayer);
           this.primarySchoolDistrictTemp = true;
+          this.$bus.$emit('primarySchoolDistrictTemp',this.primarySchoolDistrictTemp);
         }else{
           if (this.primarySchoolDistrictTemp) {
             this.primarySchoolDistrictTemp = false
+            this.$bus.$emit('primarySchoolDistrictTemp',this.primarySchoolDistrictTemp);
             // this.$bus.$emit('primarySchoolDistrict',this.primarySchoolDistrictTemp);
           }else if (!this.primarySchoolDistrictTemp) {
             this.primarySchoolDistrictTemp = true
-            // this.$bus.$emit('primarySchoolDistrict',this.primarySchoolDistrictTemp);
+            this.$bus.$emit('primarySchoolDistrictTemp',this.primarySchoolDistrictTemp);
           }
           this.primarySchoolDistrictLayer.setVisible(this.primarySchoolDistrictTemp);
         }
@@ -655,14 +657,15 @@ export default {
           });
           this.$map.addLayer(this.middleSchoolDistrictLayer);
           this.middleSchoolDistrictTemp = true;
+          this.$bus.$emit('middleSchoolDistrictTemp',this.middleSchoolDistrictTemp);
           // this.$store.dispatch('lqfb/changeVideoListOffsetRight', 0)
         }else{
           if (this.middleSchoolDistrictTemp) {
             this.middleSchoolDistrictTemp = false
-            this.$bus.$emit('middleSchoolDistrict',this.middleSchoolDistrictTemp);
+            this.$bus.$emit('middleSchoolDistrictTemp',this.middleSchoolDistrictTemp);
           }else if (!this.middleSchoolDistrictTemp) {
             this.middleSchoolDistrictTemp = true
-            this.$bus.$emit('middleSchoolDistrict',this.middleSchoolDistrictTemp);
+            this.$bus.$emit('middleSchoolDistrictTemp',this.middleSchoolDistrictTemp);
           }
           this.middleSchoolDistrictLayer.setVisible(this.middleSchoolDistrictTemp);
         }
