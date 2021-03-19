@@ -148,9 +148,11 @@ export default {
 
     this.$store.dispatch('lqfb/changezlOffsetRight', 0)
     this.$bus.$on("showPoup",item=>{
+
       that.showPopupItem(item);
     });
     this.$bus.$on("showPoupItem",item=>{
+      
       that.showPopupSearchItem(item);
     })
   },
@@ -200,7 +202,7 @@ export default {
     //火灾点自动弹框
     async showPopupItem(item) {
       const that = this;
-
+      that.$store.dispatch("lqfb/changeInfoPanelOffsetRight",-30);
       let node = $(`#e_container`)
       if (node) {
         node.css("z-index","2")
@@ -244,6 +246,7 @@ export default {
         this.$bus.$emit("fire",value);
         this.$bus.$emit("gridInfo",null);
         this.$bus.$emit("streetInfo",null);
+        this.$store.dispatch("lqfb/changeInfoPanelOffsetRight",-30);
       }else{
       }
 
@@ -311,7 +314,7 @@ export default {
     //除了火灾点其他点位的自动弹框
     async showPopupSearchItem(feature){
       const that = this;
-
+      that.$store.dispatch("lqfb/changeInfoPanelOffsetRight",-30);
       let node = $(`#e_container`)
       if (node) {
         node.css("z-index","2")
@@ -362,6 +365,7 @@ export default {
         this.$bus.$emit("fire",value);
         this.$bus.$emit("gridInfo",null);
         this.$bus.$emit("streetInfo",null);
+        this.$store.dispatch("lqfb/changeInfoPanelOffsetRight",-30);
       }else{
       }
       // debugger
@@ -467,7 +471,7 @@ export default {
             detailInfo['relhumidity'] = '-'
           }
 
-          console.log("气象站指标",detailInfo)
+          // console.log("气象站指标",detailInfo)
           infoTmpl += `<div  class="item">
               <span class="key">名称：</span>
               <span class="value" title="${value['ADDRESS']}">${value['ADDRESS']}</span>
@@ -631,6 +635,7 @@ export default {
         this.$bus.$emit("fire",value);
         this.$bus.$emit("gridInfo",null);
         this.$bus.$emit("streetInfo",null);
+        this.$store.dispatch("lqfb/changeInfoPanelOffsetRight",-30);
       }
       // debugger
 
@@ -683,192 +688,169 @@ export default {
         table = document.getElementById('table-box')
       }
       // debugger
-      console.log(123)
+      // console.log(123)
       if (!(value['systemcode'])) {
-        // console.log("不是火灾点")
-                    //办事网点
-      if (value['BSWD_TYPE']) {
+        //办事网点
+        if (value['BSWD_TYPE']) {
 
-        infoTmpl += `<div  class="item">
+          infoTmpl += `<div  class="item">
+                  <span class="key">名称：</span>
+                  <span class="value" title="${value["NAME"]}">${value["NAME"]}</span>
+              </div>`
+          infoTmpl += `<div  class="item">
+              <span class="key">类型：</span>
+              <span class="value" title="${value["BSWD_TYPE"]}">${value["BSWD_TYPE"]}</span>
+          </div>`
+          infoTmpl += `<div  class="item">
+              <span class="key">区县：</span>
+              <span class="value" title="${value["SZQX"]}">${value["SZQX"]}</span>
+          </div>`
+          infoTmpl += `<div  class="item">
+              <span class="key">街道：</span>
+              <span class="value" title="${value["SZZ"]}">${value["SZZ"]}</span>
+          </div>`
+          infoTmpl += `<div  class="item">
+              <span class="key">级别：</span>
+              <span class="value" title="${value["XZJB"]}">${value["XZJB"]}</span>
+          </div>`
+          infoTmpl += `<div  class="item">
+              <span class="key">地址：</span>
+              <span class="value" title="${value["DZ"]}">${value["DZ"]}</span>
+          </div>`
+          infoTmpl += `<div  class="item">
+              <span class="key">联系电话：</span>
+              <span class="value" title="${value["LXDH"]}">${value["LXDH"]}</span>
+          </div>`
+          infoTmpl += `<div  class="item">
+              <span class="key">工作时间：</span>
+              <span class="value" title="${value["GZSJ"]}">${value["GZSJ"]}</span>
+          </div>`
+
+        }else if(value['IIIII']){
+          util.getQXDetail(value['IIIII']).then(r=>{
+            const detailInfo = r['[]'][0]['SzlsDwSjjhSfxptBiz067QxQyqxzgc']
+            detailInfo['风向'] = that.getWindDirect(Number(detailInfo.winddirect))
+            detailInfo['摄氏度'] = that.changeTemperatureType(Number(detailInfo.drybultemp))
+            //气压
+            if (detailInfo['stationpress'].indexOf('32768')!= -1 ) {
+              detailInfo['stationpress'] = '-'
+            }else{
+              detailInfo['stationpress'] = Number(detailInfo['stationpress']) / 10
+              detailInfo['stationpress'] += " hPa"
+            }
+            //水汽压
+            if (!(detailInfo['vapourpress'].indexOf('32768')!=-1)) {
+              detailInfo['vapourpress'] = Number(detailInfo['vapourpress']) / 10
+              detailInfo['vapourpress'] += " hPa"
+            }else{
+              detailInfo['vapourpress'] = '-'
+            }
+            //湿度
+            if (!(detailInfo['relhumidity'].indexOf('32768')!=-1)) {
+              detailInfo['relhumidity'] += " %"
+            }else{
+              detailInfo['relhumidity'] = '-'
+            }
+            // console.log("气象站指标",detailInfo)
+            infoTmpl += `<div  class="item">
+                <span class="key">名称：</span>
+                <span class="value" title="${value['ADDRESS']}">${value['ADDRESS']}</span>
+            </div>`
+            infoTmpl += `<div  class="item">
+                <span class="key">温度：</span>
+                <span class="value" title="${detailInfo["摄氏度"]}">${detailInfo["摄氏度"]} ℃</span>
+            </div>`
+            infoTmpl += `<div  class="item">
+                <span class="key">风向：</span>
+                <span class="value" title="${detailInfo["风向"]}">${detailInfo["风向"]}</span>
+            </div>`
+            infoTmpl += `<div  class="item">
+                <span class="key">风速：</span>
+                <span class="value" title="${detailInfo["windvelocity"]}">${detailInfo["windvelocity"]} m/s</span>
+            </div>`
+            infoTmpl += `<div  class="item">
+                <span class="key">降雨量：</span>
+                <span class="value" title="${detailInfo["precipition"]}">${detailInfo["precipition"]} mm</span>
+            </div>`
+            // infoTmpl += `<div  class="item">
+            //     <span class="key">时间：</span>
+            //     <span class="value" title="${detailInfo["biz_time"]}">${detailInfo["biz_time"]}</span>
+            // </div>`
+            infoTmpl += `<div  class="item">
+                <span class="key">气压：</span>
+                <span class="value" title="${detailInfo["stationpress"]}">${detailInfo["stationpress"]}</span>
+            </div>`
+            infoTmpl += `<div  class="item">
+                <span class="key">湿度：</span>
+                <span class="value" title="${detailInfo["relhumidity"]}">${detailInfo["relhumidity"]}</span>
+            </div>`
+            infoTmpl += `<div  class="item">
+                <span class="key">水汽压：</span>
+                <span class="value" title="${detailInfo["vapourpress"]}">${detailInfo["vapourpress"]}</span>
+            </div>`
+            // debugger
+            table.innerHTML = infoTmpl
+          })
+        }else if(value['HLX']){
+          // debugger
+            infoTmpl += `<div  class="item">
+                <span class="key">姓名：</span>
+                <span class="value" title="${value["XM"]}">${value["XM"]}</span>
+            </div>`
+            infoTmpl += `<div  class="item">
+                <span class="key">地址：</span>
+                <span class="value" title="${value['JZDZ']}">${value['JZDZ']}</span>
+            </div>`
+            infoTmpl += `<div  class="item">
+                <span class="key">户类型：</span>
+                <span class="value" title="${value["HLX"]}">${value["HLX"]}</span>
+            </div>`
+            // infoTmpl += `<div  class="item">
+            //     <span class="key">出生日期：</span>
+            //     <span class="value" title="${value["CSRQ"]}">${value["CSRQ"]}</span>
+            // </div>`
+            // infoTmpl += `<div  class="item">
+            //     <span class="key">户号：</span>
+            //     <span class="value" title="${value["HH"]}">${value["HH"]}</span>
+            // </div>`
+            infoTmpl += `<div  class="item">
+                <span class="key">街道名称：</span>
+                <span class="value" title="${value["JDMC"]}">${value["JDMC"]}</span>
+            </div>`
+        }else if(value['OBJECTID'] && value['TYPE']){
+            infoTmpl += `<div  class="item">
                 <span class="key">名称：</span>
                 <span class="value" title="${value["NAME"]}">${value["NAME"]}</span>
             </div>`
-        infoTmpl += `<div  class="item">
-            <span class="key">类型：</span>
-            <span class="value" title="${value["BSWD_TYPE"]}">${value["BSWD_TYPE"]}</span>
-        </div>`
-        infoTmpl += `<div  class="item">
-            <span class="key">区县：</span>
-            <span class="value" title="${value["SZQX"]}">${value["SZQX"]}</span>
-        </div>`
-        infoTmpl += `<div  class="item">
-            <span class="key">街道：</span>
-            <span class="value" title="${value["SZZ"]}">${value["SZZ"]}</span>
-        </div>`
-        infoTmpl += `<div  class="item">
-            <span class="key">级别：</span>
-            <span class="value" title="${value["XZJB"]}">${value["XZJB"]}</span>
-        </div>`
-        infoTmpl += `<div  class="item">
-            <span class="key">地址：</span>
-            <span class="value" title="${value["DZ"]}">${value["DZ"]}</span>
-        </div>`
-        infoTmpl += `<div  class="item">
-            <span class="key">联系电话：</span>
-            <span class="value" title="${value["LXDH"]}">${value["LXDH"]}</span>
-        </div>`
-        infoTmpl += `<div  class="item">
-            <span class="key">工作时间：</span>
-            <span class="value" title="${value["GZSJ"]}">${value["GZSJ"]}</span>
-        </div>`
-
-      }else if(value['IIIII']){
-        util.getQXDetail(value['IIIII']).then(r=>{
-          const detailInfo = r['[]'][0]['SzlsDwSjjhSfxptBiz067QxQyqxzgc']
-          detailInfo['风向'] = that.getWindDirect(Number(detailInfo.winddirect))
-          detailInfo['摄氏度'] = that.changeTemperatureType(Number(detailInfo.drybultemp))
-          //气压
-          if (detailInfo['stationpress'].indexOf('32768')!= -1 ) {
-            detailInfo['stationpress'] = '-'
-          }else{
-            detailInfo['stationpress'] = Number(detailInfo['stationpress']) / 10
-            detailInfo['stationpress'] += " hPa"
-          }
-          //水汽压
-          if (!(detailInfo['vapourpress'].indexOf('32768')!=-1)) {
-            detailInfo['vapourpress'] = Number(detailInfo['vapourpress']) / 10
-            detailInfo['vapourpress'] += " hPa"
-          }else{
-            detailInfo['vapourpress'] = '-'
-          }
-          //湿度
-          if (!(detailInfo['relhumidity'].indexOf('32768')!=-1)) {
-            detailInfo['relhumidity'] += " %"
-          }else{
-            detailInfo['relhumidity'] = '-'
-          }
-          console.log("气象站指标",detailInfo)
-          infoTmpl += `<div  class="item">
-              <span class="key">名称：</span>
-              <span class="value" title="${value['ADDRESS']}">${value['ADDRESS']}</span>
-          </div>`
-          infoTmpl += `<div  class="item">
-              <span class="key">温度：</span>
-              <span class="value" title="${detailInfo["摄氏度"]}">${detailInfo["摄氏度"]} ℃</span>
-          </div>`
-          infoTmpl += `<div  class="item">
-              <span class="key">风向：</span>
-              <span class="value" title="${detailInfo["风向"]}">${detailInfo["风向"]}</span>
-          </div>`
-          infoTmpl += `<div  class="item">
-              <span class="key">风速：</span>
-              <span class="value" title="${detailInfo["windvelocity"]}">${detailInfo["windvelocity"]} m/s</span>
-          </div>`
-          infoTmpl += `<div  class="item">
-              <span class="key">降雨量：</span>
-              <span class="value" title="${detailInfo["precipition"]}">${detailInfo["precipition"]} mm</span>
-          </div>`
-          // infoTmpl += `<div  class="item">
-          //     <span class="key">时间：</span>
-          //     <span class="value" title="${detailInfo["biz_time"]}">${detailInfo["biz_time"]}</span>
-          // </div>`
-          infoTmpl += `<div  class="item">
-              <span class="key">气压：</span>
-              <span class="value" title="${detailInfo["stationpress"]}">${detailInfo["stationpress"]}</span>
-          </div>`
-          infoTmpl += `<div  class="item">
-              <span class="key">湿度：</span>
-              <span class="value" title="${detailInfo["relhumidity"]}">${detailInfo["relhumidity"]}</span>
-          </div>`
-          infoTmpl += `<div  class="item">
-              <span class="key">水汽压：</span>
-              <span class="value" title="${detailInfo["vapourpress"]}">${detailInfo["vapourpress"]}</span>
-          </div>`
-          // debugger
-          table.innerHTML = infoTmpl
-        })
-      }else if(value['HLX']){
-        // debugger
-          infoTmpl += `<div  class="item">
-              <span class="key">姓名：</span>
-              <span class="value" title="${value["XM"]}">${value["XM"]}</span>
-          </div>`
-          infoTmpl += `<div  class="item">
-              <span class="key">地址：</span>
-              <span class="value" title="${value['JZDZ']}">${value['JZDZ']}</span>
-          </div>`
-          infoTmpl += `<div  class="item">
-              <span class="key">户类型：</span>
-              <span class="value" title="${value["HLX"]}">${value["HLX"]}</span>
-          </div>`
-          // infoTmpl += `<div  class="item">
-          //     <span class="key">出生日期：</span>
-          //     <span class="value" title="${value["CSRQ"]}">${value["CSRQ"]}</span>
-          // </div>`
-          // infoTmpl += `<div  class="item">
-          //     <span class="key">户号：</span>
-          //     <span class="value" title="${value["HH"]}">${value["HH"]}</span>
-          // </div>`
-          infoTmpl += `<div  class="item">
-              <span class="key">街道名称：</span>
-              <span class="value" title="${value["JDMC"]}">${value["JDMC"]}</span>
-          </div>`
-      }else if(value['OBJECTID'] && value['TYPE']){
-          infoTmpl += `<div  class="item">
-              <span class="key">名称：</span>
-              <span class="value" title="${value["NAME"]}">${value["NAME"]}</span>
-          </div>`
-          infoTmpl += `<div  class="item">
-              <span class="key">地址：</span>
-              <span class="value" title="${value['ADDRESS']}">${value['ADDRESS']}</span>
-          </div>`
-          infoTmpl += `<div  class="item">
-              <span class="key">类型：</span>
-              <span class="value" title="${value["TYPE"]}">${value["TYPE"]}</span>
-          </div>`
-          infoTmpl += `<div  class="item">
-              <span class="key">范围：</span>
-              <span class="value" title="${value["AREA"]}">${value["AREA"]}</span>
-          </div>`
-          // infoTmpl += `<div  class="item">
-          //     <span class="key">户号：</span>
-          //     <span class="value" title="${value["HH"]}">${value["HH"]}</span>
-          // </div>`
-      }else{
-        for (const key in attrData[value['TABLE_NAME']]) {
-          if (value[key] != undefined) {
             infoTmpl += `<div  class="item">
-                            <span class="key">${attrData[value['TABLE_NAME']][key]}：</span>
-                            <span class="value">${value[key]}</span>
-                        </div>`
+                <span class="key">地址：</span>
+                <span class="value" title="${value['ADDRESS']}">${value['ADDRESS']}</span>
+            </div>`
+            infoTmpl += `<div  class="item">
+                <span class="key">类型：</span>
+                <span class="value" title="${value["TYPE"]}">${value["TYPE"]}</span>
+            </div>`
+            infoTmpl += `<div  class="item">
+                <span class="key">范围：</span>
+                <span class="value" title="${value["AREA"]}">${value["AREA"]}</span>
+            </div>`
+            // infoTmpl += `<div  class="item">
+            //     <span class="key">户号：</span>
+            //     <span class="value" title="${value["HH"]}">${value["HH"]}</span>
+            // </div>`
+        }else{
+          for (const key in attrData[value['TABLE_NAME']]) {
+            if (value[key] != undefined) {
+              infoTmpl += `<div  class="item">
+                              <span class="key">${attrData[value['TABLE_NAME']][key]}：</span>
+                              <span class="value">${value[key]}</span>
+                          </div>`
+            }
           }
         }
-      }
-
       }else if ((value['systemcode'])) {
         this.firePopyp.setPosition([value.x,value.y])
-        // debugger
-        infoTmpl += `<div  class="item">
-                <span class="key">地点：</span>
-                <span class="value">${value["address"]}</span>
-            </div>`
-        infoTmpl += `<div  class="item">
-            <span class="key">类型：</span>
-            <span class="value">${value["infocontent"]}</span>
-        </div>`
-        infoTmpl += `<div  class="item">
-            <span class="key">来源：</span>
-            <span class="value">${value["systemcode"]}</span>
-        </div>`
-        infoTmpl += `<div  class="item">
-            <span class="key">电话：</span>
-            <span class="value">${value["jubaorentel"]}</span>
-        </div>`
-        infoTmpl += `<div  class="item">
-            <span class="key">时间：</span>
-            <span class="value">${value["time"]}</span>
-        </div>`
-        // console.log(infoTmpl)
+
       }
 
       table.innerHTML = infoTmpl

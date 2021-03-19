@@ -186,7 +186,7 @@ export default {
       }
     },
     rightMenuList(list){
-      console.log('当前剩余',list.length)
+      // console.log('当前剩余',list.length)
       const that = this;
       if (list.length>0) {
         that.$bus.$emit("changeMenuLocaltion",30)

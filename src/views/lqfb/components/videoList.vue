@@ -115,7 +115,7 @@ export default {
   top: 0;
   right: 0;
   padding: 10px;
-  z-index: 1999;
+  z-index: 1002;
   .close {
     position: absolute;
     left: -34px;

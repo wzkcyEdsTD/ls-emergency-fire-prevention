@@ -143,7 +143,7 @@ export default {
       const url = "http://10.53.137.59:8090/iserver/services/data-lishui_forestfire_v2/rest/data";
       new FeatureService(url).getFeaturesByGeometry(geometryParam, serviceResult => {
         // debugger
-        console.log("街道信息查询",serviceResult)
+        // console.log("街道信息查询",serviceResult)
         const list = serviceResult.result.features.features;
         let sql;
         list.forEach(element => {
@@ -234,7 +234,7 @@ export default {
       const fireCoor = fireFeature.getGeometry().getCoordinates()
       this.inputLon = fireCoor[0]
       this.inputLat = fireCoor[1]
-      console.log(fireCoor)
+      // console.log(fireCoor)
       const r = this.inputSearchRadius / 1000;
       const buffered = turf.buffer(
         turf.point(fireCoor),
@@ -438,6 +438,7 @@ export default {
       return new Promise((resolve) => {
 
         if (this.qxczLayer) {
+          this.$map.removeLayer(this.qxczLayer)
           this.qxczLayer=null;
         }
         this.pointList.map(v=>{
@@ -449,12 +450,12 @@ export default {
           return a.juli-b.juli
         })
         const minDistancePoint = this.pointList[0]
-        console.log(minDistancePoint)
+        // console.log(minDistancePoint)
         util.getQXDetail(minDistancePoint.properties.IIIII).then(r=>{
           const detailInfo = r['[]'][0]['SzlsDwSjjhSfxptBiz067QxQyqxzgc']
           detailInfo['风向'] = that.getWindDirect(Number(detailInfo.winddirect))
           detailInfo['摄氏度'] = that.changeTemperatureType(Number(detailInfo.drybultemp))
-          console.log("气象站指标",detailInfo)
+          // console.log("气象站指标",detailInfo)
           that.$bus.$emit("detailInfo",detailInfo)
           resolve(true)
         })
@@ -480,6 +481,7 @@ export default {
           features,
           wrapX: false
         });
+
         this.qxczLayer = new VectorLayer({
           source: vectorSource,
         })
@@ -497,6 +499,7 @@ export default {
       this.searchGrid(new Point([this.inputLon,this.inputLat]))
       this.streetDetail(new Point([this.inputLon,this.inputLat]))
       this.clearFire();
+
       const fireFeat = this.$map.createFeature([this.inputLon, this.inputLat])
       this.showFireFeature(fireFeat)
       if (this.inputSearchRadius === 0 || !this.inputSearchRadius) {
@@ -518,6 +521,12 @@ export default {
       this.$store.dispatch('siderbar/changeCheckedLeafNodesWithBuffer', hzdfxNodes)
       // this.$store.dispatch('jjya/getSsxyPersonList', null)
       // this.$store.dispatch('jjya/getMonitorList', null)
+
+      const nodes = {name:"周边分析"}
+      this.$store.dispatch('map/appendDetailOrAround', null)
+      this.$store.dispatch('map/appendDetailOrAround', nodes)
+
+
     },
     async testData(){
       const that = this;
@@ -543,7 +552,7 @@ export default {
             that.pointList.push(element)
 
           });
-          console.log(2)
+          // console.log(2)
           resolve(true);
         })
 
@@ -586,6 +595,8 @@ export default {
         // that.streetDetail(new Point([value.x,value.y]))
         // that.streetDetail(new Point([value.x,value.y]))
         that.$bus.$emit("sysCode",value.systemcode)
+
+        this.$store.dispatch("lqfb/changeInfoPanelOffsetRight",-30);
         // that.handlePickClick();
     })
 

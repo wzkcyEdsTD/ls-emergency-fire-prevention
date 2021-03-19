@@ -1,5 +1,5 @@
 <template>
-  <div id="info-pannel-wrapper" class="info-pannel-wrapper" :style="{right:`${offsetRight}rem`}">
+  <div id="info-pannel-wrapper" class="info-pannel-wrapper" :class="{active: detail}"  :style="{right:`${offsetRight}rem`}">
     <div class="close" @click="closeMenu" />
     <div style="padding-top:3vh" v-show="isXFDW === ''">
       <div class="title">
@@ -51,6 +51,8 @@
 export default {
   data() {
     return {
+      detail:false,
+      temp:false,
     }
   },
   computed: {
@@ -59,17 +61,37 @@ export default {
     },
     isXFDW() {
       return this.$store.getters.isXFDW
-    }
+    },
+    detailOrAround(){
+      return this.$store.getters.detailOrAround
+    },
   },
   watch:{
     offsetRight(val){
       if (val===0) {
         const nodes = {name:"详情列表"}
         this.$store.dispatch('map/appendRightMenuList', nodes)
+        // this.$store.dispatch('map/appendRightMenuList', nodes)
+        this.$store.dispatch('map/appendDetailOrAround', null)
+        this.$store.dispatch('map/appendDetailOrAround', nodes)
       }else{
         const nodes = {name:"详情列表"}
         this.$store.dispatch('map/removeRightMenuListItem', nodes)
       }
+    },
+    detailOrAround(val){
+      const that = this;
+      // console.log("changeRightMenu",val)
+      if (val) {
+        if (val.name=='详情列表') {
+          that.detail = true;
+        }else{
+          // console.log("周边分析")
+          that.detail = false;
+        }
+
+      }
+      // console.log("详情z-index",that.detail);
     }
   },
   methods: {
@@ -78,8 +100,8 @@ export default {
     },
     collapse() {
       this.$store.dispatch('lqfb/changeInfoPanelOffsetRight', this.offsetRight === 0 ? -30 : 0)
-    },
 
+    },
     changeIsXFDW(type) {
       this.$store.dispatch('lqfb/changeIsXFDW', type)
     }
@@ -97,6 +119,12 @@ export default {
     right: 0;
     padding: 10px;
     transition: right 0.9s;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    &.active{
+      z-index: 4001;
+    }
+
     .close {
         position: absolute;
         left: -34px;

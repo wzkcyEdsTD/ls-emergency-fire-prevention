@@ -134,6 +134,7 @@ export default {
       hasID:false,
       size:1000,
       rightMenu:30,
+      temp:false,
     };
   },
   computed: {
@@ -259,7 +260,7 @@ export default {
       const url = "http://10.53.137.59:8090/iserver/services/data-lishui_forestfire_v2/rest/data";
       new FeatureService(url).getFeaturesByGeometry(geometryParam, serviceResult => {
         // debugger
-        console.log("街道信息查询",serviceResult)
+        // console.log("街道信息查询",serviceResult)
         const list = serviceResult.result.features.features;
         let sql;
         list.forEach(element => {
@@ -366,7 +367,7 @@ export default {
 
     zbfx() {
       this.$bus.$emit("fireShow", this.tempData);
-      console.log(this.detailShow)
+      // console.log(this.detailShow)
     },
     getOffsetRight(val) {
       const that = this;
@@ -553,6 +554,13 @@ export default {
         "lqfb/changeInfoPanelOffsetRight",
         this.infoPanelOffsetRight === 0 ? -30 : 0
       );
+      const temp =this.$store.getters.detailOrAround
+      if (temp) {
+        const nodes = {name:"详情列表"}
+        this.$store.dispatch('map/appendDetailOrAround', null)
+        this.$store.dispatch('map/appendDetailOrAround', nodes)
+      }
+
     },
   },
 };

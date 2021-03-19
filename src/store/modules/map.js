@@ -16,7 +16,8 @@ const state = {
   videoData:[],
   netWorkData:[],
   qiXiangData:[],
-  rightMenuList:[{name:"火灾点列表"}]
+  rightMenuList:[{name:"火灾点列表"}],
+  detailOrAround:{},
 }
 
 const mutations = {
@@ -48,6 +49,28 @@ const mutations = {
       state.rightMenuList = resoult;
     }
   },
+
+  APPEND_DETAILORAROUND(state, item){
+
+    state.detailOrAround = item
+  },
+
+  SET_DETAILORAROUND(state, list){
+    state.detailOrAround = list
+  },
+  REMOVE_DETAILORAROUND(state, item){
+
+    if (state.detailOrAround.length > 0) {
+      const list = state.detailOrAround
+      const resoult = list.filter(v=>{
+        if (v.name!=item.name) {
+          return v
+        }
+      })
+      state.detailOrAround = resoult;
+    }
+  },
+
   SET_VIDEO(state, video){
     state.videoData = video
   },
@@ -137,6 +160,17 @@ const actions = {
   removeRightMenuListItem({ commit },list){
     commit('REMOVE_RIGHTMENULIST', list)
   },
+
+  appendDetailOrAround({ commit },list){
+    commit('APPEND_DETAILORAROUND', list)
+  },
+  removeDetailOrAround({ commit },list){
+    commit('REMOVE_DETAILORAROUND', list)
+  },
+  setDetailOrAround({ commit },list){
+    commit('SET_DETAILORAROUND', list)
+  },
+  
   changeVideo({ commit },video){
     commit('SET_VIDEO', video)
   },

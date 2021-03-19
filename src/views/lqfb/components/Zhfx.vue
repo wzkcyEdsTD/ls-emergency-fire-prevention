@@ -1,5 +1,5 @@
 <template>
-  <div class="zhfxlb-wrapper" :style="{ right: `${zhfxOffsetRight}rem` }" >
+  <div class="zhfxlb-wrapper" :class="{active: around}" :style="{ right: `${zhfxOffsetRight}rem` }" >
     <div class="close" @click="close" v-show="!hasID"/>
     <div class="ljxq-container">
       <div v-show="hasID">
@@ -362,9 +362,13 @@ export default {
         ZBZY: undefined,
       },
       detailInfo:{},
+      around:false,
     };
   },
   computed: {
+    detailOrAround(){
+      return this.$store.getters.detailOrAround
+    },
     featuresData() {
       return this.$store.getters.featuresData;
     },
@@ -407,11 +411,26 @@ export default {
       if (val===0) {
         const nodes = {name:"周边分析"}
         this.$store.dispatch('map/appendRightMenuList', nodes)
+
+        // this.$store.dispatch('map/appendDetailOrAround', null)
+        // this.$store.dispatch('map/appendDetailOrAround', nodes)
       }else{
         const nodes = {name:"周边分析"}
         this.$store.dispatch('map/removeRightMenuListItem', nodes)
       }
     },
+    detailOrAround(val){
+      const that = this;
+      if (val) {
+        if (val.name=='周边分析') {
+          that.around = true;
+        }else{
+          that.around = false;
+        }
+      }
+      // console.log("周边分析z-index",that.around);
+    },
+
     featuresData(val) {
       // console.log(this.$store.getters.featuresData.ZBZY[1]);
       const that = this;
@@ -481,7 +500,7 @@ export default {
       });
     },
     qiXiangData(val) {
-      console.log("气象测站",val)
+      // console.log("气象测站",val)
       const that = this;
       let data = this.$store.getters.featuresData;
       let list = []
@@ -822,7 +841,7 @@ export default {
     });
 
     that.$bus.$on("gridInfo", (gridInfo) => {
-      console.log("网格信息", gridInfo);
+      // console.log("网格信息", gridInfo);
       // debugger
       if (gridInfo && gridInfo.features.length > 0) {
         that.gridPerson = "";
@@ -876,7 +895,7 @@ export default {
     });
 
     that.$bus.$on("detailInfo", (detailInfo) => {
-      console.log("气象信息", detailInfo);
+      // console.log("气象信息", detailInfo);
       that.$nextTick(()=>{
         that.detailInfo = detailInfo;
         // that.$bus.$emit("changeMenuLocaltion",30)
@@ -906,6 +925,12 @@ export default {
   right: 0;
   padding: 10px;
   z-index: 1999;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  &.active{
+    z-index: 4000;
+  }
+  
   .close {
     position: absolute;
     left: -34px;
