@@ -695,6 +695,8 @@ export default {
     this.$bus.$off("primarySchoolChildrenTemp")
     this.$bus.$off("middleschoolPoint")
     this.$bus.$off("middleSchoolChildren")
+    this.$bus.$off("showVideoList")
+    this.$bus.$off("bswd")    
     this.$bus.$off("changeMenuLocaltion")
     this.$bus.$off("gylcLayer")
     this.$bus.$off("slgyLayer")

@@ -839,7 +839,6 @@ export default {
         // that.address = value.address;
       });
     });
-
     that.$bus.$on("gridInfo", (gridInfo) => {
       // console.log("网格信息", gridInfo);
       // debugger
@@ -893,7 +892,6 @@ export default {
         that.syscode = value;
       });
     });
-
     that.$bus.$on("detailInfo", (detailInfo) => {
       // console.log("气象信息", detailInfo);
       that.$nextTick(()=>{
