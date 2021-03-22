@@ -32,11 +32,6 @@
   </div>
 </template>
 <script>
-import spUtils from "./shortpath";
-import { getVideoByCode } from "@/api/lqfb";
-import { TurnType } from "@supermap/iclient-ol";
-import * as turf from "@turf/turf";
-import { log } from "video.js";
 
 export default {
   data() {

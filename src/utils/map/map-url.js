@@ -1,5 +1,3 @@
-import { getForRain_3H } from '@/api/lqfb'
-
 const dataSourceName = 'lishui_forestfire_v2'
 const dataUrl = 'http://10.53.137.59:8090/iserver/services/data-lishui_forestfire_v2/rest/data'
 // const bufferUrl = 'http://10.36.234.83:8090/iserver/services/data-buffer/rest/data'

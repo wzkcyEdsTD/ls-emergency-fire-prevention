@@ -25,7 +25,6 @@
   </div>
 </template>
 <script>
-import { getFireInfo } from '@/api/lqfb'
 export default {
   filters: {
     getData(val) {
@@ -77,17 +76,7 @@ export default {
       this.$store.dispatch('lqfb/changeyzhxdjOffsetRight', -30)
     },
     getForestFireInfo() {
-      getFireInfo().then(res => {
-        if (res && res.data) {
-          res.data.forEach(v => {
-            this.yzhxdjData.push({
-              date: v.date,
-              level: v.level.match(/[0-9]/) ? v.level.match(/[0-9]/)[0] : 0,
-              tips: v.comment
-            })
-          })
-        }
-      })
+
     }
   }
 }

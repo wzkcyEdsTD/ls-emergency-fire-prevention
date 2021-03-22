@@ -131,15 +131,10 @@
   </div>
 </template>
 <script>
-import {
-  getFhry,
-  getFhryCurPositionByPhone,
-  getFhryHisPosition,
-  getHly
-} from '@/api/lqfb'
+
 import moment from 'moment'
 import MarkerAnimation from './MarkerAnimation'
-import { lineStringsCoordinateAtM } from 'ol/geom/flat/interpolate'
+
 
 export default {
   data() {
@@ -202,15 +197,9 @@ export default {
         if (val < 0) {
           this.fhryLayer && this.fhryLayer.setVisible(false)
           this.lsgjLayer && this.lsgjLayer.setVisible(false)
-          // 取消实时刷新定位
-          // this.interval && clearInterval(this.interval)
         } else {
           this.fhryLayer && this.fhryLayer.setVisible(true)
           this.lsgjLayer && this.lsgjLayer.setVisible(true)
-          // 执行实时刷新定位
-          // this.interval = setInterval(() => {
-          //   this.updateCurPosition()
-          // }, 1000 * 30)
         }
       },
       immediate: true
@@ -219,17 +208,11 @@ export default {
   mounted() {
     this.getList()
     this.getFhryCurPosition()
-    // 执行实时刷新定位
-    // this.interval = setInterval(() => {
-    //   this.updateCurPosition()
-    // }, 1000 * 30)
   },
   beforeDestroy() {
     this.$map.removeLayer(this.fhryLayer)
   },
   destroyed() {
-    // 取消实时刷新
-    // this.interval && clearInterval(this.interval)
   },
   methods: {
     initSearchTime() {
@@ -254,45 +237,6 @@ export default {
 
     initOnlineTime(item) {
       const phone = item.phone || item.telephone
-
-      // 今天在线时长
-      getFhryHisPosition({
-        phone,
-        startTime: new moment().startOf('day').format('X') * 1000,
-        endTime: new moment().endOf('day').format('X') * 1000
-      }).then(res => {
-        if (res.code === 20000 && res.data.length > 0) {
-          this.onlineTime[0].time = res.data[0].totTime
-        } else {
-          this.onlineTime[0].time = 0
-        }
-      })
-
-      // 本周在线时长
-      getFhryHisPosition({
-        phone,
-        startTime: new moment().startOf('week').format('X') * 1000,
-        endTime: new moment().endOf('week').format('X') * 1000
-      }).then(res => {
-        if (res.code === 20000 && res.data.length > 0) {
-          this.onlineTime[1].time = res.data[0].totTime
-        } else {
-          this.onlineTime[1].time = 0
-        }
-      })
-
-      // 本月在线时长
-      getFhryHisPosition({
-        phone,
-        startTime: new moment().startOf('month').format('X') * 1000,
-        endTime: new moment().endOf('month').format('X') * 1000
-      }).then(res => {
-        if (res.code === 20000 && res.data.length > 0) {
-          this.onlineTime[2].time = res.data[0].totTime
-        } else {
-          this.onlineTime[2].time = 0
-        }
-      })
     },
 
     getList() {
@@ -300,76 +244,13 @@ export default {
       if (this.input) {
         query.param = this.input
       }
-      // getFhry(query).then((res) => {
-      //   this.tableXFYData = res.data.result.map((v) => ({
-      //     ...v,
-      //     status: '未上线',
-      //     type: '消防员'
-      //   }))
-      //   this.selectedItem = {
-      //     smid: '',
-      //     name: '',
-      //     phone: '',
-      //     team: '',
-      //     type: ''
-      //   }
-      // })
-      
-      // getHly(query).then((res) => {
-      //   this.tableHLYData = res.data.result.map((v) => ({
-      //     ...v,
-      //     type: '护林员',
-      //     status: '未上线'
-      //   }))
-      //   this.selectedItem = {
-      //     smid: '',
-      //     name: '',
-      //     phone: '',
-      //     team: '',
-      //     type: ''
-      //   }
-      // })
-    
     },
 
     getFhryCurPosition() {
-      // getFhryCurPositionByPhone().then((res) => {
-      //   const list = res.data.result
-      //   this.updateTableList(list)
-      //   const features = list.map((v) => {
-      //     const feature = this.$map.createFeature(
-      //       [v.longitude, v.latitude],
-      //       v.smid,
-      //       { ...v, NAME: v.name }
-      //     )
-      //     feature.setStyle(this.$map.getFhryStyle(feature))
-      //     return feature
-      //   })
-      //   this.fhryLayer = this.$map.createVectorLayer(features)
-      //   this.fhryLayer.setZIndex(100)
-      //   this.fhryLayer.setVisible(false)
-      //   this.$map.addLayer(this.fhryLayer)
-      // })
-    
     },
 
     updateCurPosition() {
       this.fhryLayer.getSource().clear()
-      // getFhryCurPositionByPhone().then((res) => {
-      //   const list = res.data.result
-      //   this.updateTableList(list)
-      //   const features = list.map((v) => {
-      //     const feature = this.$map.createFeature(
-      //       [v.longitude, v.latitude],
-      //       v.smid,
-      //       { ...v, NAME: v.smid }
-      //     )
-      //     feature.setStyle(this.$map.getFhryStyle(feature))
-      //     return feature
-      //   })
-      //   this.fhryLayer.getSource().addFeatures(features)
-      // })
-    
     },
 
     updateTableList(list) {
@@ -419,41 +300,7 @@ export default {
       const timestampEnd = moment(this.endDate + ' ' + this.endTime).format(
         'X'
       ) * 1000
-      getFhryHisPosition({
-        phone: this.selectedItem.phone || this.selectedItem.telephone,
-        startTime: timestampStart,
-        endTime: timestampEnd
-      }).then(res => {
-        if (res.data.length === 0) {
-          this.$message.info('无历史轨迹数据！')
-          return
-        }
-        console.log(res)
-        // 显示历史轨迹
-        const list = res.data[0].path
-        const lines = []
-        list.forEach(item => {
-          const features = item.map((v) => {
-            const feature = this.$map.createFeature(
-              [v.longitude, v.latitude],
-              v.smid,
-              { ...v, NAME: v.smid }
-            )
-            feature.setStyle(this.$map.getLsgjStyle(feature))
-            return feature
-          })
-          const coorArr = item.map(v => [Number(v.longitude), Number(v.latitude)])
-          // MarkerAnimation.init(coorArr)
-          const line = this.$map.createLineStringFeature(coorArr, 'line')
-          // features.push(line)
-          lines.push(line)
-          this.ZoomToFeature(features[0])
-        })
-        this.lsgjLayer = this.$map.createVectorLayer(lines)
-        this.lsgjLayer.setZIndex(100)
-        this.lsgjLayer.setVisible(true)
-        this.$map.addLayer(this.lsgjLayer)
-      })
+
     },
 
     handleSearchHis() {

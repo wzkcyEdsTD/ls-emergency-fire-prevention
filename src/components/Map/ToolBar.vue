@@ -80,7 +80,6 @@ import jsonp from 'jsonp'
 import moment from 'moment'
 import windPr1h from './预测1小时风向.json'
 import axios from 'axios'
-import { getForRain_3H } from '@/api/lqfb'
 import { log } from 'video.js'
 import utils from "@/libs/windAPI.js";
 export default {
@@ -217,18 +216,6 @@ export default {
     clickFire(){
       this.showFire=!this.showFire;
       this.$bus.$emit('hzjbd',this.showFire);
-    },
-
-    async handleRainPrChange(val) {
-      this.$map.removeLayer(this.rainPrLayer)
-      if (val.type === '短时预报') {
-        const url = await getForRain_3H()
-        if (!url) return
-        this.rainPrLayer = this.$map.createTileSuperMapRestLayer(url.match(/.*RainFall/)[0], false)
-      } else if (val.type === '智能网格') this.rainPrLayer = this.$map.createTileSuperMapRestLayer(val.value, true)
-      else return
-      // this.rainPrLayer.addFilter(this.mask)
-      this.$map.addLayer(this.rainPrLayer)
     },
     
     showWind(){

@@ -246,7 +246,6 @@
 <script>
 import axios from 'axios'
 import MAP_URL from '@/utils/map/map-url'
-import { getResources } from '@/api/lqfb'
 import dbsbList from './d_dbsb_jbxx.json'
 import zhcList from './d_zhc_jbxx.json'
 

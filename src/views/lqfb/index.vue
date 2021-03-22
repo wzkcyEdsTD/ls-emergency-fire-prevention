@@ -51,7 +51,7 @@ import Overlay from 'ol/Overlay'
 import InfoPannel from './components/InfoPannel'
 import attrData from './components/attrDictionary'
 import MAP_URL from '@/utils/map/map-url'
-import { getVideoByCode, getFiremanByTeamName, getEquipment, getLqzyByCoordinate } from '@/api/lqfb'
+
 import detailAxios from "@/libs/cimAPI"
 import { Point } from 'ol/geom'
 import {

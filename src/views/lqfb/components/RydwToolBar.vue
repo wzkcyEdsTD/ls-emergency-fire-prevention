@@ -18,7 +18,6 @@
   </div>
 </template>
 <script>
-import { getFhry, getHlyOlineNum, getFhryOlineNum, getHly } from '@/api/lqfb'
 export default {
   data() {
     return {
@@ -58,12 +57,6 @@ export default {
     },
 
     getOnlineNum() {
-      getHlyOlineNum().then((res) => {
-        this.hlyOnlineNum = res.data
-      })
-      getFhryOlineNum().then((res) => {
-        this.fhryOnlineNum = res.data
-      })
     }
   }
 }

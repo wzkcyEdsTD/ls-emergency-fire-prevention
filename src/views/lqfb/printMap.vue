@@ -40,7 +40,6 @@ import Overlay from 'ol/Overlay'
 import InfoPannel from './components/InfoPannel'
 import attrData from './components/attrDictionary'
 import MAP_URL from '@/utils/map/map-url'
-import { getVideoByCode, getFiremanByTeamName, getEquipment, getLqzyByCoordinate } from '@/api/lqfb'
 import detailAxios from "@/libs/cimAPI"
 export default {
   name: 'Lqfb',
@@ -287,42 +286,8 @@ export default {
       this.$store.dispatch('map/changeIsShowDetail', true)
       let table; let infoTmpl = ``
       // debugger
-      if (feature.values_.DATATYPE === '骨干救援队伍' && feature.values_.TYPE2 === '森林消防救援队伍') {
-        table = document.getElementById('table-box1')
-        const infoPannelDwry = document.getElementById('info-pannel-dwry')
-        const infoPannelWzzb = document.getElementById('info-pannel-wzzb')
-        let dwry = ``; let wzzb = ``
-        getFiremanByTeamName(feature.values_.NAME).then(res => {
-          if (res.code === 20000) {
-            res.data.forEach(item => {
-              dwry += `<li>
-                        <div class="item item-1">${item.name}</div>
-                        <div class="item item-1"></div>
-                        <div class="item item-1">${item.age}</div>
-                        <div class="item item-2">${item.phone}</div>
-                      </li>`
-            })
-            infoPannelDwry.innerHTML = dwry
-          }
-        })
-        getEquipment(feature.values_.BID).then(res => {
-          if (res.code === 20000) {
-            res.data.forEach(item => {
-              wzzb += `<li>
-                        <div class="item item-2">${item.name}</div>
-                        <div class="item item-2">${item.type}</div>
-                        <div class="item item-1">${item.user_number}</div>
-                        <div class="item item-1">${item.unit}</div>
-                      </li>`
-            })
-            infoPannelWzzb.innerHTML = wzzb
-          }
-        })
-        this.$store.dispatch('lqfb/changeIsXFDW', '基本信息')
-      } else {
         this.$store.dispatch('lqfb/changeIsXFDW', '')
         table = document.getElementById('table-box')
-      }
       // debugger
       // console.log(value)
       if (!(value['systemcode'])) {

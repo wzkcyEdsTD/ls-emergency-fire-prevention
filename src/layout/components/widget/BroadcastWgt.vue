@@ -10,9 +10,6 @@
 
 </template>
 <script>
-import html2json from 'html2json'
-import jsonp from 'jsonp'
-import { getFireInfo } from '@/api/lqfb'
 export default {
   name: 'BroadcastWgt',
   data() {
@@ -69,16 +66,7 @@ export default {
     //   })
     // },
     getForestFireInfo() {
-      this.content = ``
-      getFireInfo().then(res => {
-        if (res && res.data) {
-          res.data.forEach(item => {
-            this.content += `${item.date.trim()}; ${item.level.trim()}; ${item.comment.trim()}; `
-          })
-          this.content = this.content.slice(0, -1)
-        }
-      })
-    },
+   },
     onAnimationEnd() {
       this.firstRound = false
       this.duration = (this.offsetWidth + this.wrapWidth) / this.speed
