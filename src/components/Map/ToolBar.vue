@@ -325,12 +325,18 @@ export default {
 
     },
 
-    addWindCur() {
+   async addWindCur() {
       const url = `https://datacenter.istrongcloud.com`
       const that = this;
       var temp = {}
       var timeList = [];//日期
       var dataList = [];//日期对应的时间戳
+      that.windData().then(
+        ()=>{
+        console.log("最新的台风网数据",that.resoultData)
+        that.oe = that.$map.wind(that.resoultData)
+        }
+      );
       // utils.getWindDataList().then(res=>{
       //   console.log(res)
       //   const list = Object.keys(res.data).map((item, index) => ({value:res.data[item]}))
@@ -374,9 +380,7 @@ export default {
       // })
      
      
-        console.log("最新的台风网数据",that.resoultData)
 
-      that.oe = that.$map.wind(that.resoultData)
      // axios.get(`${url}/data/gfs/fcdata/202103/04/02/006.json?v=1614821921256`).then(res => {
       //    const temp = res.data["2021030408"]
       //   //  console.log(temp)
@@ -478,7 +482,7 @@ export default {
   },
   async mounted(){
     const that = this;
-    await that.windData();
+    // await that.windData();
 
     that.$nextTick(()=>{
       that.showPrintMap=true

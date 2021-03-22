@@ -274,7 +274,7 @@ export default {
       // this.handlePickClick()
     },
     initData() {
-      if (this.features.length === 81) {
+      if (this.features.length === 7) {
         const attrDic = {
           ZBZY: {
              // 周边资源
@@ -341,9 +341,10 @@ export default {
           dbfgNum: 0
         }
         // 去除空数组
-        // debugger
-        const fe = this.features.filter(v => v.length > 0)
 
+        const fe = this.features.filter(v => v.length > 0)
+        console.log('all',fe)
+        
         fe.forEach(item => {
           if (item[0].values_['BUFFERRADIUSRIGHT']) {
             // 道路数量
@@ -352,30 +353,57 @@ export default {
             // 水系数量
             attrDic.riverNum += item.length
           } else if (item[0].values_['TABLE_NAME']) {
+
             item.forEach(i => {
-              for (const listKey in attrDic) {
-                for (const key in attrDic[listKey]) {
-                  if (item[0].values_['TABLE_NAME'].indexOf(key) !== -1 || (attrDic[listKey][key].children && attrDic[listKey][key].children.indexOf(item[0].values_['TABLE_NAME']) !== -1)) {
-                    attrDic[listKey][key].arr
-                      ? attrDic[listKey][key].arr.push({
-                        name: i.values_['NAME'],
-                        feature: i
-                      })
-                      : attrDic[listKey][key].arr = [{
-                        name: i.values_['NAME'],
-                        feature: i
-                      }]
+                          // debugger
+              if (i.values_.NAME) {
+                for (const listKey in attrDic) {
+                  for (const key in attrDic[listKey]) {
+                    if (item[0].values_['TABLE_NAME'].indexOf(key) !== -1 || (attrDic[listKey][key].children && attrDic[listKey][key].children.indexOf(item[0].values_['TABLE_NAME']) !== -1)) {
+                      attrDic[listKey][key].arr
+                        ? attrDic[listKey][key].arr.push({
+                          name: i.values_['NAME'],
+                          feature: i
+                        })
+                        : attrDic[listKey][key].arr = [{
+                          name: i.values_['NAME'],
+                          feature: i
+                        }]
+                    }
                   }
                 }
               }
+
             })
+
+          } else if (item[0].values_['BSWD_TYPE']){
+            let list = [];
+            item.forEach(element=>{
+              const json = {
+                name: element.values_.NAME,
+                feature: element,
+              };
+              list.push(json);
+            })
+            attrDic.ZBZY.netWork.arr = list
+
+          } else if (item[0].values_['IIIII']){
+            let list = [];
+            item.forEach(element=>{
+              const json = {
+                name: element.values_.ADDRESS,
+                feature: element,
+              };
+              list.push(json);
+            })
+            attrDic.ZBZY.qiXiang.arr = list
 
           } else {
             // 地表覆盖数量
             attrDic.dbfgNum += item.length
           }
         })
-        
+        console.log(attrDic.ZBZY);
         this.$store.dispatch('map/changeFeaturesData', attrDic)
         // console.log("FeaturesData",attrDic);
       }
@@ -494,6 +522,9 @@ export default {
     async handleComfirmClick() {
       const that = this;
       // debugger
+
+      this.handleClearClick();
+
       that.$bus.$emit("hasQxcz",true);
       // debugger
       this.searchGrid(new Point([this.inputLon,this.inputLat]))
@@ -513,7 +544,9 @@ export default {
       this.$map.getMap().getView().setCenter([this.inputLon,this.inputLat]);
       this.$map.getMap().getView().setZoom(16);
       // debugger
+
       await that.createMinDistanceQXCZ();
+      
       this.$store.dispatch('map/changeVideo', [])//清空视频数据
       this.$store.dispatch('map/changeLqzyLayer', true)
       this.$store.dispatch('map/changeIsAddFeatures', true) // 只在选中火灾点的时候获取才重新数据

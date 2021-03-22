@@ -231,15 +231,15 @@
         <el-collapse-item title="周边资源搜索成果" name="1">
           <div class="ljxq-content">
             <div
-              v-for="(item, index) in tempdata.ZBZY"
+              v-for="(item, index) in featuresData.ZBZY"
               v-show="!ljxqDetailVisible"
               :key="index"
             >
-              <div v-show="item" class="item" @click="handleLabelClick(tempdata.ZBZY[index])">
-                <img :src="getImgSrc(tempdata.ZBZY[index].name)" style="width: 26px;height: 26px;" alt />
+              <div v-show="item" class="item" @click="handleLabelClick(featuresData.ZBZY[index])">
+                <img :src="getImgSrc(featuresData.ZBZY[index].name)" style="width: 26px;height: 26px;" alt />
                 <div class="label">
-                  {{ tempdata.ZBZY[index].name }}：{{
-                    tempdata.ZBZY[index].arr ? tempdata.ZBZY[index].arr.length : 0
+                  {{ featuresData.ZBZY[index].name }}：{{
+                    featuresData.ZBZY[index].arr ? featuresData.ZBZY[index].arr.length : 0
                   }}
                 </div>
               </div>
@@ -359,7 +359,8 @@ export default {
           }
       },
       tempdata: {
-        ZBZY: undefined,
+        ZBZY: {
+        },
       },
       detailInfo:{},
       around:false,
@@ -435,6 +436,34 @@ export default {
       // console.log(this.$store.getters.featuresData.ZBZY[1]);
       const that = this;
       this.$store.dispatch("lqfb/changezhfxOffsetRight", 0);
+      console.log(val);
+
+      if (val.ZBZY.netWork.arr && val.ZBZY.netWork.arr.length > 0) {
+        that.aroundDetail = "";
+        val.ZBZY.netWork.arr.forEach((element) => {
+          // debugger
+          that.aroundDetail += element.name;
+          that.aroundDetail += "   ";
+        });
+        // debugger
+      } else {
+        that.aroundDetail = "周边无办事网点";
+      }
+      const fireEvent = this.$route.query;
+      document.onreadystatechange = function () {
+        if (document.readyState == "complete") {
+          if (fireEvent["id"]) {
+            let node = $(`#finish`);
+            if (node) {
+              node.remove();
+              $(`#temp`).after(`<div id = 'finish'></div>`);
+            } else {
+              $(`#temp`).after(`<div id = 'finish'></div>`);
+            }
+            console.log("已添加finish节点");
+          }
+        }
+      };
     },
     videoData(val) {
       const that = this;
@@ -459,73 +488,40 @@ export default {
     },
     netWorkData(val) {
       const that = this;
-      let data = this.$store.getters.featuresData;
-      let list = [];
-      val.forEach((item) => {
-        const json = {
-          name: item.values_.NAME,
-          feature: item,
-        };
-        list.push(json);
-      });
-      this.$nextTick(() => {
-        data.ZBZY.netWork.arr = list;
-        if (val && val.length > 0) {
-          that.aroundDetail = "";
-          val.forEach((element) => {
-            that.aroundDetail += element.values_.NAME;
-            that.aroundDetail += "   ";
-          });
-          // debugger
-        } else {
-          that.aroundDetail = "周边无办事网点";
-        }
-        that.tempdata = data;
-        const fireEvent = this.$route.query;
-        // console.log(this.fireId);
-        document.onreadystatechange = function () {
-          if (document.readyState == "complete") {
-            if (fireEvent["id"]) {
-              let node = $(`#finish`);
-              if (node) {
-                node.remove();
-                $(`#temp`).after(`<div id = 'finish'></div>`);
-              } else {
-                $(`#temp`).after(`<div id = 'finish'></div>`);
-              }
-              console.log("已添加finish节点");
-            }
-          }
-        };
-      });
+      // let data = this.$store.getters.featuresData;
+      // let list = [];
+      // val.forEach((item) => {
+      //   const json = {
+      //     name: item.values_.NAME,
+      //     feature: item,
+      //   };
+      //   list.push(json);
+      // });
+      // data.ZBZY.netWork.arr = list;
+      // if (val && val.length > 0) {
+      //   that.aroundDetail = "";
+      //   val.forEach((element) => {
+      //     that.aroundDetail += element.values_.NAME;
+      //     that.aroundDetail += "   ";
+      //   });
+      //   // debugger
+      // } else {
+      //   that.aroundDetail = "周边无办事网点";
+      // }
+
     },
     qiXiangData(val) {
-      // console.log("气象测站",val)
       const that = this;
-      let data = this.$store.getters.featuresData;
-      let list = []
-      val.forEach(item => {
-        const json = {
-          name:item.values_.ADDRESS,
-          feature:item,
-        }
-        list.push(json)
-      })
-      this.$nextTick(()=>{
-        data.ZBZY.qiXiang.arr = list
-        
-        // if (val && val.length>0) {
-        //   that.aroundQiXiangDetail = ""
-        //   val.forEach(element => {
-        //     that.aroundQiXiangDetail += element.values_.ADDRESS
-        //     that.aroundQiXiangDetail += "   "
-        //   });
-        // }else{
-        //   that.aroundQiXiangDetail = "周边无气象站点"
-        // }
-        that.tempdata = data
-        // debugger
-      })
+      // let data = this.$store.getters.featuresData;
+      // let list = []
+      // val.forEach(item => {
+      //   const json = {
+      //     name:item.values_.ADDRESS,
+      //     feature:item,
+      //   }
+      //   list.push(json)
+      // })
+      // data.ZBZY.qiXiang.arr = list;
     },
     ssxyPersonList(val) {
       this.ssxyPersonLayer && this.$map.removeLayer(this.ssxyPersonLayer);
@@ -589,6 +585,9 @@ export default {
     },
 
     ZoomToFeature(feature) {
+      if (feature.values_['IIIII']) {
+        return
+      }
       this.$map
         .getMap()
         .getView()

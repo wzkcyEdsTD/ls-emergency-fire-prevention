@@ -565,7 +565,7 @@ const getFeaturesByGeometry = ({ url, dataSourceName, label, layerName, attribut
               features1.push(feature);
           });
           // store.dispatch('map/changeFeatures', features1)
-          store.dispatch('map/changeNetWork', features1)
+          // store.dispatch('map/changeNetWork', features1)
         }
         else if(label == '气象测站'){
           const list = serviceResult.result.features.features;
@@ -579,7 +579,7 @@ const getFeaturesByGeometry = ({ url, dataSourceName, label, layerName, attribut
               features1.push(feature);
           });
           // store.dispatch('map/changeFeatures', features1)
-          store.dispatch('map/changeQiXiang', features1)
+          // store.dispatch('map/changeQiXiang', features1)
         }
         else{
           features1 = new GeoJSON().readFeatures(serviceResult.result.features || [])
@@ -707,6 +707,7 @@ const getFeaturesByGeometry = ({ url, dataSourceName, label, layerName, attribut
               })
             })
           })
+          resultLayer.setVisible(false);
           resolve(resultLayer)
         }
         else{

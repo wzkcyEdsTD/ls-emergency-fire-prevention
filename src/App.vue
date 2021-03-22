@@ -4,27 +4,24 @@
     <div id="content" class="content">
       <router-view />
     </div>
-    <!-- <m-bottom v-show="printShow"></m-bottom> -->
+
   </div>
 </template>
 
 <script>
 import MHeader from "@/components/m-header/m-header";
-import MBottom from "@/components/m-bottom/m-bottom"
 import html2canvas from 'html2canvas';
 import canvg from 'canvg';
 export default {
   name: 'App',
   components: {
     MHeader,
-    MBottom
   },
   data() {
     return {
       printShow:false,
     }},
   mounted(){
-
 
   },
   methods:{

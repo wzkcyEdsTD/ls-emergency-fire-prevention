@@ -141,6 +141,13 @@ export default {
   },
   mounted() {
     const that = this;
+
+    // const token = this.$cookies.get("token")
+    // if (!token) {
+    //   this.$router.push('/login');
+    // }
+
+
     if (this.drawLayer) this.drawLayer.setVisible(false)
         this.initPopup()
     this.$map.goHome()
@@ -381,46 +388,47 @@ export default {
       this.$store.dispatch('map/changeIsShowDetail', true)
       let table; let infoTmpl = ``
 
-      if (feature.values_.DATATYPE === '骨干救援队伍' && feature.values_.TYPE2 === '森林消防救援队伍') {
-        table = document.getElementById('table-box1')
-        const infoPannelDwry = document.getElementById('info-pannel-dwry')
-        const infoPannelWzzb = document.getElementById('info-pannel-wzzb')
-        let dwry = ``; let wzzb = ``
-        getFiremanByTeamName(feature.values_.NAME).then(res => {
-          if (res.code === 20000) {
-            res.data.forEach(item => {
-              dwry += `<li>
-                        <div class="item item-1">${item.name}</div>
-                        <div class="item item-1"></div>
-                        <div class="item item-1">${item.age}</div>
-                        <div class="item item-2">${item.phone}</div>
-                      </li>`
-            })
-            infoPannelDwry.innerHTML = dwry
-          }
-        })
-        getEquipment(feature.values_.BID).then(res => {
-          if (res.code === 20000) {
-            res.data.forEach(item => {
-              wzzb += `<li>
-                        <div class="item item-2">${item.name}</div>
-                        <div class="item item-2">${item.type}</div>
-                        <div class="item item-1">${item.user_number}</div>
-                        <div class="item item-1">${item.unit}</div>
-                      </li>`
-            })
-            infoPannelWzzb.innerHTML = wzzb
-          }
-        })
-        this.$store.dispatch('lqfb/changeIsXFDW', '基本信息')
-      } else {
+      // if (feature.values_.DATATYPE === '骨干救援队伍' && feature.values_.TYPE2 === '森林消防救援队伍') {
+      //   table = document.getElementById('table-box1')
+      //   const infoPannelDwry = document.getElementById('info-pannel-dwry')
+      //   const infoPannelWzzb = document.getElementById('info-pannel-wzzb')
+      //   let dwry = ``; let wzzb = ``
+      //   getFiremanByTeamName(feature.values_.NAME).then(res => {
+      //     if (res.code === 20000) {
+      //       res.data.forEach(item => {
+      //         dwry += `<li>
+      //                   <div class="item item-1">${item.name}</div>
+      //                   <div class="item item-1"></div>
+      //                   <div class="item item-1">${item.age}</div>
+      //                   <div class="item item-2">${item.phone}</div>
+      //                 </li>`
+      //       })
+      //       infoPannelDwry.innerHTML = dwry
+      //     }
+      //   })
+      //   getEquipment(feature.values_.BID).then(res => {
+      //     if (res.code === 20000) {
+      //       res.data.forEach(item => {
+      //         wzzb += `<li>
+      //                   <div class="item item-2">${item.name}</div>
+      //                   <div class="item item-2">${item.type}</div>
+      //                   <div class="item item-1">${item.user_number}</div>
+      //                   <div class="item item-1">${item.unit}</div>
+      //                 </li>`
+      //       })
+      //       infoPannelWzzb.innerHTML = wzzb
+      //     }
+      //   })
+      //   this.$store.dispatch('lqfb/changeIsXFDW', '基本信息')
+      // } else {
         this.$store.dispatch('lqfb/changeIsXFDW', '')
         table = document.getElementById('table-box')
-      }
+      // }
       // debugger
       // console.log(value)
       if (!(value['systemcode'])) {
         // console.log("不是火灾点")
+
         if(value['BSWD_TYPE']){
 
           infoTmpl += `<div  class="item">
@@ -444,6 +452,23 @@ export default {
               <span class="value" title="${value["GZSJ"]}">${value["GZSJ"]}</span>
           </div>`
 
+        }else if(value['DATATYPE'].indexOf('救援队伍')!=-1){
+          infoTmpl += `<div  class="item">
+                  <span class="key">负责人：</span>
+                  <span class="value" title="${value["LINK_MAN"]}">${value["LINK_MAN"]}</span>
+              </div>`
+          infoTmpl += `<div  class="item">
+              <span class="key">类型：</span>
+              <span class="value" title="${value["NAME"]}">${value["NAME"]}</span>
+          </div>`
+          infoTmpl += `<div  class="item">
+              <span class="key">地址：</span>
+              <span class="value" title="${value["STREET"]}">${value["STREET"]}</span>
+          </div>`
+          infoTmpl += `<div  class="item">
+              <span class="key">联系电话：</span>
+              <span class="value" title="${value["PHONE"]}">${value["PHONE"]}</span>
+          </div>`
         }else if(value['IIIII']){
         util.getQXDetail(value['IIIII']).then(r=>{
           const detailInfo = r['[]'][0]['SzlsDwSjjhSfxptBiz067QxQyqxzgc']
@@ -651,42 +676,10 @@ export default {
       this.$store.dispatch('map/changeIsShowDetail', true)
       let table; let infoTmpl = ``
       // debugger
-      if (feature.values_.DATATYPE === '骨干救援队伍' && feature.values_.TYPE2 === '森林消防救援队伍') {
-        table = document.getElementById('table-box1')
-        const infoPannelDwry = document.getElementById('info-pannel-dwry')
-        const infoPannelWzzb = document.getElementById('info-pannel-wzzb')
-        let dwry = ``; let wzzb = ``
-        getFiremanByTeamName(feature.values_.NAME).then(res => {
-          if (res.code === 20000) {
-            res.data.forEach(item => {
-              dwry += `<li>
-                        <div class="item item-1">${item.name}</div>
-                        <div class="item item-1"></div>
-                        <div class="item item-1">${item.age}</div>
-                        <div class="item item-2">${item.phone}</div>
-                      </li>`
-            })
-            infoPannelDwry.innerHTML = dwry
-          }
-        })
-        getEquipment(feature.values_.BID).then(res => {
-          if (res.code === 20000) {
-            res.data.forEach(item => {
-              wzzb += `<li>
-                        <div class="item item-2">${item.name}</div>
-                        <div class="item item-2">${item.type}</div>
-                        <div class="item item-1">${item.user_number}</div>
-                        <div class="item item-1">${item.unit}</div>
-                      </li>`
-            })
-            infoPannelWzzb.innerHTML = wzzb
-          }
-        })
-        this.$store.dispatch('lqfb/changeIsXFDW', '基本信息')
-      } else {
+
         this.$store.dispatch('lqfb/changeIsXFDW', '')
         table = document.getElementById('table-box')
-      }
+
       // debugger
       // console.log(123)
       if (!(value['systemcode'])) {
@@ -838,6 +831,23 @@ export default {
             //     <span class="key">户号：</span>
             //     <span class="value" title="${value["HH"]}">${value["HH"]}</span>
             // </div>`
+        }else if(value['DATATYPE'].indexOf('救援队伍')!=-1){
+          infoTmpl += `<div  class="item">
+                  <span class="key">负责人：</span>
+                  <span class="value" title="${value["LINK_MAN"]}">${value["LINK_MAN"]}</span>
+              </div>`
+          infoTmpl += `<div  class="item">
+              <span class="key">类型：</span>
+              <span class="value" title="${value["NAME"]}">${value["NAME"]}</span>
+          </div>`
+          infoTmpl += `<div  class="item">
+              <span class="key">地址：</span>
+              <span class="value" title="${value["STREET"]}">${value["STREET"]}</span>
+          </div>`
+          infoTmpl += `<div  class="item">
+              <span class="key">联系电话：</span>
+              <span class="value" title="${value["PHONE"]}">${value["PHONE"]}</span>
+          </div>`
         }else{
           for (const key in attrData[value['TABLE_NAME']]) {
             if (value[key] != undefined) {

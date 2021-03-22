@@ -39,6 +39,9 @@ export default {
         that.checked = val;
       })
     })
+  },
+  beforeDestroy(){
+    this.$bus.$off('checkAll');
   }
 }
 </script>

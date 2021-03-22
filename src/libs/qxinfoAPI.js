@@ -11,7 +11,7 @@ serverInstanec.defaults.baseURL = BASEURL;
  */
 
  serverInstanec.interceptors.request.use(config => {
-    config.headers['X-Access-Token'] = window.localStorage.getItem("access_token");
+    config.headers['X-Access-Token'] = window.localStorage.getItem("token");
     return config;
 });
 

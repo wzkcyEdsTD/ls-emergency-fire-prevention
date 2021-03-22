@@ -5,13 +5,14 @@ import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css' // progress bar style
 import { getToken } from '@/utils/auth' // get token from cookie
 import getPageTitle from '@/utils/get-page-title'
-import { getAccount } from '@/api/user'
+import Cookies from 'js-cookie';
 
 const whiteList = ['/lqfb','/login','/404',"/lqfb/printMap"] // no redirect whitelist
 
 router.beforeEach(async(to, from, next) => {
   document.title = getPageTitle(to.meta.title)
-  const token = window.localStorage.getItem('access_token');
+  // const token = window.localStorage.getItem('token');
+  const token = Cookies.get('token')
   if (whiteList.indexOf(to.path) !== -1) {
     if (to.path =="/login" || to.path == "/404") {
       next()

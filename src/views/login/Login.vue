@@ -73,6 +73,7 @@
 /* eslint-disable */
 // import { WRT_config } from "@/components/common/Tmap";
 import { doLogin } from "@/libs/loginApi";
+import Cookies from 'js-cookie';
 export default {
   data() {
     return {
@@ -108,7 +109,15 @@ export default {
         try {
           const res = await doLogin(this.form);
           setTimeout(() => {
-            window.localStorage.setItem('access_token',res.token);
+            window.localStorage.setItem('token',res.token);
+            // this.$cookies.set("token",res.token,"6h")
+
+            const setTime = new Date(new Date().getTime() + 6 * 60 * 60 * 1000);//6小时
+            // const setTime = new Date(new Date().getTime() + 30 * 1000);//30
+            Cookies.set("token", res.token, {
+                expires: setTime
+            });
+
             that.doMessage("登陆成功");
             that.$router.push({ path: "/lqfb" })
           }, 500);

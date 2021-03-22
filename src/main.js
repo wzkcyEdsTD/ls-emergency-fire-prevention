@@ -25,6 +25,8 @@ import '@/permission' // permission control
 import '@/libs/rem.js'
 import 'video.js/dist/video-js.css'
 import VueBus from "vue-bus";
+import VueCookies from "vue-cookies";
+Vue.use(VueCookies);
 
 import map from '@/utils/map'
 Vue.prototype.$map = map
@@ -50,6 +52,8 @@ Vue.use(VueBus);
 Vue.use(ElementUI)
 
 Vue.config.productionTip = false
+
+
 
 const vue = new Vue({
   el: '#app',
