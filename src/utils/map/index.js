@@ -49,6 +49,10 @@ const createMap = (divId, options = {}) => {
       // minZoom:10,
       maxZoom:20
     }),
+    interactions: ol.interaction.defaults({
+      doubleClickZoom: false,// 取消双击放大功能交互
+      shiftDragZoom: false, // 取消shift+wheel左键拖动交互
+    }),
     ...options
   })
 
@@ -124,12 +128,6 @@ const createTileSuperMapRestLayer = (url, options = {}) => {
     projection: 'EPSG:4326',
     ...options
   })
-
-  // if (isMask) {
-  //   const mask = createMaskByGeoJson(require('@/components/Map/ruian.json'))
-  //   layer.addFilter(mask)
-  // }
-
   return layer
 }
 
@@ -137,7 +135,6 @@ const createTianDiTuLayer = (type, options = {}) => {
   const token = "717e5c0403f4c23654be096d2f7d6e68";
   const layer = new ol.layer.Tile({
     source: new ol.source.XYZ({
-      // crossOrigin: 'anonymous',
       url: `http://t0.tianditu.com/DataServer?T=${type}&x={x}&y={y}&l={z}&tk=${token}`,
       wrapX: false,
       crossOrigin: "Anonymous"
@@ -361,7 +358,9 @@ const getFeaturesBySQL = ({ url, dataSourceName, layerName, label, attributeFilt
     if (label == "单兵设备") {
       return
     }
-
+    if (!url) {
+      return
+    }
     new FeatureService(url).getFeaturesBySQL(sqlParam, serviceResult => {
       // debugger
       const features = new GeoJSON().readFeatures(serviceResult.result.features)

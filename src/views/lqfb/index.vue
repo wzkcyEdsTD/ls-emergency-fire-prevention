@@ -452,7 +452,7 @@ export default {
               <span class="value" title="${value["GZSJ"]}">${value["GZSJ"]}</span>
           </div>`
 
-        }else if(value['DATATYPE'].indexOf('救援队伍')!=-1){
+        }else if(value['DATATYPE'] && value['DATATYPE'].indexOf('救援队伍')!=-1){
           infoTmpl += `<div  class="item">
                   <span class="key">负责人：</span>
                   <span class="value" title="${value["LINK_MAN"]}">${value["LINK_MAN"]}</span>
@@ -615,6 +615,9 @@ export default {
         })
       const coordinate = evt.coordinate
       console.log({ feature })
+      if (!feature) {
+        return
+      }
       if (!feature) {
         const filters = this.layerList.filter(v => v.label === '巡逻范围')
         if (filters.length > 0) {
@@ -831,7 +834,7 @@ export default {
             //     <span class="key">户号：</span>
             //     <span class="value" title="${value["HH"]}">${value["HH"]}</span>
             // </div>`
-        }else if(value['DATATYPE'].indexOf('救援队伍')!=-1){
+        }else if(value['DATATYPE'] && value['DATATYPE'].indexOf('救援队伍')!=-1){
           infoTmpl += `<div  class="item">
                   <span class="key">负责人：</span>
                   <span class="value" title="${value["LINK_MAN"]}">${value["LINK_MAN"]}</span>

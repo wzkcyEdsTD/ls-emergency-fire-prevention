@@ -118,7 +118,7 @@ const mapUrl = {
     layerName: 'Buffer_35m',
     label: '国道',
     dataSourceName: 'Buffer',
-    url: bufferUrl
+    // url: bufferUrl
   },
   // --省道、城市干道
   Buffer_26m: {
@@ -126,7 +126,7 @@ const mapUrl = {
     layerName: 'Buffer_26m',
     label: '省道、城市干道',
     dataSourceName: 'Buffer',
-    url: bufferUrl
+    // url: bufferUrl
   },
   // --城市高架、快速路
   Buffer_30m: {
@@ -134,7 +134,7 @@ const mapUrl = {
     layerName: 'Buffer_30m',
     label: '城市高架、快速路',
     dataSourceName: 'Buffer',
-    url: bufferUrl
+    // url: bufferUrl
   },
   // --支线
   Buffer_15m: {
@@ -142,7 +142,7 @@ const mapUrl = {
     layerName: 'Buffer_15m',
     label: '支线',
     dataSourceName: 'Buffer',
-    url: bufferUrl
+    // url: bufferUrl
   },
   // --乡道、村道、其他道路
   Buffer_10m: {
@@ -150,7 +150,7 @@ const mapUrl = {
     layerName: 'Buffer_10m',
     label: '乡道、村道、其他道路',
     dataSourceName: 'Buffer',
-    url: bufferUrl
+    // url: bufferUrl
   },
   // --5m水系
   Buf_Hyd_5m: {
@@ -158,7 +158,7 @@ const mapUrl = {
     layerName: 'Buf_Hyd_5m',
     label: '阻隔水系-1',
     dataSourceName: 'Buffer',
-    url: bufferUrl
+    // url: bufferUrl
   },
   // --10m水系
   Buf_Hyd_10m: {
@@ -166,7 +166,7 @@ const mapUrl = {
     layerName: 'Buf_Hyd_10m',
     label: '阻隔水系-2',
     dataSourceName: 'Buffer',
-    url: bufferUrl
+    // url: bufferUrl
   },
   // 荒漠地
   HMD: {
@@ -174,7 +174,7 @@ const mapUrl = {
     layerName: '荒漠SmA',
     label: '荒漠地',
     dataSourceName: 'Buffer',
-    url: bufferUrl
+    // url: bufferUrl
   },
   // 种植地
   ZZD: {
@@ -182,7 +182,7 @@ const mapUrl = {
     layerName: 'SmA95',
     label: '种植地',
     dataSourceName: 'Buffer',
-    url: bufferUrl
+    // url: bufferUrl
   },
   // 地表覆盖
   HM: {
@@ -220,35 +220,6 @@ const mapUrl = {
     icon: '构筑物颜色.png',
     // url: 'http://10.36.234.83:8090/iserver/services/map-TuDiLY/rest/maps/GouZhuW'
   },
-
-  // 林业资源
-  // --森林公园
-  // SECRET_FORESTPARK_M: {
-  //   type: 'data', // 数据服务
-  //   layerName: 'd_forest_park',
-  //   label: '森林公园',
-  //   dataSourceName,
-  //   icon: '森林公园.png',
-  //   url: dataUrl
-  // },
-  // // --国有林场
-  // SECRET_NATIONAL_FOREST: {
-  //   type: 'data', // 数据服务
-  //   layerName: 'd_national_forest',
-  //   label: '国有林场',
-  //   dataSourceName,
-  //   icon: '国有林场.png',
-  //   url: dataUrl
-  // },
-  // // --湿地
-  // SECRET_WETLAND: {
-  //   type: 'data', // 数据服务
-  //   layerName: 'd_wetland',
-  //   label: '湿地',
-  //   dataSourceName,
-  //   icon: '湿地.png',
-  //   url: dataUrl
-  // },
 
   VIDEO:{
     type: 'data', // 数据服务
@@ -308,7 +279,7 @@ const mapUrl = {
     layerName: 'd_emergency_team',
     label: '应急专家',
     dataSourceName,
-    url: dataUrl,
+    // url: dataUrl,
     icon: '危化类.png'
   },
   // --危化类
@@ -317,7 +288,7 @@ const mapUrl = {
     layerName: 'd_emergency_team',
     label: '危化类专家',
     dataSourceName,
-    url: dataUrl,
+    // url: dataUrl,
     icon: '危化类.png',
     attributeFilter: "DATATYPE = '危化类专家'"
   },
@@ -327,7 +298,7 @@ const mapUrl = {
     layerName: 'd_emergency_team',
     label: '机械类专家',
     dataSourceName,
-    url: dataUrl,
+    // url: dataUrl,
     icon: '机械电气类.png',
     attributeFilter: "DATATYPE = '机械类专家'"
   },
@@ -337,7 +308,7 @@ const mapUrl = {
     layerName: 'd_emergency_team',
     label: '矿山类专家',
     dataSourceName,
-    url: dataUrl,
+    // url: dataUrl,
     icon: '矿山类.png',
     attributeFilter: "DATATYPE = '矿山类专家'"
   },
@@ -347,7 +318,7 @@ const mapUrl = {
     layerName: 'd_emergency_team',
     label: '防汛类专家',
     dataSourceName,
-    url: dataUrl,
+    // url: dataUrl,
     icon: '防汛类.png',
     attributeFilter: "DATATYPE = '防汛类专家'"
   },
@@ -357,7 +328,7 @@ const mapUrl = {
     layerName: 'd_emergency_team',
     label: '综合类专家',
     dataSourceName,
-    url: dataUrl,
+    // url: dataUrl,
     icon: '综合类.png',
     attributeFilter: "DATATYPE = '综合类专家'"
   },
@@ -367,7 +338,7 @@ const mapUrl = {
     layerName: 'd_emergency_team',
     label: '减灾救灾类专家',
     dataSourceName,
-    url: dataUrl,
+    // url: dataUrl,
     icon: '减灾救灾类.png',
     attributeFilter: "DATATYPE = '减灾救灾类专家'"
   },
@@ -377,7 +348,7 @@ const mapUrl = {
     layerName: 'd_emergency_team',
     label: '地震地质类专家',
     dataSourceName,
-    url: dataUrl,
+    // url: dataUrl,
     icon: '地震地质类.png',
     attributeFilter: "DATATYPE = '地震地质类专家'"
   },
@@ -447,7 +418,7 @@ const mapUrl = {
     layerName: 'JZJZNL_BZAZCS',
     label: '应急避难场所',
     dataSourceName,
-    url: dataUrl,
+    // url: dataUrl,
     icon: '应急避难场所.png'
   },
   // 应急物资储备库
@@ -457,7 +428,7 @@ const mapUrl = {
     layerName: 'JZJZNL_WZCBK',
     label: '市县物资储备库',
     dataSourceName,
-    url: dataUrl,
+    // url: dataUrl,
     icon: '市县物资储备库.png',
     attributeFilter: "DATATYPE = '市县物资储备库'"
   },
@@ -467,7 +438,7 @@ const mapUrl = {
     layerName: 'JZJZNL_WZCBK',
     label: '部门物资储备点',
     dataSourceName,
-    url: dataUrl,
+    // url: dataUrl,
     icon: '部门物资储备点.png',
     attributeFilter: "DATATYPE = '部门物资储备点'"
   },
@@ -477,7 +448,7 @@ const mapUrl = {
     layerName: 'JZJZNL_WZCBK',
     label: '乡镇（街道）物资储备库',
     dataSourceName,
-    url: dataUrl,
+    // url: dataUrl,
     icon: '部门物资储备点.png',
     attributeFilter: "DATATYPE = '乡镇物资储备点'"
   },
@@ -489,7 +460,7 @@ const mapUrl = {
     layerName: 'JZJZNL_WZCBQY_GYWD',
     label: '供应网点',
     dataSourceName,
-    url: dataUrl,
+    // url: dataUrl,
     icon: '供应网点.png'
   },
   // --加工企业
@@ -498,7 +469,7 @@ const mapUrl = {
     layerName: 'JZJZNL_WZCBQY_JGQY',
     label: '加工企业',
     dataSourceName,
-    url: dataUrl,
+    // url: dataUrl,
     icon: '供应网点.png'
   },
   // --配送中心
@@ -507,7 +478,7 @@ const mapUrl = {
     layerName: 'JZJZNL_WZCBQY_PSZX',
     label: '配送中心',
     dataSourceName,
-    url: dataUrl,
+    // url: dataUrl,
     icon: '供应网点.png'
   },
   // --运输企业
@@ -516,7 +487,7 @@ const mapUrl = {
     layerName: 'JZJZNL_WZCBQY_YSQY',
     label: '运输企业',
     dataSourceName,
-    url: dataUrl,
+    // url: dataUrl,
     icon: '运输企业.png'
   },
   // 应急关键设备
@@ -526,7 +497,7 @@ const mapUrl = {
     layerName: 'JZJZNL_YJGJSB',
     label: '冲锋舟',
     dataSourceName,
-    url: dataUrl,
+    // url: dataUrl,
     icon: '冲锋舟.png',
     attributeFilter: "YJGJSB_TYPE = '冲锋舟'"
   },
@@ -536,7 +507,7 @@ const mapUrl = {
     layerName: 'JZJZNL_YJGJSB',
     label: '橡皮艇',
     dataSourceName,
-    url: dataUrl,
+    // url: dataUrl,
     icon: '橡皮艇.png',
     attributeFilter: "YJGJSB_TYPE = '橡皮艇'"
   },
@@ -546,7 +517,7 @@ const mapUrl = {
     layerName: 'JZJZNL_YJGJSB',
     label: '挖掘机',
     dataSourceName,
-    url: dataUrl,
+    // url: dataUrl,
     icon: '挖掘机.png',
     attributeFilter: "YJGJSB_TYPE = '挖掘机'"
   },
@@ -556,7 +527,7 @@ const mapUrl = {
     layerName: 'JZJZNL_YJGJSB',
     label: '推土机',
     dataSourceName,
-    url: dataUrl,
+    // url: dataUrl,
     icon: '推土机.png',
     attributeFilter: "YJGJSB_TYPE = '推土机'"
   },
@@ -566,7 +537,7 @@ const mapUrl = {
     layerName: 'JZJZNL_YJGJSB',
     label: '发电机组',
     dataSourceName,
-    url: dataUrl,
+    // url: dataUrl,
     icon: '发电机组.png',
     attributeFilter: "YJGJSB_TYPE = '发电机组'"
   },
@@ -576,7 +547,7 @@ const mapUrl = {
     layerName: 'JZJZNL_YJGJSB',
     label: '水泵',
     dataSourceName,
-    url: dataUrl,
+    // url: dataUrl,
     icon: '水泵.png',
     attributeFilter: "YJGJSB_TYPE = '水泵'"
   },
@@ -586,7 +557,7 @@ const mapUrl = {
     layerName: 'JZJZNL_YJGJSB',
     label: '卫星电话',
     dataSourceName,
-    url: dataUrl,
+    // url: dataUrl,
     icon: '运输车.png',
     attributeFilter: "YJGJSB_TYPE = '卫星电话'"
   },
@@ -596,7 +567,7 @@ const mapUrl = {
     layerName: 'JZJZNL_YJGJSB',
     label: '单兵设备',
     dataSourceName,
-    url: dataUrl,
+    // url: dataUrl,
     icon: '运输车.png',
     attributeFilter: "YJGJSB_TYPE = '单兵设备'"
   },
@@ -606,7 +577,7 @@ const mapUrl = {
     layerName: 'JZJZNL_YJGJSB',
     label: '吊车',
     dataSourceName,
-    url: dataUrl,
+    // url: dataUrl,
     icon: '吊车.png',
     attributeFilter: "YJGJSB_TYPE = '吊车'"
   },
@@ -616,7 +587,7 @@ const mapUrl = {
     layerName: 'JZJZNL_YJGJSB',
     label: '抛绳器',
     dataSourceName,
-    url: dataUrl,
+    // url: dataUrl,
     icon: '抛绳器.png',
     attributeFilter: "YJGJSB_TYPE = '抛绳器'"
   },
@@ -626,7 +597,7 @@ const mapUrl = {
     layerName: 'JZJZNL_YJGJSB',
     label: '大型照明设备',
     dataSourceName,
-    url: dataUrl,
+    // url: dataUrl,
     icon: '大型照明设备.png',
     attributeFilter: "YJGJSB_TYPE = '大型照明设备'"
   },
@@ -636,7 +607,7 @@ const mapUrl = {
     layerName: 'JZJZNL_YJGJSB',
     label: '无人机',
     dataSourceName,
-    url: dataUrl,
+    // url: dataUrl,
     icon: '无人机.png',
     attributeFilter: "YJGJSB_TYPE = '无人机'"
   },
@@ -646,7 +617,7 @@ const mapUrl = {
     layerName: 'JZJZNL_YJGJSB',
     label: '切割机',
     dataSourceName,
-    url: dataUrl,
+    // url: dataUrl,
     icon: '切割机.png',
     attributeFilter: "YJGJSB_TYPE = '切割机'"
   },
@@ -656,7 +627,7 @@ const mapUrl = {
     layerName: 'JZJZNL_YJGJSB',
     label: '运输车',
     dataSourceName,
-    url: dataUrl,
+    // url: dataUrl,
     icon: '运输车.png',
     attributeFilter: "YJGJSB_TYPE = '运输车'"
   },
@@ -666,7 +637,7 @@ const mapUrl = {
     layerName: 'JZJZNL_YJGJSB',
     label: '拖轮',
     dataSourceName,
-    url: dataUrl,
+    // url: dataUrl,
     icon: '运输车.png',
     attributeFilter: "YJGJSB_TYPE = '拖轮'"
   },
@@ -678,7 +649,7 @@ const mapUrl = {
     layerName: 'JZJZNL_YLJH_JHCS',
     label: '救护场所',
     dataSourceName,
-    url: dataUrl,
+    // url: dataUrl,
     icon: '救护场所.png'
   },
   // --救护车辆
@@ -687,7 +658,7 @@ const mapUrl = {
     layerName: 'JZJZNL_YLJH_JHCL',
     label: '救护车辆',
     dataSourceName,
-    url: dataUrl,
+    // url: dataUrl,
     icon: '救护车辆.png'
   },
   // --医疗救护设备
@@ -696,7 +667,7 @@ const mapUrl = {
     layerName: 'JZJZNL_YLJH_JHCL_JHSB',
     label: '医疗救护设备',
     dataSourceName,
-    url: dataUrl,
+    // url: dataUrl,
     icon: '医疗救护设备.png'
   },
   // --医疗物资
@@ -705,7 +676,7 @@ const mapUrl = {
     layerName: 'JZJZNL_YLJH_JHCL_YLWZ',
     label: '医疗物资',
     dataSourceName,
-    url: dataUrl,
+    // url: dataUrl,
     icon: '医疗物资.png'
   },
   // --血库
@@ -714,7 +685,7 @@ const mapUrl = {
     layerName: 'JZJZNL_YLJH_XZ_XK',
     label: '血库',
     dataSourceName,
-    url: dataUrl,
+    // url: dataUrl,
     icon: '血库.png'
   },
   // --血站
@@ -723,7 +694,7 @@ const mapUrl = {
     layerName: 'JZJZNL_YLJH_XZ',
     label: '血站',
     dataSourceName,
-    url: dataUrl,
+    // url: dataUrl,
     icon: '血站.png'
   },
   // --疾控中心
@@ -732,7 +703,7 @@ const mapUrl = {
     layerName: 'JZJZNL_YLJH_JKZX',
     label: '疾控中心',
     dataSourceName,
-    url: dataUrl,
+    // url: dataUrl,
     icon: '疾控中心.png'
   },
   // --急救指挥中心
@@ -741,7 +712,7 @@ const mapUrl = {
     layerName: 'JZJZNL_YLJH_JJZHZX',
     label: '急救指挥中心',
     dataSourceName,
-    url: dataUrl,
+    // url: dataUrl,
     icon: '急救指挥中心.png'
   },
   // --卫生监督机构
@@ -750,7 +721,7 @@ const mapUrl = {
     layerName: 'JZJZNL_YLJH_WSJDJG',
     label: '卫生监督机构',
     dataSourceName,
-    url: dataUrl
+    // url: dataUrl
   },
   // 消防救援能力
   // --消防站
@@ -759,7 +730,7 @@ const mapUrl = {
     layerName: 'JZJZNL_XFJYNL_XFZ',
     label: '消防站',
     dataSourceName,
-    url: dataUrl,
+    // url: dataUrl,
     icon: '消防站.png'
   },
   // --专职消防队
@@ -772,7 +743,7 @@ const mapUrl = {
     layerName: 'RESERVOIR',
     label: '水库',
     dataSourceName,
-    url: dataUrl,
+    // url: dataUrl,
     icon: '水库.png'
   },
   // --山塘
@@ -781,7 +752,7 @@ const mapUrl = {
     layerName: 'POOL',
     label: '山塘',
     dataSourceName,
-    url: dataUrl,
+    // url: dataUrl,
     icon: '山塘.png'
   },
   // --海塘
@@ -790,7 +761,7 @@ const mapUrl = {
     layerName: 'SEAWALL',
     label: '海塘',
     dataSourceName,
-    url: dataUrl,
+    // url: dataUrl,
     icon: '海塘.png'
   },
   // --堤防
@@ -799,7 +770,7 @@ const mapUrl = {
     layerName: 'DYKE',
     label: '堤防',
     dataSourceName,
-    url: dataUrl,
+    // url: dataUrl,
     icon: '堤防.png'
   },
   // --泵站
@@ -808,7 +779,7 @@ const mapUrl = {
     layerName: 'PUMP',
     label: '泵站',
     dataSourceName,
-    url: dataUrl,
+    // url: dataUrl,
     icon: '泵站.png'
   },
   // --水闸
@@ -817,7 +788,7 @@ const mapUrl = {
     layerName: 'WATER_GATE',
     label: '水闸',
     dataSourceName,
-    url: dataUrl,
+    // url: dataUrl,
     icon: '水闸.png'
   },
   // --旱闸
@@ -828,7 +799,7 @@ const mapUrl = {
     layerName: 'RURAL_DRINKING_WATER',
     label: '农村饮用水',
     dataSourceName,
-    url: dataUrl,
+    // url: dataUrl,
     icon: '农村饮用水.png'
   },
   // --水电站
@@ -837,7 +808,7 @@ const mapUrl = {
     layerName: 'AQFXY_SL_SDZ',
     label: '水电站',
     dataSourceName,
-    url: dataUrl,
+    // url: dataUrl,
     icon: '水电站.png'
   },
   // 道路运输
@@ -847,7 +818,7 @@ const mapUrl = {
     layerName: 'BRIDGE',
     label: '桥梁',
     dataSourceName,
-    url: dataUrl,
+    // url: dataUrl,
     icon: '桥梁.png'
   },
   // --隧道
@@ -856,7 +827,7 @@ const mapUrl = {
     layerName: 'TUNNEL',
     label: '隧道',
     dataSourceName,
-    url: dataUrl,
+    // url: dataUrl,
     icon: '隧道.png'
   },
   // --涵洞
@@ -865,7 +836,7 @@ const mapUrl = {
     layerName: 'AQFXY_JT_HD',
     label: '涵洞',
     dataSourceName,
-    url: dataUrl,
+    // url: dataUrl,
     icon: '涵洞.png'
   },
   // --港口码头
@@ -874,7 +845,7 @@ const mapUrl = {
     layerName: 'PORT_WHARF',
     label: '港口码头',
     dataSourceName,
-    url: dataUrl,
+    // url: dataUrl,
     icon: '港口.png'
   },
   // --水路运输单位
@@ -883,7 +854,7 @@ const mapUrl = {
     layerName: 'WATERWAY_TRANSPORT_UNIT',
     label: '水路运输单位',
     dataSourceName,
-    url: dataUrl,
+    // url: dataUrl,
     icon: '水路运输单位.png'
   },
   // --市域轨道站点
@@ -892,7 +863,7 @@ const mapUrl = {
     layerName: 'D_HAZARDS_TRACKSHP_P',
     label: '市域轨道站点',
     dataSourceName,
-    url: dataUrl,
+    // url: dataUrl,
     icon: '市域轨道站点.png'
   },
   // --火车站
@@ -901,7 +872,7 @@ const mapUrl = {
     layerName: 'D_HAZARDS_TRAIN_STATION',
     label: '火车站',
     dataSourceName,
-    url: dataUrl,
+    // url: dataUrl,
     icon: '火车站.png'
   },
   // --两客一危企业
@@ -910,7 +881,7 @@ const mapUrl = {
     layerName: 'DANGEROUS_CAR_ENTERPRISE',
     label: '两客一危企业',
     dataSourceName,
-    url: dataUrl,
+    // url: dataUrl,
     icon: '两客一危企业.png'
   },
   // --道路隐患点
@@ -919,7 +890,7 @@ const mapUrl = {
     layerName: 'DANGEROUS_CAR_ENTERPRISE',
     label: '道路隐患点',
     dataSourceName,
-    url: dataUrl,
+    // url: dataUrl,
     icon: '道路隐患点.png'
   },
   // 化工危险品企业
@@ -928,7 +899,7 @@ const mapUrl = {
     layerName: 'D_HAZARDS_CHEMICALSHP',
     label: '化工危险品企业',
     dataSourceName,
-    url: dataUrl,
+    // url: dataUrl,
     icon: '生产企业.png'
   },
   // --生产企业
@@ -937,7 +908,7 @@ const mapUrl = {
     layerName: 'D_HAZARDS_CHEMICALSHP',
     label: '生产企业',
     dataSourceName,
-    url: dataUrl,
+    // url: dataUrl,
     icon: '生产企业.png',
     attributeFilter: "DATATYPE = '生产企业'"
   },
@@ -947,7 +918,7 @@ const mapUrl = {
     layerName: 'D_HAZARDS_CHEMICALSHP',
     label: '使用企业',
     dataSourceName,
-    url: dataUrl,
+    // url: dataUrl,
     icon: '使用企业.png',
     attributeFilter: "DATATYPE = '使用企业'"
   },
@@ -957,7 +928,7 @@ const mapUrl = {
     layerName: 'D_HAZARDS_CHEMICALSHP',
     label: '仓储经营',
     dataSourceName,
-    url: dataUrl,
+    // url: dataUrl,
     icon: '仓储经营.png',
     attributeFilter: "DATATYPE = '仓储经营'"
   },
@@ -967,7 +938,7 @@ const mapUrl = {
     layerName: 'D_HAZARDS_CHEMICALSHP',
     label: '带仓储经营',
     dataSourceName,
-    url: dataUrl,
+    // url: dataUrl,
     icon: '带仓储经营.png',
     attributeFilter: "DATATYPE = '带仓储经营'"
   },
@@ -977,7 +948,7 @@ const mapUrl = {
     layerName: 'D_HAZARDS_CHEMICALSHP',
     label: '不带仓储经营',
     dataSourceName,
-    url: dataUrl,
+    // url: dataUrl,
     icon: '不带仓储经营.png',
     attributeFilter: "DATATYPE = '不带仓储经营'"
   },
@@ -987,7 +958,7 @@ const mapUrl = {
     layerName: 'D_HAZARDS_CHEMICALSHP',
     label: '加油站',
     dataSourceName,
-    url: dataUrl,
+    // url: dataUrl,
     icon: '加油站.png',
     attributeFilter: "DATATYPE = '加油站'"
   },
@@ -998,7 +969,7 @@ const mapUrl = {
     layerName: 'TOURIST_SPOT',
     label: '旅游景点',
     dataSourceName,
-    url: dataUrl,
+    // url: dataUrl,
     icon: '旅游景点.png'
   },
   // --农家乐
@@ -1007,7 +978,7 @@ const mapUrl = {
     layerName: 'AGRITAINMENT',
     label: '农家乐',
     dataSourceName,
-    url: dataUrl,
+    // url: dataUrl,
     icon: '农家乐.png'
   },
   // --民宿
@@ -1016,7 +987,7 @@ const mapUrl = {
     layerName: 'HOMESTAY',
     label: '民宿',
     dataSourceName,
-    url: dataUrl,
+    // url: dataUrl,
     icon: '民宿.png'
   },
   // --重点餐饮
@@ -1025,7 +996,7 @@ const mapUrl = {
     layerName: 'AQFXY_RM_ZDCY',
     label: '重点餐饮',
     dataSourceName,
-    url: dataUrl,
+    // url: dataUrl,
     icon: '重点餐饮(瑞安).png'
   },
   // 爆竹烟花经营单位
@@ -1034,7 +1005,7 @@ const mapUrl = {
     layerName: 'D_HARAZDS_FIREWORKS',
     label: '烟花爆竹经营单位',
     dataSourceName,
-    url: dataUrl,
+    // url: dataUrl,
     icon: '专库存储经营.png'
   },
   // 消防安全重点单位
@@ -1043,7 +1014,7 @@ const mapUrl = {
     layerName: 'FIRE_SAFETY_PROTECT_UNIT',
     label: '消防安全单位',
     dataSourceName,
-    url: dataUrl,
+    // url: dataUrl,
     icon: '消防安全重点单位.png'
   },
   // 其它
@@ -1053,7 +1024,7 @@ const mapUrl = {
     layerName: 'CIVIL_EXPLOSIVES_ENTERPRISES',
     label: '民爆物品企业',
     dataSourceName,
-    url: dataUrl,
+    // url: dataUrl,
     icon: '民爆物品企业(瑞安).png'
   },
   // --易制毒化学品企业
@@ -1062,7 +1033,7 @@ const mapUrl = {
     layerName: 'AQFXY_QT_YZDHX',
     label: '易制毒化学品企业',
     dataSourceName,
-    url: dataUrl,
+    // url: dataUrl,
     icon: '易制毒化学品企业(瑞安).png'
   },
   // 巡逻范围
@@ -1073,7 +1044,7 @@ const mapUrl = {
     dataSourceName,
     icon: '巡逻范围.png',
     // url: 'http://172.20.83.218:8090/iserver/services/data-wenzhouyingji/rest/data'
-    url: 'http://10.36.234.83:8094/iserver/services/map-SLFH_DATA/rest/maps/SLFH_FHRY'
+    // url: 'http://10.36.234.83:8094/iserver/services/map-SLFH_DATA/rest/maps/SLFH_FHRY'
   }
 }
 

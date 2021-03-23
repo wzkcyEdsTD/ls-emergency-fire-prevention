@@ -244,7 +244,7 @@ function  measure(map, measureType) {
           map.on('dblclick', function (evt) {
               var point = new Point(evt.coordinate);
               source.addFeature(new Feature(point));
-              idea = false;
+              // idea = false;
 
               // alert(idea)
           });

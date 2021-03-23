@@ -250,7 +250,9 @@ const actions = {
         let layer = null
         // debugger
           if (v.type === 'map') {
-            layer = vue.$map.createTileSuperMapRestLayer(v.url)
+            if (v.url) {
+              layer = vue.$map.createTileSuperMapRestLayer(v.url)
+            }
           } else if (v.type === 'wms') {
             layer = vue.$map.createWMSLayer(v)
           } else {
