@@ -7,25 +7,6 @@
     </div>
     <div class="content">
       <div class="input-container">
-        <!-- <div class="draw-wrapper">
-          <div class="item">
-            <span>经度：</span>
-            <input
-              v-model="inputLon"
-              placeholder=""
-              @keyup="inputLon = inputLon.replace(/[^\d.]/g, '')"
-            >
-          </div>
-          <div class="item">
-            <span>纬度：</span>
-            <input
-              v-model="inputLat"
-              placeholder=""
-              @keyup="inputLat = inputLat.replace(/[^\d.]/g, '')"
-            >
-          </div>
-          <div class="input-btn" @click="handlePickClick" />
-        </div> -->
         <div class="input-radius">
           <input
             v-model="inputSearchRadius"
@@ -76,6 +57,9 @@ export default {
     firePtLayer() {
       return this.$store.getters.firePtLayer
     },
+    clearAllFlag() {
+      return this.$store.getters.clearAllFlag
+    },
     features() {
       return this.$store.getters.features
     },
@@ -87,6 +71,9 @@ export default {
     },
   },
   watch: {
+    clearAllFlag(val) {
+      const that = this;
+    },
     features(val) {
       this.initData()
     },
@@ -409,11 +396,10 @@ export default {
       }
     },
     closePicFirePoint() {
+      console.log("qwe")
       this.$parent.isShowPickFirePoint = false
       this.$parent.$refs['tool-bar'].isHzhzd = false
-
-     this.$bus.$emit("clearAll")
-
+      this.$bus.$emit("clearAll")
       this.handleClearClick();
 
     },
@@ -608,7 +594,7 @@ export default {
   },
   async mounted(){
     const that = this;
-    that.testData();
+    await that.testData();
     this.$bus.$on('fire',(value)=>{
       // console.log("传过来了",value)
       // that.handleClearClick();
@@ -658,10 +644,25 @@ export default {
         },600);
       })
     })
+  
+    this.$bus.$on('qingKong',(val)=>{
+      if (val) {
+        that.closePicFirePoint()
+        const list = window.g.map.getLayers().array_
+        list.forEach(v => {
+          if (v instanceof VectorLayer) {
+            if ((v.className_=='ol-layer')) {
+              v.setVisible(false)
+            }
+          }
+        });
+      }
+    })
   },
   beforeDestroy(){
     this.$bus.$off('fire');
     this.$bus.$off('fireAndId');
+    this.$bus.$off('qingKong')
   }
 }
 </script>

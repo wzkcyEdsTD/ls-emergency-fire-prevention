@@ -18,6 +18,7 @@ const state = {
   qiXiangData:[],
   rightMenuList:[{name:"火灾点列表"}],
   detailOrAround:{},
+  clearAllFlag:false,
 }
 
 const mutations = {
@@ -54,7 +55,9 @@ const mutations = {
 
     state.detailOrAround = item
   },
-
+  SET_CLEARALLFLAG(state, flag){
+    state.clearAllFlag = flag
+  },
   SET_DETAILORAROUND(state, list){
     state.detailOrAround = list
   },
@@ -169,6 +172,9 @@ const actions = {
   },
   setDetailOrAround({ commit },list){
     commit('SET_DETAILORAROUND', list)
+  },
+  setClearAllFlag({ commit },flag){
+    commit('SET_CLEARALLFLAG', flag)
   },
   
   changeVideo({ commit },video){

@@ -204,7 +204,7 @@ export default {
             }
           })
 
-          console.log(nodeList)
+          // console.log(nodeList)
           nodeList.map(v=>{
             that.handleCheckChange(v)
           })
@@ -315,6 +315,7 @@ export default {
         });
         var fireLayer = new VectorLayer({
           source: vectorSource,
+          className:"fire"
         })
         // fireLayer.setStyle(this.$map.getFirePointStyle())
         this.firelayer = fireLayer;

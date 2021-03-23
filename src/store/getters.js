@@ -43,5 +43,6 @@ const getters = {
   qiXiangData:state => state.map.qiXiangData,
   rightMenuList:state => state.map.rightMenuList,
   detailOrAround:state => state.map.detailOrAround,
+  clearAllFlag:state => state.map.clearAllFlag,
 }
 export default getters

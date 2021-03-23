@@ -148,6 +148,9 @@ export default {
       that.$nextTick(()=>{
         // that.layerType = !that.layerType
         that.$bus.$emit('checkBox',false)
+        that.$bus.$emit('qingKong',true)
+        // that.$store.dispatch('map/setClearAllFlag', null)
+        // that.$store.dispatch('map/setClearAllFlag', true)
       })
     },
     handleActiveType(type) {
@@ -292,7 +295,6 @@ export default {
           });
           this.list = [];
         }
-
       }
       if (val === '绘点') {
        const tempLayer = Measure.returnLayer(window.g.map,"Point");

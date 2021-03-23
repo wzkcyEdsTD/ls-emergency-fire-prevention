@@ -164,7 +164,6 @@
 <script>
 
 import fireList from './fire.json'
-import video from '@/components/video/video'
 import { set } from 'ol/transform'
 import { Point } from 'ol/geom'
 import VectorLayer from 'ol/layer/Vector'
@@ -177,10 +176,8 @@ import {
   FeatureService,
   SuperMap
 } from '@supermap/iclient-ol'
-// import Video from '@/components/video/video.vue'
 export default {
   components: {
-    video,
   },
 
   data() {

@@ -614,6 +614,7 @@ export default {
     },
     close() {
       this.$store.dispatch("lqfb/changezhfxOffsetRight", -30);
+      console.log(222)
     },
     getImgSrc(name) {
       return require(`../../../assets/images/icon/${name}.png`);

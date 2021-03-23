@@ -440,22 +440,6 @@ export default {
       const imgUrl = 'http://10.53.137.59:8090/iserver/services/map-agscache-Layers/rest/maps/Layers'
       let wenzhouLayer = ''
       let zjLayer = ''
-      // if (that.hasID) {
-      //   wenzhouLayer = this.$map.crtLayerWMTSAndID('img_c')
-      //   this.$store.dispatch("map/changeBaseLayer", wenzhouLayer);
-
-      //   // const zjLayer = this.$map.createTianDiTuLayer("cia_w");
-      //   zjLayer = this.$map.crtLayerWMTSAndID("cia_c");
-
-      //   // // zjLayer.addFilter(mask)
-      //   this.$store.dispatch("map/changeZjLayer", zjLayer);
-      // }else{
-      //   wenzhouLayer = this.$map.createTileSuperMapRestLayer(imgUrl, {
-      //     className: "img_c",
-      //   });
-
-      //   this.$store.dispatch("map/changeBaseLayer", wenzhouLayer);
-      // }
 
       wenzhouLayer = this.$map.createTileSuperMapRestLayer(imgUrl, {
         className: "img_c",
@@ -601,7 +585,7 @@ export default {
   background-image: url("~@/common/images/详情框.png");
   background-size: 100% 100%;
   position: absolute;
-  left: -140px;
+  left: -130px;
   bottom: 33px;
   .popup-header {
     width: 100%;

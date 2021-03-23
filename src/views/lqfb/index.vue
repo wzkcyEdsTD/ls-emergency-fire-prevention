@@ -60,7 +60,7 @@ import {
   SuperMap
 } from '@supermap/iclient-ol'
 import util from "@/libs/qxinfoAPI"
-import Video from '@/components/video/video.vue'
+
 export default {
   name: 'Lqfb',
   components: {
@@ -107,6 +107,9 @@ export default {
     mode() {
       return this.$store.getters.lqfbMode
     },
+    clearAllFlag() {
+      return this.$store.getters.clearAllFlag
+    },
     activeMenu() {
       return this.$store.getters.lqfbActiveMenu
     },
@@ -129,11 +132,20 @@ export default {
       return this.$store.getters.drawLayer
     }
   },
+  watch:{
+    clearAllFlag(val) {
+      const that = this;
+      if (val) {
+        that.clearPopup();
+      }
+    }
+  },
   beforeDestroy() {
     this.$map.getMap().un('click', this.showPopup)
     this.infoPopup.setPosition(undefined)
     this.$bus.$off("showPoup")
     this.$bus.$off("showPoupItem")
+    this.$bus.$off("qingKong")
     this.jkLayer && this.$store.dispatch('map/changeJkLayer', {
       layer: this.jkLayer,
       ope: 'REMOVELAYER'
@@ -141,13 +153,6 @@ export default {
   },
   mounted() {
     const that = this;
-
-    // const token = this.$cookies.get("token")
-    // if (!token) {
-    //   this.$router.push('/login');
-    // }
-
-
     if (this.drawLayer) this.drawLayer.setVisible(false)
         this.initPopup()
     this.$map.goHome()
@@ -159,8 +164,12 @@ export default {
       that.showPopupItem(item);
     });
     this.$bus.$on("showPoupItem",item=>{
-      
       that.showPopupSearchItem(item);
+    })
+    this.$bus.$on("qingKong",val=>{
+      if (val) {
+        that.clearPopup();
+      }
     })
   },
   methods: {

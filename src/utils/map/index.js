@@ -31,7 +31,7 @@ import {
 import Ol_filter_Mask from 'ol-ext/filter/Mask'
 import Ol_filter_Crop from 'ol-ext/filter/Crop'
 import store from '@/store'
-
+import { DoubleClickZoom } from 'ol/interaction'
 import { addInteraction } from './measure'
 
 const createMap = (divId, options = {}) => {
@@ -49,12 +49,17 @@ const createMap = (divId, options = {}) => {
       // minZoom:10,
       maxZoom:20
     }),
-    interactions: ol.interaction.defaults({
-      doubleClickZoom: false,// 取消双击放大功能交互
-      shiftDragZoom: false, // 取消shift+wheel左键拖动交互
-    }),
     ...options
   })
+
+  const dblClickInteraction = map
+  .getInteractions()
+  .getArray()
+  .find(interaction => {
+    return interaction instanceof DoubleClickZoom
+  })
+  map.removeInteraction(dblClickInteraction)
+
 
   map.on('pointermove', function (evt) {
     const hit = map.hasFeatureAtPixel(evt.pixel)
@@ -529,7 +534,6 @@ const getFeaturesByGeometry = ({ url, dataSourceName, label, layerName, attribut
     // }
     new FeatureService(url).getFeaturesByGeometry(geometryParam, serviceResult => {
       let features1 = [];
-      
       
       if (serviceResult.result) {
         // if (label=='综合救援队伍' || label=='森林消防救援队伍'||label=='专业救援队伍'||label=='志愿者救援队伍') {
