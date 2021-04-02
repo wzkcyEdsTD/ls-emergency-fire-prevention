@@ -113,7 +113,7 @@ export default {
           that.videoList = that.videoList.slice(0,10)
         }
 
-        that.jklb = `视频列表（${that.videoList.length}）`
+        that.jklb = `视频列表（${that.tempList.length}）`
 
       });
       console.log("qqqq",videoPointList)
