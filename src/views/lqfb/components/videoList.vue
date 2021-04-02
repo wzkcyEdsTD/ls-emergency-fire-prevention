@@ -4,29 +4,37 @@
 
     <div class="ljxq-container">
       <div class="zbjksz-container">
-        <div class="flexLine">
-          <div class="title">
-            监控列表
-            <img src="@/common/images/边.png" alt="" class="imgLine" />
+        <div>
+          <div class="flexLine">
+            <div class="title">
+              {{jklb}}
+              <img src="@/common/images/边.png" alt="" class="imgLine" />
+            </div>
+            <div class="closeicon" @click="close"></div>
           </div>
-          <div class="closeicon" @click="close"></div>
-        </div>
-        <div v-if="videoList.length > 0">
-          <ul style="height: 25vh">
-            <li
-              v-for="(v, i) in videoList"
-              :key="i"
-              :class="{ active: videotemp == i }"
-              @click="
-                videotemp = i;
-                handleVideoClick(v);
-              "
-            >
-              {{ v["properties"]["MC"] }}
+          <div class="ul-head">
+            <div class="item item-1">地点</div>
+            <!-- <div class="item item-1">举报人</div> -->
+            <div class="item item-1">通道数量</div>
+            <div class="item item-1">类型</div>
+          </div>
+          <ul style="max-height:80vh">
+            <li v-for="(item, index) in videoList" 
+                :key="index" 
+                class="list-item" 
+                :class="{active : videoItem == index}"
+                @click="videoItem = index;handleVideoClick(item)">
+              <div @mouseenter="titeEnter" class="item item-2">{{ item.properties.MC }}</div>
+              <!-- <div class="item item-1">{{ item.jubaoren }}</div> -->
+              <div class="item item-2">{{ item.properties.TD_NUM }}</div>
+              <div class="item item-2">{{ item.properties.TYPE }}</div>
             </li>
+            <div class="allmore" v-show="hasMore" @click="viewMore">
+              <div class="moreText">查看更多</div>
+              <div class="more" />
+            </div>
           </ul>
         </div>
-        <div v-else>周边无监控设施</div>
       </div>
     </div>
   </div>
@@ -38,7 +46,12 @@ export default {
     return {
       videoList: [],
       zhfxOffsetRight: -30,
-      videotemp:null
+      videotemp:null,
+      activeNames:['1'],
+      jklb:'',
+      videoItem:undefined,
+      hasMore:false,
+      tempList:[]
     };
   },
   methods: {
@@ -47,7 +60,13 @@ export default {
       const { clientWidth, scrollWidth, title } = target;
       if (!title && scrollWidth > clientWidth) target.title = target.innerText;
     },
-
+    viewMore(){
+      const that = this;
+      that.$nextTick(()=>{
+        that.hasMore = false;
+        that.videoList = that.tempList
+      })
+    },
     close() {
       const that = this;
       that.$nextTick(() => {
@@ -88,8 +107,16 @@ export default {
     that.$bus.$on("sendVideoListData", (videoPointList) => {
       that.$nextTick(() => {
         that.videoList = videoPointList;
+        that.tempList = videoPointList;
+        if (that.videoList.length>=10) {
+          that.hasMore = true;
+          that.videoList = that.videoList.slice(0,10)
+        }
+
+        that.jklb = `视频列表（${that.videoList.length}）`
+
       });
-      // console.log("qqqq",videoPointList)
+      console.log("qqqq",videoPointList)
     });
   },
   beforeDestroy() {
@@ -102,7 +129,7 @@ export default {
 <style lang="scss" scoped>
 .zhfxlb-wrapper {
   width: 400px;
-  height: calc(100vh - 60px);
+  height: 100%;
   transition: right 0.6s;
   background-color: rgba(16, 21, 24, 1);
   position: absolute;
@@ -124,12 +151,9 @@ export default {
 
   .ljxq-container {
     // height: 450px;
-    height: calc(100% - 120px);
-    width: 100%;
+    // height: calc(100% - 120px);
     padding-top: 1vh;
     .zbjksz-container {
-      height: 300px;
-      width: 100%;
       .flexLine{
         display: flex;
         .title {
@@ -150,53 +174,101 @@ export default {
           margin-right: 1vh;
         }
       }
-
+      .ul-head {
+      height: 26px;
+      width: 380px;
+      // background-color: rgb(10, 40, 68);
+      margin-top: 10px;
+      display: flex;
+      }
       ul {
-        padding-left: 0;
-        list-style: none;
-        // height: 230px;
-        overflow: auto;
-        font-family: PingFang SC;
-        font-size: 16px;
+      list-style: none;
+      padding-left: 0;
+      overflow-x: hidden; overflow-y: auto;
         li {
-          height: 32px;
-          font-size: 16px;
-          line-height: 32px;
-          padding: 0px 0 0px 27px;
-          // margin-top: 10px;
-          list-style: none;
-        //   background: url("~@/assets/images/2.png") no-repeat;
-          background-size: 100% 100%;
-          cursor: pointer;
-          &.active {
-            background: url("~@/assets/images/1.png");
-            color: hsla(153, 98%, 53%, 1);
+            display: flex;
+            align-items: center;
+            position: relative;
+            width: 380px;
+            height: 35px;
+            margin-bottom: 5px;
+            font-family: PingFang SC;
+            font-size: 16px;
+            // background: url(../../../assets/images/框.png) no-repeat;
             background-size: 100% 100%;
-          }
-        }
-        li:hover {
-        //   color: hsla(180, 100%, 47%, 1);
-            background: url("../../../assets/images/矩形 515.png") no-repeat;
-            background-size: 100%;
-            color: hsla(153, 98%, 53%, 1);
-            border: 1px solid hsla(153, 98%, 53%, 1);
-            cursor: pointer;
+            &.active {
+            background: #103E29;
+            border: 1px solid #0F7247;
+            color: #52FEB3;
+
+            }
+            .number {
+            width: 30px;
+            margin-left: 8px;
+            height: 30px;
+            border-radius: 15px;
+            text-align: center;
+            line-height: 30px;
+            color: rgba(0, 240, 242, 1);
+            font-weight: bolder;
+            font-size: 18px;
+            margin-right: 40px;
+            }
         }
       }
+      .item {
+      text-align: center;
+      line-height: 26px;
+      font-size: 16px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      }
+      .item-1 {
+        flex: 1;
+
+      }
+      .item-2 {
+        flex: 1;
+        cursor: pointer;
+      }
+      .allmore{
+        cursor: pointer;
+        display:flex;
+        justify-content:center;
+        align-items: center;
+        padding-left: 1vh;
+        .more{
+          background: url('~@/common/images/14和12.png');
+          background-size: 100% 100%;
+          width: 1.5vh;
+          height: 1.5vh;
+          position: relative;
+          top: 0vh;
+          left: 0.5vh;
+          
+        }
+        .moreText{
+          font-size: 16px;
+        }
+      }
+
+      /*滚动条样式*/
       ul::-webkit-scrollbar {
-        width: 4px;
-        height: 4px;
+          width: 4px;
+          height: 4px;
       }
       ul::-webkit-scrollbar-thumb {
-        border-radius: 10px;
-        background: rgba(255, 255, 255, 0.8);
-        width: 4px;
-        height: 30px;
+          border-radius: 10px;
+          background:#118251;
+          width: 8px;
+          height: 30px;
       }
       ul::-webkit-scrollbar-track {
-        border-radius: 0;
-        background: rgba(255, 255, 255, 0.2);
+          border-radius: 0;
+          background:#103E29;
       }
+
     }
   }
 }
