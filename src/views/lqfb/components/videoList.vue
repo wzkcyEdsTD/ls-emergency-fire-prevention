@@ -20,7 +20,7 @@
                 <div class="item item-1">通道数量</div>
                 <div class="item item-1">类型</div>
               </div>
-              <ul style="max-height:80vh">
+              <ul style="max-height:75vh">
                 <li v-for="(item, index) in videoList" 
                     :key="index" 
                     class="list-item" 
@@ -53,7 +53,7 @@
                 <div class="item item-1">通道数量</div>
                 <div class="item item-1">类型</div>
               </div>
-              <ul style="max-height:80vh">
+              <ul style="max-height:75vh">
                 <li v-for="(item, index) in offlineVideo" 
                     :key="index" 
                     class="list-item" 
