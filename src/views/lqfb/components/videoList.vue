@@ -4,37 +4,74 @@
 
     <div class="ljxq-container">
       <div class="zbjksz-container">
-        <div>
-          <div class="flexLine">
-            <div class="title">
-              {{jklb}}
-              <img src="@/common/images/边.png" alt="" class="imgLine" />
+        <el-collapse v-model="activeNames" accordion>
+          <el-collapse-item :title='zxsp' name="1">
+            <div>
+              <!-- <div class="flexLine">
+                <div class="title">
+                  {{zxsp}}
+                  <img src="@/common/images/边.png" alt="" class="imgLine" />
+                </div>
+                <div class="closeicon" @click="close"></div>
+              </div> -->
+              <div class="ul-head">
+                <div class="item item-1">地点</div>
+                <!-- <div class="item item-1">举报人</div> -->
+                <div class="item item-1">通道数量</div>
+                <div class="item item-1">类型</div>
+              </div>
+              <ul style="max-height:80vh">
+                <li v-for="(item, index) in videoList" 
+                    :key="index" 
+                    class="list-item" 
+                    :class="{active : videoItem == index}"
+                    @click="videoItem = index;handleVideoClick(item)">
+                  <div @mouseenter="titeEnter" class="item item-2">{{ item.properties.MC }}</div>
+                  <!-- <div class="item item-1">{{ item.jubaoren }}</div> -->
+                  <div class="item item-2">{{ item.properties.TD_NUM }}</div>
+                  <div class="item item-2">{{ item.properties.TYPE }}</div>
+                </li>
+                <div class="allmore" v-show="hasMore" @click="viewMore">
+                  <div class="moreText">查看更多</div>
+                  <div class="more" />
+                </div>
+              </ul>
             </div>
-            <div class="closeicon" @click="close"></div>
-          </div>
-          <div class="ul-head">
-            <div class="item item-1">地点</div>
-            <!-- <div class="item item-1">举报人</div> -->
-            <div class="item item-1">通道数量</div>
-            <div class="item item-1">类型</div>
-          </div>
-          <ul style="max-height:80vh">
-            <li v-for="(item, index) in videoList" 
-                :key="index" 
-                class="list-item" 
-                :class="{active : videoItem == index}"
-                @click="videoItem = index;handleVideoClick(item)">
-              <div @mouseenter="titeEnter" class="item item-2">{{ item.properties.MC }}</div>
-              <!-- <div class="item item-1">{{ item.jubaoren }}</div> -->
-              <div class="item item-2">{{ item.properties.TD_NUM }}</div>
-              <div class="item item-2">{{ item.properties.TYPE }}</div>
-            </li>
-            <div class="allmore" v-show="hasMore" @click="viewMore">
-              <div class="moreText">查看更多</div>
-              <div class="more" />
+          </el-collapse-item>
+          <el-collapse-item :title='lxsp' name="2">
+            <div>
+              <!-- <div class="flexLine">
+                <div class="title">
+                  {{lxsp}}
+                  <img src="@/common/images/边.png" alt="" class="imgLine" />
+                </div>
+                <div class="closeicon" @click="close"></div>
+              </div> -->
+              <div class="ul-head">
+                <div class="item item-1">地点</div>
+                <!-- <div class="item item-1">举报人</div> -->
+                <div class="item item-1">通道数量</div>
+                <div class="item item-1">类型</div>
+              </div>
+              <ul style="max-height:80vh">
+                <li v-for="(item, index) in offlineVideo" 
+                    :key="index" 
+                    class="list-item" 
+                    :class="{active : offlineVideoItem == index}"
+                    @click="offlineVideoItem = index;handleVideoClick(item)">
+                  <div @mouseenter="titeEnter" class="item item-2">{{ item.properties.MC }}</div>
+                  <!-- <div class="item item-1">{{ item.jubaoren }}</div> -->
+                  <div class="item item-2">{{ item.properties.TD_NUM }}</div>
+                  <div class="item item-2">{{ item.properties.TYPE }}</div>
+                </li>
+                <div class="allmore" v-show="offlineHasMore" @click="offlineViewMore">
+                  <div class="moreText">查看更多</div>
+                  <div class="more" />
+                </div>
+              </ul>
             </div>
-          </ul>
-        </div>
+          </el-collapse-item>
+        </el-collapse>
       </div>
     </div>
   </div>
@@ -47,11 +84,18 @@ export default {
       videoList: [],
       zhfxOffsetRight: -30,
       videotemp:null,
-      activeNames:['1'],
+      activeNames:'1',
       jklb:'',
       videoItem:undefined,
+      offlineVideoItem:undefined,
       hasMore:false,
-      tempList:[]
+      offlineHasMore:false,
+      tempList:[],
+      offlineVideo:[],
+      xzspList:[],
+      lxspList:[],
+      lxsp:"",
+      zxsp:""
     };
   },
   methods: {
@@ -64,8 +108,15 @@ export default {
       const that = this;
       that.$nextTick(()=>{
         that.hasMore = false;
-        that.videoList = that.tempList
+        that.videoList = that.xzspList
       })
+    },
+    offlineViewMore(){
+      const that = this;
+      that.$nextTick(()=>{
+        that.offlineHasMore = false;
+        that.offlineVideo = that.lxspList
+      })    
     },
     close() {
       const that = this;
@@ -81,7 +132,10 @@ export default {
         this.$map.getMap().getView().setCenter([v.properties.X,v.properties.Y]);
         this.$map.getMap().getView().setZoom(16);
         setTimeout(()=>{
-          that.$bus.$emit("videoData",v.properties);
+          console.log(v.properties);
+          if (v.properties.VIDEO_URL) {            
+            that.$bus.$emit("videoData",v.properties);
+          }
         },1000)
     }
   },
@@ -106,17 +160,31 @@ export default {
     });
     that.$bus.$on("sendVideoListData", (videoPointList) => {
       that.$nextTick(() => {
-        that.videoList = videoPointList;
-        that.tempList = videoPointList;
+        videoPointList.sort((a,b)=>b.properties.VIDEO_URL.localeCompare(a.properties.VIDEO_URL))
+        //在线视频
+        that.videoList = videoPointList.filter(v=>v.properties.VIDEO_URL);
+        console.log('在线视频',that.videoList);
+        //离线视频
+        that.offlineVideo = videoPointList.filter(v=>!v.properties.VIDEO_URL)
+        that.xzspList = that.videoList
+        that.lxspList = that.offlineVideo
+
         if (that.videoList.length>=10) {
           that.hasMore = true;
           that.videoList = that.videoList.slice(0,10)
         }
 
-        that.jklb = `视频列表（${that.tempList.length}）`
-
+        if (that.offlineVideo.length>=10) {
+          that.offlineHasMore = true;
+          that.offlineVideo = that.offlineVideo.slice(0,10)
+        }
+        let lxspLength = 0;
+        that.lxspList.forEach(element => {
+          lxspLength += Number(element.properties.TD_NUM)
+        });
+        that.zxsp = `在线视频列表（${that.xzspList.length}）`
+        that.lxsp = `离线视频列表（${lxspLength}）`
       });
-      console.log("qqqq",videoPointList)
     });
   },
   beforeDestroy() {
@@ -271,5 +339,34 @@ export default {
 
     }
   }
+}
+
+/deep/.el-collapse{
+  width: 100%;
+  margin-top: 1vh;
+  height: 100%;
+}
+/deep/.el-collapse-item__content{
+  color: #fff;
+}
+/deep/.el-collapse-item__wrap{
+  background-color: transparent;
+}
+
+/deep/.el-collapse .el-collapse-item__header {
+    background: #101518;
+    color: #FAFAFA;
+    border: none;
+    height: 4vh;
+    font-size: 2vh;
+    line-height: 4vh;
+    font-family: youshebiaotihei;
+    padding-left: 1.5vh;
+}
+
+/deep/.el-collapse-item__header:focus {
+    background: url('~@/assets/images/框new.png');
+    background-size: 100%;
+    color: #fafafa;
 }
 </style>

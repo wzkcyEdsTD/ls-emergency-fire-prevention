@@ -51,12 +51,9 @@ export default {
     initRtmp(url) {
       if (this.video) {
         this.video.dispose();
+        this.video = null;
       }
       return new Promise((resolve) => {
-        // this.video = undefined;
-        // if (!this.video) {
-          
-        // }
         this.video = new window.Aliplayer(
           {
             id: "myVideoPlayer",
@@ -77,8 +74,8 @@ export default {
       });
     },
     releaseVideo() {
-      // this.$hub.$emit("arcgis-popup-video", undefined);
       this.video.dispose();
+      this.video = null;
       this.videoShow = false;
     },
     close() {
