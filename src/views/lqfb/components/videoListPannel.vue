@@ -17,7 +17,7 @@
 </template>
 
 <script>
-
+import { fetchVideoURL } from "@/libs/m3u8API";
 export default {
   data() {
     return {
@@ -38,10 +38,17 @@ export default {
     this.$bus.$on("videoData",value=>{
       // console.log(value);
       // that.id = value.SMID;
-      that.$nextTick(()=>{
+      that.$nextTick(async()=>{
         that.videoShow = true
         that.mc = value.MC
-        that.initRtmp(value.VIDEO_URL);
+        if (this.video) {
+          this.video.dispose();
+          this.video = null;
+        }
+        const URL = await fetchVideoURL(
+          value.VIDEO_URL.replace("http://183.131.138.61:9080", "")
+        );
+        await that.initRtmp(URL);
       })
 
     
@@ -49,10 +56,10 @@ export default {
   },
   methods: {
     initRtmp(url) {
-      if (this.video) {
-        this.video.dispose();
-        this.video = null;
-      }
+      // if (this.video) {
+      //   this.video.dispose();
+      //   this.video = null;
+      // }
       return new Promise((resolve) => {
         this.video = new window.Aliplayer(
           {
