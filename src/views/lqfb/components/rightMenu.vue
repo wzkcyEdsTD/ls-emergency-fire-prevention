@@ -117,6 +117,7 @@
           <div class="title" >
             {{`历史回传截图列表`}}
           </div>
+          <div id="refreshIcon2" class="refreshIcon2" :class="{active: isRefreshHistory}" @click="refreshEventHistory"/>
         </div>
         <img style="width: 100%;" src="@/common/images/边.png" alt="">
         <div class="ul-head">
@@ -216,7 +217,9 @@ export default {
       layerList:[],
       allFireList:[],
       isRefresh: false,
-      isRefreshStreet:false
+      isRefreshStreet:false,
+      isRefreshHistory: false,
+      isRefreshStreetHistory:false
     }
   },
   methods:{
@@ -302,7 +305,62 @@ export default {
           that.isRefreshStreet = false;
         },500);
       })
+    },
+    refreshEventHistory(){
+      const that = this;
+      that.$nextTick(()=>{
+        this.isRefreshHistory = true
+        // that.isRefreshStreetHistory = true;
+        setTimeout(async()=>{
+          this.isRefreshHistory = false
 
+          let list = await that.regenerate()
+          for (let index = 0; index < list.length; index++) {
+            const element = list[index];
+            if (!element.imgSrc) {
+              const temp = await Util.regeneratePic(element.id)
+            } 
+          }
+          let size = window.size
+          Util.listAxios(size).then(res=>{
+            if(res.message.indexOf('成功')!=-1){
+              if (size < Number(res.result.total)) {
+                size = (res.result.total + 100);
+                Util.listAxios(size).then(r=>{
+                  that.$bus.$emit('fireList',r);
+                })
+              }else{
+                that.$bus.$emit('fireList',res);
+              }
+            }
+          })
+          that.$message({
+            message: '刷新成功',
+            type: 'success'
+          });
+
+        },500);
+      })
+    },
+    async regenerate(){
+      return new Promise((resolve) => {
+        let size = window.size;
+        Util.testAxios(Number(size)).then(res=>{
+          if(res.message.indexOf('成功')!=-1){
+            if (size < Number(res.result.total)) {
+              size = (res.result.total + 100);
+              console.log(size);
+              Util.testAxios(Number(size)).then(r=>{
+                // that.$bus.$emit('fireList',r);
+                resolve(r.result.records)
+              })
+            }else{
+              resolve(res.result.records)
+
+            }
+          }
+        })
+      })
 
     },
     getData() {
@@ -1160,7 +1218,7 @@ export default {
         }
 
         .title {
-        width: 100%;
+        width: 50%;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -1211,7 +1269,31 @@ export default {
         border-radius: 5px;
         }
 
+        .refreshIcon2{
+          // display        : flex;
+          background-image: url('~@/common/images/刷新.png');
+          background-size: 100% 100%;
+          width: 2.5vh;
+          height: 2.5vh;
+          position: relative;
+          right: 0;
+          cursor: pointer;
+          // animation: 0.5s ease-out 0s 1 normal none running gira;
+          &.active {
+            animation: gira 0.5s 1;
+          }
+        }
+        @-webkit-keyframes gira {
+          // from{-webkit-transform: rotate(0deg);}
+          // to{-webkit-transform: rotate(360deg);}
+          from{-webkit-transform: rotate(0deg);}
+          to{-webkit-transform: rotate(360deg);}
+        }
 
+        @keyframes gira {
+          from{-webkit-transform: rotate(0deg); transform: rotate(0deg)}
+          to{-webkit-transform: rotate(360deg); transform: rotate(360deg)}
+        }
 
     }
       .ul-head {

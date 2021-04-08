@@ -466,9 +466,9 @@ export default {
         const minDistancePoint = this.pointList[0]
         // console.log(minDistancePoint)
         util.getQXDetail(minDistancePoint.properties.IIIII).then(r=>{
-          const detailInfo = r['[]'][0]['SzlsDwSjjhSfxptBiz067QxQyqxzgc']
+          const detailInfo = r['[]'][0]['SzlsDwSjjhQxjHourlyelement']
           detailInfo['风向'] = that.getWindDirect(Number(detailInfo.winddirect))
-          detailInfo['摄氏度'] = that.changeTemperatureType(Number(detailInfo.drybultemp))
+          detailInfo['摄氏度'] = that.changeTemperatureType(Number(detailInfo.temperature))
           // console.log("气象站指标",detailInfo)
           that.$bus.$emit("detailInfo",detailInfo)
           resolve(true)
@@ -547,9 +547,9 @@ export default {
 
 
     },
-    async testData(){
+    async testData(value){
       const that = this;
-      return new Promise((resolve) => {
+
         var sqlParam = new SuperMap.GetFeaturesBySQLParameters({
           toIndex: 999999,
           queryParameter: {
@@ -571,9 +571,25 @@ export default {
             that.pointList.push(element)
 
           });
-          // console.log(2)
-          resolve(true);
-        })
+
+          if (value) {
+            if (that.firePtLayer) {
+              that.$store.dispatch('map/changeClearFlag', null)
+              that.$store.dispatch('map/changeIsAddFeatures', false)
+              that.firePtLayer && that.$map.removeLayer(that.firePtLayer)
+              that.$store.dispatch('jjya/changeFirePtLayer', null)
+              that.$store.dispatch('jjya/changeBuffer', null)
+              that.$store.dispatch('jjya/changeFirePt', null)
+            }
+            that.inputLon = value.x;
+            that.inputLat = value.y;
+            console.log(2);
+            that.systemcode = value.systemcode
+            that.$bus.$emit("sysCode",value.systemcode)
+            setTimeout(()=>{
+              that.handleComfirmClick();
+            },600); 
+          }
 
      });
     },
@@ -619,30 +635,11 @@ export default {
         // that.handlePickClick();
     })
 
-    that.$bus.$on('fireAndId',(value)=>{
+    that.$bus.$on('fireAndId', (value)=>{
       // that.inputSearchRadius = 1000;//半径
-      that.testData().then(()=>{
-        if (that.firePtLayer) {
-          that.$store.dispatch('map/changeClearFlag', null)
-          that.$store.dispatch('map/changeIsAddFeatures', false)
-          that.firePtLayer && that.$map.removeLayer(that.firePtLayer)
-          that.$store.dispatch('jjya/changeFirePtLayer', null)
-          that.$store.dispatch('jjya/changeBuffer', null)
-          that.$store.dispatch('jjya/changeFirePt', null)
-        }
-        that.inputLon = value.x;
-        that.inputLat = value.y;
-        // debugger
-        // that.$store.dispatch("map/clearLayerList",[]);
-        // that.initData()
-        that.systemcode = value.systemcode
-        that.$bus.$emit("sysCode",value.systemcode)
-        //等待资源加载完
-            console.log(3)
-        setTimeout(()=>{
-          that.handleComfirmClick();
-        },600);
-      })
+      console.log(1);
+        that.testData(value)
+      console.log(3);
     })
   
     this.$bus.$on('qingKong',(val)=>{

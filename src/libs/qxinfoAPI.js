@@ -27,8 +27,8 @@ function getQXDetail(id) {
     const method = "post"
     const params = {
         "[]": {
-            "SzlsDwSjjhSfxptBiz067QxQyqxzgc": {
-                "stationnum":`${id}`,
+            "SzlsDwSjjhQxjHourlyelement": {
+                "stcd":`${id}`,
                 "@order":"biz_time-"
             },
             "count":5,

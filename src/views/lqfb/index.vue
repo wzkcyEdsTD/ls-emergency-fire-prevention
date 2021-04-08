@@ -484,30 +484,31 @@ export default {
           </div>`
         }else if(value['IIIII']){
         util.getQXDetail(value['IIIII']).then(r=>{
-          const detailInfo = r['[]'][0]['SzlsDwSjjhSfxptBiz067QxQyqxzgc']
+          const detailInfo = r['[]'][0]['SzlsDwSjjhQxjHourlyelement']
           detailInfo['风向'] = that.getWindDirect(Number(detailInfo.winddirect))
-          detailInfo['摄氏度'] = that.changeTemperatureType(Number(detailInfo.drybultemp))
+          detailInfo['摄氏度'] = that.changeTemperatureType(Number(detailInfo.temperature))
 
-          //气压
-          if (detailInfo['stationpress'].indexOf('32768')!= -1 ) {
-            detailInfo['stationpress'] = '-'
-          }else{
-            detailInfo['stationpress'] = Number(detailInfo['stationpress']) / 10
-            detailInfo['stationpress'] += " hPa"
-          }
-          //水汽压
-          if (!(detailInfo['vapourpress'].indexOf('32768')!=-1)) {
-            detailInfo['vapourpress'] = Number(detailInfo['vapourpress']) / 10
-            detailInfo['vapourpress'] += " hPa"
-          }else{
-            detailInfo['vapourpress'] = '-'
-          }
+          // //气压
+          // if (detailInfo['stationpress'].indexOf('32768')!= -1 ) {
+          //   detailInfo['stationpress'] = '-'
+          // }else{
+          //   detailInfo['stationpress'] = Number(detailInfo['stationpress']) / 10
+          //   detailInfo['stationpress'] += " hPa"
+          // }
+          // //水汽压
+          // if (!(detailInfo['vapourpress'].indexOf('32768')!=-1)) {
+          //   detailInfo['vapourpress'] = Number(detailInfo['vapourpress']) / 10
+          //   detailInfo['vapourpress'] += " hPa"
+          // }else{
+          //   detailInfo['vapourpress'] = '-'
+          // }
           //湿度
-          if (!(detailInfo['relhumidity'].indexOf('32768')!=-1)) {
+          if ((detailInfo['relhumidity'])&&(!(detailInfo['relhumidity'].indexOf('32768')!=-1))) {
             detailInfo['relhumidity'] += " %"
           }else{
             detailInfo['relhumidity'] = '-'
           }
+          // debugger
 
           // console.log("气象站指标",detailInfo)
           infoTmpl += `<div  class="item">
@@ -524,27 +525,19 @@ export default {
           </div>`
           infoTmpl += `<div  class="item">
               <span class="key">风速：</span>
-              <span class="value" title="${detailInfo["windvelocity"]}">${detailInfo["windvelocity"]} m/s</span>
+              <span class="value" title="${detailInfo["windspeed"]}">${Number(detailInfo["windspeed"])} m/s</span>
           </div>`
           infoTmpl += `<div  class="item">
               <span class="key">降雨量：</span>
-              <span class="value" title="${detailInfo["precipition"]}">${detailInfo["precipition"]} mm</span>
+              <span class="value" title="${detailInfo["precipitation"]}">${Number(detailInfo["precipitation"])} mm</span>
           </div>`
           // infoTmpl += `<div  class="item">
           //     <span class="key">时间：</span>
           //     <span class="value" title="${detailInfo["biz_time"]}">${detailInfo["biz_time"]}</span>
           // </div>`
           infoTmpl += `<div  class="item">
-              <span class="key">气压：</span>
-              <span class="value" title="${detailInfo["stationpress"]}">${detailInfo["stationpress"]}</span>
-          </div>`
-          infoTmpl += `<div  class="item">
               <span class="key">湿度：</span>
               <span class="value" title="${detailInfo["relhumidity"]}">${detailInfo["relhumidity"]}</span>
-          </div>`
-          infoTmpl += `<div  class="item">
-              <span class="key">水汽压：</span>
-              <span class="value" title="${detailInfo["vapourpress"]}">${detailInfo["vapourpress"]}</span>
           </div>`
           // debugger
           table.innerHTML = infoTmpl
@@ -740,25 +733,25 @@ export default {
 
         }else if(value['IIIII']){
           util.getQXDetail(value['IIIII']).then(r=>{
-            const detailInfo = r['[]'][0]['SzlsDwSjjhSfxptBiz067QxQyqxzgc']
+            const detailInfo = r['[]'][0]['SzlsDwSjjhQxjHourlyelement']
             detailInfo['风向'] = that.getWindDirect(Number(detailInfo.winddirect))
-            detailInfo['摄氏度'] = that.changeTemperatureType(Number(detailInfo.drybultemp))
+            detailInfo['摄氏度'] = that.changeTemperatureType(Number(detailInfo.temperature))
             //气压
-            if (detailInfo['stationpress'].indexOf('32768')!= -1 ) {
-              detailInfo['stationpress'] = '-'
-            }else{
-              detailInfo['stationpress'] = Number(detailInfo['stationpress']) / 10
-              detailInfo['stationpress'] += " hPa"
-            }
-            //水汽压
-            if (!(detailInfo['vapourpress'].indexOf('32768')!=-1)) {
-              detailInfo['vapourpress'] = Number(detailInfo['vapourpress']) / 10
-              detailInfo['vapourpress'] += " hPa"
-            }else{
-              detailInfo['vapourpress'] = '-'
-            }
+            // if (detailInfo['stationpress'].indexOf('32768')!= -1 ) {
+            //   detailInfo['stationpress'] = '-'
+            // }else{
+            //   detailInfo['stationpress'] = Number(detailInfo['stationpress']) / 10
+            //   detailInfo['stationpress'] += " hPa"
+            // }
+            // //水汽压
+            // if (!(detailInfo['vapourpress'].indexOf('32768')!=-1)) {
+            //   detailInfo['vapourpress'] = Number(detailInfo['vapourpress']) / 10
+            //   detailInfo['vapourpress'] += " hPa"
+            // }else{
+            //   detailInfo['vapourpress'] = '-'
+            // }
             //湿度
-            if (!(detailInfo['relhumidity'].indexOf('32768')!=-1)) {
+            if ((detailInfo['relhumidity'])&&(!(detailInfo['relhumidity'].indexOf('32768')!=-1))) {
               detailInfo['relhumidity'] += " %"
             }else{
               detailInfo['relhumidity'] = '-'
@@ -778,28 +771,28 @@ export default {
             </div>`
             infoTmpl += `<div  class="item">
                 <span class="key">风速：</span>
-                <span class="value" title="${detailInfo["windvelocity"]}">${detailInfo["windvelocity"]} m/s</span>
+                <span class="value" title="${detailInfo["windspeed"]}">${Number(detailInfo["windspeed"])} m/s</span>
             </div>`
             infoTmpl += `<div  class="item">
                 <span class="key">降雨量：</span>
-                <span class="value" title="${detailInfo["precipition"]}">${detailInfo["precipition"]} mm</span>
+                <span class="value" title="${detailInfo["precipitation"]}">${Number(detailInfo["precipitation"])} mm</span>
             </div>`
             // infoTmpl += `<div  class="item">
             //     <span class="key">时间：</span>
             //     <span class="value" title="${detailInfo["biz_time"]}">${detailInfo["biz_time"]}</span>
             // </div>`
-            infoTmpl += `<div  class="item">
-                <span class="key">气压：</span>
-                <span class="value" title="${detailInfo["stationpress"]}">${detailInfo["stationpress"]}</span>
-            </div>`
+            // infoTmpl += `<div  class="item">
+            //     <span class="key">气压：</span>
+            //     <span class="value" title="${detailInfo["stationpress"]}">${detailInfo["stationpress"]}</span>
+            // </div>`
             infoTmpl += `<div  class="item">
                 <span class="key">湿度：</span>
                 <span class="value" title="${detailInfo["relhumidity"]}">${detailInfo["relhumidity"]}</span>
             </div>`
-            infoTmpl += `<div  class="item">
-                <span class="key">水汽压：</span>
-                <span class="value" title="${detailInfo["vapourpress"]}">${detailInfo["vapourpress"]}</span>
-            </div>`
+            // infoTmpl += `<div  class="item">
+            //     <span class="key">水汽压：</span>
+            //     <span class="value" title="${detailInfo["vapourpress"]}">${detailInfo["vapourpress"]}</span>
+            // </div>`
             // debugger
             table.innerHTML = infoTmpl
           })

@@ -110,14 +110,14 @@
               <span class="indexList">风速</span>
                 <p
                   @mouseenter="titeEnter"
-                  class="contentList" >{{`${detailInfo['windvelocity']} m/s`}}</p
+                  class="contentList" >{{`${detailInfo['windspeed']} m/s`}}</p
                 >
             </li>
             <li class="result-data">
               <span class="indexList">降雨量</span>
                 <p
                   @mouseenter="titeEnter"
-                  class="contentList" >{{`${detailInfo['precipition']} mm`}}</p
+                  class="contentList" >{{`${detailInfo['precipitation']} mm`}}</p
                 >
             </li>
           </ul>
@@ -435,7 +435,7 @@ export default {
       // console.log(this.$store.getters.featuresData.ZBZY[1]);
       const that = this;
       this.$store.dispatch("lqfb/changezhfxOffsetRight", 0);
-      console.log(val);
+      console.log(12312312);
 
       if (val.ZBZY.netWork.arr && val.ZBZY.netWork.arr.length > 0) {
         that.aroundDetail = "";

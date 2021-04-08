@@ -120,7 +120,6 @@ export default {
     ToolBar,
     PickFirePoint,
     Yzhxdj,
-    hightStreatList:[],
   },
   data() {
     return {
@@ -135,6 +134,7 @@ export default {
       size:1000,
       rightMenu:30,
       temp:false,
+      hightStreatList:[],
     };
   },
   computed: {
@@ -168,17 +168,15 @@ export default {
     const that = this;
     const fireEvent = this.$route.query
     // console.log(this.fireId);
-
     if (fireEvent["id"]) {
       console.log(fireEvent["id"])
       that.hasID = true;
       Util.detailAxios(fireEvent["id"]).then((res)=>{
         const value = res.result;
         // that.showPopup(value);
-        // debugger
         that.$bus.$emit("fireAndId",value);
         if (value.systemcode.indexOf("ilishui")!=-1) {
-          that.searchStreet(new Point([value.x,value.y]))
+          that.searchStreet(new Point([value.x,value.y]),that)
         }
         // that.searchGrid(new Point([value.x,value.y]))
         // debugger
@@ -190,14 +188,12 @@ export default {
     await this.initMap();
     this.getData();
 
-
     this.$bus.$on('hzjbd',temp=>{
       if (that.hightStreatList && that.hightStreatList.length>0) {
         that.hightStreatList.map(v=>{
           v.setVisible(temp)
         })
       }
-
     });
     this.$bus.$on('changeMenuLocaltion',temp =>{
       that.$nextTick(()=>{
@@ -477,7 +473,7 @@ export default {
       this.map.addLayer(gridLayer);
     },
 
-    searchStreet(point){
+    searchStreet(point,self){
       const that = this;
       var geometryParam = new SuperMap.GetFeaturesByGeometryParameters({
         toIndex: 999999,
@@ -524,10 +520,9 @@ export default {
         const testLayer = new VectorLayer({
           source: vectorSource,
         })
-        that.$nextTick(()=>{
-          that.hightStreatList.push(testLayer)
-        })
-
+        console.log("list123",self.hightStreatList);
+        // debugger
+        that.hightStreatList.push(testLayer)
         this.map.getLayers().insertAt(4, testLayer)
 
       })

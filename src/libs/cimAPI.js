@@ -36,12 +36,17 @@ function getData(sign,requestTime) {
     },method)
 };
 
-
 function testAxios(pageSize) {
     const method = "get"
     return getAxios(`front/forestfire/forestFireCaseCurdate/queryForestFireCaseCurData?pageSize=${pageSize}`
     ,{},method)
 };
+
+function regeneratePic(id) {
+    const method = "get"
+    return getAxios(`/front/forestfire/forestFireCaseCurdate/processForestFireCaseImg?id=${id}`
+    ,{},method)
+}
 
 function listAxios(pageSize) {
     const method = "get"
@@ -61,4 +66,5 @@ export default {
     testAxios,
     listAxios,
     detailAxios,
+    regeneratePic
 }
