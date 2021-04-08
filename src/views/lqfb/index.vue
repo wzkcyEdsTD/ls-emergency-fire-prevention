@@ -246,9 +246,11 @@ export default {
 
 
       const value = item
-      if (value['VIDEO_URL']) {
+      if (value['VIDEO_URL'] || value['VIDEO_URL']=="") {
         // 查询监控视频
-        this.$bus.$emit("videoData",value);
+        if (value['VIDEO_URL']) {          
+          this.$bus.$emit("videoData",value);
+        }
         return
       }
       if (value['OBJECTID']) {
@@ -361,9 +363,11 @@ export default {
       }else{
         coordinate = [value.geometry.flatCoordinates[0],value.geometry.flatCoordinates[1]]
       }
-      if (value['VIDEO_URL']) {
+      if (value['VIDEO_URL'] || value['VIDEO_URL']=="") {
         // 查询监控视频
-        this.$bus.$emit("videoData",value);
+        if (value['VIDEO_URL']) {          
+          this.$bus.$emit("videoData",value);
+        }
         return
       }
       // //办事网点
@@ -656,9 +660,12 @@ export default {
       const popInfoDetail = document.getElementById('pop-info-deatil')
 
       const value = feature.values_
-      if (value['VIDEO_URL']) {
+      // debugger
+      if (value['VIDEO_URL'] || value['VIDEO_URL']=="") {
         // 查询监控视频
-        this.$bus.$emit("videoData",value);
+        if (value['VIDEO_URL']) {          
+          this.$bus.$emit("videoData",value);
+        }
         return
       }
       // if (value['OBJECTID']) {

@@ -272,7 +272,7 @@
         <el-collapse-item title="周边监控设置" name="4">
           <div class="zbjksz-container">
             <div v-if="videoList.length > 0">
-              <ul style="height:15vh">
+              <ul style="height:15vh;margin-top:0;">
                 <li v-for="(v, i) in videoList" 
                 :key="i" 
                 :class="{active : videotemp == i}"
@@ -605,7 +605,9 @@ export default {
       this.$map.getMap().getView().setCenter([item.X, item.Y]);
       this.$map.getMap().getView().setZoom(16);
 
-      this.$bus.$emit("videoData", item);
+      if (item.VIDEO_URL) {        
+        this.$bus.$emit("videoData", item);
+      }
 
       // this.ZoomToFeature(item);
       // getVideoByCode(item.values_["indexCode"]).then((res) => {
