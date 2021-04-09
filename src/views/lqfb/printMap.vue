@@ -3,7 +3,7 @@
     <sider-bar v-show="false"/>
     <info-pannel ref="infoPannel" v-show="false" />
     <rydw-pannel ref="rydwPannel" v-show="false" />
-    <rightMenu v-show="false" />
+    <!-- <rightMenu v-show="false" /> -->
 
     <rydw-popup v-show="false" />
 

@@ -136,8 +136,9 @@
                 <el-image
                   style="width: 70px; height: 70px"
                   :src="item.imgSrc"
-                  :preview-src-list="item.imgList">
-              </el-image>
+                  :preview-src-list="item.imgList"
+                  >
+                </el-image>
             </div>
           </li>
           <!-- <div class="allmore" v-show="hasMore && !hasSearch" @click="viewMore">

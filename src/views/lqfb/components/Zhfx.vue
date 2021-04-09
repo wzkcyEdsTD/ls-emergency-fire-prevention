@@ -436,7 +436,7 @@ export default {
       const that = this;
       this.$store.dispatch("lqfb/changezhfxOffsetRight", 0);
       console.log(12312312);
-
+      // debugger
       if (val.ZBZY.netWork.arr && val.ZBZY.netWork.arr.length > 0) {
         that.aroundDetail = "";
         val.ZBZY.netWork.arr.forEach((element) => {
@@ -449,20 +449,24 @@ export default {
         that.aroundDetail = "周边无办事网点";
       }
       const fireEvent = this.$route.query;
-      document.onreadystatechange = function () {
-        if (document.readyState == "complete") {
-          if (fireEvent["id"]) {
-            let node = $(`#finish`);
-            if (node) {
-              node.remove();
-              $(`#temp`).after(`<div id = 'finish'></div>`);
-            } else {
-              $(`#temp`).after(`<div id = 'finish'></div>`);
-            }
-            console.log("已添加finish节点");
+      
+      //手动延迟10s
+      setTimeout(()=>{
+        if (fireEvent["id"]) {
+          let node = $(`#finish`);
+          if (node) {
+            node.remove();
+            $(`#temp`).after(`<div id = 'finish'></div>`);
+          } else {
+            $(`#temp`).after(`<div id = 'finish'></div>`);
           }
+          console.log("已添加finish节点");
         }
-      };
+      },10000)
+      // document.onreadystatechange = function () {
+      //   if (document.readyState == "complete") {
+      //   }
+      // };
     },
     videoData(val) {
       const that = this;
@@ -900,6 +904,8 @@ export default {
         // that.$bus.$emit("changeMenuLocaltion",30)
       })
     });
+
+  
   },
   beforeDestroy() {
     this.$bus.$off("clearAll");
