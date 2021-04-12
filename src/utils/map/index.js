@@ -567,8 +567,20 @@ const getFeaturesByGeometry = ({ url, dataSourceName, label, layerName, attribut
               // debugger
               features1.push(feature);
           });
-          // store.dispatch('map/changeFeatures', features1)
-          // store.dispatch('map/changeNetWork', features1)
+
+        }else if(label == '铁塔'){
+          const list = serviceResult.result.features.features;
+          // console.log("铁塔",list);
+          list.forEach(element => {
+            const properties = element.properties;
+            const feature =  new Feature({
+                  geometry: new Point([properties.JD,properties.WD]),
+                  ...properties
+              })
+              // debugger
+              features1.push(feature);
+          });
+
         }
         else if(label == '气象测站'){
           const list = serviceResult.result.features.features;
@@ -697,8 +709,7 @@ const getFeaturesByGeometry = ({ url, dataSourceName, label, layerName, attribut
             })
           })
           resolve(resultLayer)
-        }
-        else if(label == '气象测站'){
+        }else if(label == '气象测站'){
           const resultLayer = new VectorLayer({
             source: vectorSource,
             style: new Style({
@@ -711,6 +722,20 @@ const getFeaturesByGeometry = ({ url, dataSourceName, label, layerName, attribut
             })
           })
           resultLayer.setVisible(false);
+          resolve(resultLayer)
+        }else if(label == '铁塔'){
+          const resultLayer = new VectorLayer({
+            source: vectorSource,
+            style: new Style({
+              image: new Icon({
+                anchor: [0.5, 26],
+                anchorXUnits: 'fraction',
+                anchorYUnits: 'pixels',
+                src: require(`@/assets/images/icon/${'铁塔.png'}`)
+              })
+            })
+          })
+          // resultLayer.setVisible(false);
           resolve(resultLayer)
         }
         else{

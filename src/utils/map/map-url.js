@@ -245,6 +245,14 @@ const mapUrl = {
     icon: '气象测站.png',
     url: dataUrl
   },
+  TIETA:{
+    type: 'data', // 数据服务
+    layerName: 'v_forest_tower',
+    label: '铁塔',
+    dataSourceName,
+    icon: '铁塔.png',
+    url: dataUrl
+  },
   // 水系
   WATER: {
     type: 'map',

@@ -389,7 +389,7 @@ export default {
       }else{
       }
       // debugger
-      if (!value['systemcode'] && !value['IIIII']) {
+      if (!value['systemcode'] && !value['IIIII'] &&!value['ZZMC']) {
         if (!value['NAME']) return
       }
 
@@ -401,46 +401,10 @@ export default {
       this.$store.dispatch('map/changeIsShowDetail', true)
       let table; let infoTmpl = ``
 
-      // if (feature.values_.DATATYPE === '骨干救援队伍' && feature.values_.TYPE2 === '森林消防救援队伍') {
-      //   table = document.getElementById('table-box1')
-      //   const infoPannelDwry = document.getElementById('info-pannel-dwry')
-      //   const infoPannelWzzb = document.getElementById('info-pannel-wzzb')
-      //   let dwry = ``; let wzzb = ``
-      //   getFiremanByTeamName(feature.values_.NAME).then(res => {
-      //     if (res.code === 20000) {
-      //       res.data.forEach(item => {
-      //         dwry += `<li>
-      //                   <div class="item item-1">${item.name}</div>
-      //                   <div class="item item-1"></div>
-      //                   <div class="item item-1">${item.age}</div>
-      //                   <div class="item item-2">${item.phone}</div>
-      //                 </li>`
-      //       })
-      //       infoPannelDwry.innerHTML = dwry
-      //     }
-      //   })
-      //   getEquipment(feature.values_.BID).then(res => {
-      //     if (res.code === 20000) {
-      //       res.data.forEach(item => {
-      //         wzzb += `<li>
-      //                   <div class="item item-2">${item.name}</div>
-      //                   <div class="item item-2">${item.type}</div>
-      //                   <div class="item item-1">${item.user_number}</div>
-      //                   <div class="item item-1">${item.unit}</div>
-      //                 </li>`
-      //       })
-      //       infoPannelWzzb.innerHTML = wzzb
-      //     }
-      //   })
-      //   this.$store.dispatch('lqfb/changeIsXFDW', '基本信息')
-      // } else {
-        this.$store.dispatch('lqfb/changeIsXFDW', '')
-        table = document.getElementById('table-box')
-      // }
-      // debugger
-      // console.log(value)
+      this.$store.dispatch('lqfb/changeIsXFDW', '')
+      table = document.getElementById('table-box')
+
       if (!(value['systemcode'])) {
-        // console.log("不是火灾点")
 
         if(value['BSWD_TYPE']){
 
@@ -542,6 +506,51 @@ export default {
           // debugger
           table.innerHTML = infoTmpl
         })
+        }else if(value['ZZMC']){
+          infoTmpl += `<div  class="item">
+              <span class="key">名称：</span>
+              <span class="value" title="${value['ZZMC']}">${value['ZZMC']}</span>
+          </div>`
+          infoTmpl += `<div  class="item">
+              <span class="key">地址：</span>
+              <span class="value" title="${value["ZDDZ"]}">${value["ZDDZ"]}</span>
+          </div>`
+          infoTmpl += `<div  class="item">
+              <span class="key">站址编码：</span>
+              <span class="value" title="${value["ZZBM"]}">${value["ZZBM"]}</span>
+          </div>`
+          infoTmpl += `<div  class="item">
+              <span class="key">地市：</span>
+              <span class="value" title="${value["CITY"]}">${value["CITY"]}</span>
+          </div>`
+          infoTmpl += `<div  class="item">
+              <span class="key">县市：</span>
+              <span class="value" title="${value["DISTRICT_1"]}">${value["DISTRICT_1"]}</span>
+          </div>`
+          infoTmpl += `<div  class="item">
+              <span class="key">乡镇：</span>
+              <span class="value" title="${value["STREET"]}">${value["STREET"]}</span>
+          </div>`
+          infoTmpl += `<div  class="item">
+              <span class="key">场景划分：</span>
+              <span class="value" title="${value["CJHF"]}">${value["CJHF"]}</span>
+          </div>`
+          infoTmpl += `<div  class="item">
+              <span class="key">铁塔类型：</span>
+              <span class="value" title="${value["TTLX"]}">${value["TTLX"]}</span>
+          </div>`
+          infoTmpl += `<div  class="item">
+              <span class="key">铁塔高度：</span>
+              <span class="value" title="${value["TTGD"]}">${value["TTGD"]}</span>
+          </div>`
+          infoTmpl += `<div  class="item">
+              <span class="key">机房类型：</span>
+              <span class="value" title="${value["JFLX"]}">${value["JFLX"]}</span>
+          </div>`
+          infoTmpl += `<div  class="item">
+              <span class="key">供电类型：</span>
+              <span class="value" title="${value["GDLX"]}">${value["GDLX"]}</span>
+          </div>`
         }else{
           for (const key in attrData[value['TABLE_NAME']]) {
             if (value[key] != undefined) {
@@ -594,6 +603,9 @@ export default {
         }else if(value['IIIII']){
           keyName.innerHTML = `名称：`
           keyValue.innerHTML = `${value['ADDRESS']}`
+        }else if(value['ZZMC']){
+          keyName.innerHTML = `名称：`
+          keyValue.innerHTML = `${value['ZZMC']}`
         }else{
           keyName.innerHTML = `${attrData[value['TABLE_NAME']]['NAME']}：`
           keyValue.innerHTML = `${value['NAME']}`
@@ -653,7 +665,7 @@ export default {
       const popInfoDetail = document.getElementById('pop-info-deatil')
 
       const value = feature.values_
-      // debugger
+
       if (value['VIDEO_URL'] || value['VIDEO_URL']=="") {
         // 查询监控视频
         if (value['VIDEO_URL']) {          
@@ -676,7 +688,7 @@ export default {
       }
       // debugger
 
-      if (!value['systemcode'] && !value['BSWD_TYPE'] && !value['IIIII'] && !value['HLX'] && !value['OBJECTID'] && !value['TYPE']) {
+      if (!value['systemcode'] && !value['BSWD_TYPE'] && !value['IIIII'] && !value['HLX'] && !value['OBJECTID'] && !value['TYPE'] && !value['ZZMC']) {
         if ((!value['NAME'] && !value['label'])) return
       }
 
@@ -796,6 +808,51 @@ export default {
             // debugger
             table.innerHTML = infoTmpl
           })
+        }else if(value['ZZMC']){
+          infoTmpl += `<div  class="item">
+              <span class="key">名称：</span>
+              <span class="value" title="${value['ZZMC']}">${value['ZZMC']}</span>
+          </div>`
+          infoTmpl += `<div  class="item">
+              <span class="key">地址：</span>
+              <span class="value" title="${value["ZDDZ"]}">${value["ZDDZ"]}</span>
+          </div>`
+          infoTmpl += `<div  class="item">
+              <span class="key">站址编码：</span>
+              <span class="value" title="${value["ZZBM"]}">${value["ZZBM"]}</span>
+          </div>`
+          infoTmpl += `<div  class="item">
+              <span class="key">地市：</span>
+              <span class="value" title="${value["CITY"]}">${value["CITY"]}</span>
+          </div>`
+          infoTmpl += `<div  class="item">
+              <span class="key">县市：</span>
+              <span class="value" title="${value["DISTRICT_1"]}">${value["DISTRICT_1"]}</span>
+          </div>`
+          infoTmpl += `<div  class="item">
+              <span class="key">乡镇：</span>
+              <span class="value" title="${value["STREET"]}">${value["STREET"]}</span>
+          </div>`
+          infoTmpl += `<div  class="item">
+              <span class="key">场景划分：</span>
+              <span class="value" title="${value["CJHF"]}">${value["CJHF"]}</span>
+          </div>`
+          infoTmpl += `<div  class="item">
+              <span class="key">铁塔类型：</span>
+              <span class="value" title="${value["TTLX"]}">${value["TTLX"]}</span>
+          </div>`
+          infoTmpl += `<div  class="item">
+              <span class="key">铁塔高度：</span>
+              <span class="value" title="${value["TTGD"]}">${value["TTGD"]}</span>
+          </div>`
+          infoTmpl += `<div  class="item">
+              <span class="key">机房类型：</span>
+              <span class="value" title="${value["JFLX"]}">${value["JFLX"]}</span>
+          </div>`
+          infoTmpl += `<div  class="item">
+              <span class="key">供电类型：</span>
+              <span class="value" title="${value["GDLX"]}">${value["GDLX"]}</span>
+          </div>`
         }else if(value['HLX']){
           // debugger
             infoTmpl += `<div  class="item">
@@ -915,6 +972,9 @@ export default {
         }else if(value['IIIII']){
           keyName.innerHTML = `名称：`
           keyValue.innerHTML = `${value['ADDRESS']}`
+        }else if(value['ZZMC']){
+          keyName.innerHTML = `名称：`
+          keyValue.innerHTML = `${value['ZZMC']}`
         }else if(value['HLX']){
           keyName.innerHTML = `姓名：`
           keyValue.innerHTML = `${value['XM']}`

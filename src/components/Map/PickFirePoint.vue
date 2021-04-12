@@ -51,6 +51,7 @@ export default {
       systemcode:"",
       pointList:[],
       qxczLayer:null,
+      properties:{},
     }
   },
   computed: {
@@ -214,7 +215,6 @@ export default {
         fireFeature.setStyle(style)
       }
 
-
       this.$store.dispatch('jjya/changeFirePt', fireFeature)
       const layer = this.$map.createVectorLayer([fireFeature])
       this.$map.addLayer(layer)
@@ -261,7 +261,7 @@ export default {
       // this.handlePickClick()
     },
     initData() {
-      if (this.features.length === 7) {
+      if (this.features.length === 8) {
         const attrDic = {
           ZBZY: {
              // 周边资源
@@ -270,6 +270,9 @@ export default {
             },
             qiXiang:{
               name:"气象测站"
+            },
+            tieTa:{
+              name:"铁塔"
             },
             d_emergency_team: {
               name: '应急队伍'
@@ -385,12 +388,23 @@ export default {
             })
             attrDic.ZBZY.qiXiang.arr = list
 
-          } else {
+          } else if (item[0].values_['TTLX']){
+            let list = [];
+            item.forEach(element=>{
+              const json = {
+                name: element.values_.ZZMC,
+                feature: element,
+              };
+              list.push(json);
+            })
+            attrDic.ZBZY.tieTa.arr = list
+
+          }
+           else {
             // 地表覆盖数量
             attrDic.dbfgNum += item.length
           }
         })
-        console.log(attrDic.ZBZY);
         this.$store.dispatch('map/changeFeaturesData', attrDic)
         // console.log("FeaturesData",attrDic);
       }
@@ -516,7 +530,8 @@ export default {
       this.searchGrid(new Point([this.inputLon,this.inputLat]))
       this.streetDetail(new Point([this.inputLon,this.inputLat]))
       this.clearFire();
-
+      // const featureProperties = this.$store.getters.drawFirePoint 
+      // debugger
       const fireFeat = this.$map.createFeature([this.inputLon, this.inputLat])
       this.showFireFeature(fireFeat)
       if (this.inputSearchRadius === 0 || !this.inputSearchRadius) {
@@ -612,7 +627,8 @@ export default {
     const that = this;
     await that.testData();
     this.$bus.$on('fire',(value)=>{
-      // console.log("传过来了",value)
+      console.log("传过来了",value)
+      // this.$store.dispatch('map/appendDrawFirePoint', value)
       // that.handleClearClick();
       if (that.firePtLayer) {
         // debugger
@@ -644,6 +660,7 @@ export default {
   
     this.$bus.$on('qingKong',(val)=>{
       if (val) {
+
         that.closePicFirePoint()
         const list = window.g.map.getLayers().array_
         list.forEach(v => {

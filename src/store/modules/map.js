@@ -19,9 +19,14 @@ const state = {
   rightMenuList:[{name:"火灾点列表"}],
   detailOrAround:{},
   clearAllFlag:false,
+  drawFirePoint:{}
 }
 
 const mutations = {
+  APPEND_DRAWFIREPOINT(state, properties){
+    state.drawFirePoint = properties
+  },
+
   APPEND_RIGHTMENULIST(state, rightMenu){
     
     if (state.rightMenuList.length == 0) {
@@ -157,6 +162,10 @@ const mutations = {
 }
 
 const actions = {
+  appendDrawFirePoint({ commit },properties){
+    commit('APPEND_DRAWFIREPOINT', properties)
+  },
+  //APPEND_DRAWFIREPOINT
   appendRightMenuList({ commit },list){
     commit('APPEND_RIGHTMENULIST', list)
   },

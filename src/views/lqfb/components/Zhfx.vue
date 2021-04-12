@@ -436,7 +436,6 @@ export default {
       const that = this;
       this.$store.dispatch("lqfb/changezhfxOffsetRight", 0);
       console.log(12312312);
-      // debugger
       if (val.ZBZY.netWork.arr && val.ZBZY.netWork.arr.length > 0) {
         that.aroundDetail = "";
         val.ZBZY.netWork.arr.forEach((element) => {

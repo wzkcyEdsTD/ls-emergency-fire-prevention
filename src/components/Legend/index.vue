@@ -128,6 +128,12 @@ export default {
         label:"初中学区",
         name:"初中学区",
       }
+      //铁塔
+      const legend14 = {
+        icon:"铁塔.png",
+        label:"铁塔",
+        name:"铁塔",
+      }
       const list = []
       if (that.fireLayerTemp) {
         list.push(legend)
@@ -170,6 +176,9 @@ export default {
       if (that.middleSchoolDistrictTemp) {
         list.push(legend13)
       }
+      if (that.tt) {
+        list.push(legend14)
+      }     
       
       //过滤重复item
       if (this.allLayerList.length == 0) {
@@ -213,6 +222,7 @@ export default {
       gylc:false,
       slgy:false,
       sd:false,
+      tt:false,
     }
   },
   methods: {
@@ -686,6 +696,39 @@ export default {
         }
       })
     })
+    this.$bus.$on("ttLayer",temp=>{
+      that.$nextTick(()=>{
+        that.tt = temp;
+        if (temp) {
+          const list = []
+          const legend = {
+            icon:"铁塔.png",
+            label:"铁塔",
+            name:"铁塔",
+          }
+          list.push(legend)
+          if (this.allLayerList.length == 0) {
+            this.allLayerList = [...this.allLayerList, ...list]
+          } else {
+            const obj = {};
+            const arr = [...this.allLayerList, ...list];
+            arr.map(v => {
+              if (!obj[v.name]) { obj[v.name] = v }
+            })
+
+            const setNameArr = [...new Set(arr.map(v => v.name))];
+            this.allLayerList = setNameArr.map(v => obj[v])
+          }
+        }else{
+            that.allLayerList = that.allLayerList.filter(v=>{
+              if (!(v.name.indexOf('铁塔')!=-1)) {
+                return v
+              }
+            })
+          
+        }
+      })
+    })
     },
   beforeDestroy(){
     this.$bus.$off('hzjbd');
@@ -703,6 +746,7 @@ export default {
     this.$bus.$off("sdLayer")
     this.$bus.$off("primarySchoolDistrictTemp")
     this.$bus.$off("middleSchoolDistrictTemp")
+    this.$bus.$off("ttLayer")
   }
 }
 </script>

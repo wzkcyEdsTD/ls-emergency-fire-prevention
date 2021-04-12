@@ -89,99 +89,11 @@ const treeData = [
       }
     ]
   },
-  
-
   {
     id: 2,
     label: '应急资源',
     showCheck: true,
     children: [
-      // {
-      //   id: 21,
-      //   label: '应急专家',
-      //   value: MAP_URL.JZJZNL_YJZJ,
-      //   isZLZY: true,
-      //   children: [
-      //     {
-      //       id: 211,
-      //       label: '危化类',
-      //       isZLZY: true,
-      //       value: MAP_URL.JZJZNL_YJZJ_WH
-      //     },
-      //     {
-      //       id: 212,
-      //       label: '机械类',
-      //       value: MAP_URL.JZJZNL_YJZJ_JXDQ,
-      //       isZLZY: true
-      //     },
-      //     {
-      //       id: 213,
-      //       label: '矿山类',
-      //       value: MAP_URL.JZJZNL_YJZJ_KS,
-      //       isZLZY: true
-      //     },
-      //     {
-      //       id: 214,
-      //       label: '防汛类',
-      //       value: MAP_URL.JZJZNL_YJZJ_FX,
-      //       isZLZY: true
-      //     },
-      //     {
-      //       id: 215,
-      //       label: '综合类',
-      //       value: MAP_URL.JZJZNL_YJZJ_ZH,
-      //       isZLZY: true
-      //     },
-      //     {
-      //       id: 216,
-      //       label: '减灾救灾类',
-      //       value: MAP_URL.JZJZNL_YJZJ_ZJJZ,
-      //       isZLZY: true
-      //     },
-      //     {
-      //       id: 217,
-      //       label: '地震地质类',
-      //       value: MAP_URL.JZJZNL_YJZJ_DZDZ,
-      //       isZLZY: true
-      //     }
-      //   ]
-      // },
-      // {
-      //   id: 22,
-      //   label: '应急队伍',
-      //   // children: [
-      //   //   {
-      //   //     id: 221,
-      //   //     label: '综合救援队伍',
-      //   //     value: MAP_URL.JZJZNL_YJDW_ZH,
-      //   //     isZLZY: true
-      //   //   },
-      //   //   {
-      //   //     id: 222,
-      //   //     label: '森林消防救援队伍',
-      //   //     value: MAP_URL.JZJZNL_YJDW_GG,
-      //   //     isZLZY: true
-      //   //   },
-      //   //   {
-      //   //     id: 223,
-      //   //     label: '专业救援队伍',
-      //   //     value: MAP_URL.JZJZNL_YJDW_ZY,
-      //   //     isZLZY: true
-      //   //   },
-      //   //   {
-      //   //     id: 224,
-      //   //     label: '志愿者救援队伍',
-      //   //     value: MAP_URL.JZJZNL_YJDW_ZYZ,
-      //   //     isZLZY: true
-      //   //   }
-      //   //   // {
-      //   //   //   id: 225,
-      //   //   //   label: '森林消防救援队伍',
-      //   //   //   value: MAP_URL.JZJZNL_YJDW_XFDW,
-      //   //   //   isZLZY: true
-      //   //   // }
-      //   // ]
-      // },
       {
         id: 27,
         label: '应急避难场所',
@@ -198,13 +110,6 @@ const treeData = [
             value: MAP_URL.JZJZNL_WZCBK_SX,
             isZLZY: true
           },
-          // {
-          //   id: 232,
-          //   label: '部门物资储备点',
-          //   // label: '乡镇物资储备库',
-          //   value: MAP_URL.JZJZNL_WZCBK_BM,
-          //   isZLZY: true
-          // }
           {
             id: 233,
             label: '乡镇（街道）物资储备库',
@@ -247,18 +152,6 @@ const treeData = [
         id: 25,
         label: '应急关键设备',
         children: [
-          // {
-          //   id: 251,
-          //   label: '冲锋舟',
-          //   value: MAP_URL.JZJZNL_YJGJSB_CFZ,
-          //   isZLZY: true
-          // },
-          // {
-          //   id: 252,
-          //   label: '橡皮艇',
-          //   value: MAP_URL.JZJZNL_YJGJSB_XPT,
-          //   isZLZY: true
-          // },
           {
             id: 253,
             label: '挖掘机',
@@ -366,12 +259,6 @@ const treeData = [
             label: '医疗物资',
             value: MAP_URL.JZJZNL_YLJH_YLWZ
           },
-          // {
-          //   id: 265,
-          //   label: '血库',
-          //   value: MAP_URL.JZJZNL_YLJH_XK,
-          //   isZLZY: true
-          // },
           {
             id: 266,
             label: '血站',
@@ -438,19 +325,6 @@ const treeData = [
       },
     ]
   },
-  // {
-  //   id: 4,
-  //   label: '巡逻范围',
-  //   showCheck: true,
-  //   children: [
-  //     {
-  //       id: 41,
-  //       label: '巡逻范围',
-  //       value: MAP_URL.SLFH_FHRY
-  //     }
-  //   ]
-  // },
-
   {
     id: 7,
     label: '监控设备',
@@ -515,7 +389,17 @@ const treeData = [
       },
     ]
   },
-
+  {
+    id: 10,
+    label: '铁塔',
+    showCheck: true,
+    children: [
+      {
+        id: 101,
+        label: '铁塔'
+      },
+    ]
+  },
 
 ]
 

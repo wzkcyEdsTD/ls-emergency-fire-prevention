@@ -90,7 +90,8 @@ export default {
       networkTemp:false,
       qxczLayer:null,
       qxczTemp:false,
-
+      ttLayer:null,
+      ttTemp:false,
       //教育资源
       //小学
       primartSchoolLayer:null,
@@ -194,7 +195,7 @@ export default {
     clearAllNode(){
       const that = this;
       // debugger
-      for (let index = 1; index < 10; index++) {
+      for (let index = 1; index < 11; index++) {
         const tree = this.$refs[`tree_${index}`]
         if (tree) {
           var nodeList = tree[0].getCheckedNodes();
@@ -331,7 +332,7 @@ export default {
       }
     },
     handleCheckChange(data, checked, id) {
-      //console.log('handleCheckChange', data, checked)
+      // console.log('handleCheckChange', data, checked)
       // 勾选目录树控制总览显示资源
       const that = this;
       let list = window.g.map.getLayers().array_
@@ -362,9 +363,6 @@ export default {
 
           new FeatureService(url).getFeaturesBySQL(sqlParam, serviceResult => {
             const videoPointList = serviceResult.result.features.features;
-            // debugger
-            // that.videoList = videoPointList;
-            // console.log("qwe",that.videoList);
             const features = [];
             videoPointList.forEach(element => {
               const properties = element.properties;
@@ -1078,7 +1076,59 @@ export default {
         this.handleCheckChange(temp1)
 
       }
+      if (data.label === '铁塔') {
+        if (!this.ttLayer) {
+          var sqlParam = new SuperMap.GetFeaturesBySQLParameters({
+            toIndex: -1,
+            maxFeatures: 99999999,
+            queryParameter: {
+              // name: layerName,
+              attributeFilter: "",
 
+            },
+            datasetNames: [`lishui_forestfire_v2:v_forest_tower`]
+          })
+          const url = "http://10.53.137.59:8090/iserver/services/data-lishui_forestfire_v2/rest/data";
+
+          new FeatureService(url).getFeaturesBySQL(sqlParam, serviceResult => {
+            const features = new GeoJSON().readFeatures(serviceResult.result.features)
+            features.map(f => {
+              f.setStyle(new Style({
+                image: new Icon({
+                  anchor: [0.5, 26],
+                  anchorXUnits: 'fraction',
+                  anchorYUnits: 'pixels',
+                  scale: 1,
+                  src: require(`@/assets/images/icon/${'铁塔.png'}`)
+                }),
+              }))
+            })
+            var vectorSource = new VectorSource({
+              features,
+              wrapX: false
+            });
+
+            this.ttLayer = new VectorLayer({
+              source: vectorSource,
+            })
+
+            this.$map.addLayer(this.ttLayer)
+            that.$bus.$emit("ttLayer",true);
+        })
+          this.ttTemp = true;
+          that.$bus.$emit("ttLayer",true);
+          // this.$store.dispatch('lqfb/changeVideoListOffsetRight', 0)
+        }else{
+          if (this.ttTemp) {
+            this.ttTemp = false
+            that.$bus.$emit("ttLayer",false);
+          }else if (!this.ttTemp) {
+            this.ttTemp = true
+            that.$bus.$emit("ttLayer",true);
+          }
+          this.ttLayer.setVisible(this.ttTemp);
+        }
+      }
 
 
       // 显示选中图层

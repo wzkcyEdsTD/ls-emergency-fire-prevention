@@ -44,5 +44,6 @@ const getters = {
   rightMenuList:state => state.map.rightMenuList,
   detailOrAround:state => state.map.detailOrAround,
   clearAllFlag:state => state.map.clearAllFlag,
+  drawFirePoint:state => state.map.drawFirePoint,
 }
 export default getters
