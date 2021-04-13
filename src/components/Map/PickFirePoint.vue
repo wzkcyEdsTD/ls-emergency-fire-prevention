@@ -254,7 +254,7 @@ export default {
     handleClearClick() {
       this.clearFire()
       this.$store.dispatch('map/changeClearFlag', null)
-
+      this.$bus.$emit("clearVideoMaker",true)
       this.$map.removeLayer(this.qxczLayer);
       this.$bus.$emit("hasQxcz",false);
 
@@ -414,6 +414,7 @@ export default {
       this.$parent.isShowPickFirePoint = false
       this.$parent.$refs['tool-bar'].isHzhzd = false
       this.$bus.$emit("clearAll")
+      this.$bus.$emit("clearVideoMaker",true)
       this.handleClearClick();
 
     },

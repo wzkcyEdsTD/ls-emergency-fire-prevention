@@ -74,10 +74,14 @@
         </el-collapse>
       </div>
     </div>
+
   </div>
 </template>
 <script>
-
+import { Circle as CircleStyle, Fill, Stroke, Style, Icon, Text } from 'ol/style'
+import Feature from 'ol/Feature'
+import { Point } from 'ol/geom'
+import Overlay from 'ol/Overlay'
 export default {
   data() {
     return {
@@ -95,7 +99,9 @@ export default {
       xzspList:[],
       lxspList:[],
       lxsp:"",
-      zxsp:""
+      zxsp:"",
+      videoLayer:undefined,
+      lyr:undefined
     };
   },
   methods: {
@@ -127,13 +133,55 @@ export default {
       });
       //   this.$store.dispatch("lqfb/changezhfxOffsetRight", -30);
     },
+
+    addGifMarks(point) {
+      if (!this.lyr) {
+        document.getElementById('marks').style.display = 'block';
+        this.lyr = new Overlay({
+            id: "hightVideo",
+            element: document.getElementById('marks'),//绑定上面添加的元素
+        });
+        this.$map.getMap().addOverlay(this.lyr);
+        // debugger
+        this.lyr.setPosition(point); //显示  
+        window.lyr = this.lyr;
+      }else{
+        // debugger
+        this.lyr.setPosition(undefined);
+        this.lyr.setPosition(point);
+      }
+
+    },
+
     handleVideoClick(v){
         const that = this;
         this.$map.getMap().getView().setCenter([v.properties.X,v.properties.Y]);
-        this.$map.getMap().getView().setZoom(16);
+        this.$map.getMap().getView().setZoom(17);
+        that.addGifMarks([v.properties.X,v.properties.Y])
+        // console.log(v.properties);
+        // const videoSelect = new Feature({
+        //   geometry: new Point([v.properties.X,v.properties.Y]),
+        // });
+        // const style = new Style({
+        //   image: new Icon({
+        //     anchor: [0.5, 52],
+        //     anchorXUnits: 'fraction',
+        //     anchorYUnits: 'pixels',
+        //     scale:0.5,
+        //     // offset:[0,20],
+        //     src: require(`@/assets/images/icon/${'视频高亮.gif'}`)
+        //   }),
+        // })
+        // videoSelect.setStyle(style)
+        // const layer = this.$map.createVectorLayer([videoSelect])
+        // if (that.videoLayer) {
+        //   this.$map.removeLayer(that.videoLayer)
+        //   that.videoLayer = undefined
+        // }
+        // that.videoLayer = layer;
+        // this.$map.addLayer(layer)
         setTimeout(()=>{
-          console.log(v.properties);
-          if (v.properties.VIDEO_URL) {            
+          if (v.properties.VIDEO_URL) {
             that.$bus.$emit("videoData",v.properties);
           }
         },1000)
@@ -141,6 +189,60 @@ export default {
   },
   mounted() {
     const that = this;
+    that.$bus.$on("clickGIF",(value)=>{
+      if (value && that.lyr) {
+
+        const temp = that.lyr.getPosition()
+        //转屏幕坐标
+        const list = window.g.map.getPixelFromCoordinate(temp)
+        let feature = this.$map
+        .getMap()
+        .forEachFeatureAtPixel(list, function(feature) {
+          return feature
+        })
+        // debugger
+        console.log(feature);
+        if (feature.values_.VIDEO_URL) {          
+          that.$parent.$refs.videoListPannel.gifData(feature.values_)
+        }
+        // that.$bus.$emit("showPoupItem",feature);
+      }
+    })
+    that.$bus.$on("clickSearch",(value)=>{
+      if (value) {
+        if (!that.lyr) {
+          document.getElementById('marks').style.display = 'block';
+          that.lyr = new Overlay({
+              id: "hightVideo",
+              element: document.getElementById('marks'),//绑定上面添加的元素
+          });
+          this.$map.getMap().addOverlay(that.lyr);
+          // debugger
+          that.lyr.setPosition(value); //显示  
+          // window.lyr = that.lyr;
+        }else{
+          // debugger
+          that.lyr.setPosition(undefined);
+          that.lyr.setPosition(value);
+        }
+        const temp = that.lyr.getPosition()
+        //转屏幕坐标
+        const list = window.g.map.getPixelFromCoordinate(temp)
+        let feature = this.$map
+        .getMap()
+        .forEachFeatureAtPixel(list, function(feature) {
+          return feature
+        })
+        // debugger
+
+        if (feature.values_ && feature.values_.VIDEO_URL) {          
+          that.$parent.$refs.videoListPannel.gifData(feature.values_)
+        }
+        // that.$bus.$emit("showPoupItem",feature);
+      }
+    })
+
+
     that.$bus.$on("showVideoList", (value) => {
       if (value) {
         that.$nextTick(() => {

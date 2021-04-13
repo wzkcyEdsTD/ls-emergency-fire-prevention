@@ -364,14 +364,36 @@ export default {
           new FeatureService(url).getFeaturesBySQL(sqlParam, serviceResult => {
             const videoPointList = serviceResult.result.features.features;
             const features = [];
+            const style = new Style({
+              image: new Icon({
+                anchor: [0.5, 26],
+                anchorXUnits: 'fraction',
+                anchorYUnits: 'pixels',
+                src: require(`@/assets/images/icon/${'视频不可选.png'}`)
+              }),
+            })
+            const style1 = new Style({
+              image: new Icon({
+                anchor: [0.5, 26],
+                anchorXUnits: 'fraction',
+                anchorYUnits: 'pixels',
+                src: require(`@/assets/images/icon/监控.png`)
+              }),
+            })
             videoPointList.forEach(element => {
               const properties = element.properties;
 
               const feature =  new Feature({
                     geometry: new Point([properties.X,properties.Y]),
-                    ...properties
+                    ...properties,
                 })
-                // debugger
+
+              if(element.properties.VIDEO_URL){
+                console.log(element.properties.MC,element.properties.X);
+                feature.setStyle(style1)
+              } else{
+                feature.setStyle(style)
+              }
               features.push(feature);
             });
  
@@ -381,7 +403,7 @@ export default {
             });
             this.videoLayer = new VectorLayer({
               source: vectorSource,
-              style:this.$map.getMonitorStyle()
+              // style:this.$map.getMonitorStyle()
               })
             
             //4: "119.35790729284101"
@@ -397,6 +419,7 @@ export default {
           if (this.videoTemp) {
             this.videoTemp = false
             that.$bus.$emit("showVideoList",false);
+            this.$bus.$emit("clearVideoMaker",true)
             // that.$bus.$emit("changeMenuLocaltion",2)
           }else if (!this.videoTemp) {
             this.videoTemp = true

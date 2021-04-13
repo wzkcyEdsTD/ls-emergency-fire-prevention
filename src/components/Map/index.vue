@@ -77,6 +77,8 @@
         </div>
       </div>
     </div>
+    <!-- 点击高亮 -->
+    <div id="marks" class="marks" @click="clickGIF"></div>
     <layer-switch />
     <div class="toobar" :style="{ right: `${rightMenu}rem` }">
       <tool-bar ref="tool-bar" />
@@ -206,7 +208,9 @@ export default {
     this.$bus.$off("changeMenuLocaltion");
   },
   methods: {
-
+    clickGIF(){
+      this.$bus.$emit("clickGIF",true);
+    },
     searchGrid(point){
       const that = this;
       let geometryParam = new SuperMap.GetFeaturesByGeometryParameters({
@@ -841,6 +845,16 @@ export default {
 //   border-top: 10px solid rgba(1, 51, 78, 0.8);
 //   border-left: 10px solid transparent;
 // }
+
+.marks{
+  width: 3.3vh;
+  height: 3.3vh;
+  background: url("~@/assets/images/icon/视频高亮.gif");
+  background-size: 100% 100%;
+  position: absolute;
+  left: -1.8vh;
+  bottom: -0.6vh;
+}
 
 .toobar {
   position: absolute;

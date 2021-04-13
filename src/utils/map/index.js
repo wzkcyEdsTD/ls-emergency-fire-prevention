@@ -551,7 +551,23 @@ const getFeaturesByGeometry = ({ url, dataSourceName, label, layerName, attribut
                   ...properties
               })
               // debugger
-              features1.push(feature);
+            const style = new Style({
+              image: new Icon({
+                anchor: [0.5, 26],
+                anchorXUnits: 'fraction',
+                anchorYUnits: 'pixels',
+                src: require(`@/assets/images/icon/${'视频不可选.png'}`)
+              }),
+            })
+
+            if(element.properties.VIDEO_URL){
+              console.log(element.properties.MC);
+              feature.setStyle(this.$map.getMonitorStyle())
+            } else{
+              feature.setStyle(style)
+            }
+            
+            features1.push(feature);
           });
 
           store.dispatch('map/changeVideo', features1)
@@ -685,14 +701,14 @@ const getFeaturesByGeometry = ({ url, dataSourceName, label, layerName, attribut
           // debugger
           const resultLayer = new VectorLayer({
             source: vectorSource,
-            style: new Style({
-              image: new Icon({
-                anchor: [0.5, 26],
-                anchorXUnits: 'fraction',
-                anchorYUnits: 'pixels',
-                src: require(`@/assets/images/icon/${'监控.png'}`)
-              })
-            })
+            // style: new Style({
+            //   image: new Icon({
+            //     anchor: [0.5, 26],
+            //     anchorXUnits: 'fraction',
+            //     anchorYUnits: 'pixels',
+            //     src: require(`@/assets/images/icon/${'监控.png'}`)
+            //   })
+            // })
           })
           resolve(resultLayer)
         }else if(label == '办事网点'){

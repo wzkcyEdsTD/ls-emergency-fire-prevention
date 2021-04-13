@@ -16,8 +16,8 @@
     <zztx v-show="yadqPannel === '组织指挥体系及职责'" />
     <video-box />
     <zllb-tab ref="zlTab" />
-    <video-list-pannel />
-    <videoList/>
+    <video-list-pannel ref="videoListPannel"/>
+    <videoList ref="videoList"/>
 
     <!-- <div class="video-wrapper">
       <video id="my-video" class="video-js vjs-default-skin" controls preload="auto" poster="https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg">
@@ -157,7 +157,9 @@ export default {
         this.initPopup()
     this.$map.goHome()
     this.$map.getMap().on('click', this.showPopup)
-
+    this.$bus.$on("clearVideoMaker",value=>{
+      that.$refs.videoList.addGifMarks(undefined)
+    })
     this.$store.dispatch('lqfb/changezlOffsetRight', 0)
     this.$bus.$on("showPoup",item=>{
 
@@ -246,6 +248,7 @@ export default {
 
 
       const value = item
+      that.$refs.videoList.addGifMarks(undefined)
       if (value['VIDEO_URL'] || value['VIDEO_URL']=="") {
         // 查询监控视频
         if (value['VIDEO_URL']) {          
@@ -358,6 +361,7 @@ export default {
       // debugger
       const value = feature.values_
       let coordinate = []
+      that.$refs.videoList.addGifMarks(undefined)
       if (value['IIIII']) {
         coordinate = [value.LONGITUDE,value.LATITUDE]
       }else{
@@ -365,6 +369,7 @@ export default {
       }
       if (value['VIDEO_URL'] || value['VIDEO_URL']=="") {
         // 查询监控视频
+        that.$refs.videoList.addGifMarks([value.X,value.Y])
         if (value['VIDEO_URL']) {          
           this.$bus.$emit("videoData",value);
         }
@@ -616,7 +621,7 @@ export default {
     //手动点击时弹框
     async showPopup(evt) {
       const that = this;
-
+      // debugger
       let node = $(`#e_container`)
       if (node) {
         node.css("z-index","2")
@@ -626,6 +631,8 @@ export default {
         node1.css("z-index","5")
       }
       this.clearPopup()
+      console.log(evt.pixel);
+      // debugger
       let feature = this.$map
         .getMap()
         .forEachFeatureAtPixel(evt.pixel, function(feature) {
@@ -666,8 +673,10 @@ export default {
 
       const value = feature.values_
 
+      that.$refs.videoList.addGifMarks(undefined)
       if (value['VIDEO_URL'] || value['VIDEO_URL']=="") {
         // 查询监控视频
+        that.$refs.videoList.addGifMarks([value.X,value.Y])
         if (value['VIDEO_URL']) {          
           this.$bus.$emit("videoData",value);
         }

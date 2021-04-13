@@ -141,10 +141,10 @@
                 </el-image>
             </div>
           </li>
-          <!-- <div class="allmore" v-show="hasMore && !hasSearch" @click="viewMore">
+          <div class="allmore" v-show="hasMoreImg" @click="viewMoreImg">
             <div class="moreText">查看更多</div>
             <div class="more" />
-          </div> -->
+          </div>
           
         </ul>
       </div>
@@ -184,6 +184,8 @@ export default {
 
   data() {
     return {
+      savedData:[],
+      hasMoreImg:false,
       wcl:"",
       yclwbj:"",
       ybj:"",
@@ -224,6 +226,13 @@ export default {
     }
   },
   methods:{
+    viewMoreImg(){
+      const that = this;
+      that.hasMoreImg = false;
+      if (that.savedData.length>0) {        
+        that.imageList = that.savedData;
+      }
+    },
     changeMenu(){
       const that = this;
       that.$nextTick(()=>{
@@ -739,6 +748,11 @@ export default {
             return v
           }
         })
+        that.savedData = imageList;
+        if (imageList.length>10) {
+          imageList = imageList.slice(0,10)
+          that.hasMoreImg = true
+        }
         that.imageList = imageList;
         // console.log("imageList",that.imageList);
         that.tempList = templist1.filter(v=>{

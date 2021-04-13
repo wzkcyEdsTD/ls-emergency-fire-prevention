@@ -606,9 +606,10 @@ export default {
     handleVideoClick(item) {
       //样式待修改
       this.$map.getMap().getView().setCenter([item.X, item.Y]);
-      this.$map.getMap().getView().setZoom(16);
+      this.$map.getMap().getView().setZoom(17);
 
-      if (item.VIDEO_URL) {        
+      this.$bus.$emit("clickSearch",[item.X, item.Y])
+      if (item.VIDEO_URL) {
         this.$bus.$emit("videoData", item);
       }
 

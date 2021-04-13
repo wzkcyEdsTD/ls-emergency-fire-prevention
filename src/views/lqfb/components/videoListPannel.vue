@@ -55,6 +55,22 @@ export default {
     });
   },
   methods: {
+    gifData(value){
+      const that = this;
+      that.$nextTick(async()=>{
+        that.videoShow = true
+        that.mc = value.MC
+        if (this.video) {
+          this.video.dispose();
+          this.video = null;
+        }
+        const URL = await fetchVideoURL(
+          value.VIDEO_URL.replace("http://183.131.138.61:9080", "")
+        );
+        await that.initRtmp(URL);
+      })
+
+    },
     initRtmp(url) {
       // if (this.video) {
       //   this.video.dispose();
