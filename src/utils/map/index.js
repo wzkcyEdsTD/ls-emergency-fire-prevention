@@ -539,7 +539,7 @@ const getFeaturesByGeometry = ({ url, dataSourceName, label, layerName, attribut
         // if (label=='综合救援队伍' || label=='森林消防救援队伍'||label=='专业救援队伍'||label=='志愿者救援队伍') {
         //   return
         // }
-        if(label == '监控'){
+        if(label == '监控设备'){
           const pointList = serviceResult.result.features.features;
           // debugger
           // const features = [];
@@ -697,7 +697,7 @@ const getFeaturesByGeometry = ({ url, dataSourceName, label, layerName, attribut
           features:features1,
           wrapX: false
         })
-        if(label == "监控"){
+        if(label == "监控设备"){
           // debugger
           const resultLayer = new VectorLayer({
             source: vectorSource,
@@ -1037,7 +1037,7 @@ const getMonitorStyle = (feature) => {
       anchor: [0.5, 26],
       anchorXUnits: 'fraction',
       anchorYUnits: 'pixels',
-      src: require(`@/assets/images/icon/${'监控.png'}`)
+      src: require(`@/assets/images/icon/${'监控设备.png'}`)
     })
   })
 }

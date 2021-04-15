@@ -64,33 +64,33 @@ export default {
       }
       //小学
       const legend3 = {
-        icon:"小学icon.png",
+        icon:"小学.png",
         label:"小学",
         name:"小学",
       }
       //小学适龄儿童
       const legend4 = {
-        icon:"小学适龄户籍儿童icon.png",
+        icon:"小学适龄儿童.png",
         label:"小学适龄儿童",
         name:"小学适龄儿童",
       }    
       //初中
       const legend5 = {
-        icon:"初中icon.png",
+        icon:"初中.png",
         label:"初中",
         name:"初中",
       }
       //初中适龄儿童
       const legend6 = {
-        icon:"初中适龄户籍儿童icon.png",
+        icon:"初中适龄儿童.png",
         label:"初中适龄儿童",
         name:"初中适龄儿童",
       } 
       //监控
       const legend7 = {
-        icon:"监控.png",
-        label:"监控",
-        name:"监控",
+        icon:"监控设备.png",
+        label:"监控设备",
+        name:"监控设备",
       }
       //办事网点
       const legend8 = {
@@ -133,6 +133,12 @@ export default {
         icon:"铁塔.png",
         label:"铁塔",
         name:"铁塔",
+      }
+      //铁塔监控
+      const legend15 = {
+        icon:"铁塔监控.png",
+        label:"铁塔监控",
+        name:"铁塔监控",
       }
       const list = []
       if (that.fireLayerTemp) {
@@ -179,7 +185,10 @@ export default {
       if (that.tt) {
         list.push(legend14)
       }     
-      
+      if (that.ttjk) {
+        list.push(legend15)
+      }
+
       //过滤重复item
       if (this.allLayerList.length == 0) {
         this.allLayerList = [...this.allLayerList, ...list]
@@ -223,6 +232,7 @@ export default {
       slgy:false,
       sd:false,
       tt:false,
+      ttjk:false,
     }
   },
   methods: {
@@ -239,6 +249,85 @@ export default {
   },
   mounted(){
     const that = this;
+    this.$bus.$on('allLegend',val=>{
+      let list = [];
+      that.$nextTick(()=>{
+        switch (val.label) {
+          case '铁塔监控':
+            that.ttjk = val.temp;
+            break;
+          case '监控设备':
+            that.showVideoList = val.temp;
+            break;
+          case '气象测站':
+            that.qxczLayerTemp = val.temp;
+            break;
+          case '小学':
+            that.primartSchool = val.temp;
+            break;
+          case '小学学区':
+            that.primarySchoolDistrictTemp = val.temp;
+            break;
+          case '小学适龄儿童':
+            that.primarySchoolChildrenTemp = val.temp;
+            break;
+          case '初中':
+            that.middleschoolPoint = val.temp;
+            break;
+          case '初中学区':
+            that.middleSchoolDistrictTemp = val.temp;
+            break;
+          case '初中适龄儿童':
+            that.middleSchoolChildren = val.temp;
+            break;
+          case '办事网点':
+            that.bswd = val.temp;
+            break;
+          case '国有林场':
+            that.gylc = val.temp;
+            break;
+          case '森林公园':
+            that.slgy = val.temp;
+            break;
+          case '湿地':
+            that.sd = val.temp;
+            break;
+          case '铁塔':
+            that.tt = val.temp;
+            break;
+          default:
+            break;
+        }
+        if (val.temp) {
+          // const list = []
+          const legend = {
+            icon:`${val.label}.png`,
+            label:`${val.label}`,
+            name:`${val.label}`,
+          }
+          list.push(legend)
+          if (this.allLayerList.length == 0) {
+            this.allLayerList = [...this.allLayerList, ...list]
+          } else {
+            const obj = {};
+            const arr = [...this.allLayerList, ...list];
+            arr.map(v => {
+              if (!obj[v.name]) { obj[v.name] = v }
+            })
+
+            const setNameArr = [...new Set(arr.map(v => v.name))];
+            this.allLayerList = setNameArr.map(v => obj[v])
+          }
+        }else{
+            that.allLayerList = that.allLayerList.filter(v=>{
+              if (!(v.name.indexOf('val.label')!=-1)) {
+                return v
+              }
+            })
+          
+        }
+      })
+    })
     this.$bus.$on('hzjbd',temp=>{
       // console.log(temp)
       that.$nextTick(()=>{
@@ -248,505 +337,12 @@ export default {
             return v
           }
         })
-        // console.log('allList',that.allLayerList)
       })
-    
     });
-    this.$bus.$on("qxcz",temp=>{
-      // debugger
-      that.$nextTick(()=>{
-        that.qxczLayerTemp = temp;
-        if (temp) {
-          const list = []
-          const legend = {
-            icon:"气象测站.png",
-            label:"气象测站",
-            name:"气象测站",
-          }
-          list.push(legend)
-          if (this.allLayerList.length == 0) {
-            this.allLayerList = [...this.allLayerList, ...list]
-          } else {
-            const obj = {};
-            const arr = [...this.allLayerList, ...list];
-            arr.map(v => {
-              if (!obj[v.name]) { obj[v.name] = v }
-            })
-
-            const setNameArr = [...new Set(arr.map(v => v.name))];
-            this.allLayerList = setNameArr.map(v => obj[v])
-          }
-        }else{
-          if (!that.hasQxcz) {
-            that.allLayerList = that.allLayerList.filter(v=>{
-              if (!(v.name.indexOf('气象测站')!=-1)) {
-                return v
-              }
-            })
-          }
-        }
-      })
-    })
-    this.$bus.$on("hasQxcz", val=>{
-      that.$nextTick(()=>{
-        that.hasQxcz = val
-        if (val) {
-          const list = []
-          const legend = {
-            icon:"气象测站.png",
-            label:"气象测站",
-            name:"气象测站",
-          }
-          list.push(legend)
-          if (this.allLayerList.length == 0) {
-            this.allLayerList = [...this.allLayerList, ...list]
-          } else {
-            const obj = {};
-            const arr = [...this.allLayerList, ...list];
-            arr.map(v => {
-              if (!obj[v.name]) { obj[v.name] = v }
-            })
-
-            const setNameArr = [...new Set(arr.map(v => v.name))];
-            this.allLayerList = setNameArr.map(v => obj[v])
-          }
-        }else{
-          if (!that.qxczLayerTemp) {
-            that.allLayerList = that.allLayerList.filter(v=>{
-              if (!(v.name.indexOf('气象测站')!=-1)) {
-                return v
-              }
-            })
-          }
-        }
-      })
-    })
-    this.$bus.$on("primartSchool",temp=>{
-      // debugger
-      const that = this;
-      that.$nextTick(()=>{
-        that.primartSchool = temp
-        if (temp) {
-          const list = []
-          const legend = {
-            icon:"小学icon.png",
-            label:"小学",
-            name:"小学",
-          }
-          list.push(legend)
-          if (this.allLayerList.length == 0) {
-            this.allLayerList = [...this.allLayerList, ...list]
-          } else {
-            const obj = {};
-            const arr = [...this.allLayerList, ...list];
-            arr.map(v => {
-              if (!obj[v.name]) { obj[v.name] = v }
-            })
-
-            const setNameArr = [...new Set(arr.map(v => v.name))];
-            this.allLayerList = setNameArr.map(v => obj[v])
-          }
-        }else{
-          that.allLayerList = that.allLayerList.filter(v=>{
-            if (v.name!=='小学') {
-              return v
-            }
-          })
-        }
-      })
-    
-    })
-    this.$bus.$on("primarySchoolChildrenTemp",temp=>{
-      // debugger
-      that.$nextTick(()=>{
-        that.primarySchoolChildrenTemp = temp;
-        if (temp) {
-          const list = []
-          const legend = {
-            icon:"小学适龄户籍儿童icon.png",
-            label:"小学适龄儿童",
-            name:"小学适龄儿童",
-          }
-          list.push(legend)
-          if (this.allLayerList.length == 0) {
-            this.allLayerList = [...this.allLayerList, ...list]
-          } else {
-            const obj = {};
-            const arr = [...this.allLayerList, ...list];
-            arr.map(v => {
-              if (!obj[v.name]) { obj[v.name] = v }
-            })
-
-            const setNameArr = [...new Set(arr.map(v => v.name))];
-            this.allLayerList = setNameArr.map(v => obj[v])
-          }
-        }else{
-
-            that.allLayerList = that.allLayerList.filter(v=>{
-              if (!(v.name.indexOf('小学适龄儿童')!=-1)) {
-                return v
-              }
-            })
-          
-        }
-      })
-    
-    })
-    this.$bus.$on("middleschoolPoint",temp=>{
-      // debugger
-      that.$nextTick(()=>{
-        that.middleschoolPoint = temp;
-        if (temp) {
-          const list = []
-          const legend = {
-            icon:"初中icon.png",
-            label:"初中",
-            name:"初中",
-          }
-          list.push(legend)
-          if (this.allLayerList.length == 0) {
-            this.allLayerList = [...this.allLayerList, ...list]
-          } else {
-            const obj = {};
-            const arr = [...this.allLayerList, ...list];
-            arr.map(v => {
-              if (!obj[v.name]) { obj[v.name] = v }
-            })
-
-            const setNameArr = [...new Set(arr.map(v => v.name))];
-            this.allLayerList = setNameArr.map(v => obj[v])
-          }
-        }else{
-          that.allLayerList = that.allLayerList.filter(v=>{
-            if (v.name!=='初中') {
-              return v
-            }
-          })
-        }
-      })
-    
-    })
-    this.$bus.$on("middleSchoolChildren",temp=>{
-      // debugger
-      that.$nextTick(()=>{
-        that.middleSchoolChildren = temp;
-        if (temp) {
-          const list = []
-          const legend = {
-            icon:"初中适龄户籍儿童icon.png",
-            label:"初中适龄儿童",
-            name:"初中适龄儿童",
-          }
-          list.push(legend)
-          if (this.allLayerList.length == 0) {
-            this.allLayerList = [...this.allLayerList, ...list]
-          } else {
-            const obj = {};
-            const arr = [...this.allLayerList, ...list];
-            arr.map(v => {
-              if (!obj[v.name]) { obj[v.name] = v }
-            })
-
-            const setNameArr = [...new Set(arr.map(v => v.name))];
-            this.allLayerList = setNameArr.map(v => obj[v])
-          }
-        }else{
-          that.allLayerList = that.allLayerList.filter(v=>{
-            if (!(v.name.indexOf('初中适龄儿童')!=-1)) {
-              return v
-            }
-          })
-        }
-      })
-    
-    })
-    this.$bus.$on('showVideoList',temp=>{
-      // debugger
-      that.$nextTick(()=>{
-        that.showVideoList = temp;
-        if (temp) {
-          const list = []
-          const legend = {
-            icon:"监控.png",
-            label:"监控",
-            name:"监控",
-          }
-          list.push(legend)
-          if (this.allLayerList.length == 0) {
-            this.allLayerList = [...this.allLayerList, ...list]
-          } else {
-            const obj = {};
-            const arr = [...this.allLayerList, ...list];
-            arr.map(v => {
-              if (!obj[v.name]) { obj[v.name] = v }
-            })
-
-            const setNameArr = [...new Set(arr.map(v => v.name))];
-            this.allLayerList = setNameArr.map(v => obj[v])
-          }
-        }else{
-          that.allLayerList = that.allLayerList.filter(v=>{
-            if (!(v.name.indexOf('监控')!=-1)) {
-              return v
-            }
-          })
-        }
-      })
-    })
-    this.$bus.$on('bswd',temp=>{
-      // debugger
-      that.$nextTick(()=>{
-        that.bswd = temp;
-        if (temp) {
-          const list = []
-          const legend = {
-            icon:"办事网点.png",
-            label:"办事网点",
-            name:"办事网点",
-          }
-          list.push(legend)
-          if (this.allLayerList.length == 0) {
-            this.allLayerList = [...this.allLayerList, ...list]
-          } else {
-            const obj = {};
-            const arr = [...this.allLayerList, ...list];
-            arr.map(v => {
-              if (!obj[v.name]) { obj[v.name] = v }
-            })
-
-            const setNameArr = [...new Set(arr.map(v => v.name))];
-            this.allLayerList = setNameArr.map(v => obj[v])
-          }
-        }else{
-          that.allLayerList = that.allLayerList.filter(v=>{
-            if (!(v.name.indexOf('办事网点')!=-1)) {
-              return v
-            }
-          })
-        }
-      })
-    })
-    this.$bus.$on('changeMenuLocaltion',temp =>{
-      that.$nextTick(()=>{
-        that.getOffsetRight(temp);
-      })
-    })
-    this.$bus.$on('gylcLayer',temp=>{
-      // debugger
-      that.$nextTick(()=>{
-        that.gylc = temp;
-        if (temp) {
-          const list = []
-          const legend = {
-            icon:"国有林场.png",
-            label:"国有林场",
-            name:"国有林场",
-          }
-          list.push(legend)
-          if (this.allLayerList.length == 0) {
-            this.allLayerList = [...this.allLayerList, ...list]
-          } else {
-            const obj = {};
-            const arr = [...this.allLayerList, ...list];
-            arr.map(v => {
-              if (!obj[v.name]) { obj[v.name] = v }
-            })
-
-            const setNameArr = [...new Set(arr.map(v => v.name))];
-            this.allLayerList = setNameArr.map(v => obj[v])
-          }
-        }else{
-          that.allLayerList = that.allLayerList.filter(v=>{
-            if (!(v.name.indexOf('国有林场')!=-1)) {
-              return v
-            }
-          })
-        }
-      })
-    })
-    this.$bus.$on('slgyLayer',temp=>{
-      // debugger
-      that.$nextTick(()=>{
-        that.slgy = temp;
-        if (temp) {
-          const list = []
-          const legend = {
-            icon:"森林公园.png",
-            label:"森林公园",
-            name:"森林公园",
-          }
-          list.push(legend)
-          if (this.allLayerList.length == 0) {
-            this.allLayerList = [...this.allLayerList, ...list]
-          } else {
-            const obj = {};
-            const arr = [...this.allLayerList, ...list];
-            arr.map(v => {
-              if (!obj[v.name]) { obj[v.name] = v }
-            })
-
-            const setNameArr = [...new Set(arr.map(v => v.name))];
-            this.allLayerList = setNameArr.map(v => obj[v])
-          }
-        }else{
-          that.allLayerList = that.allLayerList.filter(v=>{
-            if (!(v.name.indexOf('森林公园')!=-1)) {
-              return v
-            }
-          })
-        }
-      })
-    })
-    this.$bus.$on('sdLayer',temp=>{
-      // debugger
-      that.$nextTick(()=>{
-        that.sd = temp;
-        if (temp) {
-          const list = []
-          const legend = {
-            icon:"湿地.png",
-            label:"湿地",
-            name:"湿地",
-          }
-          list.push(legend)
-          if (this.allLayerList.length == 0) {
-            this.allLayerList = [...this.allLayerList, ...list]
-          } else {
-            const obj = {};
-            const arr = [...this.allLayerList, ...list];
-            arr.map(v => {
-              if (!obj[v.name]) { obj[v.name] = v }
-            })
-
-            const setNameArr = [...new Set(arr.map(v => v.name))];
-            this.allLayerList = setNameArr.map(v => obj[v])
-          }
-        }else{
-          that.allLayerList = that.allLayerList.filter(v=>{
-            if (!(v.name.indexOf('湿地')!=-1)) {
-              return v
-            }
-          })
-        }
-      })
-    })
-    this.$bus.$on("primarySchoolDistrictTemp",temp=>{
-      that.$nextTick(()=>{
-        that.primarySchoolDistrictTemp = temp;
-        if (temp) {
-          const list = []
-          const legend = {
-            icon:"小学学区.jpg",
-            label:"小学学区",
-            name:"小学学区",
-          }
-          list.push(legend)
-          if (this.allLayerList.length == 0) {
-            this.allLayerList = [...this.allLayerList, ...list]
-          } else {
-            const obj = {};
-            const arr = [...this.allLayerList, ...list];
-            arr.map(v => {
-              if (!obj[v.name]) { obj[v.name] = v }
-            })
-
-            const setNameArr = [...new Set(arr.map(v => v.name))];
-            this.allLayerList = setNameArr.map(v => obj[v])
-          }
-        }else{
-            that.allLayerList = that.allLayerList.filter(v=>{
-              if (!(v.name.indexOf('小学学区')!=-1)) {
-                return v
-              }
-            })
-          
-        }
-      })
-    })
-    this.$bus.$on("middleSchoolDistrictTemp",temp=>{
-      that.$nextTick(()=>{
-        that.middleSchoolDistrictTemp = temp;
-        if (temp) {
-          const list = []
-          const legend = {
-            icon:"初中学区.jpg",
-            label:"初中学区",
-            name:"初中学区",
-          }
-          list.push(legend)
-          if (this.allLayerList.length == 0) {
-            this.allLayerList = [...this.allLayerList, ...list]
-          } else {
-            const obj = {};
-            const arr = [...this.allLayerList, ...list];
-            arr.map(v => {
-              if (!obj[v.name]) { obj[v.name] = v }
-            })
-
-            const setNameArr = [...new Set(arr.map(v => v.name))];
-            this.allLayerList = setNameArr.map(v => obj[v])
-          }
-        }else{
-            that.allLayerList = that.allLayerList.filter(v=>{
-              if (!(v.name.indexOf('初中学区')!=-1)) {
-                return v
-              }
-            })
-          
-        }
-      })
-    })
-    this.$bus.$on("ttLayer",temp=>{
-      that.$nextTick(()=>{
-        that.tt = temp;
-        if (temp) {
-          const list = []
-          const legend = {
-            icon:"铁塔.png",
-            label:"铁塔",
-            name:"铁塔",
-          }
-          list.push(legend)
-          if (this.allLayerList.length == 0) {
-            this.allLayerList = [...this.allLayerList, ...list]
-          } else {
-            const obj = {};
-            const arr = [...this.allLayerList, ...list];
-            arr.map(v => {
-              if (!obj[v.name]) { obj[v.name] = v }
-            })
-
-            const setNameArr = [...new Set(arr.map(v => v.name))];
-            this.allLayerList = setNameArr.map(v => obj[v])
-          }
-        }else{
-            that.allLayerList = that.allLayerList.filter(v=>{
-              if (!(v.name.indexOf('铁塔')!=-1)) {
-                return v
-              }
-            })
-          
-        }
-      })
-    })
     },
   beforeDestroy(){
     this.$bus.$off('hzjbd');
-    this.$bus.$off('qxcz');
-    this.$bus.$off("hasQxcz")
-    this.$bus.$off("primartSchool")
-    this.$bus.$off("primarySchoolChildrenTemp")
-    this.$bus.$off("middleschoolPoint")
-    this.$bus.$off("middleSchoolChildren")
-    this.$bus.$off("showVideoList")
-    this.$bus.$off("bswd")    
-    this.$bus.$off("changeMenuLocaltion")
-    this.$bus.$off("gylcLayer")
-    this.$bus.$off("slgyLayer")
-    this.$bus.$off("sdLayer")
-    this.$bus.$off("primarySchoolDistrictTemp")
-    this.$bus.$off("middleSchoolDistrictTemp")
-    this.$bus.$off("ttLayer")
+    this.$bus.$off('allLegend');
   }
 }
 </script>

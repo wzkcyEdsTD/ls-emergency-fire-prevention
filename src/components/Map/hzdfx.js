@@ -22,7 +22,7 @@ const hzdfxNodes = [
   },
   {
     id:373,
-    label:'监控',
+    label:'监控设备',
     value:MAP_URL.VIDEO
   },
   {

@@ -146,6 +146,7 @@ export default {
     this.$bus.$off("showPoup")
     this.$bus.$off("showPoupItem")
     this.$bus.$off("qingKong")
+    this.$bus.$off("clearVideoMaker")
     this.jkLayer && this.$store.dispatch('map/changeJkLayer', {
       layer: this.jkLayer,
       ope: 'REMOVELAYER'
@@ -678,6 +679,15 @@ export default {
         // 查询监控视频
         that.$refs.videoList.addGifMarks([value.X,value.Y])
         if (value['VIDEO_URL']) {          
+          this.$bus.$emit("videoData",value);
+        }
+        return
+      }
+      if (value['HLS_URL'] || value['HLS_URL']=="") {
+        // debugger
+        // 查询监控视频
+        that.$refs.videoList.addGifMarks([value.JD,value.WD])
+        if (value['HLS_URL']) {          
           this.$bus.$emit("videoData",value);
         }
         return

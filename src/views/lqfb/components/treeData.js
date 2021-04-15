@@ -332,7 +332,7 @@ const treeData = [
     children: [
       {
         id: 71,
-        label: '监控'
+        label: '监控设备'
       }
     ]
   },
@@ -398,6 +398,10 @@ const treeData = [
         id: 101,
         label: '铁塔'
       },
+      {
+        id: 102,
+        label: '铁塔监控'
+      }
     ]
   },
 

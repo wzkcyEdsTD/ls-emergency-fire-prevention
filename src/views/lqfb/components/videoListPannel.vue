@@ -38,37 +38,68 @@ export default {
     this.$bus.$on("videoData",value=>{
       // console.log(value);
       // that.id = value.SMID;
-      that.$nextTick(async()=>{
-        that.videoShow = true
-        that.mc = value.MC
-        if (this.video) {
-          this.video.dispose();
-          this.video = null;
-        }
-        const URL = await fetchVideoURL(
-          value.VIDEO_URL.replace("http://183.131.138.61:9080", "")
-        );
-        await that.initRtmp(URL);
-      })
+      if (value.HLS_URL) {
+        // debugger
+        that.$nextTick(async()=>{
+          that.videoShow = true
+          that.mc = value.MCSB
+          if (this.video) {
+            this.video.dispose();
+            this.video = null;
+          }
+          const URL = await fetchVideoURL(
+            value.HLS_URL.replace("http://183.131.138.61:9080", "")
+          );
+          await that.initRtmp(URL);
+        })
+      }else{
+        that.$nextTick(async()=>{
+          that.videoShow = true
+          that.mc = value.MC
+          if (this.video) {
+            this.video.dispose();
+            this.video = null;
+          }
+          const URL = await fetchVideoURL(
+            value.VIDEO_URL.replace("http://183.131.138.61:9080", "")
+          );
+          await that.initRtmp(URL);
+        })
 
-    
+      }
     });
   },
   methods: {
     gifData(value){
       const that = this;
-      that.$nextTick(async()=>{
-        that.videoShow = true
-        that.mc = value.MC
-        if (this.video) {
-          this.video.dispose();
-          this.video = null;
-        }
-        const URL = await fetchVideoURL(
-          value.VIDEO_URL.replace("http://183.131.138.61:9080", "")
-        );
-        await that.initRtmp(URL);
-      })
+      if (value.HLS_URL) {
+        // debugger
+        that.$nextTick(async()=>{
+          that.videoShow = true
+          that.mc = value.MCSB
+          if (this.video) {
+            this.video.dispose();
+            this.video = null;
+          }
+          const URL = await fetchVideoURL(
+            value.HLS_URL.replace("http://183.131.138.61:9080", "")
+          );
+          await that.initRtmp(URL);
+        })
+      }else{
+        that.$nextTick(async()=>{
+          that.videoShow = true
+          that.mc = value.MC
+          if (this.video) {
+            this.video.dispose();
+            this.video = null;
+          }
+          const URL = await fetchVideoURL(
+            value.VIDEO_URL.replace("http://183.131.138.61:9080", "")
+          );
+          await that.initRtmp(URL);
+        })
+      }
 
     },
     initRtmp(url) {

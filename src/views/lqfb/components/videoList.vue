@@ -202,7 +202,7 @@ export default {
         })
         // debugger
         console.log(feature);
-        if (feature.values_.VIDEO_URL) {          
+        if (feature.values_.VIDEO_URL || feature.values_.HLS_URL) {          
           that.$parent.$refs.videoListPannel.gifData(feature.values_)
         }
         // that.$bus.$emit("showPoupItem",feature);
@@ -293,6 +293,8 @@ export default {
     const that = this;
     that.$bus.$off("showVideoList");
     that.$bus.$off("sendVideoListData");
+    that.$bus.$off("clickGIF");
+    that.$bus.$off("clickSearch");
   },
 };
 </script>

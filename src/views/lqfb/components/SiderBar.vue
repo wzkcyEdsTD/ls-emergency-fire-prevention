@@ -92,6 +92,8 @@ export default {
       qxczTemp:false,
       ttLayer:null,
       ttTemp:false,
+      ttVideoLayer:null,
+      ttVideoTemp:false,
       //教育资源
       //小学
       primartSchoolLayer:null,
@@ -347,7 +349,7 @@ export default {
       // if ((data.id + '')[0] === '4' || (data.id + '')[0] === '6' || (data.id + '')[0] === '7') {
       //   this.$store.dispatch('lqfb/changezlOffsetRight', -25)
       // }
-      if (data.label === '监控') {
+      if (data.label === '监控设备') {
         if (!this.videoLayer) {
           var sqlParam = new SuperMap.GetFeaturesBySQLParameters({
             toIndex: 999999,
@@ -377,7 +379,7 @@ export default {
                 anchor: [0.5, 26],
                 anchorXUnits: 'fraction',
                 anchorYUnits: 'pixels',
-                src: require(`@/assets/images/icon/监控.png`)
+                src: require(`@/assets/images/icon/监控设备.png`)
               }),
             })
             videoPointList.forEach(element => {
@@ -403,30 +405,86 @@ export default {
             });
             this.videoLayer = new VectorLayer({
               source: vectorSource,
-              // style:this.$map.getMonitorStyle()
               })
-            
-            //4: "119.35790729284101"
-            //5: "27.541516789796798"
             this.$map.addLayer(this.videoLayer)
             that.$bus.$emit("sendVideoListData",videoPointList);
         })
           this.videoTemp = true;
-          that.$bus.$emit("showVideoList",true);
-          // that.$bus.$emit("changeMenuLocaltion",30)
-          // this.$store.dispatch('lqfb/changeVideoListOffsetRight', 0)
+          this.$bus.$emit('allLegend',{"temp":this.videoTemp,"label":data.label});
         }else{
           if (this.videoTemp) {
             this.videoTemp = false
-            that.$bus.$emit("showVideoList",false);
+            this.$bus.$emit('allLegend',{"temp":this.videoTemp,"label":data.label});
             this.$bus.$emit("clearVideoMaker",true)
-            // that.$bus.$emit("changeMenuLocaltion",2)
           }else if (!this.videoTemp) {
             this.videoTemp = true
-            that.$bus.$emit("showVideoList",true);
-            // that.$bus.$emit("changeMenuLocaltion",30)
+            this.$bus.$emit('allLegend',{"temp":this.videoTemp,"label":data.label});
           }
           this.videoLayer.setVisible(this.videoTemp);
+        }
+      }
+      if (data.label == '铁塔监控') {
+        if (!this.ttVideoLayer) {
+          var sqlParam = new SuperMap.GetFeaturesBySQLParameters({
+            toIndex: 999999,
+            queryParameter: {
+              // name: layerName,
+              attributeFilter: "",
+              maxFeatures: 99999999
+            },
+            datasetNames: [`lishui_forestfire_v2:v_forest_tower_video`]
+          })
+          const url = "http://10.53.137.59:8090/iserver/services/data-lishui_forestfire_v2/rest/data";
+          // debugger
+
+          new FeatureService(url).getFeaturesBySQL(sqlParam, serviceResult => {
+
+            const videoPointList = serviceResult.result.features.features;
+            const features = [];
+             
+            const style = new Style({
+              image: new Icon({
+                anchor: [0.5, 26],
+                anchorXUnits: 'fraction',
+                anchorYUnits: 'pixels',
+                scale:0.7,
+                src: require(`@/assets/images/icon/铁塔监控.png`)
+              }),
+            })
+
+            videoPointList.forEach(element => {
+              const properties = element.properties;
+
+              const feature =  new Feature({
+                    geometry: new Point([properties.JD,properties.WD]),
+                    ...properties,
+                })
+
+              feature.setStyle(style)
+              features.push(feature);
+            });
+
+            var vectorSource = new VectorSource({
+              features,
+              wrapX: false
+            });
+            this.ttVideoLayer = new VectorLayer({
+              source: vectorSource,
+              })
+            this.$map.addLayer(this.ttVideoLayer)
+        })
+          this.ttVideoTemp = true;
+          // that.$bus.$emit("showVideoList",true);
+          this.$bus.$emit('allLegend',{"temp":this.ttVideoTemp,"label":data.label});
+        }else{
+          if (this.ttVideoTemp) {
+            this.ttVideoTemp = false
+            this.$bus.$emit('allLegend',{"temp":this.ttVideoTemp,"label":data.label});
+          }else if (!this.ttVideoTemp) {
+            this.ttVideoTemp = true
+            this.$bus.$emit('allLegend',{"temp":this.ttVideoTemp,"label":data.label});
+          }
+          this.ttVideoLayer.setVisible(this.ttVideoTemp);
         }
       }
       if(data.label === '气象测站'){
@@ -479,15 +537,14 @@ export default {
             this.$map.addLayer(this.qxczLayer)
         })
           this.qxczTemp = true;
-          this.$bus.$emit('qxcz',this.qxczTemp);
-          // this.$store.dispatch('lqfb/changeVideoListOffsetRight', 0)
+          this.$bus.$emit('allLegend',{"temp":this.qxczTemp,"label":data.label});
         }else{
           if (this.qxczTemp) {
             this.qxczTemp = false
-            this.$bus.$emit('qxcz',this.qxczTemp);
+            this.$bus.$emit('allLegend',{"temp":this.qxczTemp,"label":data.label});
           }else if (!this.qxczTemp) {
             this.qxczTemp = true
-            this.$bus.$emit('qxcz',this.qxczTemp);
+            this.$bus.$emit('allLegend',{"temp":this.qxczTemp,"label":data.label});
           }
           this.qxczLayer.setVisible(this.qxczTemp);
         }
@@ -521,7 +578,7 @@ export default {
                   anchorXUnits: 'fraction',
                   anchorYUnits: 'pixels',
                   scale:0.7,
-                  src: require(`@/assets/images/icon/${'小学icon.png'}`)
+                  src: require(`@/assets/images/icon/${'小学.png'}`)
                 }),
                 // stroke: new Stroke({ color: 'red', width: 2 })
             })
@@ -532,15 +589,14 @@ export default {
             this.$map.addLayer(this.primartSchoolLayer)
         })
           this.primartSchoolTemp = true;
-          this.$bus.$emit('primartSchool',this.primartSchoolTemp);
-          // this.$store.dispatch('lqfb/changeVideoListOffsetRight', 0)
+          this.$bus.$emit('allLegend',{"temp":this.primartSchoolTemp,"label":data.label});
         }else{
           if (this.primartSchoolTemp) {
             this.primartSchoolTemp = false
-            this.$bus.$emit('primartSchool',this.primartSchoolTemp);
+            this.$bus.$emit('allLegend',{"temp":this.primartSchoolTemp,"label":data.label});
           }else if (!this.qxczTemp) {
             this.primartSchoolTemp = true
-            this.$bus.$emit('primartSchool',this.primartSchoolTemp);
+            this.$bus.$emit('allLegend',{"temp":this.primartSchoolTemp,"label":data.label});
           }
           this.primartSchoolLayer.setVisible(this.primartSchoolTemp);
         }
@@ -553,15 +609,18 @@ export default {
           });
           this.$map.addLayer(this.primarySchoolDistrictLayer);
           this.primarySchoolDistrictTemp = true;
-          this.$bus.$emit('primarySchoolDistrictTemp',this.primarySchoolDistrictTemp);
+          this.$bus.$emit('allLegend',{"temp":this.primarySchoolDistrictTemp,"label":data.label});
+          // this.$bus.$emit('primarySchoolDistrictTemp',this.primarySchoolDistrictTemp);
         }else{
           if (this.primarySchoolDistrictTemp) {
             this.primarySchoolDistrictTemp = false
-            this.$bus.$emit('primarySchoolDistrictTemp',this.primarySchoolDistrictTemp);
+            this.$bus.$emit('allLegend',{"temp":this.primarySchoolDistrictTemp,"label":data.label});
+            // this.$bus.$emit('primarySchoolDistrictTemp',this.primarySchoolDistrictTemp);
             // this.$bus.$emit('primarySchoolDistrict',this.primarySchoolDistrictTemp);
           }else if (!this.primarySchoolDistrictTemp) {
             this.primarySchoolDistrictTemp = true
-            this.$bus.$emit('primarySchoolDistrictTemp',this.primarySchoolDistrictTemp);
+            this.$bus.$emit('allLegend',{"temp":this.primarySchoolDistrictTemp,"label":data.label});
+            // this.$bus.$emit('primarySchoolDistrictTemp',this.primarySchoolDistrictTemp);
           }
           this.primarySchoolDistrictLayer.setVisible(this.primarySchoolDistrictTemp);
         }
@@ -589,7 +648,7 @@ export default {
                 anchorXUnits: 'fraction',
                 anchorYUnits: 'pixels',
                 scale:0.7,
-                src: require(`@/assets/images/icon/${'小学适龄户籍儿童icon.png'}`)
+                src: require(`@/assets/images/icon/${'小学适龄儿童.png'}`)
               }),
             })
             var vectorSource = new VectorSource({
@@ -604,15 +663,18 @@ export default {
             this.$map.addLayer(this.primarySchoolChildrenLayer)
         })
           this.primarySchoolChildrenTemp = true;
-          this.$bus.$emit('primarySchoolChildrenTemp',this.primarySchoolChildrenTemp);
+          this.$bus.$emit('allLegend',{"temp":this.primarySchoolChildrenTemp,"label":data.label});
+          // this.$bus.$emit('primarySchoolChildrenTemp',this.primarySchoolChildrenTemp);
           // this.$store.dispatch('lqfb/changeVideoListOffsetRight', 0)
         }else{
           if (this.primarySchoolChildrenTemp) {
             this.primarySchoolChildrenTemp = false
-            this.$bus.$emit('primarySchoolChildrenTemp',this.primarySchoolChildrenTemp);
+            this.$bus.$emit('allLegend',{"temp":this.primarySchoolChildrenTemp,"label":data.label});
+            // this.$bus.$emit('primarySchoolChildrenTemp',this.primarySchoolChildrenTemp);
           }else if (!this.primarySchoolChildrenTemp) {
             this.primarySchoolChildrenTemp = true
-            this.$bus.$emit('primarySchoolChildrenTemp',this.primarySchoolChildrenTemp);
+            this.$bus.$emit('allLegend',{"temp":this.primarySchoolChildrenTemp,"label":data.label});
+            // this.$bus.$emit('primarySchoolChildrenTemp',this.primarySchoolChildrenTemp);
           }
           this.primarySchoolChildrenLayer.setVisible(this.primarySchoolChildrenTemp);
         }
@@ -645,7 +707,7 @@ export default {
                   anchorXUnits: 'fraction',
                   anchorYUnits: 'pixels',
                   scale:0.7,
-                  src: require(`@/assets/images/icon/${'初中icon.png'}`)
+                  src: require(`@/assets/images/icon/${'初中.png'}`)
                 }),
                 // stroke: new Stroke({ color: 'red', width: 2 })
             })
@@ -657,15 +719,18 @@ export default {
             this.$map.addLayer(this.middleschoolPointLayer)
         })
           this.middleschoolPointTemp = true;
-          this.$bus.$emit('middleschoolPoint',this.middleschoolPointTemp);
+          this.$bus.$emit('allLegend',{"temp":this.middleschoolPointTemp,"label":data.label});
+          // this.$bus.$emit('middleschoolPoint',this.middleschoolPointTemp);
           // this.$store.dispatch('lqfb/changeVideoListOffsetRight', 0)
         }else{
           if (this.middleschoolPointTemp) {
             this.middleschoolPointTemp = false
-            this.$bus.$emit('middleschoolPoint',this.middleschoolPointTemp);
+            this.$bus.$emit('allLegend',{"temp":this.middleschoolPointTemp,"label":data.label});
+            // this.$bus.$emit('middleschoolPoint',this.middleschoolPointTemp);
           }else if (!this.middleschoolPointTemp) {
             this.middleschoolPointTemp = true
-            this.$bus.$emit('middleschoolPoint',this.middleschoolPointTemp);
+            this.$bus.$emit('allLegend',{"temp":this.middleschoolPointTemp,"label":data.label});
+            // this.$bus.$emit('middleschoolPoint',this.middleschoolPointTemp);
           }
           this.middleschoolPointLayer.setVisible(this.middleschoolPointTemp);
         }
@@ -678,15 +743,18 @@ export default {
           });
           this.$map.addLayer(this.middleSchoolDistrictLayer);
           this.middleSchoolDistrictTemp = true;
-          this.$bus.$emit('middleSchoolDistrictTemp',this.middleSchoolDistrictTemp);
+          this.$bus.$emit('allLegend',{"temp":this.middleSchoolDistrictTemp,"label":data.label});
+          // this.$bus.$emit('middleSchoolDistrictTemp',this.middleSchoolDistrictTemp);
           // this.$store.dispatch('lqfb/changeVideoListOffsetRight', 0)
         }else{
           if (this.middleSchoolDistrictTemp) {
             this.middleSchoolDistrictTemp = false
-            this.$bus.$emit('middleSchoolDistrictTemp',this.middleSchoolDistrictTemp);
+            this.$bus.$emit('allLegend',{"temp":this.middleSchoolDistrictTemp,"label":data.label});
+            // this.$bus.$emit('middleSchoolDistrictTemp',this.middleSchoolDistrictTemp);
           }else if (!this.middleSchoolDistrictTemp) {
             this.middleSchoolDistrictTemp = true
-            this.$bus.$emit('middleSchoolDistrictTemp',this.middleSchoolDistrictTemp);
+            this.$bus.$emit('allLegend',{"temp":this.middleSchoolDistrictTemp,"label":data.label});
+            // this.$bus.$emit('middleSchoolDistrictTemp',this.middleSchoolDistrictTemp);
           }
           this.middleSchoolDistrictLayer.setVisible(this.middleSchoolDistrictTemp);
         }
@@ -714,7 +782,7 @@ export default {
                 anchorXUnits: 'fraction',
                 anchorYUnits: 'pixels',
                 scale:0.7,
-                src: require(`@/assets/images/icon/${'初中适龄户籍儿童icon.png'}`)
+                src: require(`@/assets/images/icon/${'初中适龄儿童.png'}`)
               }),
             })
             var vectorSource = new VectorSource({
@@ -729,15 +797,18 @@ export default {
             this.$map.addLayer(this.middleSchoolChildrenLayer)
         })
           this.middleSchoolChildrenTemp = true;
-          this.$bus.$emit('middleSchoolChildren',this.middleSchoolChildrenTemp);
+          this.$bus.$emit('allLegend',{"temp":this.middleSchoolChildrenTemp,"label":data.label});
+          // this.$bus.$emit('middleSchoolChildren',this.middleSchoolChildrenTemp);
           // this.$store.dispatch('lqfb/changeVideoListOffsetRight', 0)
         }else{
           if (this.middleSchoolChildrenTemp) {
             this.middleSchoolChildrenTemp = false
-            this.$bus.$emit('middleSchoolChildren',this.middleSchoolChildrenTemp);
+            this.$bus.$emit('allLegend',{"temp":this.middleSchoolChildrenTemp,"label":data.label});
+            // this.$bus.$emit('middleSchoolChildren',this.middleSchoolChildrenTemp);
           }else if (!this.middleSchoolChildrenTemp) {
             this.middleSchoolChildrenTemp = true
-            this.$bus.$emit('middleSchoolChildren',this.middleSchoolChildrenTemp);
+            this.$bus.$emit('allLegend',{"temp":this.middleSchoolChildrenTemp,"label":data.label});
+            // this.$bus.$emit('middleSchoolChildren',this.middleSchoolChildrenTemp);
           }
           this.middleSchoolChildrenLayer.setVisible(this.middleSchoolChildrenTemp);
         }
@@ -810,15 +881,18 @@ export default {
             this.$map.addLayer(this.networkLayer)
         })
           this.networkTemp = true;
+          this.$bus.$emit('allLegend',{"temp":this.networkTemp,"label":data.label});
           // this.$store.dispatch('lqfb/changeVideoListOffsetRight', 0)
-          that.$bus.$emit('bswd',true)
+          // that.$bus.$emit('bswd',true)
         }else{
           if (this.networkTemp) {
             this.networkTemp = false
-            that.$bus.$emit('bswd',false)
+            this.$bus.$emit('allLegend',{"temp":this.networkTemp,"label":data.label});
+            // that.$bus.$emit('bswd',false)
           }else if (!this.networkTemp) {
             this.networkTemp = true
-            that.$bus.$emit('bswd',true)
+            this.$bus.$emit('allLegend',{"temp":this.networkTemp,"label":data.label});
+            // that.$bus.$emit('bswd',true)
           }
           this.networkLayer.setVisible(this.networkTemp);
         }
@@ -923,19 +997,20 @@ export default {
               style:style
             })
             window.g.map.getLayers().insertAt(4, this.gylcLayer)
-            // this.$map.addLayer(this.gylcLayer)
-            that.$bus.$emit("gylcLayer",true);
         })
           this.gylcTemp = true;
-          that.$bus.$emit("gylcLayer",true);
+          this.$bus.$emit('allLegend',{"temp":this.gylcTemp,"label":data.label});
+          // that.$bus.$emit("gylcLayer",true);
           // this.$store.dispatch('lqfb/changeVideoListOffsetRight', 0)
         }else{
           if (this.gylcTemp) {
             this.gylcTemp = false
-            that.$bus.$emit("gylcLayer",false);
+            this.$bus.$emit('allLegend',{"temp":this.gylcTemp,"label":data.label});
+            // that.$bus.$emit("gylcLayer",false);
           }else if (!this.gylcTemp) {
             this.gylcTemp = true
-            that.$bus.$emit("gylcLayer",true);
+            this.$bus.$emit('allLegend',{"temp":this.gylcTemp,"label":data.label});
+            // that.$bus.$emit("gylcLayer",true);
           }
           this.gylcLayer.setVisible(this.gylcTemp);
         }
@@ -1002,18 +1077,20 @@ export default {
               })
             window.g.map.getLayers().insertAt(4, this.slgyLayer)
             // this.$map.addLayer(this.slgyLayer)
-            that.$bus.$emit("slgyLayer",true);
         })
           this.slgyTemp = true;
-          that.$bus.$emit("slgyLayer",true);
+          this.$bus.$emit('allLegend',{"temp":this.slgyTemp,"label":data.label});
+          // that.$bus.$emit("slgyLayer",true);
           // this.$store.dispatch('lqfb/changeVideoListOffsetRight', 0)
         }else{
           if (this.slgyTemp) {
             this.slgyTemp = false
-            that.$bus.$emit("slgyLayer",false);
+            this.$bus.$emit('allLegend',{"temp":this.slgyTemp,"label":data.label});
+            // that.$bus.$emit("slgyLayer",false);
           }else if (!this.slgyTemp) {
             this.slgyTemp = true
-            that.$bus.$emit("slgyLayer",true);
+            this.$bus.$emit('allLegend',{"temp":this.slgyTemp,"label":data.label});
+            // that.$bus.$emit("slgyLayer",true);
           }
           this.slgyLayer.setVisible(this.slgyTemp);
         }
@@ -1077,19 +1154,20 @@ export default {
               style:style
               })
             window.g.map.getLayers().insertAt(4, this.sdLayer)
-            // this.$map.addLayer(this.sdLayer)
-            that.$bus.$emit("sdLayer",true);
         })
           this.sdTemp = true;
-          that.$bus.$emit("sdLayer",true);
+          this.$bus.$emit('allLegend',{"temp":this.sdTemp,"label":data.label});
+          // that.$bus.$emit("sdLayer",true);
           // this.$store.dispatch('lqfb/changeVideoListOffsetRight', 0)
         }else{
           if (this.sdTemp) {
             this.sdTemp = false
-            that.$bus.$emit("sdLayer",false);
+            this.$bus.$emit('allLegend',{"temp":this.sdTemp,"label":data.label});
+            // that.$bus.$emit("sdLayer",false);
           }else if (!this.sdTemp) {
             this.sdTemp = true
-            that.$bus.$emit("sdLayer",true);
+            this.$bus.$emit('allLegend',{"temp":this.sdTemp,"label":data.label});
+            // that.$bus.$emit("sdLayer",true);
           }
           this.sdLayer.setVisible(this.sdTemp);
         }
@@ -1136,18 +1214,20 @@ export default {
             })
 
             this.$map.addLayer(this.ttLayer)
-            that.$bus.$emit("ttLayer",true);
         })
           this.ttTemp = true;
-          that.$bus.$emit("ttLayer",true);
+          this.$bus.$emit('allLegend',{"temp":this.ttTemp,"label":data.label});
+          // that.$bus.$emit("ttLayer",true);
           // this.$store.dispatch('lqfb/changeVideoListOffsetRight', 0)
         }else{
           if (this.ttTemp) {
             this.ttTemp = false
-            that.$bus.$emit("ttLayer",false);
+            this.$bus.$emit('allLegend',{"temp":this.ttTemp,"label":data.label});
+            // that.$bus.$emit("ttLayer",false);
           }else if (!this.ttTemp) {
             this.ttTemp = true
-            that.$bus.$emit("ttLayer",true);
+            this.$bus.$emit('allLegend',{"temp":this.ttTemp,"label":data.label});
+            // that.$bus.$emit("ttLayer",true);
           }
           this.ttLayer.setVisible(this.ttTemp);
         }
@@ -1204,7 +1284,7 @@ export default {
         // this.$bus.$emit("hzjbd",true);
       }
       // debugger
-      if (data.label == "监控") {
+      if (data.label == "监控设备") {
         //123123123
         // that.$bus.$emit("showVideoList",true);
         return
