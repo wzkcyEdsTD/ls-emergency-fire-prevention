@@ -447,7 +447,6 @@ export default {
                 anchor: [0.5, 26],
                 anchorXUnits: 'fraction',
                 anchorYUnits: 'pixels',
-                scale:0.7,
                 src: require(`@/assets/images/icon/铁塔监控.png`)
               }),
             })
