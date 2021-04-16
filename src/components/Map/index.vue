@@ -440,12 +440,16 @@ export default {
       const imgUrl = 'http://10.53.137.59:8090/iserver/services/map-agscache-Layers/rest/maps/Layers'
       let wenzhouLayer = ''
       let zjLayer = ''
+      const zjurl = "http://10.53.137.59:8090/iserver/services/map-agscachev2-lishuiyxzj2020cgcs2000/rest/maps/lishui_yxzj_2020_cgcs2000"
 
       wenzhouLayer = this.$map.createTileSuperMapRestLayer(imgUrl, {
         className: "img_c",
       });
-
+      zjLayer = this.$map.createTileSuperMapRestLayer(zjurl, {
+        className: "zj_c",
+      });
       this.$store.dispatch("map/changeBaseLayer", wenzhouLayer);
+      this.$store.dispatch('map/changeZjLayer', zjLayer)
 
       //行政区划
       const baseUrl = `http://10.53.137.59:8090/iserver/services/map-lishui_region/rest/maps/`;

@@ -1,6 +1,7 @@
 <template>
   <div class="layer-switch-wrapper" v-show="showPrintMap">
     <ul>
+      <!-- 定位 -->
       <li class="vector" :title="'地图定位'" @click="handleToolChange('定位')">
         <img
           v-show="activeType !== '矢量'"
@@ -15,38 +16,41 @@
         <svg-icon v-show="activeType !== '矢量'" icon-class="矢量icon" />
         <svg-icon v-show="activeType === '矢量'" icon-class="矢量icon-选中" />
       </li>
+      <!-- 底图切换 -->
       <li
         :title="'地图切换'"
-        class="img-container"
-        :style="activeType === '影像' ? '' : ''"
-        @click="change()"
+        class="tool"
+        :style="activeType === '地图切换' ? 'height:13vh' : ''"
+        @click="handleActiveType('地图切换')"
       >
         <img
-          v-show="mapType === 'img_c'"
+          v-show="activeType !== '地图切换'"
           src="../../assets/images/框1.png"
           alt=""
         >
         <img
-          v-show="mapType === 'vec_c'"
+          v-show="activeType === '地图切换'"
           src="../../assets/images/绿框.png"
           alt=""
         >
-        <svg-icon v-show="mapType === 'img_c'" icon-class="影像icon" />
-        <svg-icon v-show="mapType === 'vec_c'" icon-class="影像icon-选中" />
+        <svg-icon v-show="activeType !== '地图切换'" icon-class="影像icon" />
+        <svg-icon v-show="activeType === '地图切换'" icon-class="影像icon-选中" />
         <div
           class="dropdown-lists"
-          :style="activeType === '影像' ? 'height:375px' : 'height:0px'"
+          style="padding-left: 4px;padding-right: 4px;"
+          :style="activeType === '地图切换' ? 'height:9vh' : 'height:0px'"
         >
           <div
-            v-for="(item, index) in imgList"
+            v-for="(item, index) in mapList"
             :key="index"
             class="item"
-            @click="handleDropdownChange(item)"
+            @click="handleToolChange(item)"
           >
-            {{ item.label }}
+            {{ item }}
           </div>
         </div>
       </li>
+      <!-- 工具 -->
       <li
         :title="'工具'"
         class="tool"
@@ -73,12 +77,14 @@
             v-for="(item, index) in toolList"
             :key="index"
             class="item"
+            style="font-size:14px"
             @click="handleToolChange(item)"
           >
             {{ item }}
           </div>
         </div>
       </li>
+      <!-- 清空 -->
       <li
         :title="'清空'"
         @click="clearAllLayer()"
@@ -112,6 +118,7 @@ export default {
       measureLayers: [],
       list:[],
       map:window.g.map,
+      mapList:['影像图','大数据'],
       vectorList: [
         {
           label: '标准地图',
@@ -133,7 +140,7 @@ export default {
       ],
       toolList: ['绘点', '绘线',"绘面",'清空',"打印"],
       dgxLayer: null ,// 示高线图层
-      mapType:"img_c",
+      mapType:"影像图",
       hasID:false,
     }
   },
@@ -178,111 +185,6 @@ export default {
         return
       }
 
-      let temp = null;
-      let temp1 = null;
-      if(data.type == "vec_c"){
-        const layerList = map.getLayers().array_;
-        layerList.forEach((item)=>{
-          if(item.className_=="vec_c"){
-            temp = item
-            item.setVisible(true)
-          }else if(item.className_=="cva_c"){
-            item.setVisible(true)
-          }
-        })
-        //若无矢量图
-        if(!temp){
-          let vec_layer = ''
-          let cva_layer = ''
-          if (that.hasID) {
-            vec_layer = this.$map.crtLayerWMTSAndID("vec_c")
-            cva_layer = this.$map.crtLayerWMTSAndID("cva_c")
-          } else{
-            vec_layer = this.$map.crtLayerWMTS("vec_c")
-            cva_layer = this.$map.crtLayerWMTS("cva_c")
-          }
-          temp = vec_layer;
-          map.getLayers().item(0).setVisible(false)//影像图
-          // map.getLayers().item(1).setVisible(false)//影像图注记
-          map.addLayer(vec_layer);
-          map.addLayer(cva_layer);
-        }else{
-          // map.getLayers().item(5).setVisible(true)//矢量图
-          // map.getLayers().item(6).setVisible(true)//矢量图注记
-        }
-      }else if(data.type == "img_c"){
-        const layerList = map.getLayers().array_;
-        layerList.forEach(element => {
-          if(element.className_ == "vec_c"){
-            element.setVisible(false)
-          }else if(element.className_ == "cva_c"){
-            element.setVisible(false)
-          }
-        });
-        map.getLayers().item(0).setVisible(true)//影像图
-        map.getLayers().item(1).setVisible(true)//影像图注记
-        // map.getLayers().item(5).setVisible(false)//矢量图
-        // map.getLayers().item(6).setVisible(false)//矢量图注记
-      }
-
-    },
-    change(){
-      //影像切矢量
-      const map = window.g.map;
-      const imgUrl = 'http://10.53.137.59:8090/iserver/services/map-agscache-Layers/rest/maps/Layers'
-      //影像切矢量
-      //img_w
-      const that = this;
-      if(this.mapType == "img_c"){
-        let temp = null;
-        const layerList = map.getLayers().array_;
-        layerList.forEach((item)=>{
-          if(item.className_=="vec_c"){
-            temp = item
-            item.setVisible(true)
-          }else if(item.className_=="cva_c"){
-            item.setVisible(true)
-          }
-        })
-        //若无矢量图
-        if(!temp){
-          let vec_layer = ''
-          let cva_layer = ''
-
-          if (that.hasID) {
-            vec_layer = this.$map.crtLayerWMTSAndID("vec_c")
-            cva_layer = this.$map.crtLayerWMTSAndID("cva_c")
-          } else{
-            vec_layer = this.$map.crtLayerWMTS("vec_c")
-            cva_layer = this.$map.crtLayerWMTS("cva_c")
-          }
-          temp = vec_layer;
-          map.getLayers().item(0).setVisible(false)//影像图
-          // map.getLayers().item(1).setVisible(false)//影像图注记
-
-          // 矢量图层插入顺序
-          map.getLayers().insertAt(1, vec_layer)
-          map.getLayers().insertAt(2, cva_layer)
-        }else{
-          // map.getLayers().item(5).setVisible(true)//矢量图
-          // map.getLayers().item(6).setVisible(true)//矢量图注记
-        }
-        this.mapType = "vec_c"
-      }else if(this.mapType == "vec_c"){
-        const layerList = map.getLayers().array_;
-        layerList.forEach(element => {
-          if(element.className_ == "vec_c"){
-            element.setVisible(false)
-          }else if(element.className_ == "cva_c"){
-            element.setVisible(false)
-          }
-        });
-        map.getLayers().item(0).setVisible(true)//影像图
-        // map.getLayers().item(1).setVisible(true)//影像图注记
-        // map.getLayers().item(5).setVisible(false)//矢量图
-        // map.getLayers().item(6).setVisible(false)//矢量图注记
-        this.mapType = "img_c"
-      }
     },
     handleToolChange(val) {
       if (val === '清空') {
@@ -330,6 +232,62 @@ export default {
       }
       if (val === '定位'){
         this.$map.goHome()
+      }
+      if (val === '大数据') {
+        const map = window.g.map;
+        const dsjUrl = 'http://10.53.137.59:8090/iserver/services/map-agscachev2-lishuidsj2020cgcs2000/rest/maps/lishui_dsj__2020_cgcs2000'
+        const dsjLayer = this.$map.createTileSuperMapRestLayer(dsjUrl, {
+          className: "dsj",
+        });
+        const layerList = map.getLayers().array_;
+        const baseLayer = layerList[0]
+        if (baseLayer.className_!='dsj') {
+          const zjLayer = layerList.find(v=>v.className_=="zj_c")
+          map.getLayers().insertAt(0, dsjLayer)
+          window.g.map.removeLayer(baseLayer)
+          if (zjLayer) {
+            window.g.map.removeLayer(zjLayer)
+          }
+          
+        }
+      }
+      if (val === '影像图') {
+        const map = window.g.map;
+        const imgUrl = 'http://10.53.137.59:8090/iserver/services/map-agscache-Layers/rest/maps/Layers'
+        const zjurl = "http://10.53.137.59:8090/iserver/services/map-agscachev2-lishuiyxzj2020cgcs2000/rest/maps/lishui_yxzj_2020_cgcs2000"
+
+        const wenzhouLayer = this.$map.createTileSuperMapRestLayer(imgUrl, {
+          className: "img_c",
+        });
+        const zjLayer = this.$map.createTileSuperMapRestLayer(zjurl, {
+          className: "zj_c",
+        });
+        const layerList = map.getLayers().array_;
+        const baseLayer = layerList[0]
+        if (baseLayer.className_!='img_c') {
+          //先插入注记，再插入底图
+          map.getLayers().insertAt(0, zjLayer)
+          map.getLayers().insertAt(0, wenzhouLayer)
+          window.g.map.removeLayer(baseLayer)
+        }
+      }
+      if (val === '标准版') {
+        const map = window.g.map;
+        const bzbUrl = 'http://10.53.137.59:8090/iserver/services/map-agscachev2-lishuibzbwudem2020cgcs2000/rest/maps/lishui_bzb_wudem_2020_cgcs2000'
+        const bzbUrlLayer = this.$map.createTileSuperMapRestLayer(bzbUrl, {
+          className: "bzb",
+        });
+        const layerList = map.getLayers().array_;
+        const baseLayer = layerList[0]
+        if (baseLayer.className_!='bzb') {
+          const zjLayer = layerList.find(v=>v.className_=="zj_c")
+          map.getLayers().insertAt(0, bzbUrlLayer)
+          window.g.map.removeLayer(baseLayer)
+          if (zjLayer) {
+            window.g.map.removeLayer(zjLayer)
+          }
+          
+        }
       }
     },
 
@@ -439,7 +397,7 @@ export default {
         transition: height 0.3s;
         .item {
           margin-top: 8px;
-          font-size: 14px;
+          font-size: 13px;
           padding-bottom: 5px;
           border-bottom: 1px solid rgb(15, 119, 197);
         }
