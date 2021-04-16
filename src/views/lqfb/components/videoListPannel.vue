@@ -36,15 +36,17 @@ export default {
  async mounted() {
     const that = this;
     this.$bus.$on("videoData",value=>{
-      // console.log(value);
-      // that.id = value.SMID;
+
       if (value.HLS_URL) {
-        // debugger
         that.$nextTick(async()=>{
           that.videoShow = true
           that.mc = value.MCSB
           if (this.video) {
-            this.video.dispose();
+            try {
+              this.video.dispose();
+            } catch (error) {
+              console.log(error);
+            }
             this.video = null;
           }
           const URL = await fetchVideoURL(
@@ -57,7 +59,11 @@ export default {
           that.videoShow = true
           that.mc = value.MC
           if (this.video) {
-            this.video.dispose();
+            try {
+              this.video.dispose();
+            } catch (error) {
+              console.log(error);
+            }
             this.video = null;
           }
           const URL = await fetchVideoURL(
@@ -78,7 +84,11 @@ export default {
           that.videoShow = true
           that.mc = value.MCSB
           if (this.video) {
-            this.video.dispose();
+            try {
+              this.video.dispose();
+            } catch (error) {
+              console.log(error);
+            }
             this.video = null;
           }
           const URL = await fetchVideoURL(
@@ -91,7 +101,11 @@ export default {
           that.videoShow = true
           that.mc = value.MC
           if (this.video) {
-            this.video.dispose();
+            try {
+              this.video.dispose();
+            } catch (error) {
+              console.log(error);
+            }
             this.video = null;
           }
           const URL = await fetchVideoURL(
@@ -128,7 +142,11 @@ export default {
       });
     },
     releaseVideo() {
-      this.video.dispose();
+      try {
+        this.video.dispose();
+      } catch (error) {
+        console.log(error);
+      }
       this.video = null;
       this.videoShow = false;
     },
@@ -138,7 +156,13 @@ export default {
   },
   beforeDestroy() {
     this.$bus.$off('videoData')
-    this.video && this.video.dispose();
+    if(this.video){
+      try {
+        this.video.dispose();
+      } catch (error) {
+        console.log(error);
+      }
+    }
   },
 }
 </script>

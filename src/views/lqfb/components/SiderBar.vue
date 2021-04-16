@@ -78,6 +78,9 @@ export default {
         children: 'children',
         label: 'label'
       },
+      videoPointList:[],
+      ttVideoList:[],
+
       temp:true,
       firelayer:null,
       district:true,
@@ -365,6 +368,7 @@ export default {
 
           new FeatureService(url).getFeaturesBySQL(sqlParam, serviceResult => {
             const videoPointList = serviceResult.result.features.features;
+            that.videoPointList = videoPointList;
             const features = [];
             const style = new Style({
               image: new Icon({
@@ -407,7 +411,8 @@ export default {
               source: vectorSource,
               })
             this.$map.addLayer(this.videoLayer)
-            that.$bus.$emit("sendVideoListData",videoPointList);
+            that.$bus.$emit("showVideoList",true);
+            that.$bus.$emit("sendVideoListData",that.videoPointList);
         })
           this.videoTemp = true;
           this.$bus.$emit('allLegend',{"temp":this.videoTemp,"label":data.label});
@@ -415,9 +420,12 @@ export default {
           if (this.videoTemp) {
             this.videoTemp = false
             this.$bus.$emit('allLegend',{"temp":this.videoTemp,"label":data.label});
+            that.$bus.$emit("showVideoList",false);
             this.$bus.$emit("clearVideoMaker",true)
           }else if (!this.videoTemp) {
             this.videoTemp = true
+            that.$bus.$emit("sendVideoListData",that.videoPointList);
+            that.$bus.$emit("showVideoList",true);
             this.$bus.$emit('allLegend',{"temp":this.videoTemp,"label":data.label});
           }
           this.videoLayer.setVisible(this.videoTemp);
@@ -441,6 +449,7 @@ export default {
 
             const videoPointList = serviceResult.result.features.features;
             const features = [];
+            that.ttVideoList = videoPointList;
              
             const style = new Style({
               image: new Icon({
@@ -471,16 +480,22 @@ export default {
               source: vectorSource,
               })
             this.$map.addLayer(this.ttVideoLayer)
+            that.$bus.$emit("showTTVideoList",true);
+            that.$bus.$emit("sendTTVideoListData",that.ttVideoList);
         })
           this.ttVideoTemp = true;
-          // that.$bus.$emit("showVideoList",true);
           this.$bus.$emit('allLegend',{"temp":this.ttVideoTemp,"label":data.label});
         }else{
           if (this.ttVideoTemp) {
             this.ttVideoTemp = false
+            that.$bus.$emit("showTTVideoList",false);
             this.$bus.$emit('allLegend',{"temp":this.ttVideoTemp,"label":data.label});
           }else if (!this.ttVideoTemp) {
             this.ttVideoTemp = true
+            
+            that.$bus.$emit("showTTVideoList",true);
+            that.$bus.$emit("sendTTVideoListData",that.ttVideoList);
+            
             this.$bus.$emit('allLegend',{"temp":this.ttVideoTemp,"label":data.label});
           }
           this.ttVideoLayer.setVisible(this.ttVideoTemp);

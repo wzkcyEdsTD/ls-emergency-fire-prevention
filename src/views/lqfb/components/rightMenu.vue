@@ -133,12 +133,17 @@
             <div @mouseenter="titeEnter" class="item item-1">{{ item.address }}</div>
             <div class="item item-1">{{ item.time }}</div>
             <div class="item item-2">
-                <el-image
+                <img
                   style="width: 70px; height: 70px"
+                  @click="onPreview(item)"
                   :src="item.imgSrc"
-                  :preview-src-list="item.imgList"
                   >
-                </el-image>
+                <el-image-viewer
+                  v-if="showViewer && item.id == id"
+                  :on-close="closeViewer"
+                  :url-list="item.imgList" />
+                  <!-- :preview-src-list="item.imgList" -->
+                <!-- </el-image> -->
             </div>
           </li>
           <div class="allmore" v-show="hasMoreImg" @click="viewMoreImg">
@@ -148,18 +153,6 @@
           
         </ul>
       </div>
-      <!-- <div class="changeMenuTool">
-        <img src="@/common/images/左.png" class="leftTool" @click="leftTool">
-        <div class="selectMenu">
-          <div class="one" @click="leftTool" :style="{'background-color': selectMenu==1 ? '#B5F3B5' : '#0C985B'}">
-            <div class="text" :style="{'color': selectMenu==1 ? '#0C110B' : '#B5F3B5'}">1</div>
-          </div>
-          <div class="two" @click="rightTool" :style="{'background-color': selectMenu==2 ? '#B5F3B5' : '#0C985B'}">
-            <div class="text" :style="{'color': selectMenu==2 ? '#0C110B' : '#B5F3B5'}">2</div>
-          </div>
-        </div>
-        <img src="@/common/images/右.png" class="rightTool" @click="rightTool">
-      </div> -->
     </div>
   </div>
 </template>
@@ -178,12 +171,18 @@ import {
   FeatureService,
   SuperMap
 } from '@supermap/iclient-ol'
+
+import ElImageViewer from 'element-ui/packages/image/src/image-viewer'
+
 export default {
   components: {
+    ElImageViewer
   },
 
   data() {
     return {
+      id:undefined,
+      showViewer: false, // 显示查看器
       savedData:[],
       hasMoreImg:false,
       wcl:"",
@@ -226,6 +225,16 @@ export default {
     }
   },
   methods:{
+    onPreview(item) {
+      this.id = item.id;
+      this.showViewer = true
+    },
+    // 关闭查看器
+    closeViewer() {
+      this.id = undefined
+      this.showViewer = false
+    },
+
     viewMoreImg(){
       const that = this;
       that.hasMoreImg = false;
@@ -741,9 +750,19 @@ export default {
         })
         imageList = imageList.map(v=>{
           if (v.imgSts=="1") {
-            v.imgSrc = `http://10.53.137.235/forestfire/sys/common/static/${v.imgSrc}`
-            v.imgList = []
-            v.imgList.push(v.imgSrc)
+            if (v.imgSrc.indexOf(';')!=-1) {
+              const list = v.imgSrc.split(';')
+              //压缩图
+              v.imgSrc = `http://10.53.137.235/forestfire/sys/common/static/${list[1]}`
+              //原图
+              const src = `http://10.53.137.235/forestfire/sys/common/static/${list[0]}`
+              v.imgList = []
+              v.imgList.push(src)
+            }else{
+              v.imgSrc = `http://10.53.137.235/forestfire/sys/common/static/${v.imgSrc}`
+              v.imgList = []
+              v.imgList.push(v.imgSrc)
+            }
             v.createTime = v.createTime.substr(5)
             return v
           }
