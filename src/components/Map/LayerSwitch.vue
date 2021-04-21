@@ -54,7 +54,7 @@
       <li
         :title="'工具'"
         class="tool"
-        :style="activeType === '工具' ? 'height:24vh' : ''"
+        :style="activeType === '工具' ? 'height:22vh' : ''"
         @click="handleActiveType('工具')"
       >
         <img

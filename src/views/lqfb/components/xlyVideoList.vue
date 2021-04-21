@@ -4,25 +4,42 @@
 
     <div class="ljxq-container">
       <div class="zbjksz-container">
-        <div class="titleLine">
+        <!-- <div class="titleLine">
           <div class="title" >
             {{`小流域监控列表`}}
           </div>
         </div>
-        <img style="width: 100%;" src="@/common/images/边.png" alt="">
-        <ul style="max-height:75vh">
-          <li v-for="(item, index) in videoList" 
-              :key="index" 
-              class="list-item" 
-              :class="{active : videoItem == index}"
-              @click="videoItem = index;handleVideoClick(item)">
-            <div @mouseenter="titeEnter" class="item item-2">{{ item.properties.MC }}</div>
-          </li>
-          <!-- <div class="allmore" v-show="hasMore" @click="viewMore">
-            <div class="moreText">查看更多</div>
-            <div class="more" />
-          </div> -->
-        </ul>
+        <img style="width: 100%;" src="@/common/images/边.png" alt=""> -->
+        
+        <div class="search-header">
+          <img src="@/common/images/搜索icon.png" class="searchIcon">
+          <el-input
+            v-model="searchTextAll"
+            class="searchFilterInput"
+            placeholder="监控查找"
+            size="small"
+          />
+          <img src="@/common/images/关闭icon.png" class="clearIcon" @click="searchTextAll=''">
+        </div>
+        <el-collapse v-model="activeNames" accordion>
+          <el-collapse-item :title='xlyjk' name="1">
+            <ul style="max-height:77vh">
+              <li v-for="(item, index) in videoList" 
+                  :key="index" 
+                  class="list-item" 
+                  :class="{active : videoItem == index}"
+                  @click="videoItem = index;handleVideoClick(item)">
+                <div @mouseenter="titeEnter" class="item item-2">{{ item.properties.MC }}</div>
+              </li>
+              <div class="allmore" v-show="hasMore" @click="viewMore">
+                <div class="moreText">查看更多</div>
+                <div class="more" />
+              </div>
+            </ul>
+          </el-collapse-item>
+        </el-collapse>
+        
+
       </div>
     </div>
 
@@ -33,15 +50,31 @@ import Overlay from 'ol/Overlay'
 export default {
   data() {
     return {
-      videoList: [],
+      activeNames:'1',
       zhfxOffsetRight: -30,
       videoItem:undefined,
       offlineVideoItem:undefined,
       hasMore:false,
       videoList:[],
       ttVideoList:[],
-      lyr:undefined
+      lyr:undefined,
+      xlyjk:undefined,
+      searchTextAll:""
     };
+  },
+  watch:{
+    searchTextAll(text){
+      if (text && this.ttVideoList.length>0) {
+        this.videoList = this.ttVideoList.filter(v=>v.properties.MC.indexOf(text)!=-1)
+        this.hasMore = false;
+      }else if (!text && this.ttVideoList.length>0) {
+        if (this.hasMore) {
+          that.videoList = that.videoList.slice(0,17)
+        }else{
+          this.videoList = this.ttVideoList;
+        }
+      }
+    }
   },
   methods: {
     titeEnter(e) {
@@ -101,11 +134,11 @@ export default {
       that.$nextTick(() => {
         that.ttVideoList = videoPointList
         that.videoList = that.ttVideoList
-        // if (that.videoList.length>=10) {
-        //   that.hasMore = true;
-        //   that.videoList = that.videoList.slice(0,10)
-        // }
-        that.ttjk = `铁塔视频列表（${that.ttVideoList.length}）`
+        if (that.videoList.length>=17) {
+          that.hasMore = true;
+          that.videoList = that.videoList.slice(0,17)
+        }
+        that.xlyjk = `小流域监控列表（${that.ttVideoList.length}）`
       });
     });
   },
@@ -144,6 +177,36 @@ export default {
     // height: calc(100% - 120px);
     padding-top: 1vh;
     .zbjksz-container {
+      .search-header {
+        display        : flex;
+        align-items    : center;
+        justify-content: space-between;
+        // width          : 20vh;
+        margin-top     : 1vh;
+        background-image: url('~@/common/images/底.png');
+        background-size: 100% 100%;
+        width: 90%;
+        
+        .searchFilterInput {
+          width: 28vh;
+        }
+        .searchIcon{
+          width: 1.5vh;
+          position: relative;
+          left: 1vh;
+          // padding-top: 0.5vh;
+          // height: 100%;
+        }
+        .clearIcon{
+          width: 1vh;
+          position: relative;
+          right: 1vh;
+          cursor: pointer;
+              // padding-right: 1vh;
+          // padding-top: 0.5vh;
+          // height: 100%;
+        }
+      }
       .flexLine{
         display: flex;
         .title {

@@ -15,7 +15,7 @@
                 <div class="closeicon" @click="close"></div>
               </div> -->
               <div class="ul-head">
-                <div class="item item-1">地点</div>
+                <div class="item item-1">设备名称</div>
                 <!-- <div class="item item-1">举报人</div> -->
                 <div class="item item-1">通道数量</div>
                 <div class="item item-1">类型</div>
@@ -48,7 +48,7 @@
                 <div class="closeicon" @click="close"></div>
               </div> -->
               <div class="ul-head">
-                <div class="item item-1">地点</div>
+                <div class="item item-1">设备名称</div>
                 <!-- <div class="item item-1">举报人</div> -->
                 <div class="item item-1">通道数量</div>
                 <div class="item item-1">类型</div>

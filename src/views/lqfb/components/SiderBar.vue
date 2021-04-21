@@ -531,7 +531,6 @@ export default {
               src: require(`@/assets/images/icon/${data.icon}.png`),
             }),
           });
-
           videoPointList.forEach((element) => {
             const properties = element.properties;
 

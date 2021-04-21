@@ -1,6 +1,6 @@
 module.exports = {
 
-  title: '丽水森林防火',
+  title: '森林火情预警',
 
   /**
    * @type {boolean} true | false

@@ -1,5 +1,5 @@
 <template>
-  <div v-show="allLayerList.length > 0" class="legend-wrapper" :style="{right: `${rightMenu}rem`}">
+  <div v-show="allLayerList.length > 0" class="legend-wrapper" :class="{active:rightMenu==2}">
     <div class="title">图例</div>
     <div class="item-list">
       <div v-for="(v, i) in allLayerList" v-show="v.icon" :key="i" class="item">
@@ -212,11 +212,17 @@ export default {
       }
     },
     rightMenuList(list){
-      // console.log('当前剩余',list.length)
+      console.log('当前剩余',list.length)
       const that = this;
       if (list.length>0) {
+
+        that.rightMenu = 30;
+        
         that.$bus.$emit("changeMenuLocaltion",30)
       }else{
+
+        that.rightMenu = 2;
+        
         that.$bus.$emit("changeMenuLocaltion",2)
       }
     }
@@ -365,11 +371,14 @@ export default {
   z-index: 999;
   bottom: 20px;
   padding: 10px;
-  right: 420px;
+  right: 30rem;
   // background-color: rgba($color: $color-theme, $alpha: 0.8);
   background-image: url("~@/common/images/弹框.png");
   background-size: 100% 100%;
   transition: right 0.9s;
+  &.active{
+    right:2rem
+  }
   .title {
     text-align: center;
     padding: 5px 0;

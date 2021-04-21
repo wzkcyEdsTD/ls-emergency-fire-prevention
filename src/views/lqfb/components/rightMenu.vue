@@ -24,7 +24,7 @@
               class="searchFilterInput"
               placeholder="查找火灾点"
               size="small"
-              @keyup.enter.native="searchFilterAll"
+
             />
             <img src="@/common/images/关闭icon.png" class="clearIcon" @click="searchClearAll">
           </div>
@@ -50,7 +50,7 @@
                   <div class="item item-1">{{ item.time }}</div>
                   <div class="item item-1">{{ systemName[`${item.systemcode}`] }}</div>
                 </li>
-                <div class="allmore" v-show="hasMore && !hasSearch" @click="viewMore">
+                <div class="allmore" v-show="hasMore" @click="viewMore">
                   <div class="moreText">查看更多</div>
                   <div class="more" />
                 </div>
@@ -77,7 +77,7 @@
                   <div class="item item-1">{{ item.time }}</div>
                   <div class="item item-1">{{ systemName[`${item.systemcode}`] }}</div>
                 </li>
-                <div class="allmore" v-show="hasMoreUnSettled && !hasSearchUnSettled" @click="viewMoreUnSettled">
+                <div class="allmore" v-show="hasMoreUnSettled" @click="viewMoreUnSettled">
                   <div class="moreText">查看更多</div>
                   <div class="more" />
                 </div>
@@ -103,7 +103,7 @@
                   <div class="item item-1">{{ item.time }}</div>
                   <div class="item item-1">{{ systemName[`${item.systemcode}`] }}</div>
                 </li>
-                <div class="allmore" v-show="hasMoreHistory && !hasSearchHistory" @click="viewMoreHistory">
+                <div class="allmore" v-show="hasMoreHistory" @click="viewMoreHistory">
                   <div class="moreText">查看更多</div>
                   <div class="more" />
                 </div>
@@ -193,9 +193,6 @@ export default {
       textName:"截图列表",
       imageList:[],
       unSettledList:[],
-      hasSearch:false,
-      hasSearchUnSettled:false,
-      hasSearchHistory:false,
       hasMoreUnSettled:true,
       hasMore:true,
       hasMoreHistory:true,
@@ -224,6 +221,15 @@ export default {
       isRefreshStreetHistory:false
     }
   },
+  watch:{
+    searchTextAll(text){
+      this.hasMore = false;
+      this.hasMoreHistory = false;
+      this.hasMoreUnSettled = false;
+      this.searchFilterAll(text);
+    }
+  },
+
   methods:{
     onPreview(item) {
       this.id = item.id;
@@ -472,7 +478,7 @@ export default {
           
           const nodes = {name:"火灾点列表"}
           this.$store.dispatch('map/appendRightMenuList', nodes)
-          // console.log(this.$store.getters.rightMenuList)
+          console.log(this.$store.getters.rightMenuList)
           // that.$bus.$emit("changeMenuLocaltion",30)
         })
       }else{
@@ -480,7 +486,7 @@ export default {
           that.rydwPannelOffsetRight=-25
           const nodes = {name:"火灾点列表"}
           this.$store.dispatch('map/removeRightMenuListItem', nodes)
-          // console.log(this.$store.getters.rightMenuList)
+          console.log(this.$store.getters.rightMenuList)
           // that.$bus.$emit("changeMenuLocaltion",2)
         })
       }
@@ -544,9 +550,7 @@ export default {
           console.log(that.tempList)
         })
         // debugger
-        that.hasSearchHistory = true;
       }else{
-        that.hasSearchHistory = false;
         let templist = that.fireList.result.records.sort(that.sortUpDate)
         if (that.hasMoreHistory) {
           templist = templist.slice(0,10)
@@ -563,7 +567,6 @@ export default {
     searchFilterUnresolve(){
       const that = this
       if (that.searchTextUnresolve) {
-        that.hasSearch = true;
         let list = that.fireList.result.records.sort(that.sortUpDate)
 
         list = list.filter((v) =>{
@@ -593,7 +596,6 @@ export default {
           console.log(that.unresolveList)
         })
       }else{
-        that.hasSearch = false;
         let tempList12 = that.fireList.result.records.sort(that.sortUpDate)
 
         tempList12 = tempList12.filter((v) =>{
@@ -612,7 +614,6 @@ export default {
     searchFilterUnSettled(){
       const that = this
       if (that.searchTextUnSettled) {
-        that.hasSearchUnSettled = true;
         let list = that.fireList.result.records.sort(that.sortUpDate)
 
         list = list.filter((v) =>{
@@ -642,7 +643,6 @@ export default {
 
         })
       }else{
-        that.hasSearchUnSettled = false;
         let tempList333 = that.fireList.result.records.sort(that.sortUpDate)
 
         tempList333 = tempList333.filter((v) =>{
@@ -688,7 +688,6 @@ export default {
         }
       })
       this.searchText = "";
-      that.hasSearchHistory = false;
     },
     searchClearUnresolve(){
       // debugger
@@ -705,7 +704,6 @@ export default {
       }
       that.unresolveList = tempList5;
       this.searchTextUnresolve = "";
-      that.hasSearch = false;
     },
     searchClearUnSettled(){
       // debugger
@@ -722,7 +720,6 @@ export default {
       }
       that.unSettledList = tempList6;
       this.searchTextUnSettled = "";
-      that.hasSearchUnSettled = false;
     },
     //正序
     sortDownDate(a, b) {
@@ -1509,6 +1506,7 @@ export default {
     width: 1vh;
     position: relative;
     right: 1vh;
+    cursor: pointer;
         // padding-right: 1vh;
     // padding-top: 0.5vh;
     // height: 100%;
