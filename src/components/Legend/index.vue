@@ -140,6 +140,12 @@ export default {
         label:"铁塔监控",
         name:"铁塔监控",
       }
+      //小流域监控
+      const legend16 = {
+        icon:"小流域监控.png",
+        label:"小流域监控",
+        name:"小流域监控",
+      }
       const list = []
       if (that.fireLayerTemp) {
         list.push(legend)
@@ -166,7 +172,6 @@ export default {
       if (that.bswd) {
         list.push(legend8)
       }
-
       if (that.gylc) {
         list.push(legend10)
       }
@@ -187,6 +192,9 @@ export default {
       }     
       if (that.ttjk) {
         list.push(legend15)
+      }
+      if (that.xly) {
+        list.push(legend16)
       }
 
       //过滤重复item
@@ -233,6 +241,7 @@ export default {
       sd:false,
       tt:false,
       ttjk:false,
+      xly:false,
     }
   },
   methods: {
@@ -294,6 +303,9 @@ export default {
             break;
           case '铁塔':
             that.tt = val.temp;
+            break;
+          case '小流域监控':
+            that.xly = val.temp;
             break;
           default:
             break;

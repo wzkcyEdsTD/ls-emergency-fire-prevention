@@ -40,7 +40,7 @@ export default {
       if (value.HLS_URL) {
         that.$nextTick(async()=>{
           that.videoShow = true
-          that.mc = value.MCSB
+          that.mc = value.MC
           if (this.video) {
             try {
               this.video.dispose();

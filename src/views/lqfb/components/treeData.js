@@ -24,12 +24,14 @@ const treeData = [
             id: 111,
             label: '森林公园',
             isZLZY: true,
+            dataset:"d_forest_park"
             // value: MAP_URL.SECRET_FORESTPARK_M
           },
           {
             id: 112,
             label: '国有林场',
             isZLZY: true,
+            dataset:"d_national_forest"
             // value: MAP_URL.SECRET_NATIONAL_FOREST
           }
         ]
@@ -78,6 +80,7 @@ const treeData = [
             id: 146,
             label: '湿地',
             isZLZY: true,
+            dataset:"d_wetland",
             value: MAP_URL.SECRET_WETLAND
           }
           // {
@@ -332,7 +335,8 @@ const treeData = [
     children: [
       {
         id: 71,
-        label: '监控设备'
+        label: '监控设备',
+        dataset:"d_video"
       }
     ]
   },
@@ -344,6 +348,7 @@ const treeData = [
       {
         id: 31,
         label: '办事网点',
+        dataset:"d_handle_network"
       }
     ]
   },
@@ -354,7 +359,8 @@ const treeData = [
     children: [
       {
         id: 81,
-        label: '气象测站'
+        label: '气象测站',
+        dataset:"v_forest_qixiangcezhandian"
       }
     ]
   },
@@ -365,7 +371,8 @@ const treeData = [
     children: [
       {
         id: 91,
-        label: '小学'
+        label: '小学',
+        dataset:"jy_primaryschool"
       },
       {
         id: 92,
@@ -373,11 +380,13 @@ const treeData = [
       },
       {
         id: 93,
-        label: '小学适龄儿童'
+        label: '小学适龄儿童',
+        dataset:"jy_primaryschool_children"
       },
       {
         id: 94,
-        label: '初中'
+        label: '初中',
+        dataset:"jy_middleschool"
       },
       {
         id: 95,
@@ -385,7 +394,8 @@ const treeData = [
       },
       {
         id: 96,
-        label: '初中适龄儿童'
+        label: '初中适龄儿童',
+        dataset:"jy_middleschool_children"
       },
     ]
   },
@@ -396,15 +406,29 @@ const treeData = [
     children: [
       {
         id: 101,
-        label: '铁塔'
+        label: '铁塔',
+        dataset:"v_forest_tower"
       },
       {
         id: 102,
-        label: '铁塔监控'
+        label: '铁塔监控',
+        dataset:"v_forest_tower_video"
       }
     ]
   },
-
+  {
+    id: 4,
+    label: '小流域监控',
+    showCheck: true,
+    children: [
+      {
+        id: 41,
+        label: '小流域监控',
+        icon:"小流域监控",
+        dataset:"v_forest_small_watershed_video"
+      },
+    ]
+  },
 ]
 
 export default treeData

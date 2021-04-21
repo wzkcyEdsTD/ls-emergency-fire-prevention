@@ -6,7 +6,7 @@
       <div class="zbjksz-container">
         <div class="titleLine">
           <div class="title" >
-            {{`铁塔监控列表`}}
+            {{`小流域监控列表`}}
           </div>
         </div>
         <img style="width: 100%;" src="@/common/images/边.png" alt="">
@@ -60,7 +60,7 @@ export default {
       const that = this;
       that.$nextTick(() => {
         that.zhfxOffsetRight = -30;
-        const nodes = {name:"铁塔监控列表"}
+        const nodes = {name:"小流域监控列表"}
         this.$store.dispatch('map/removeRightMenuListItem', nodes)
       });
       //   this.$store.dispatch("lqfb/changezhfxOffsetRight", -30);
@@ -80,24 +80,24 @@ export default {
   mounted() {
     const that = this;
 
-    that.$bus.$on("showTTVideoList", (value) => {
+    that.$bus.$on("showXLYVideoList", (value) => {
       if (value) {
         that.$nextTick(() => {
           that.zhfxOffsetRight = 0;
 
         });
-        const nodes = {name:"铁塔监控列表"}
+        const nodes = {name:"小流域监控列表"}
         that.$store.dispatch('map/appendRightMenuList', nodes)
       } else {
         that.$nextTick(() => {
           that.zhfxOffsetRight = -30;
 
         });
-        const nodes = {name:"铁塔监控列表"}
+        const nodes = {name:"小流域监控列表"}
         that.$store.dispatch('map/removeRightMenuListItem', nodes)
       }
     });
-    that.$bus.$on("sendTTVideoListData", (videoPointList) => {
+    that.$bus.$on("sendXLYVideoListData", (videoPointList) => {
       that.$nextTick(() => {
         that.ttVideoList = videoPointList
         that.videoList = that.ttVideoList
@@ -111,8 +111,8 @@ export default {
   },
   beforeDestroy() {
     const that = this;
-    that.$bus.$off("showTTVideoList");
-    that.$bus.$off("sendTTVideoListData");
+    that.$bus.$off("showXLYVideoList");
+    that.$bus.$off("sendXLYVideoListData");
   },
 };
 </script>
@@ -127,7 +127,7 @@ export default {
   top: 0;
   right: 0;
   padding: 10px;
-  z-index: 1003;
+  z-index: 1004;
   .close {
     position: absolute;
     left: -34px;
