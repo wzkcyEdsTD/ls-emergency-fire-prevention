@@ -20,7 +20,7 @@
       <li
         :title="'地图切换'"
         class="tool"
-        :style="activeType === '地图切换' ? 'height:13vh' : ''"
+        :style="activeType === '地图切换' ? 'height:16vh' : ''"
         @click="handleActiveType('地图切换')"
       >
         <img
@@ -118,7 +118,7 @@ export default {
       measureLayers: [],
       list:[],
       map:window.g.map,
-      mapList:['影像图','大数据'],
+      mapList:['影像图','标准版','大数据'],
       vectorList: [
         {
           label: '标准地图',
@@ -273,7 +273,7 @@ export default {
       }
       if (val === '标准版') {
         const map = window.g.map;
-        const bzbUrl = 'http://10.53.137.59:8090/iserver/services/map-agscachev2-lishuibzbwudem2020cgcs2000/rest/maps/lishui_bzb_wudem_2020_cgcs2000'
+        const bzbUrl = 'http://10.53.137.59:8090/iserver/services/map-agscachev2-lishuibzbwudem2020cgcs20002/rest/maps/lishui_bzb_wudem_2020_cgcs2000'
         const bzbUrlLayer = this.$map.createTileSuperMapRestLayer(bzbUrl, {
           className: "bzb",
         });

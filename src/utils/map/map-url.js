@@ -224,9 +224,9 @@ const mapUrl = {
   VIDEO:{
     type: 'data', // 数据服务
     layerName: 'd_video',
-    label: '监控设备',
+    label: '视频监控',
     dataSourceName,
-    icon: '监控设备.png',
+    icon: '视频监控.png',
     url: dataUrl
   },
   NETWORK:{

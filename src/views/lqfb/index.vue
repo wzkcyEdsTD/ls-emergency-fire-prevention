@@ -20,6 +20,8 @@
     <videoList ref="videoList"/>
     <tt-video-list/>
     <xly-video-list/>
+    <xftd-video-list/>
+    <slsp-video-list/>
     <!-- <div class="video-wrapper">
       <video id="my-video" class="video-js vjs-default-skin" controls preload="auto" poster="https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg">
         <source src="http://10.20.103.167:83/ncg/10.20.103.166/7099/0/33038111001322200202/MAIN/TCP/live.m3u8?checkinfo=ewogICAidGltZSIgOiAiMjAyMDA3MTVUMjIyOTMyWiIsCiAgICJ1cmwiIDogImh0dHA6Ly8xMC4yMC4xMDMuMTY3OjgzL25jZy8xMC4yMC4xMDMuMTY2LzcwOTkvMC8zMzAzODExMTAwMTMyMjIwMDIwMi9NQUlOL1RDUC9saXZlLm0zdTgiCn0K&idinfo=EAAAAAAQAAC4gm0bX7cgKBhtPkyaBnSxWWEUGZS7zTyPvg5%2FCOj%2BqUzgKBuq8pvgEAh8gRsn5VM%3D" type="application/x-mpegURL">
@@ -63,6 +65,8 @@ import {
 import util from "@/libs/qxinfoAPI"
 import TtVideoList from './components/ttVideoList';
 import XlyVideoList from './components/xlyVideoList';
+import XftdVideoList from './components/xftdVideoList.vue';
+import SlspVideoList from './components/slspVideoList.vue';
 
 export default {
   name: 'Lqfb',
@@ -86,7 +90,9 @@ export default {
     zllbTab,
     videoListPannel,
     TtVideoList,
-    XlyVideoList
+    XlyVideoList,
+    XftdVideoList,
+    SlspVideoList,
   },
   data() {
     return {
@@ -686,8 +692,9 @@ export default {
           this.$bus.$emit("videoData",value);
         }
         return
+
       }
-      if (value['HLS_URL'] || value['HLS_URL']=="") {
+      if (value['HLS_URL'] || value['HLS_URL']=="" || value['CAMERA_TYPE'] || value['CAMERA_TYPE']=='') {
         // debugger
         // 查询监控视频
         that.$refs.videoList.addGifMarks([value.X,value.Y])

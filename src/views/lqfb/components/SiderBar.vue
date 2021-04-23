@@ -88,6 +88,8 @@ export default {
       videoPointList: [],
       ttVideoList: [],
       xlyVideoList:[],
+      xftdVideoList:[],
+      slspVideoList:[],
 
       temp: true,
       firelayer: null,
@@ -107,6 +109,10 @@ export default {
       ttVideoTemp: false,
       xlyVideoLayer: null,
       xlyVideoTemp: false,
+      xftdVideoLayer: null,
+      xftdVideoTemp: false,
+      slspVideoLayer: null,
+      slspVideoTemp: false,
       //教育资源
       //小学
       primartSchoolLayer: null,
@@ -375,7 +381,7 @@ export default {
       // if ((data.id + '')[0] === '4' || (data.id + '')[0] === '6' || (data.id + '')[0] === '7') {
       //   this.$store.dispatch('lqfb/changezlOffsetRight', -25)
       // }
-      if (data.label === "监控设备") {
+      if (data.label === "视频监控") {
         if (!this.videoLayer) {
           const serviceResult = await this.searchFeatures(data);
           const videoPointList = serviceResult.result.features.features;
@@ -394,7 +400,7 @@ export default {
               anchor: [0.5, 26],
               anchorXUnits: "fraction",
               anchorYUnits: "pixels",
-              src: require(`@/assets/images/icon/监控设备.png`),
+              src: require(`@/assets/images/icon/视频监控.png`),
             }),
           });
           videoPointList.forEach((element) => {
@@ -579,6 +585,134 @@ export default {
             });
           }
           this.xlyVideoLayer.setVisible(this.xlyVideoTemp);
+        }
+      }
+      if (data.label === "消防通道视频监控") {
+        if (!this.xftdVideoLayer) {
+          const serviceResult = await this.searchFeatures(data);
+          const videoPointList = serviceResult.result.features.features;
+          const features = [];
+          that.xftdVideoList = videoPointList;
+          const style = new Style({
+            image: new Icon({
+              anchor: [0.5, 26],
+              anchorXUnits: "fraction",
+              anchorYUnits: "pixels",
+              src: require(`@/assets/images/icon/${data.icon}.png`),
+            }),
+          });
+          videoPointList.forEach((element) => {
+            const properties = element.properties;
+
+            const feature = new Feature({
+              geometry: new Point([properties.X, properties.Y]),
+              ...properties,
+            });
+
+            feature.setStyle(style);
+            features.push(feature);
+          });
+
+          var vectorSource = new VectorSource({
+            features,
+            wrapX: false,
+          });
+          this.xftdVideoLayer = new VectorLayer({
+            source: vectorSource,
+          });
+          this.$map.addLayer(this.xftdVideoLayer);
+          that.$bus.$emit("showXFTDVideoList", true);
+          that.$bus.$emit("sendXFTDVideoListData", that.xftdVideoList);
+          this.xftdVideoTemp = true;
+          this.$bus.$emit("allLegend", {
+            temp: this.xftdVideoTemp,
+            label: data.label,
+          });
+        } else {
+          if (this.xftdVideoTemp) {
+            this.xftdVideoTemp = false;
+            that.$bus.$emit("showXFTDVideoList", false);
+            this.$bus.$emit("clearVideoMaker", true);
+            this.$bus.$emit("allLegend", {
+              temp: this.xftdVideoTemp,
+              label: data.label,
+            });
+          } else if (!this.xftdVideoTemp) {
+            this.xftdVideoTemp = true;
+
+            that.$bus.$emit("showXFTDVideoList", true);
+            that.$bus.$emit("sendXFTDVideoListData", that.xftdVideoList);
+
+            this.$bus.$emit("allLegend", {
+              temp: this.xftdVideoTemp,
+              label: data.label,
+            });
+          }
+          this.xftdVideoLayer.setVisible(this.xftdVideoTemp);
+        }
+      }
+      if (data.label === "水利视频监控") {
+        if (!this.slspVideoLayer) {
+          const serviceResult = await this.searchFeatures(data);
+          const videoPointList = serviceResult.result.features.features;
+          const features = [];
+          that.slspVideoList = videoPointList;
+          const style = new Style({
+            image: new Icon({
+              anchor: [0.5, 26],
+              anchorXUnits: "fraction",
+              anchorYUnits: "pixels",
+              src: require(`@/assets/images/icon/${data.icon}.png`),
+            }),
+          });
+          videoPointList.forEach((element) => {
+            const properties = element.properties;
+
+            const feature = new Feature({
+              geometry: new Point([properties.X, properties.Y]),
+              ...properties,
+            });
+
+            feature.setStyle(style);
+            features.push(feature);
+          });
+
+          var vectorSource = new VectorSource({
+            features,
+            wrapX: false,
+          });
+          this.slspVideoLayer = new VectorLayer({
+            source: vectorSource,
+          });
+          this.$map.addLayer(this.slspVideoLayer);
+          that.$bus.$emit("showSLSPVideoList", true);
+          that.$bus.$emit("sendSLSPVideoListData", that.slspVideoList);
+          this.slspVideoTemp = true;
+          this.$bus.$emit("allLegend", {
+            temp: this.slspVideoTemp,
+            label: data.label,
+          });
+        } else {
+          if (this.slspVideoTemp) {
+            this.slspVideoTemp = false;
+            that.$bus.$emit("showSLSPVideoList", false);
+            this.$bus.$emit("clearVideoMaker", true);
+            this.$bus.$emit("allLegend", {
+              temp: this.slspVideoTemp,
+              label: data.label,
+            });
+          } else if (!this.slspVideoTemp) {
+            this.slspVideoTemp = true;
+
+            that.$bus.$emit("showSLSPVideoList", true);
+            that.$bus.$emit("sendSLSPVideoListData", that.slspVideoList);
+
+            this.$bus.$emit("allLegend", {
+              temp: this.slspVideoTemp,
+              label: data.label,
+            });
+          }
+          this.slspVideoLayer.setVisible(this.slspVideoTemp);
         }
       }
       if (data.label === "气象测站") {

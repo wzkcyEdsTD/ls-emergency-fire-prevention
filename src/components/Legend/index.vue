@@ -88,9 +88,9 @@ export default {
       } 
       //监控
       const legend7 = {
-        icon:"监控设备.png",
-        label:"监控设备",
-        name:"监控设备",
+        icon:"视频监控.png",
+        label:"视频监控",
+        name:"视频监控",
       }
       //办事网点
       const legend8 = {
@@ -146,6 +146,18 @@ export default {
         label:"小流域监控",
         name:"小流域监控",
       }
+      //消防通道视频监控
+      const legend17 = {
+        icon:"消防通道视频监控.png",
+        label:"消防通道视频监控",
+        name:"消防通道视频监控",
+      }
+      //水利视频监控
+      const legend18 = {
+        icon:"水利视频监控.png",
+        label:"水利视频监控",
+        name:"水利视频监控",
+      }
       const list = []
       if (that.fireLayerTemp) {
         list.push(legend)
@@ -195,6 +207,12 @@ export default {
       }
       if (that.xly) {
         list.push(legend16)
+      }
+      if (that.xftd) {
+        list.push(legend17)
+      }
+      if (that.slsp) {
+        list.push(legend18)
       }
 
       //过滤重复item
@@ -248,6 +266,8 @@ export default {
       tt:false,
       ttjk:false,
       xly:false,
+      xftd:false,
+      slsp:false,
     }
   },
   methods: {
@@ -271,7 +291,7 @@ export default {
           case '铁塔监控':
             that.ttjk = val.temp;
             break;
-          case '监控设备':
+          case '视频监控':
             that.showVideoList = val.temp;
             break;
           case '气象测站':
@@ -312,6 +332,12 @@ export default {
             break;
           case '小流域监控':
             that.xly = val.temp;
+            break;
+          case '消防通道视频监控':
+            that.xftd = val.temp;
+            break;
+          case '水利视频监控':
+            that.slsp = val.temp;
             break;
           default:
             break;

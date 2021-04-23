@@ -330,14 +330,37 @@ const treeData = [
   },
   {
     id: 7,
-    label: '监控设备',
+    label: '视频监控',
     showCheck: true,
     children: [
       {
         id: 71,
-        label: '监控设备',
+        label: '视频监控',
         dataset:"d_video"
-      }
+      },
+      {
+        id: 72,
+        label: '铁塔监控',
+        dataset:"v_forest_tower_video"
+      },
+      {
+        id: 73,
+        label: '小流域监控',
+        icon:"小流域监控",
+        dataset:"v_forest_small_watershed_video"
+      },
+      {
+        id: 74,
+        label: '消防通道视频监控',
+        icon:"消防通道视频监控",
+        dataset:"v_forest_firefighting_video"
+      },
+      {
+        id: 75,
+        label: '水利视频监控',
+        icon:"水利视频监控",
+        dataset:"v_forest_hydraulic_video"
+      },
     ]
   },
   {
@@ -409,24 +432,7 @@ const treeData = [
         label: '铁塔',
         dataset:"v_forest_tower"
       },
-      {
-        id: 102,
-        label: '铁塔监控',
-        dataset:"v_forest_tower_video"
-      }
-    ]
-  },
-  {
-    id: 4,
-    label: '小流域监控',
-    showCheck: true,
-    children: [
-      {
-        id: 41,
-        label: '小流域监控',
-        icon:"小流域监控",
-        dataset:"v_forest_small_watershed_video"
-      },
+
     ]
   },
 ]

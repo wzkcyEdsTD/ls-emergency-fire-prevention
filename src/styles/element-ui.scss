@@ -287,8 +287,8 @@
 .el-popper[x-placement^=top] .popper__arrow,
 .el-popper[x-placement^=bottom] .popper__arrow,
 .el-popper[x-placement^=bottom] .popper__arrow::after {
-  border-top-color:rgb(7, 50, 81);
-  border-bottom-color:rgb(7, 50, 81)
+  border-top-color:transparent;
+  border-bottom-color:transparent
 }
 
 .zztx-container {
@@ -331,10 +331,11 @@
   }
 }
 .el-select-dropdown {
-  background-color: rgb(7, 50, 81);
-  border-color: rgb(7, 50, 81);
+  background-color: #000;
+  border-color: #000;
 
   .el-select-dropdown__list{
+    padding: 0rem 0;
     .el-select-title {
       text-align: center;
       font-size: 16px;
@@ -351,10 +352,16 @@
   }
     
   .el-select-dropdown__item {
-    color: hsla(198, 60%, 46%, 1)
+    // color: hsla(198, 60%, 46%, 1)
+    background: #000;
+    color: #fff;
+    font-size: 15px;
+    height: 3vh;
+    line-height: 3vh;
   }
   .hover {
-    background-color: rgb(14, 124, 199);
-    color: #fff
+    background: url('~@/assets/images/框new.png');
+    background-size: 100% 100%;
+    color: #fafafa;
   }
 }
