@@ -470,8 +470,8 @@ export default {
     videoData(val) {
       const that = this;
       that.$nextTick(() => {
+        console.log('传过来的数据',val);
         that.videoList = [];
-
         val.forEach((element) => {
           that.videoList.push(element.values_);
         });

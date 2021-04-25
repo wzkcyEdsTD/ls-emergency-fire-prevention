@@ -261,7 +261,7 @@ export default {
       // this.handlePickClick()
     },
     initData() {
-      if (this.features.length === 8) {
+      if (this.features.length === 7) {
         const attrDic = {
           ZBZY: {
              // 周边资源
@@ -328,7 +328,7 @@ export default {
           },
           riverNum: 0,
           wayNum: 0,
-          dbfgNum: 0
+          dbfgNum: 0,
         }
         // 去除空数组
 
@@ -750,7 +750,8 @@ export default {
       }
       input::-webkit-input-placeholder,
       textarea::-webkit-input-placeholder {
-        color: rgba(23, 148, 194, 1);
+        // color: rgba(23, 148, 194, 1);
+        color: rgba(41, 181, 121, 1);
         font-size: 16px;
       }
       .draw-wrapper {

@@ -14,13 +14,16 @@
           <div id="key-name" class="pop-key" />
           <div id="key-value" class="pop-value" />
         </div>
-        <div v-show="isShowDetail" id="pop-info-deatil" class="pop-item">
-          <div class="button" @click="collapse"
-            >信息详情 >></div
-          >
-
-          <!-- <a href="javascript:;" v-show="detailShow" class="pop-info-detail" :style="{'padding-left':'4vh'}" @click="zbfx">周边分析 >></a> -->
+        <div class="pop-item">
+          <div id="key-name-1" class="pop-key" />
+          <div id="key-value-1" class="pop-value" />
         </div>
+          <!-- <div class="button" @click="collapse"
+            >信息详情 >></div
+          > -->
+      </div>
+      <div class="popup-lssg-footer">
+        <a href="javascript:;" class="pop-info-detail"  @click="collapse">周边分析 >></a>
       </div>
     </div>
     <!-- 火灾点属性信息弹框 -->
@@ -67,14 +70,12 @@
             <div id="key-value-fire-cont" class="pop-value" />
           </div>
         </div>
+        <div
+          class="pop-fire-detail"
 
-        <div v-show="isShowDetail" id="pop-fire-deatil" class="pop-item">
-          <div
-            class="pop-fire-detail"
+          @click="zbfx"
+          >周边分析</div>
 
-            @click="zbfx"
-            >周边分析</div>
-        </div>
       </div>
     </div>
     <!-- 点击高亮 -->
@@ -622,7 +623,7 @@ export default {
     padding: 0 20px 6px 20px;
     .pop-item {
       margin-top: 10px;
-      margin-bottom: 18px;
+      margin-bottom: 9px;
       font-size: 16px;
       .pop-key,
       .pop-value {
@@ -655,7 +656,12 @@ export default {
     margin-top: -10px;
     padding-right: 50px;
     padding-bottom: 50px;
+    margin-bottom: 0.5vh;
+    // font-family: pingfang;
+    font-size: 15px;
+    color: rgba(0, 255, 235, 1);
     .pop-info-detail {
+      text-decoration:underline;
       cursor: pointer;
     }
   }
@@ -675,7 +681,7 @@ export default {
 
 .fire-popup {
   width: 350px;
-  height: 22vh; 
+  max-height: 25vh; 
   // background-color: rgba(1, 51, 78, 0.8);
   background-image: url("~@/common/images/详情框.png");
   background-size: 100% 100%;
@@ -812,7 +818,7 @@ export default {
       line-height: 28px;
       position: relative;
       text-align: center;
-      bottom: 4vh;
+      bottom: 3.5vh;
       right: -19vh;
       background-image: url("~@/common/images/按钮.png");
       background-size: 100% 100%;

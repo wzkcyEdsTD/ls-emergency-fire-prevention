@@ -541,8 +541,23 @@ const getFeaturesByGeometry = ({ url, dataSourceName, label, layerName, attribut
         // }
         if(label == '视频监控'){
           const pointList = serviceResult.result.features.features;
-          // debugger
           // const features = [];
+          let videoStyle = new Style({
+            image: new Icon({
+              anchor: [0.5, 26],
+              anchorXUnits: 'fraction',
+              anchorYUnits: 'pixels',
+              src: require(`@/assets/images/icon/${'视频不可选.png'}`)
+            }),
+          })
+          let videoStyle1 = new Style({
+            image: new Icon({
+              anchor: [0.5, 26],
+              anchorXUnits: 'fraction',
+              anchorYUnits: 'pixels',
+              src: require(`@/assets/images/icon/${'视频监控.png'}`)
+            }),
+          })
           pointList.forEach(element => {
             const properties = element.properties;
   
@@ -551,25 +566,15 @@ const getFeaturesByGeometry = ({ url, dataSourceName, label, layerName, attribut
                   ...properties
               })
               // debugger
-            const style = new Style({
-              image: new Icon({
-                anchor: [0.5, 26],
-                anchorXUnits: 'fraction',
-                anchorYUnits: 'pixels',
-                src: require(`@/assets/images/icon/${'视频不可选.png'}`)
-              }),
-            })
 
             if(element.properties.VIDEO_URL){
-              console.log(element.properties.MC);
-              feature.setStyle(this.$map.getMonitorStyle())
+              feature.setStyle(videoStyle1)
             } else{
-              feature.setStyle(style)
+              feature.setStyle(videoStyle)
             }
             
             features1.push(feature);
           });
-
           store.dispatch('map/changeVideo', features1)
         }else if(label == '办事网点'){
           const list = serviceResult.result.features.features;

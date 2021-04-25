@@ -21,22 +21,22 @@ const hzdfxNodes = [
     value: MAP_URL.JZJZNL_YJDW_ZYZ
   },
   {
-    id:373,
+    id:225,
     label:'视频监控',
     value:MAP_URL.VIDEO
   },
   {
-    id:374,
+    id:226,
     label:'办事网点',
     value:MAP_URL.NETWORK
   },
   {
-    id:375,
+    id:227,
     label:'气象测站',
     value:MAP_URL.QIXIANG
   },
   {
-    id:376,
+    id:228,
     label:'铁塔',
     value:MAP_URL.TIETA
   }

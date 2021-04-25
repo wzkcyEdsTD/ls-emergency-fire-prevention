@@ -93,6 +93,7 @@ export default {
     XlyVideoList,
     XftdVideoList,
     SlspVideoList,
+
   },
   data() {
     return {
@@ -100,6 +101,8 @@ export default {
       rydwPopyp: null,
       firePopyp: null,
       fireId:null,
+      r:'',
+      temperature:'',
       fireStrong:{
         "1":"一级",
         "2":"二级",
@@ -359,6 +362,8 @@ export default {
 
       const keyName = document.getElementById('key-name')
       const keyValue = document.getElementById('key-value')
+      const keyName1 = document.getElementById('key-name-1')
+      const keyValue1 = document.getElementById('key-value-1')
       // const keyNameFire = document.getElementById('key-name-fire')
       const keyValueFire = document.getElementById('key-value-fire')
       const jbr = document.getElementById("key-value-fire-jbr")
@@ -408,7 +413,9 @@ export default {
       if (!value['systemcode'] && !value['IIIII'] &&!value['ZZMC']) {
         if (!value['NAME']) return
       }
-
+      if (value['IIIII']) {        
+        that.r = await util.getQXDetail(value['IIIII']);
+      }
       // 显示属性框
       if (!(value['systemcode'])) {
         this.infoPopup.setPosition(coordinate)
@@ -463,11 +470,11 @@ export default {
               <span class="value" title="${value["PHONE"]}">${value["PHONE"]}</span>
           </div>`
         }else if(value['IIIII']){
-        util.getQXDetail(value['IIIII']).then(r=>{
-          const detailInfo = r['[]'][0]['SzlsDwSjjhQxjHourlyelement']
+
+          const detailInfo = that.r['[]'][0]['SzlsDwSjjhQxjHourlyelement']
           detailInfo['风向'] = that.getWindDirect(Number(detailInfo.winddirect))
           detailInfo['摄氏度'] = that.changeTemperatureType(Number(detailInfo.temperature))
-
+          that.temperature = detailInfo['摄氏度'];
           // //气压
           // if (detailInfo['stationpress'].indexOf('32768')!= -1 ) {
           //   detailInfo['stationpress'] = '-'
@@ -521,7 +528,7 @@ export default {
           </div>`
           // debugger
           table.innerHTML = infoTmpl
-        })
+
         }else if(value['ZZMC']){
           infoTmpl += `<div  class="item">
               <span class="key">名称：</span>
@@ -616,15 +623,34 @@ export default {
         if (value['BSWD_TYPE']) {
           keyName.innerHTML = `名称：`
           keyValue.innerHTML = `${value['NAME']}`
+          keyName1.innerHTML = "地址："
+          keyValue1.innerHTML = `${value['DZ']}`
         }else if(value['IIIII']){
           keyName.innerHTML = `名称：`
           keyValue.innerHTML = `${value['ADDRESS']}`
+          keyName1.innerHTML = "温度："
+          keyValue1.innerHTML = `${that.temperature}℃`
         }else if(value['ZZMC']){
           keyName.innerHTML = `名称：`
           keyValue.innerHTML = `${value['ZZMC']}`
+          keyName1.innerHTML = "地址："
+          keyValue1.innerHTML = `${value['ZDDZ']}`
+        }else if(value['HLX']){
+          keyName.innerHTML = `姓名：`
+          keyValue.innerHTML = `${value['XM']}`
+          keyName1.innerHTML = "地址："   
+          keyValue1.innerHTML = `${value['JZDZ']}`
+        }else if(value['OBJECTID'] && value['TYPE']){
+          keyName.innerHTML = `名称：`
+          keyValue.innerHTML = `${value['NAME']}`
+          keyName1.innerHTML = "地址："
+          keyValue1.innerHTML = `${value['ADDRESS']}`
         }else{
           keyName.innerHTML = `${attrData[value['TABLE_NAME']]['NAME']}：`
           keyValue.innerHTML = `${value['NAME']}`
+          // debugger
+          keyName1.innerHTML = `类型：`
+          keyValue1.innerHTML = `${value['TYPE']}`
         }
       }
     },
@@ -671,6 +697,8 @@ export default {
 
       const keyName = document.getElementById('key-name')
       const keyValue = document.getElementById('key-value')
+      const keyName1 = document.getElementById('key-name-1')
+      const keyValue1 = document.getElementById('key-value-1')
       // const keyNameFire = document.getElementById('key-name-fire')
       const keyValueFire = document.getElementById('key-value-fire')
       const jbr = document.getElementById("key-value-fire-jbr")
@@ -721,7 +749,9 @@ export default {
       if (!value['systemcode'] && !value['BSWD_TYPE'] && !value['IIIII'] && !value['HLX'] && !value['OBJECTID'] && !value['TYPE'] && !value['ZZMC']) {
         if ((!value['NAME'] && !value['label'])) return
       }
-
+      if (value['IIIII']) {        
+        that. r = await util.getQXDetail(value['IIIII']);
+      }
       // 显示属性框
       if (!(value['systemcode'])) {
         this.infoPopup.setPosition(coordinate)
@@ -774,10 +804,11 @@ export default {
           </div>`
 
         }else if(value['IIIII']){
-          util.getQXDetail(value['IIIII']).then(r=>{
-            const detailInfo = r['[]'][0]['SzlsDwSjjhQxjHourlyelement']
+          // util.getQXDetail(value['IIIII']).then(r=>{
+            const detailInfo = that.r['[]'][0]['SzlsDwSjjhQxjHourlyelement']
             detailInfo['风向'] = that.getWindDirect(Number(detailInfo.winddirect))
             detailInfo['摄氏度'] = that.changeTemperatureType(Number(detailInfo.temperature))
+            that.temperature = detailInfo['摄氏度']
             //气压
             // if (detailInfo['stationpress'].indexOf('32768')!= -1 ) {
             //   detailInfo['stationpress'] = '-'
@@ -837,7 +868,7 @@ export default {
             // </div>`
             // debugger
             table.innerHTML = infoTmpl
-          })
+          // })
         }else if(value['ZZMC']){
           infoTmpl += `<div  class="item">
               <span class="key">名称：</span>
@@ -999,18 +1030,28 @@ export default {
         if (value['BSWD_TYPE']) {
           keyName.innerHTML = `名称：`
           keyValue.innerHTML = `${value['NAME']}`
+          keyName1.innerHTML = "地址："
+          keyValue1.innerHTML = `${value['DZ']}`
         }else if(value['IIIII']){
           keyName.innerHTML = `名称：`
           keyValue.innerHTML = `${value['ADDRESS']}`
+          keyName1.innerHTML = "温度："
+          keyValue1.innerHTML = `${that.temperature}℃`
         }else if(value['ZZMC']){
           keyName.innerHTML = `名称：`
           keyValue.innerHTML = `${value['ZZMC']}`
+          keyName1.innerHTML = "地址："
+          keyValue1.innerHTML = `${value['ZDDZ']}`
         }else if(value['HLX']){
           keyName.innerHTML = `姓名：`
           keyValue.innerHTML = `${value['XM']}`
+          keyName1.innerHTML = "地址："   
+          keyValue1.innerHTML = `${value['JZDZ']}`
         }else if(value['OBJECTID'] && value['TYPE']){
           keyName.innerHTML = `名称：`
           keyValue.innerHTML = `${value['NAME']}`
+          keyName1.innerHTML = "地址："
+          keyValue1.innerHTML = `${value['ADDRESS']}`
         }else{
           keyName.innerHTML = `${attrData[value['TABLE_NAME']]['NAME']}：`
           keyValue.innerHTML = `${value['NAME']}`
