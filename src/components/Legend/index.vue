@@ -158,6 +158,11 @@ export default {
         label:"水利视频监控",
         name:"水利视频监控",
       }
+      const legend19 = {
+        icon:"消防车道.png",
+        label:"消防车道",
+        name:"消防车道",
+      }
       const list = []
       if (that.fireLayerTemp) {
         list.push(legend)
@@ -214,7 +219,9 @@ export default {
       if (that.slsp) {
         list.push(legend18)
       }
-
+      if (that.xfcd) {
+        list.push(legend19)
+      }
       //过滤重复item
       if (this.allLayerList.length == 0) {
         this.allLayerList = [...this.allLayerList, ...list]
@@ -268,6 +275,7 @@ export default {
       xly:false,
       xftd:false,
       slsp:false,
+      xfcd:false,
     }
   },
   methods: {
@@ -338,6 +346,9 @@ export default {
             break;
           case '水利视频监控':
             that.slsp = val.temp;
+            break;
+          case '消防车道':
+            that.xfcd = val.temp;
             break;
           default:
             break;

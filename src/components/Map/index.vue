@@ -23,7 +23,7 @@
           > -->
       </div>
       <div class="popup-lssg-footer">
-        <a href="javascript:;" class="pop-info-detail"  @click="collapse">周边分析 >></a>
+        <a href="javascript:;" class="pop-info-detail"  @click="collapse">信息详情 >></a>
       </div>
     </div>
     <!-- 火灾点属性信息弹框 -->

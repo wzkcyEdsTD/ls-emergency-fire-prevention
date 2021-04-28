@@ -56,7 +56,7 @@ import attrData from './components/attrDictionary'
 import MAP_URL from '@/utils/map/map-url'
 
 import detailAxios from "@/libs/cimAPI"
-import { Point } from 'ol/geom'
+import  LineString  from 'ol/geom/LineString'
 import {
   TileSuperMapRest,
   FeatureService,
@@ -65,8 +65,10 @@ import {
 import util from "@/libs/qxinfoAPI"
 import TtVideoList from './components/ttVideoList';
 import XlyVideoList from './components/xlyVideoList';
-import XftdVideoList from './components/xftdVideoList.vue';
-import SlspVideoList from './components/slspVideoList.vue';
+import XftdVideoList from './components/xftdVideoList';
+import SlspVideoList from './components/slspVideoList';
+
+import MultiLineString  from 'ol/geom/MultiLineString';
 
 export default {
   name: 'Lqfb',
@@ -713,6 +715,23 @@ export default {
       const value = feature.values_
 
       that.$refs.videoList.addGifMarks(undefined)
+      // debugger
+      if (value['geometry'] instanceof  MultiLineString || value['geometry'] instanceof  LineString) {
+        this.infoPopup.setPosition(coordinate)
+        //消防车道详情
+        const infoTmpl = `<div  class="item">
+          <span class="key">名称：</span>
+          <span class="value" title="${value["MC"]}">${value["MC"]}</span>
+        </div>`
+        const table = document.getElementById('table-box');
+        table.innerHTML = infoTmpl
+        keyName.innerHTML = `名称：`
+        keyValue.innerHTML = `${value['MC']}`
+        // keyName1.hide();
+        // keyValue1.hide();
+        // debugger
+        return
+      }
       if (value['VIDEO_URL'] || value['VIDEO_URL']=="") {
         // 查询监控视频
         that.$refs.videoList.addGifMarks([value.X,value.Y])
@@ -735,7 +754,6 @@ export default {
       //   return
       // }
       // 是否为火灾点
-      // debugger
       if ((value['systemcode'])) {
         // debugger
         // that.searchGrid(new Point([value.x,value.y]));
@@ -763,6 +781,11 @@ export default {
 
         this.$store.dispatch('lqfb/changeIsXFDW', '')
         table = document.getElementById('table-box')
+
+
+
+
+
 
       // debugger
       // console.log(123)

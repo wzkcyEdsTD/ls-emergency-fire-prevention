@@ -435,6 +435,19 @@ const treeData = [
 
     ]
   },
+  {
+    id: 4,
+    label: '消防车道',
+    showCheck: true,
+    children: [
+      {
+        id: 41,
+        label: '消防车道',
+        dataset:"v_forest_firefighting_car"
+      },
+
+    ]
+  },
 ]
 
 export default treeData

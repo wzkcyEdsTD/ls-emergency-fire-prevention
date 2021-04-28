@@ -87,9 +87,9 @@ export default {
       },
       videoPointList: [],
       ttVideoList: [],
-      xlyVideoList:[],
-      xftdVideoList:[],
-      slspVideoList:[],
+      xlyVideoList: [],
+      xftdVideoList: [],
+      slspVideoList: [],
 
       temp: true,
       firelayer: null,
@@ -113,6 +113,9 @@ export default {
       xftdVideoTemp: false,
       slspVideoLayer: null,
       slspVideoTemp: false,
+
+      xfcdLayer: null,
+      xfcdTemp: false,
       //教育资源
       //小学
       primartSchoolLayer: null,
@@ -1181,237 +1184,371 @@ export default {
         this.handleCheckChange(temp1);
         this.handleCheckChange(temp2);
       }
-      if (data.label === '国有林场') {
+      if (data.label === "国有林场") {
         if (!this.gylcLayer) {
           var sqlParam = new SuperMap.GetFeaturesBySQLParameters({
             toIndex: 999999,
             queryParameter: {
               // name: layerName,
               attributeFilter: "",
-              maxFeatures: 99999999
+              maxFeatures: 99999999,
             },
-            datasetNames: [`lishui_forestfire_v2:d_national_forest`]
-          })
-          const url = "http://10.53.137.59:8090/iserver/services/data-lishui_forestfire_v2/rest/data";
+            datasetNames: [`lishui_forestfire_v2:d_national_forest`],
+          });
+          const url =
+            "http://10.53.137.59:8090/iserver/services/data-lishui_forestfire_v2/rest/data";
 
-          new FeatureService(url).getFeaturesBySQL(sqlParam, serviceResult => {
-            const features = new GeoJSON().readFeatures(serviceResult.result.features)
-            
-            features.map(f => {
-              f.setStyle(new Style({
-                stroke: new Stroke({
-                  color: 'rgba(249,219,49, 0.8)',
-                  // lineDash: [4],
-                  width: 1
-                }),
-                fill: new Fill({
-                  color: 'rgba(249,219,49, 0.8)'
-                }),
-                text: new Text({
-                  textAlign: 'center', // 位置
-                  textBaseline: 'middle', // 基准线
-                  offsetY: 20,
-                  font: 'normal 16px bold 微软雅黑', // 文字样式
-                  text: f.get('NAME') + '', // 文本内容
-                  fill: new Fill({ // 文本填充样式（即文字颜色)
-                    color: '#FC9309'
-                  }),
-                  stroke: new Stroke({
-                    color: '#101518',
-                    width: 2
+          new FeatureService(url).getFeaturesBySQL(
+            sqlParam,
+            (serviceResult) => {
+              const features = new GeoJSON().readFeatures(
+                serviceResult.result.features
+              );
+
+              features.map((f) => {
+                f.setStyle(
+                  new Style({
+                    stroke: new Stroke({
+                      color: "rgba(249,219,49, 0.8)",
+                      // lineDash: [4],
+                      width: 1,
+                    }),
+                    fill: new Fill({
+                      color: "rgba(249,219,49, 0.8)",
+                    }),
+                    text: new Text({
+                      textAlign: "center", // 位置
+                      textBaseline: "middle", // 基准线
+                      offsetY: 20,
+                      font: "normal 16px bold 微软雅黑", // 文字样式
+                      text: f.get("NAME") + "", // 文本内容
+                      fill: new Fill({
+                        // 文本填充样式（即文字颜色)
+                        color: "#FC9309",
+                      }),
+                      stroke: new Stroke({
+                        color: "#101518",
+                        width: 2,
+                      }),
+                    }),
                   })
-                })
-              }))
-            })
-           
-            var vectorSource = new VectorSource({
-              features,
-              wrapX: false
-            });
+                );
+              });
 
-            const style = new Style({
-              image: new Icon({
-                anchor: [0.5, 26],
-                anchorXUnits: 'fraction',
-                anchorYUnits: 'pixels',
-                src: require(`@/assets/images/icon/${'国有林场.png'}`)
-              }),
-            })
-            this.gylcLayer = new VectorLayer({
-              source: vectorSource,
-              style:style
-            })
-            window.g.map.getLayers().insertAt(4, this.gylcLayer)
-        })
+              var vectorSource = new VectorSource({
+                features,
+                wrapX: false,
+              });
+
+              const style = new Style({
+                image: new Icon({
+                  anchor: [0.5, 26],
+                  anchorXUnits: "fraction",
+                  anchorYUnits: "pixels",
+                  src: require(`@/assets/images/icon/${"国有林场.png"}`),
+                }),
+              });
+              this.gylcLayer = new VectorLayer({
+                source: vectorSource,
+                style: style,
+              });
+              window.g.map.getLayers().insertAt(4, this.gylcLayer);
+            }
+          );
           this.gylcTemp = true;
-          this.$bus.$emit('allLegend',{"temp":this.gylcTemp,"label":data.label});
+          this.$bus.$emit("allLegend", {
+            temp: this.gylcTemp,
+            label: data.label,
+          });
           // that.$bus.$emit("gylcLayer",true);
           // this.$store.dispatch('lqfb/changeVideoListOffsetRight', 0)
-        }else{
+        } else {
           if (this.gylcTemp) {
-            this.gylcTemp = false
-            this.$bus.$emit('allLegend',{"temp":this.gylcTemp,"label":data.label});
+            this.gylcTemp = false;
+            this.$bus.$emit("allLegend", {
+              temp: this.gylcTemp,
+              label: data.label,
+            });
             // that.$bus.$emit("gylcLayer",false);
-          }else if (!this.gylcTemp) {
-            this.gylcTemp = true
-            this.$bus.$emit('allLegend',{"temp":this.gylcTemp,"label":data.label});
+          } else if (!this.gylcTemp) {
+            this.gylcTemp = true;
+            this.$bus.$emit("allLegend", {
+              temp: this.gylcTemp,
+              label: data.label,
+            });
             // that.$bus.$emit("gylcLayer",true);
           }
           this.gylcLayer.setVisible(this.gylcTemp);
         }
       }
-      if (data.label === '森林公园') {
+      if (data.label === "森林公园") {
         if (!this.slgyLayer) {
           var sqlParam = new SuperMap.GetFeaturesBySQLParameters({
             toIndex: 999999,
             queryParameter: {
               // name: layerName,
               attributeFilter: "",
-              maxFeatures: 99999999
+              maxFeatures: 99999999,
             },
-            datasetNames: [`lishui_forestfire_v2:d_forest_park`]
-          })
-          const url = "http://10.53.137.59:8090/iserver/services/data-lishui_forestfire_v2/rest/data";
+            datasetNames: [`lishui_forestfire_v2:d_forest_park`],
+          });
+          const url =
+            "http://10.53.137.59:8090/iserver/services/data-lishui_forestfire_v2/rest/data";
 
-          new FeatureService(url).getFeaturesBySQL(sqlParam, serviceResult => {
-            const features = new GeoJSON().readFeatures(serviceResult.result.features)
-            
-             features.map(f => {
-              f.setStyle(new Style({
-                stroke: new Stroke({
-                  color: 'rgba(17, 243, 142, 0.8)',
-                  // lineDash: [4],
-                  width: 1
-                }),
-                fill: new Fill({
-                  color: 'rgba(17, 243, 142, 0.8)'
-                }),
-                text: new Text({
-                  textAlign: 'center', // 位置
-                  textBaseline: 'middle', // 基准线
-                  offsetY: 20,
-                  font: 'normal 16px bold 微软雅黑', // 文字样式
-                  text: f.get('NAME') + '', // 文本内容
-                  fill: new Fill({ // 文本填充样式（即文字颜色)
-                    color: '#6CF54B'
-                  }),
-                  stroke: new Stroke({
-                    color: '#101518',
-                    width: 2
+          new FeatureService(url).getFeaturesBySQL(
+            sqlParam,
+            (serviceResult) => {
+              const features = new GeoJSON().readFeatures(
+                serviceResult.result.features
+              );
+
+              features.map((f) => {
+                f.setStyle(
+                  new Style({
+                    stroke: new Stroke({
+                      color: "rgba(17, 243, 142, 0.8)",
+                      // lineDash: [4],
+                      width: 1,
+                    }),
+                    fill: new Fill({
+                      color: "rgba(17, 243, 142, 0.8)",
+                    }),
+                    text: new Text({
+                      textAlign: "center", // 位置
+                      textBaseline: "middle", // 基准线
+                      offsetY: 20,
+                      font: "normal 16px bold 微软雅黑", // 文字样式
+                      text: f.get("NAME") + "", // 文本内容
+                      fill: new Fill({
+                        // 文本填充样式（即文字颜色)
+                        color: "#6CF54B",
+                      }),
+                      stroke: new Stroke({
+                        color: "#101518",
+                        width: 2,
+                      }),
+                    }),
                   })
-                })
-              }))
-            })
+                );
+              });
 
-            var vectorSource = new VectorSource({
-              features,
-              wrapX: false
-            });
+              var vectorSource = new VectorSource({
+                features,
+                wrapX: false,
+              });
 
-            const style = new Style({
-              image: new Icon({
-                anchor: [0.5, 26],
-                anchorXUnits: 'fraction',
-                anchorYUnits: 'pixels',
-                src: require(`@/assets/images/icon/${'森林公园.png'}`)
-              }),
-            })
-            this.slgyLayer = new VectorLayer({
-              source: vectorSource,
-              style:style
-              })
-            window.g.map.getLayers().insertAt(4, this.slgyLayer)
-            // this.$map.addLayer(this.slgyLayer)
-        })
+              const style = new Style({
+                image: new Icon({
+                  anchor: [0.5, 26],
+                  anchorXUnits: "fraction",
+                  anchorYUnits: "pixels",
+                  src: require(`@/assets/images/icon/${"森林公园.png"}`),
+                }),
+              });
+              this.slgyLayer = new VectorLayer({
+                source: vectorSource,
+                style: style,
+              });
+              window.g.map.getLayers().insertAt(4, this.slgyLayer);
+              // this.$map.addLayer(this.slgyLayer)
+            }
+          );
           this.slgyTemp = true;
-          this.$bus.$emit('allLegend',{"temp":this.slgyTemp,"label":data.label});
+          this.$bus.$emit("allLegend", {
+            temp: this.slgyTemp,
+            label: data.label,
+          });
           // that.$bus.$emit("slgyLayer",true);
           // this.$store.dispatch('lqfb/changeVideoListOffsetRight', 0)
-        }else{
+        } else {
           if (this.slgyTemp) {
-            this.slgyTemp = false
-            this.$bus.$emit('allLegend',{"temp":this.slgyTemp,"label":data.label});
+            this.slgyTemp = false;
+            this.$bus.$emit("allLegend", {
+              temp: this.slgyTemp,
+              label: data.label,
+            });
             // that.$bus.$emit("slgyLayer",false);
-          }else if (!this.slgyTemp) {
-            this.slgyTemp = true
-            this.$bus.$emit('allLegend',{"temp":this.slgyTemp,"label":data.label});
+          } else if (!this.slgyTemp) {
+            this.slgyTemp = true;
+            this.$bus.$emit("allLegend", {
+              temp: this.slgyTemp,
+              label: data.label,
+            });
             // that.$bus.$emit("slgyLayer",true);
           }
           this.slgyLayer.setVisible(this.slgyTemp);
         }
       }
-      if (data.label === '湿地') {
+      if (data.label === "消防车道") {
+        if (!this.xfcdLayer) {
+          var sqlParam = new SuperMap.GetFeaturesBySQLParameters({
+            toIndex: -1,
+            maxFeatures: 99999999,
+            queryParameter: {
+              attributeFilter: "",
+            },
+            datasetNames: [`lishui_forestfire_v2:v_forest_firefighting_car`],
+          });
+          const url =
+            "http://10.53.137.59:8090/iserver/services/data-lishui_forestfire_v2/rest/data";
+
+          new FeatureService(url).getFeaturesBySQL(
+            sqlParam,
+            (serviceResult) => {
+              const features = new GeoJSON().readFeatures(
+                serviceResult.result.features
+              );
+              console.log("消防车道", features);
+              //  features.map(f => {
+              //   f.setStyle(new Style({
+              //     stroke: new Stroke({
+              //       color: 'rgba(17, 243, 142, 0.8)',
+              //       width: 1
+              //     }),
+              //   }))
+              // })
+
+              var vectorSource = new VectorSource({
+                features,
+                wrapX: false,
+              });
+
+              this.xfcdLayer = new VectorLayer({
+                source: vectorSource,
+                className:'xfcd',
+                style: new Style({
+                  fill: new Fill({
+                    color: "rgba(7, 127, 247, 0.5)",
+                  }),
+                  stroke: new Stroke({
+                    color: "rgba(7, 127, 247, 1)",
+                    width: 5,
+                  }),
+                  // image: new CircleStyle({
+                  //   radius: 7,
+                  //   fill: new Fill({
+                  //     color: "#ffcc33",
+                  //   }),
+                  // }),
+                  zIndex: 16,
+                }),
+              });
+              window.g.map.addLayer(this.xfcdLayer);
+              // window.g.map.getLayers().insertAt(4, this.xfcdLayer)
+            }
+          );
+          this.xfcdTemp = true;
+          this.$bus.$emit("allLegend", {
+            temp: this.xfcdTemp,
+            label: data.label,
+          });
+        } else {
+          if (this.xfcdTemp) {
+            this.xfcdTemp = false;
+            this.$bus.$emit("allLegend", {
+              temp: this.xfcdTemp,
+              label: data.label,
+            });
+          } else if (!this.xfcdTemp) {
+            this.xfcdTemp = true;
+            this.$bus.$emit("allLegend", {
+              temp: this.xfcdTemp,
+              label: data.label,
+            });
+          }
+          this.xfcdLayer.setVisible(this.xfcdTemp);
+        }
+      }
+      if (data.label === "湿地") {
         if (!this.sdLayer) {
           var sqlParam = new SuperMap.GetFeaturesBySQLParameters({
             toIndex: 999999,
             queryParameter: {
               // name: layerName,
               attributeFilter: "",
-              maxFeatures: 99999999
+              maxFeatures: 99999999,
             },
-            datasetNames: [`lishui_forestfire_v2:d_wetland`]
-          })
-          const url = "http://10.53.137.59:8090/iserver/services/data-lishui_forestfire_v2/rest/data";
+            datasetNames: [`lishui_forestfire_v2:d_wetland`],
+          });
+          const url =
+            "http://10.53.137.59:8090/iserver/services/data-lishui_forestfire_v2/rest/data";
 
-          new FeatureService(url).getFeaturesBySQL(sqlParam, serviceResult => {
-            const features = new GeoJSON().readFeatures(serviceResult.result.features)
-            features.map(f => {
-              f.setStyle(new Style({
-                stroke: new Stroke({
-                  color: 'rgba(59, 97, 249, 0.8)',
-                  // lineDash: [4],
-                  width: 1
-                }),
-                fill: new Fill({
-                  color: 'rgba(59, 97, 249, 0.8)'
-                }),
-                text: new Text({
-                  textAlign: 'center', // 位置
-                  textBaseline: 'middle', // 基准线
-                  offsetY: 20,
-                  font: 'normal 16px bold 微软雅黑', // 文字样式
-                  text: f.get('NAME') + '', // 文本内容
-                  fill: new Fill({ // 文本填充样式（即文字颜色)
-                    color: '#418CFD'
-                  }),
-                  stroke: new Stroke({
-                    color: '#101518',
-                    width: 2
+          new FeatureService(url).getFeaturesBySQL(
+            sqlParam,
+            (serviceResult) => {
+              const features = new GeoJSON().readFeatures(
+                serviceResult.result.features
+              );
+              features.map((f) => {
+                f.setStyle(
+                  new Style({
+                    stroke: new Stroke({
+                      color: "rgba(59, 97, 249, 0.8)",
+                      // lineDash: [4],
+                      width: 1,
+                    }),
+                    fill: new Fill({
+                      color: "rgba(59, 97, 249, 0.8)",
+                    }),
+                    text: new Text({
+                      textAlign: "center", // 位置
+                      textBaseline: "middle", // 基准线
+                      offsetY: 20,
+                      font: "normal 16px bold 微软雅黑", // 文字样式
+                      text: f.get("NAME") + "", // 文本内容
+                      fill: new Fill({
+                        // 文本填充样式（即文字颜色)
+                        color: "#418CFD",
+                      }),
+                      stroke: new Stroke({
+                        color: "#101518",
+                        width: 2,
+                      }),
+                    }),
                   })
-                })
-              }))
-            })
-            var vectorSource = new VectorSource({
-              features,
-              wrapX: false
-            });
+                );
+              });
+              var vectorSource = new VectorSource({
+                features,
+                wrapX: false,
+              });
 
-            const style = new Style({
-              image: new Icon({
-                anchor: [0.5, 26],
-                anchorXUnits: 'fraction',
-                anchorYUnits: 'pixels',
-                src: require(`@/assets/images/icon/${'湿地.png'}`)
-              }),
-            })
-            this.sdLayer = new VectorLayer({
-              source: vectorSource,
-              style:style
-              })
-            window.g.map.getLayers().insertAt(4, this.sdLayer)
-        })
+              const style = new Style({
+                image: new Icon({
+                  anchor: [0.5, 26],
+                  anchorXUnits: "fraction",
+                  anchorYUnits: "pixels",
+                  src: require(`@/assets/images/icon/${"湿地.png"}`),
+                }),
+              });
+              this.sdLayer = new VectorLayer({
+                source: vectorSource,
+                style: style,
+              });
+              window.g.map.getLayers().insertAt(4, this.sdLayer);
+            }
+          );
           this.sdTemp = true;
-          this.$bus.$emit('allLegend',{"temp":this.sdTemp,"label":data.label});
+          this.$bus.$emit("allLegend", {
+            temp: this.sdTemp,
+            label: data.label,
+          });
           // that.$bus.$emit("sdLayer",true);
           // this.$store.dispatch('lqfb/changeVideoListOffsetRight', 0)
-        }else{
+        } else {
           if (this.sdTemp) {
-            this.sdTemp = false
-            this.$bus.$emit('allLegend',{"temp":this.sdTemp,"label":data.label});
+            this.sdTemp = false;
+            this.$bus.$emit("allLegend", {
+              temp: this.sdTemp,
+              label: data.label,
+            });
             // that.$bus.$emit("sdLayer",false);
-          }else if (!this.sdTemp) {
-            this.sdTemp = true
-            this.$bus.$emit('allLegend',{"temp":this.sdTemp,"label":data.label});
+          } else if (!this.sdTemp) {
+            this.sdTemp = true;
+            this.$bus.$emit("allLegend", {
+              temp: this.sdTemp,
+              label: data.label,
+            });
             // that.$bus.$emit("sdLayer",true);
           }
           this.sdLayer.setVisible(this.sdTemp);
