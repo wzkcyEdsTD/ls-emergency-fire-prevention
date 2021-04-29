@@ -701,6 +701,8 @@ export default {
       const keyValue = document.getElementById('key-value')
       const keyName1 = document.getElementById('key-name-1')
       const keyValue1 = document.getElementById('key-value-1')
+      keyName1.style.display="";
+      keyValue1.style.display="";
       // const keyNameFire = document.getElementById('key-name-fire')
       const keyValueFire = document.getElementById('key-value-fire')
       const jbr = document.getElementById("key-value-fire-jbr")
@@ -717,6 +719,8 @@ export default {
       that.$refs.videoList.addGifMarks(undefined)
       // debugger
       if (value['geometry'] instanceof  MultiLineString || value['geometry'] instanceof  LineString) {
+        this.$store.dispatch('map/changeIsShowDetail', true)
+        this.$store.dispatch('lqfb/changeIsXFDW', '')
         this.infoPopup.setPosition(coordinate)
         //消防车道详情
         const infoTmpl = `<div  class="item">
@@ -727,8 +731,8 @@ export default {
         table.innerHTML = infoTmpl
         keyName.innerHTML = `名称：`
         keyValue.innerHTML = `${value['MC']}`
-        // keyName1.hide();
-        // keyValue1.hide();
+        keyName1.style.display="none";
+        keyValue1.style.display="none";
         // debugger
         return
       }
