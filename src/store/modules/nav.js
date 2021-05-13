@@ -1,7 +1,7 @@
 const state = {
   navList: [
     {
-      text: '森林火情预警一张图',
+      text: ' 森林火险监测预警一张图',
       link: '/lqfb',
       avatar: 'assets/images/nav/menu-slfh-icon.png',
       icon: '林区一张图',
