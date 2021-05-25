@@ -13,7 +13,7 @@
     <qdtj v-show="false" />
     <sgfj v-show="false" />
     <zztx v-show="false" />
-    <video-box v-show="false"/>
+
     <zllb-tab ref="zlTab" v-show="false" />
     <video-list-pannel v-show="false" />
   </div>
@@ -32,7 +32,7 @@ import Overview from './components/Overview'
 import Zhfx from './components/Zhfx'
 import LegendBox from '@/components/Legend'
 import RydwToolBar from './components/RydwToolBar'
-import VideoBox from './components/VideoBox'
+
 import zllbTab from './components/zllbTab'
 import videoListPannel from './components/videoListPannel'
 
@@ -57,7 +57,7 @@ export default {
     RydwPannel,
     Zhfx,
     RydwToolBar,
-    VideoBox,
+
     zllbTab,
     videoListPannel
   },

@@ -40,8 +40,6 @@
     "postcss-pxtorem": "^5.1.1",
     "randomcolor": "^0.5.4",
     "swiper": "^5.4.0",
-    "video.js": "^7.8.4",
-    "videojs-contrib-hls": "^5.15.0",
     "vue": "2.6.10",
     "vue-bus": "^1.2.1",
     "vue-cookie": "^1.1.4",

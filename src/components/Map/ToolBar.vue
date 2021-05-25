@@ -80,7 +80,6 @@ import jsonp from 'jsonp'
 import moment from 'moment'
 import windPr1h from './预测1小时风向.json'
 import axios from 'axios'
-import { log } from 'video.js'
 import utils from "@/libs/windAPI.js";
 export default {
   data() {

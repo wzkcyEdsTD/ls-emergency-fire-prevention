@@ -1,34 +1,34 @@
 import MAP_URL from '@/utils/map/map-url'
 const treeData = [
   {
-    id: 5,
+    id: 1,
     label: '火灾报警点',
     showCheck: true,
     children: [
       {
-        id: 51,
+        id: 11,
         label: '火灾报警点'
       }
     ]
   },
   {
-    id: 1,
+    id: 2,
     label: '基础要素',
     showCheck: true,
     children: [
       {
-        id: 11,
+        id: 21,
         label: '林区',
         children: [
           {
-            id: 111,
+            id: 211,
             label: '森林公园',
             isZLZY: true,
             dataset:"d_forest_park"
             // value: MAP_URL.SECRET_FORESTPARK_M
           },
           {
-            id: 112,
+            id: 212,
             label: '国有林场',
             isZLZY: true,
             dataset:"d_national_forest"
@@ -37,47 +37,47 @@ const treeData = [
         ]
       },
       {
-        id: 12,
+        id: 22,
         label: '水系',
         value: MAP_URL.WATER
       },
       {
-        id: 13,
+        id: 23,
         label: '道路',
         value: MAP_URL.ROAD
       },
       {
-        id: 14,
+        id: 24,
         label: '地表覆盖',
         // value: MAP_URL.FANGWU,
         children: [
           {
-            id: 141,
+            id: 241,
             label: '裸露地表', // '荒漠与裸露地表',
             value: MAP_URL.HM
           },
           {
-            id: 142,
+            id: 242,
             label: '农用地', // '种植土地',
             value: MAP_URL.ZZTD
           },
           {
-            id: 143,
+            id: 243,
             label: '林地', // '林草覆盖',
             value: MAP_URL.LCFG
           },
           {
-            id: 144,
+            id: 244,
             label: '房屋建筑（区）',
             value: MAP_URL.FWJZ
           },
           {
-            id: 145,
+            id: 245,
             label: '构筑物',
             value: MAP_URL.GZW
           },
           {
-            id: 146,
+            id: 246,
             label: '湿地',
             isZLZY: true,
             dataset:"d_wetland",
@@ -93,28 +93,28 @@ const treeData = [
     ]
   },
   {
-    id: 2,
+    id: 3,
     label: '应急资源',
     showCheck: true,
     children: [
       {
-        id: 27,
+        id: 31,
         label: '应急避难场所',
         value: MAP_URL.JZJZNL_BZAZCS,
         isZLZY: true
       },
       {
-        id: 23,
+        id: 32,
         label: '物资储备库',
         children: [
           {
-            id: 231,
+            id: 321,
             label: '市县物资储备库',
             value: MAP_URL.JZJZNL_WZCBK_SX,
             isZLZY: true
           },
           {
-            id: 233,
+            id: 322,
             label: '乡镇（街道）物资储备库',
             value: MAP_URL.JZJZNL_WZCBK_XZ,
             isZLZY: true
@@ -122,29 +122,29 @@ const treeData = [
         ]
       },
       {
-        id: 24,
+        id: 33,
         label: '物资储备企业',
         children: [
           {
-            id: 241,
+            id: 331,
             label: '供应网点',
             value: MAP_URL.JZJZNL_WZCBQY_GYWD,
             isZLZY: true
           },
           {
-            id: 242,
+            id: 332,
             label: '加工企业',
             value: MAP_URL.JZJZNL_WZCBQY_JGQY,
             isZLZY: true
           },
           {
-            id: 243,
+            id: 333,
             label: '配送中心',
             value: MAP_URL.JZJZNL_WZCBQY_PSZX,
             isZLZY: true
           },
           {
-            id: 244,
+            id: 334,
             label: '运输企业',
             value: MAP_URL.JZJZNL_WZCBQY_YSQY,
             isZLZY: true
@@ -152,83 +152,83 @@ const treeData = [
         ]
       },
       {
-        id: 25,
+        id: 35,
         label: '应急关键设备',
         children: [
           {
-            id: 253,
+            id: 351,
             label: '挖掘机',
             value: MAP_URL.JZJZNL_YJGJSB_WJJ,
             isZLZY: true
           },
           {
-            id: 254,
+            id: 352,
             label: '推土机',
             value: MAP_URL.JZJZNL_YJGJSB_TTJ,
             isZLZY: true
           },
           {
-            id: 255,
+            id: 353,
             label: '发电机组',
             value: MAP_URL.JZJZNL_YJGJSB_FDJZ,
             isZLZY: true
           },
           {
-            id: 256,
+            id: 354,
             label: '水泵',
             value: MAP_URL.JZJZNL_YJGJSB_SB,
             isZLZY: true
           },
           {
-            id: 257,
+            id: 355,
             label: '卫星电话',
             value: MAP_URL.JZJZNL_YJGJSB_WXDH,
             isZLZY: true
           },
           {
-            id: 2515,
+            id: 356,
             label: '单兵设备',
             value: MAP_URL.JZJZNL_YJGJSB_DBSB,
             isZLZY: true
           },
           {
-            id: 258,
+            id: 357,
             label: '吊车',
             value: MAP_URL.JZJZNL_YJGJSB_DC,
             isZLZY: true
           },
           {
-            id: 259,
+            id: 358,
             label: '抛绳器',
             value: MAP_URL.JZJZNL_YJGJSB_PSQ,
             isZLZY: true
           },
           {
-            id: 2510,
+            id: 359,
             label: '大型照明设备',
             value: MAP_URL.JZJZNL_YJGJSB_ZMSB,
             isZLZY: true
           },
           {
-            id: 2511,
+            id: 3510,
             label: '无人机',
             value: MAP_URL.JZJZNL_YJGJSB_WRJ,
             isZLZY: true
           },
           {
-            id: 2512,
+            id: 3511,
             label: '切割机',
             value: MAP_URL.JZJZNL_YJGJSB_QGJ,
             isZLZY: true
           },
           {
-            id: 2513,
+            id: 3512,
             label: '运输车',
             value: MAP_URL.JZJZNL_YJGJSB_YSC,
             isZLZY: true
           },
           {
-            id: 2514,
+            id: 3513,
             label: '拖轮',
             value: MAP_URL.JZJZNL_YJGJSB_TL,
             isZLZY: true
@@ -236,52 +236,52 @@ const treeData = [
         ]
       },
       {
-        id: 26,
+        id: 36,
         label: '医疗救护',
         children: [
           {
-            id: 261,
+            id: 361,
             label: '救护场所',
             value: MAP_URL.JZJZNL_YLJH_JHCS,
             isZLZY: true
           },
           {
-            id: 262,
+            id: 362,
             label: '救护车辆',
             value: MAP_URL.JZJZNL_YLJH_JHCL,
             isZLZY: true
           },
           {
-            id: 263,
+            id: 363,
             label: '医疗救护设备',
             value: MAP_URL.JZJZNL_YLJH_JHCL_JHSB,
             isZLZY: true
           },
           {
-            id: 264,
+            id: 364,
             label: '医疗物资',
             value: MAP_URL.JZJZNL_YLJH_YLWZ
           },
           {
-            id: 266,
+            id: 365,
             label: '血站',
             value: MAP_URL.JZJZNL_YLJH_XZ,
             isZLZY: true
           },
           {
-            id: 267,
+            id: 366,
             label: '疾控中心',
             value: MAP_URL.JZJZNL_YLJH_JKZX,
             isZLZY: true
           },
           {
-            id: 268,
+            id: 367,
             label: '急救指挥中心',
             value: MAP_URL.JZJZNL_YLJH_JJZHZX,
             isZLZY: true
           },
           {
-            id: 269,
+            id: 368,
             label: '卫生监督机构',
             value: MAP_URL.JZJZNL_YLJH_WSJDJG,
             isZLZY: true
@@ -289,12 +289,12 @@ const treeData = [
         ]
       },
       {
-        id: 28,
+        id: 37,
         label: '消防救援能力',
         showCheck: true,
         children: [
           {
-            id: 281,
+            id: 371,
             label: '消防站',
             value: MAP_URL.JZJZNL_XFJYNL_XFZ,
             isZLZY: true
@@ -303,60 +303,59 @@ const treeData = [
       },
 
     ]
-      
   },
   {
-    id: 6,
+    id: 4,
     label: '行政区划',
     showCheck: true,
     children: [
       {
-        id: 61,
+        id: 41,
         label: '区县'
       },
       {
-        id: 62,
+        id: 42,
         label: '乡镇街道'
       },
       {
-        id: 63,
+        id: 43,
         label: '行政村社区'
       },
       {
-        id: 64,
+        id: 44,
         label: '网格'
       },
     ]
   },
   {
-    id: 7,
+    id: 5,
     label: '视频监控',
     showCheck: true,
     children: [
       {
-        id: 71,
+        id: 51,
         label: '视频监控',
         dataset:"d_video"
       },
       {
-        id: 72,
+        id: 52,
         label: '铁塔监控',
         dataset:"v_forest_tower_video"
       },
       {
-        id: 73,
+        id: 53,
         label: '小流域监控',
         icon:"小流域监控",
         dataset:"v_forest_small_watershed_video"
       },
       {
-        id: 74,
+        id: 54,
         label: '消防通道视频监控',
         icon:"消防通道视频监控",
         dataset:"v_forest_firefighting_video"
       },
       {
-        id: 75,
+        id: 55,
         label: '水利视频监控',
         icon:"水利视频监控",
         dataset:"v_forest_hydraulic_video"
@@ -364,71 +363,71 @@ const treeData = [
     ]
   },
   {
-    id: 3,
+    id: 6,
     label: '办事网点',
     showCheck: true,
     children: [
       {
-        id: 31,
+        id: 61,
         label: '办事网点',
         dataset:"d_handle_network"
       }
     ]
   },
   {
-    id: 8,
+    id: 7,
     label: '气象站点',
     showCheck: true,
     children: [
       {
-        id: 81,
+        id: 71,
         label: '气象测站',
         dataset:"v_forest_qixiangcezhandian"
       }
     ]
   },
   {
-    id: 9,
+    id: 8,
     label: '教育学区资源',
     showCheck: true,
     children: [
       {
-        id: 91,
+        id: 81,
         label: '小学',
         dataset:"jy_primaryschool"
       },
       {
-        id: 92,
+        id: 82,
         label: '小学学区'
       },
       {
-        id: 93,
+        id: 83,
         label: '小学适龄儿童',
         dataset:"jy_primaryschool_children"
       },
       {
-        id: 94,
+        id: 84,
         label: '初中',
         dataset:"jy_middleschool"
       },
       {
-        id: 95,
+        id: 85,
         label: '初中学区'
       },
       {
-        id: 96,
+        id: 86,
         label: '初中适龄儿童',
         dataset:"jy_middleschool_children"
       },
     ]
   },
   {
-    id: 10,
+    id: 9,
     label: '铁塔',
     showCheck: true,
     children: [
       {
-        id: 101,
+        id: 91,
         label: '铁塔',
         dataset:"v_forest_tower"
       },
@@ -436,12 +435,12 @@ const treeData = [
     ]
   },
   {
-    id: 4,
+    id: 10,
     label: '消防车道',
     showCheck: true,
     children: [
       {
-        id: 41,
+        id: 101,
         label: '消防车道',
         dataset:"v_forest_firefighting_car"
       },

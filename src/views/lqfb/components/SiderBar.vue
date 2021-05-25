@@ -79,7 +79,7 @@ export default {
       jkList,
       firePointList,
       dbsbList,
-      activeNames: [1, 5, 6],
+      activeNames: [1, 2, 4],
       treeData,
       defaultProps: {
         children: "children",
@@ -186,8 +186,8 @@ export default {
   mounted() {
     // 默认选中林区节点
     // this.$refs[`tree_1`][0].setCheckedKeys([11, 146])
-    this.$refs[`tree_6`][0].setCheckedKeys([61]);
-    this.$refs[`tree_5`][0].setCheckedKeys([51]);
+    this.$refs[`tree_4`][0].setCheckedKeys([41]);
+    this.$refs[`tree_1`][0].setCheckedKeys([11]);
     // this.createFireLayer()
     // 显示选中图层
     this.showCheckLayer();

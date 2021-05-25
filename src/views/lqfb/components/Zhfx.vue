@@ -293,7 +293,6 @@
 import spUtils from "./shortpath";
 import { TurnType } from "@supermap/iclient-ol";
 import * as turf from "@turf/turf";
-import { log } from "video.js";
 
 export default {
   data() {

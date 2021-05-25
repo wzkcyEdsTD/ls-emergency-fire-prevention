@@ -23,7 +23,7 @@ import "@/font/DIN-Regular.css"
 import '@/icons' // icon
 import '@/permission' // permission control
 import '@/libs/rem.js'
-import 'video.js/dist/video-js.css'
+
 import VueBus from "vue-bus";
 import VueCookies from "vue-cookies";
 Vue.use(VueCookies);

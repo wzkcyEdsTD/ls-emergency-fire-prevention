@@ -14,7 +14,7 @@
     <qdtj v-show="yadqPannel === '预案启动条件'" />
     <sgfj />
     <zztx v-show="yadqPannel === '组织指挥体系及职责'" />
-    <video-box />
+
     <zllb-tab ref="zlTab" />
     <video-list-pannel ref="videoListPannel"/>
     <videoList ref="videoList"/>
@@ -46,7 +46,7 @@ import Overview from './components/Overview'
 import Zhfx from './components/Zhfx'
 import LegendBox from '@/components/Legend'
 import RydwToolBar from './components/RydwToolBar'
-import VideoBox from './components/VideoBox'
+
 import zllbTab from './components/zllbTab'
 import videoListPannel from './components/videoListPannel'
 
@@ -88,7 +88,7 @@ export default {
     RydwPannel,
     Zhfx,
     RydwToolBar,
-    VideoBox,
+
     zllbTab,
     videoListPannel,
     TtVideoList,
