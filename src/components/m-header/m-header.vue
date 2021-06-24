@@ -1,7 +1,9 @@
 <template>
   <div id="header" class="header-wrapper">
     <div class="header-img">
-      <div class="bg-img"></div>
+      <div class="bg-img">
+        <span class="titleText">丽水市资源地图基础应用</span>
+      </div>
       <div class="topLab"/>
     </div>
     <div class="info">
@@ -75,6 +77,15 @@ export default {
       z-index: -1;
       background-image: url('./images/head.png');
       background-size: 100% 100%;
+    }
+    .titleText{
+      position: absolute;
+      left: 50%;
+      top: 0.2vh;
+      transform: translateX(-50%);
+      font-size: 4vh;
+      font-family: youshebiaotihei;
+      color: #52feb3;
     }
     .topLab{
       height: 100%;

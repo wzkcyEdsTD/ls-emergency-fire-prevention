@@ -12,29 +12,31 @@ const whiteList = ['/lqfb','/login','/404',"/lqfb/printMap"] // no redirect whit
 router.beforeEach(async(to, from, next) => {
   document.title = getPageTitle(to.meta.title)
   // const token = window.localStorage.getItem('token');
-  const token = Cookies.get('token')
-  if (whiteList.indexOf(to.path) !== -1) {
-    if (to.path =="/login" || to.path == "/404") {
-      next()
-    }else{
-      if (token) {
-        next()
-      }else{
-        //不拦截后端截图的地址
-        if (to.path=="/lqfb/printMap") {
-          next()
-        }else{
-          next(`/login`)
-        }
-      }
-    }
-  } else {
+  // const token = Cookies.get('token')
+  next();
+  // if (whiteList.indexOf(to.path) !== -1) {
+  //   if (to.path =="/login" || to.path == "/404") {
+  //     next()
+  //   }else{
+  //     if (token) {
+  //       next()
+  //     }else{
+  //       //不拦截后端截图的地址
+  //       if (to.path=="/lqfb/printMap" || to.path=="/lqfb") {
+  //         next()
+  //       }else{
+  //         next(`/login`)
+  //       }
+  //     }
+  //   }
+  // } else {
     if (to.path =="/") {
-      next(`/login`)
-    }else{
-      next('/404')
+      next(`/lqfb`)
     }
-  }
+  // else{
+  //     next('/404')
+  //   }
+  // }
 })
 
 router.afterEach(() => {

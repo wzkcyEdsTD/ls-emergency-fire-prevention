@@ -386,41 +386,41 @@ const treeData = [
       }
     ]
   },
-  {
-    id: 8,
-    label: '教育学区资源',
-    showCheck: true,
-    children: [
-      {
-        id: 81,
-        label: '小学',
-        dataset:"jy_primaryschool"
-      },
-      {
-        id: 82,
-        label: '小学学区'
-      },
-      {
-        id: 83,
-        label: '小学适龄儿童',
-        dataset:"jy_primaryschool_children"
-      },
-      {
-        id: 84,
-        label: '初中',
-        dataset:"jy_middleschool"
-      },
-      {
-        id: 85,
-        label: '初中学区'
-      },
-      {
-        id: 86,
-        label: '初中适龄儿童',
-        dataset:"jy_middleschool_children"
-      },
-    ]
-  },
+  // {
+  //   id: 8,
+  //   label: '教育学区资源',
+  //   showCheck: true,
+  //   children: [
+  //     {
+  //       id: 81,
+  //       label: '小学',
+  //       dataset:"jy_primaryschool"
+  //     },
+  //     {
+  //       id: 82,
+  //       label: '小学学区'
+  //     },
+  //     {
+  //       id: 83,
+  //       label: '小学适龄儿童',
+  //       dataset:"jy_primaryschool_children"
+  //     },
+  //     {
+  //       id: 84,
+  //       label: '初中',
+  //       dataset:"jy_middleschool"
+  //     },
+  //     {
+  //       id: 85,
+  //       label: '初中学区'
+  //     },
+  //     {
+  //       id: 86,
+  //       label: '初中适龄儿童',
+  //       dataset:"jy_middleschool_children"
+  //     },
+  //   ]
+  // },
   {
     id: 9,
     label: '铁塔',

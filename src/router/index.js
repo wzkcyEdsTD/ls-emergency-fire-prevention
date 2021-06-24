@@ -22,7 +22,7 @@ export const constantRoutes = [
   {
     path: '/lqfb',
     component: Layout,
-    // redirect: '/lqfb',
+    redirect: '/lqfb',
     children: [{
       path: '/',
       name: 'lqfb',
