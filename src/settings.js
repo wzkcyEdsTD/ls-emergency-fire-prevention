@@ -1,6 +1,6 @@
 module.exports = {
 
-  title: '森林火险监测预警一张图',
+  title: '丽水市资源地图基础应用',
 
   /**
    * @type {boolean} true | false

@@ -5,9 +5,6 @@
       视频详情
     </div>
     <img src="../../../assets/images/边.png" alt="">
-    <!-- <div class="content-box">
-      <div id="video-table-box" class="table-box" />
-    </div> -->
     <div class="videoDemoPlayer" v-show="videoShow">
       <p>{{ mc }}</p>
       <span class="release-video" @click="releaseVideo">x</span>
@@ -36,7 +33,6 @@ export default {
  async mounted() {
     const that = this;
     this.$bus.$on("videoData",value=>{
-
       if (value.HLS_URL) {
         that.$nextTick(async()=>{
           that.videoShow = true
@@ -71,7 +67,6 @@ export default {
           );
           await that.initRtmp(URL);
         })
-
       }
     });
   },

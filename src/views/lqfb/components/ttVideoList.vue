@@ -1,15 +1,8 @@
 <template>
   <div class="zhfxlb-wrapper" :style="{ right: `${zhfxOffsetRight}rem` }">
     <div class="close" @click="close" />
-
     <div class="ljxq-container">
       <div class="zbjksz-container">
-        <!-- <div class="titleLine">
-          <div class="title" >
-            {{`铁塔监控列表`}}
-          </div>
-        </div> -->
-        <!-- <img style="width: 100%;" src="@/common/images/边.png" alt=""> -->
         <div class="search-header">
           <img src="@/common/images/搜索icon.png" class="searchIcon">
           <el-input
@@ -41,11 +34,9 @@
 
       </div>
     </div>
-
   </div>
 </template>
 <script>
-import Overlay from 'ol/Overlay'
 export default {
   data() {
     return {
@@ -60,11 +51,6 @@ export default {
       ttjk:undefined,
       searchTextAll:'',
     };
-  },
-  computed: {
-    // searchTextAll(){
-    //   return this.searchText
-    // }
   },
   watch:{
     searchTextAll(text){

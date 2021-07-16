@@ -782,7 +782,7 @@ export default {
           }
         })
         that.unSettledList = templist1.filter((v) =>{
-          if (v.status && v.status.indexOf(`已办结未处理`) != -1) {
+          if (v.status && v.status.indexOf(`已处理未办结`) != -1) {
             return v
           }
         })
